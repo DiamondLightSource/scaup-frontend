@@ -7,8 +7,10 @@ import { BaseShipmentItem } from "../pages";
 import { sampleForm } from "./sample";
 
 export interface DynamicFormProps {
+  /** Form input type */
   formType: BaseShipmentItem["type"];
   register: UseFormRegister<any>;
+  /** FieldErrors object passed from parent component */
   errors: FieldErrors;
 }
 

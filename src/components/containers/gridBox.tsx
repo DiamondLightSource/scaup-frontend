@@ -13,18 +13,20 @@ import { ChildSelector } from "../childSelector";
 import { TreeData } from "../treeView";
 
 export interface GridBoxProps {
+  /** Number of positions available in grid box */
   positions: number;
 }
 
-const GridItem = ({
-  hasSample,
-  position,
-  onSampleClick,
-}: {
+export interface GridItemProps {
+  /** Whether or not this grid position has a sample in it */
   hasSample: boolean;
+  /** Position of the grid in the parent grid box */
   position: number;
+  /** Callback for clicking on a given position */
   onSampleClick: () => void;
-}) => {
+}
+
+const GridItem = ({ hasSample, position, onSampleClick }: GridItemProps) => {
   return (
     <Button
       onClick={onSampleClick}

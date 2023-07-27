@@ -5,13 +5,13 @@ import { recursiveFind } from "@/utils/tree";
 import { PayloadAction, createSlice, current } from "@reduxjs/toolkit";
 
 export interface ShipmentState {
-  /** Shipment items */
+  /** Shipment items (assigned) */
   items: TreeData<BaseShipmentItem>[] | undefined;
-  /** Currently active item */
+  /** Active item (item being edited, for example) */
   activeItem: TreeData<BaseShipmentItem>;
   /** Unassigned items */
   unassigned: TreeData[];
-  /** Whether or not the selected item is being edited rather than new */
+  /** Whether or not active item is an existing item being edited or a new item */
   isEdit: boolean;
 }
 
