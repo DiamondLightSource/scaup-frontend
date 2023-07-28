@@ -135,7 +135,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: /edit/i,
+        name: /view/i,
       }),
     );
 

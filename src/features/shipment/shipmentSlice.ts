@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/treeView";
+import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { RootState } from "@/store";
 import { recursiveFind } from "@/utils/tree";
@@ -13,12 +13,14 @@ export interface ShipmentState {
   unassigned: TreeData[];
   /** Whether or not active item is an existing item being edited or a new item */
   isEdit: boolean;
+  /** Current step index */
+  currentStep: number;
 }
 
 const defaultUnassigned = [
   {
     label: "Unassigned",
-    isImmutable: true,
+    isNotViewable: true,
     id: "root",
     data: {},
     children: [
@@ -26,7 +28,7 @@ const defaultUnassigned = [
         label: "Samples",
         id: "sample",
         isUndeletable: true,
-        isImmutable: true,
+        isNotViewable: true,
         data: {},
         children: [],
       },
@@ -34,7 +36,7 @@ const defaultUnassigned = [
         label: "Grid Boxes",
         id: "gridBox",
         isUndeletable: true,
-        isImmutable: true,
+        isNotViewable: true,
         data: {},
         children: [],
       },
@@ -42,7 +44,7 @@ const defaultUnassigned = [
         label: "Containers",
         id: "container",
         isUndeletable: true,
-        isImmutable: true,
+        isNotViewable: true,
         data: {},
         children: [],
       },
@@ -70,6 +72,7 @@ export const initialState: ShipmentState = {
   activeItem: defaultActive,
   unassigned: defaultUnassigned,
   isEdit: false,
+  currentStep: 0,
 };
 
 export const shipmentSlice = createSlice({
@@ -149,6 +152,9 @@ export const shipmentSlice = createSlice({
         state.items = [action.payload];
       }
     },
+    setStep: (state, action: PayloadAction<number>) => {
+      state.currentStep = action.payload;
+    },
   },
 });
 
@@ -160,10 +166,12 @@ export const {
   addRootItem,
   moveToUnassigned,
   removeUnassigned,
+  setStep,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;
 export const selectActiveItem = (state: RootState) => state.shipment.activeItem;
 export const selectUnassigned = (state: RootState) => state.shipment.unassigned;
 export const selectIsEdit = (state: RootState) => state.shipment.isEdit;
+export const selectStep = (state: RootState) => state.shipment.currentStep;
 
 export default shipmentSlice.reducer;

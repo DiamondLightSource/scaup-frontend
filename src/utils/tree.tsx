@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/treeView";
+import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
 
 /** Recursively find item, its position in sibling array, and its siblings
@@ -10,7 +10,7 @@ import { BaseShipmentItem } from "@/mappings/pages";
 export const recursiveFind = (
   data: TreeData[],
   key: string,
-  callback: (item: TreeData, index: number, array: TreeData[]) => void,
+  callback: (item: TreeData, index: number, siblings: TreeData[]) => void,
 ) => {
   for (let i = 0; i < data.length; i++) {
     const item = data[i];

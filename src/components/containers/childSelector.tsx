@@ -45,7 +45,7 @@ export const ChildSelector = ({
   const unassigned = useSelector(selectUnassigned);
 
   // TODO: make this work for non-samples
-  const unassignedSamples: TreeData<BaseShipmentItem>[] = useMemo(
+  const unassignedSamples: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(
     () =>
       unassigned[0].children![0].children!.length ? unassigned[0].children![0].children : null,
     [unassigned],

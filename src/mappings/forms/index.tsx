@@ -14,7 +14,7 @@ export interface DynamicFormProps {
   errors: FieldErrors;
 }
 
-const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
+export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
   sample: sampleForm,
   puck: [],
   falconTube: [],

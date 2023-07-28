@@ -13,7 +13,7 @@ describe("Tree View", () => {
     render(<TreeView data={[{ id: "1", label: "Test", data: {} }]} />);
 
     expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View" })).toBeInTheDocument();
   });
 
   it("should not render remove button if specified", () => {
@@ -22,8 +22,8 @@ describe("Tree View", () => {
     expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
   });
 
-  it("should not render edit button if specified", () => {
-    render(<TreeView data={[{ id: "1", isImmutable: true, label: "Test", data: {} }]} />);
+  it("should not render view button if specified", () => {
+    render(<TreeView data={[{ id: "1", isNotViewable: true, label: "Test", data: {} }]} />);
 
     expect(screen.queryByRole("button", { name: "Edit" })).not.toBeInTheDocument();
   });
