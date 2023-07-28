@@ -53,7 +53,7 @@ const defaultUnassigned = [
 ] as TreeData[];
 
 const defaultActive = {
-  label: "New Samples",
+  label: "New Sample",
   id: "new-sample",
   data: { type: "sample" },
 } as TreeData<BaseShipmentItem>;

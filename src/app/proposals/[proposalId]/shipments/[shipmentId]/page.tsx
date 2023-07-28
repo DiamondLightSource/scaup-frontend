@@ -1,5 +1,6 @@
 "use client";
 
+import { GridBox } from "@/components/containers/gridBox";
 import {
   addRootItem,
   addUnassigned,
@@ -12,7 +13,7 @@ import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/map
 import { genUniqueId } from "@/utils/generic";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 const ItemFormPage = () => {
@@ -25,19 +26,13 @@ const ItemFormPage = () => {
   );
 
   const activeIsEdit = useSelector(selectIsEdit);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
+  const formContext = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
 
   useEffect(() => {
-    reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
-  }, [reset, activeItem, activeIsEdit]);
+    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
+  }, [formContext, activeItem, activeIsEdit]);
 
-  const onSubmit = handleSubmit((info: Omit<BaseShipmentItem, "type">) => {
+  const onSubmit = formContext.handleSubmit((info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit) {
       const values = {
         ...activeItem,
@@ -70,16 +65,19 @@ const ItemFormPage = () => {
         </HStack>
         <Divider borderColor='gray.800' />
       </VStack>
-      <form
-        onSubmit={onSubmit}
-        style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
-      >
-        <DynamicForm formType={activeItem.data.type} errors={errors} register={register} />
-        <HStack>
-          <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
-          <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
-        </HStack>
-      </form>
+      <FormProvider {...formContext}>
+        <form
+          onSubmit={onSubmit}
+          style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
+        >
+          <DynamicForm formType={activeItem.data.type} />
+          <HStack>
+            <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
+            <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
+          </HStack>
+        </form>
+      </FormProvider>
+      <GridBox positions={8} />
     </VStack>
   );
 };
