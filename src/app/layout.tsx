@@ -1,5 +1,5 @@
 "use client";
-import { AppNavbar } from "@/components/appNavbar";
+import { AppNavbar } from "@/components/navigation/appNavbar";
 import "../styles/main.css";
 import { Providers } from "./providers";
 

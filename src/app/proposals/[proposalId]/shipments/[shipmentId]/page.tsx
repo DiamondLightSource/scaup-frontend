@@ -20,7 +20,7 @@ const ItemFormPage = () => {
   const dispatch = useDispatch();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
-    () => steps[getCurrentStepIndex(activeItem.data.type)].title,
+    () => steps[getCurrentStepIndex(activeItem.data.type)].singular,
     [activeItem],
   );
 

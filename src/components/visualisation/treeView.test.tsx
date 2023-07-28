@@ -41,4 +41,28 @@ describe("Tree View", () => {
 
     expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(1);
   });
+
+  it("should render item tag", () => {
+    render(<TreeView data={[{ id: "1", label: "Test", tag: "Tag Value", data: {} }]} />);
+
+    expect(screen.getByText("Tag Value")).toBeInTheDocument();
+  });
+
+  it("should render item tag in item with children", () => {
+    render(
+      <TreeView
+        data={[
+          {
+            id: "1",
+            label: "Test",
+            tag: "Tag Value",
+            data: { position: 7 },
+            children: [{ id: "2", label: "Test", data: {} }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Tag Value")).toBeInTheDocument();
+  });
 });

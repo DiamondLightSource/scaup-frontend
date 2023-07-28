@@ -1,7 +1,7 @@
 "use client";
 
-import ShipmentOverview from "@/components/shipmentOverview";
-import { TreeData } from "@/components/treeView";
+import ShipmentOverview from "@/components/visualisation/shipmentOverview";
+import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectItems,
@@ -10,7 +10,7 @@ import {
   setShipment,
 } from "@/features/shipment/shipmentSlice";
 import { BasePage, BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
-import { recursiveCountChildrenByType } from "@/utils/tree";
+import { recursiveCountChildrenByType, setTagInPlace } from "@/utils/tree";
 import {
   Box,
   Button,
@@ -55,6 +55,7 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
     if (params.shipmentId !== "new") {
       fetch(`/api/shipments/${params.shipmentId}`).then(async (response) => {
         const newShipment = await response.json();
+        setTagInPlace(newShipment);
         dispatch(setShipment(newShipment));
       });
     }
@@ -115,7 +116,7 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
       }
     }
 
-    const unassignedItems = unassigned[0].children!;
+    const unassignedItems: TreeData[] = unassigned[0].children!;
     for (const i in unassignedItems) {
       if (unassignedItems[i].children !== undefined) {
         count[i] += unassignedItems[i].children!.length;

@@ -1,5 +1,7 @@
+import { TreeData } from "@/components/visualisation/treeView";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
+import { BaseShipmentItem } from "@/mappings/pages";
 import {
   Box,
   Button,
@@ -24,13 +26,12 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { TreeData } from "./treeView";
 
 export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Currently selected item for container position */
   selectedItem?: TreeData<PositionedItem> | null;
   /** Callback for item selection event */
-  onSelect?: (child: TreeData<PositionedItem>) => void;
+  onSelect?: (child: TreeData<BaseShipmentItem>) => void;
   /** Callback for item removal revent */
   onRemove?: (child: TreeData<PositionedItem>) => void;
 }
@@ -43,14 +44,15 @@ export const ChildSelector = ({
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
 
-  const unassignedSamples = useMemo(
+  // TODO: make this work for non-samples
+  const unassignedSamples: TreeData<BaseShipmentItem>[] = useMemo(
     () =>
       unassigned[0].children![0].children!.length ? unassigned[0].children![0].children : null,
     [unassigned],
   );
 
   const handleSampleClicked = useCallback(
-    (sample: TreeData<PositionedItem>) => {
+    (sample: TreeData<BaseShipmentItem>) => {
       if (onSelect) {
         onSelect(sample);
       }

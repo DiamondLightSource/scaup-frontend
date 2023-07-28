@@ -10,10 +10,10 @@ export interface BaseShipmentItem {
 }
 
 export const steps = [
-  { title: "Samples", id: "sample" },
-  { title: "Grid Boxes", id: "gridBox" },
-  { title: "Containers", id: ["puck", "falconTube"] },
-  { title: "Dewars", id: "dewar" },
+  { title: "Samples", id: "sample", singular: "Sample" },
+  { title: "Grid Boxes", id: "gridBox", singular: "Grid Box" },
+  { title: "Containers", id: ["puck", "falconTube"], singular: "Container" },
+  { title: "Dewars", id: "dewar", singular: "Dewar" },
 ];
 
 export const getCurrentStepIndex = (itemType: string) => {
