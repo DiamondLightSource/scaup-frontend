@@ -1,5 +1,5 @@
+import shipmentSlice from "@/features/shipment/shipmentSlice";
 import { configureStore } from "@reduxjs/toolkit";
-import shipmentSlice from "./features/shipment/shipmentSlice";
 
 export const store = configureStore({
   reducer: {

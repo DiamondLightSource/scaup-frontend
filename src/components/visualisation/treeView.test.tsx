@@ -1,6 +1,6 @@
+import { TreeView } from "@/components/visualisation/treeView";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { TreeView } from "./treeView";
 
 describe("Tree View", () => {
   it("should render root", () => {

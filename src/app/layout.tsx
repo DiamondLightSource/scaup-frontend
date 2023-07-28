@@ -1,7 +1,7 @@
 "use client";
+import { Providers } from "@/app/providers";
 import { AppNavbar } from "@/components/navigation/appNavbar";
-import "../styles/main.css";
-import { Providers } from "./providers";
+import "@/styles/main.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (

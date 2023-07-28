@@ -1,3 +1,5 @@
+import { ChildSelector } from "@/components/containers/childSelector";
+import { TreeData } from "@/components/visualisation/treeView";
 import {
   moveToUnassigned,
   removeUnassigned,
@@ -6,11 +8,10 @@ import {
   setActiveItem,
 } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
+import { BaseShipmentItem } from "@/mappings/pages";
 import { Box, Button, Grid, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChildSelector } from "../childSelector";
-import { TreeData } from "../treeView";
 
 export interface GridBoxProps {
   /** Number of positions available in grid box */
@@ -57,7 +58,7 @@ export const GridBox = ({ positions }: GridBoxProps) => {
   }, [currentGridBox, positions]);
 
   const handlePopulatePosition = useCallback(
-    (sample: TreeData<PositionedItem>) => {
+    (sample: TreeData<BaseShipmentItem>) => {
       const newGridBox = structuredClone(currentGridBox);
       const newSample = { ...sample, data: { ...sample.data, position: currentPosition } };
 
