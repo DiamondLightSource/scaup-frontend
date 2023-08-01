@@ -6,6 +6,8 @@ import ShipmentLayout from "./layout";
 
 const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
 
+jest.mock("next-auth/react", () => ({ useSession: () => ({ data: { accessToken: "a" } }) }));
+
 describe("Shipment Layout", () => {
   it("should render steps", () => {
     renderWithProviders(
