@@ -70,7 +70,10 @@ const ItemFormPage = () => {
           onSubmit={onSubmit}
           style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
         >
-          <DynamicForm formType={activeItem.data.type} />
+          <DynamicForm
+            formType={activeItem.data.type}
+            prepopData={{ dewar: { codes: ["AAAAAAa", "asdasdas"] } }}
+          />
           <GridBox positions={4} />
           <HStack>
             <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>

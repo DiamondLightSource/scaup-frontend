@@ -12,4 +12,16 @@ describe("Dynamic Form", () => {
     expect(screen.getByText("Ratio")).toBeInTheDocument();
     expect(screen.getByText("Film")).toBeInTheDocument();
   });
+
+  it("should render options for dropdown based on dynamic data if available", () => {
+    renderWithForm(
+      <DynamicForm
+        formType='dewar'
+        prepopData={{ dewar: { codes: ["BI-99-9999", "BI-88-8888"] } }}
+      />,
+    );
+
+    expect(screen.getByText("BI-99-9999")).toBeInTheDocument();
+    expect(screen.getByText("BI-88-8888")).toBeInTheDocument();
+  });
 });

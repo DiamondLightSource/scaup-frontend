@@ -13,7 +13,7 @@ export interface DynamicFormEntry {
   id: string;
   type: "text" | "dropdown" | "checkbox";
   validation?: RegisterOptions;
-  values?: { label: string; value: string }[];
+  values?: string | { label: string; value: string }[];
 }
 
 const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
