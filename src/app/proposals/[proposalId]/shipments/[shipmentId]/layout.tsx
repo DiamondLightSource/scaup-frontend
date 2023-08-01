@@ -30,6 +30,7 @@ import {
   Stepper,
   VStack,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,6 +47,7 @@ export interface ShipmentsLayoutProps {
 
 const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
+  const { data } = useSession();
 
   const router = useRouter();
   const activeItem = useSelector(selectActiveItem);
@@ -55,14 +57,16 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
 
   useEffect(() => {
     // TODO: move this to async thunk
-    if (params.shipmentId !== "new") {
-      fetch(`/api/shipments/${params.shipmentId}`).then(async (response) => {
+    if (data && params.shipmentId !== "new") {
+      fetch(`/api/shipments/${params.shipmentId}`, {
+        headers: { Authorization: `Bearer ${data.accessToken}` },
+      }).then(async (response) => {
         const newShipment = await response.json();
         setTagInPlace(newShipment);
         dispatch(setShipment(newShipment));
       });
     }
-  }, [params.shipmentId, dispatch]);
+  }, [data, params.shipmentId, dispatch]);
 
   useEffect(() => {
     if (activeStep >= steps.length) {

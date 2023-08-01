@@ -71,13 +71,13 @@ const ItemFormPage = () => {
           style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
         >
           <DynamicForm formType={activeItem.data.type} />
+          <GridBox positions={4} />
           <HStack>
             <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
         </form>
       </FormProvider>
-      <GridBox positions={8} />
     </VStack>
   );
 };

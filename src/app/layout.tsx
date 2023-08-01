@@ -1,4 +1,5 @@
 "use client";
+
 import { Providers } from "@/app/providers";
 import { AppNavbar } from "@/components/navigation/appNavbar";
 import "@/styles/main.css";

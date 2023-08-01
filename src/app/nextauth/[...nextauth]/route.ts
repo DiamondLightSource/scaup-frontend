@@ -1,9 +1,31 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
+interface ExtendedJWT extends JWT {
+  accessToken: string;
+}
+
+interface ExtendedSession extends Session {
+  accessToken: string;
+}
+
 const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
+  callbacks: {
+    async jwt({ token, account }): Promise<ExtendedJWT> {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token as ExtendedJWT;
+    },
+    async session({ session, token }): Promise<ExtendedSession> {
+      const newSession: ExtendedSession = {
+        ...session,
+        accessToken: (token as ExtendedJWT).accessToken,
+      };
+      return newSession;
+    },
+  },
   providers: [
     {
       id: "diamond",
@@ -23,6 +45,7 @@ const authOptions: NextAuthOptions = {
           id: profile.sub,
           email: profile.sub,
           name: user.givenName,
+          accessToken: tokens.access_token,
         };
       },
     },

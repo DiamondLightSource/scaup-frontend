@@ -1,6 +1,6 @@
 "use client";
 import { HStack, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
-import { Navbar, User } from "diamond-components";
+import { Navbar, User } from "@diamondlightsource/ui-components";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export const AppNavbar = () => {
