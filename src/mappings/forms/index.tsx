@@ -2,7 +2,7 @@ import { DynamicFormEntry, DynamicFormInput } from "@/components/input/formInput
 import { dewarForm } from "@/mappings/forms/dewar";
 import { sampleForm } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { findValueByPath } from "@/utils/generic";
+import { parseJsonReferences } from "@/utils/generic";
 import { VStack } from "@chakra-ui/react";
 import { useMemo } from "react";
 
@@ -30,10 +30,7 @@ export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps
       if (field.values && !Array.isArray(field.values)) {
         let fieldValues: DynamicFormEntry["values"] = [];
         if (prepopData) {
-          const values = findValueByPath(field.values, prepopData);
-          if (Array.isArray(values)) {
-            fieldValues = values.map((v) => ({ label: v, value: v }));
-          }
+          fieldValues = parseJsonReferences(field.values, prepopData);
         }
         field.values = fieldValues;
       }

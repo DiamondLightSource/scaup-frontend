@@ -1,3 +1,4 @@
+import { JsonRef } from "@/utils/generic";
 import {
   Checkbox,
   FormControl,
@@ -13,7 +14,7 @@ export interface DynamicFormEntry {
   id: string;
   type: "text" | "dropdown" | "checkbox";
   validation?: RegisterOptions;
-  values?: string | { label: string; value: string }[];
+  values?: string | { label: string; value: string }[] | JsonRef;
 }
 
 const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
@@ -36,6 +37,7 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
           {...register(id, validation)}
         >
           {values &&
+            Array.isArray(values) &&
             values.map((v) => (
               <option key={v.value} value={v.value}>
                 {v.label}

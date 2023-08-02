@@ -1,6 +1,7 @@
 "use client";
 
 import { GridBox } from "@/components/containers/gridBox";
+import { fetchProposalData } from "@/features/shipment/proposalSlice";
 import {
   addRootItem,
   addUnassigned,
@@ -10,6 +11,7 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { DynamicForm } from "@/mappings/forms";
 import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { AppDispatch } from "@/store";
 import { genUniqueId } from "@/utils/generic";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
@@ -18,12 +20,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 const ItemFormPage = () => {
   const toast = useToast();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem.data.type)].singular,
     [activeItem],
   );
+
+  useEffect(() => {
+    console.log("A");
+    dispatch(fetchProposalData("cm33915"));
+  }, [dispatch]);
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
@@ -72,10 +79,18 @@ const ItemFormPage = () => {
         >
           <DynamicForm
             formType={activeItem.data.type}
-            prepopData={{ dewar: { codes: ["AAAAAAa", "asdasdas"] } }}
+            prepopData={{
+              dewar: {
+                codes: [
+                  { dewarCode: "aaaa", dewarId: 1 },
+                  { dewarCode: "bbbb", dewarId: 2 },
+                ],
+              },
+            }}
           />
           <GridBox positions={4} />
           <HStack>
+            <Spacer />
             <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>

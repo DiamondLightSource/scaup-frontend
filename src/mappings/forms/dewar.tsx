@@ -15,12 +15,16 @@ export const dewarForm = [
     id: "dewarCode",
     label: "Dewar Code",
     type: "dropdown",
-    values: "dewar.codes",
+    values: {
+      $ref: { parent: "#/dewar/codes", map: { value: "dewarId", label: "dewarCode" } },
+    },
   },
   {
     id: "labContact",
     label: "Lab Contact",
     type: "dropdown",
-    values: "proposal.labContacts",
+    values: {
+      $ref: { parent: "#/proposal/labContacts", map: { value: "dewarId", label: "dewarCode" } },
+    },
   },
 ] as DynamicFormEntry[];

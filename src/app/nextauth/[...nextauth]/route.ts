@@ -9,7 +9,7 @@ interface ExtendedSession extends Session {
   accessToken: string;
 }
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
   callbacks: {
     async jwt({ token, account }): Promise<ExtendedJWT> {
@@ -26,6 +26,7 @@ const authOptions: NextAuthOptions = {
       return newSession;
     },
   },
+  secret: "AAAAAAAAA",
   providers: [
     {
       id: "diamond",
@@ -53,4 +54,5 @@ const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };

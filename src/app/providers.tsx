@@ -10,14 +10,14 @@ import { Provider } from "react-redux";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider>
-      <Provider store={store}>
-        <SessionProvider basePath='/nextauth' refetchOnWindowFocus={false}>
+      <SessionProvider basePath='/nextauth' refetchOnWindowFocus={false}>
+        <Provider store={store}>
           <ChakraProvider theme={theme}>
             <ColorModeScript initialColorMode='light' />
             {children}
           </ChakraProvider>
-        </SessionProvider>
-      </Provider>
+        </Provider>
+      </SessionProvider>
     </CacheProvider>
   );
 }
