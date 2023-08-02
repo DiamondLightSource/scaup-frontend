@@ -1,3 +1,4 @@
+import { TreeData, TreeView } from "@/components/visualisation/treeView";
 import {
   moveToUnassigned,
   selectItems,
@@ -8,7 +9,6 @@ import { checkIsRoot } from "@/mappings/pages";
 import { recursiveFind } from "@/utils/tree";
 import { Box, Divider, Heading } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { TreeData, TreeView } from "./treeView";
 
 export interface ShipmentOverviewProps {
   onActiveChanged: (data: TreeData) => void;

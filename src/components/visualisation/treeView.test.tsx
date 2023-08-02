@@ -1,6 +1,6 @@
+import { TreeView } from "@/components/visualisation/treeView";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { TreeView } from "./treeView";
 
 describe("Tree View", () => {
   it("should render root", () => {
@@ -40,5 +40,29 @@ describe("Tree View", () => {
     fireEvent.click(screen.getByRole("button", { name: "Parent" }));
 
     expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(1);
+  });
+
+  it("should render item tag", () => {
+    render(<TreeView data={[{ id: "1", label: "Test", tag: "Tag Value", data: {} }]} />);
+
+    expect(screen.getByText("Tag Value")).toBeInTheDocument();
+  });
+
+  it("should render item tag in item with children", () => {
+    render(
+      <TreeView
+        data={[
+          {
+            id: "1",
+            label: "Test",
+            tag: "Tag Value",
+            data: { position: 7 },
+            children: [{ id: "2", label: "Test", data: {} }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Tag Value")).toBeInTheDocument();
   });
 });

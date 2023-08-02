@@ -1,5 +1,5 @@
+import { getCurrentStepIndex } from "@/mappings/pages";
 import "@testing-library/jest-dom";
-import { getCurrentStepIndex } from "./pages";
 
 describe("Stepper", () => {
   it("should find step index if step has array of type IDs", () => {

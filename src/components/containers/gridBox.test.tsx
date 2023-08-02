@@ -1,10 +1,10 @@
-import { TreeData } from "@/components/treeView";
+import { GridBox } from "@/components/containers/gridBox";
+import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen } from "@testing-library/react";
-import { GridBox } from "./gridBox";
 
 const gridBox = {
   id: "gridBox",

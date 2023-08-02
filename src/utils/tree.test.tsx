@@ -8,4 +8,8 @@ describe("Tree Utility Functions", () => {
   it("should find branch item", () => {});
 
   it("should find root item", () => {});
+
+  it("should count children of type that exists in multiple places in tree", () => {});
+
+  it("should set tags for all objects with positions set", () => {});
 });

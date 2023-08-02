@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   Spacer,
+  Tag,
   Text,
 } from "@chakra-ui/react";
 import React, { useCallback } from "react";
@@ -20,6 +21,8 @@ export interface TreeData<T = any> {
   label: string;
   /** Unique node ID */
   id: string;
+  /** Tag prefixed to label */
+  tag?: string;
   /** Node data */
   data: T;
   /** Node children */
@@ -74,6 +77,7 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
             <List spacing={3} py={1} pt={2}>
               <ListItem ml={5}>
                 <HStack>
+                  {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
                   <Text>{item.label}</Text>
                   <Spacer />
                   {!item.isUndeletable && (
@@ -95,6 +99,7 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                 <AccordionButton>
                   <AccordionIcon />
                   <Box flex='1' textAlign='left'>
+                    {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
                     <Text fontSize='md'>{item.label}</Text>
                   </Box>
                 </AccordionButton>

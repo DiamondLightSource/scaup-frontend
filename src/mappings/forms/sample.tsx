@@ -1,5 +1,5 @@
-import { DynamicFormEntry } from "@/components/formInput";
-import { BaseShipmentItem } from "../pages";
+import { DynamicFormEntry } from "@/components/input/formInput";
+import { BaseShipmentItem } from "@/mappings/pages";
 
 export interface PositionedItem extends BaseShipmentItem {
   position: number | null;

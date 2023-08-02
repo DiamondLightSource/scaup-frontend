@@ -1,10 +1,10 @@
 import { GridBox } from "@/components/containers/gridBox";
-import { DynamicFormEntry, DynamicFormInput } from "@/components/formInput";
+import { DynamicFormEntry, DynamicFormInput } from "@/components/input/formInput";
+import { sampleForm } from "@/mappings/forms/sample";
+import { BaseShipmentItem } from "@/mappings/pages";
 import { VStack } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { BaseShipmentItem } from "../pages";
-import { sampleForm } from "./sample";
 
 export interface DynamicFormProps {
   /** Form input type */
