@@ -116,7 +116,7 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else {
-      router.push(`${params.shipmentId}/overview`);
+      router.push(`${params.shipmentId}/review`);
     }
   }, [handleSetStep, activeStep, router, params]);
 
