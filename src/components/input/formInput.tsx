@@ -62,7 +62,7 @@ export const DynamicFormInput = ({ id, label, type, validation, values }: Dynami
         </FormLabel>
       )}
       <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
-      {<InnerDynamicFormInput {...{ id, label, type, validation, values, register, errors }} />}
+      {<InnerDynamicFormInput {...{ id, label, type, validation, values }} />}
     </FormControl>
   );
 };
