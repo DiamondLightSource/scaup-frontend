@@ -12,7 +12,7 @@ import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const ItemFormPage = () => {
+const ReviewPage = () => {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
@@ -45,4 +45,4 @@ const ItemFormPage = () => {
   );
 };
 
-export default ItemFormPage;
+export default ReviewPage;
