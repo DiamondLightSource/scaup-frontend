@@ -1,5 +1,7 @@
 "use client";
 
+import { GridBox } from "@/components/containers/gridBox";
+import { fetchProposalData } from "@/features/shipment/proposalSlice";
 import {
   addRootItem,
   addUnassigned,
@@ -9,35 +11,38 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { DynamicForm } from "@/mappings/forms";
 import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { AppDispatch } from "@/store";
 import { genUniqueId } from "@/utils/generic";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 const ItemFormPage = () => {
+  const { data: session } = useSession();
   const toast = useToast();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem.data.type)].singular,
     [activeItem],
   );
 
-  const activeIsEdit = useSelector(selectIsEdit);
+  useEffect(() => {
+    if (session) {
+      dispatch(fetchProposalData({ proposalId: "cm33915", accessToken: session.accessToken }));
+    }
+  }, [dispatch, session]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
+  const activeIsEdit = useSelector(selectIsEdit);
+  const formContext = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
 
   useEffect(() => {
-    reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
-  }, [reset, activeItem, activeIsEdit]);
+    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
+  }, [formContext, activeItem, activeIsEdit]);
 
-  const onSubmit = handleSubmit((info: Omit<BaseShipmentItem, "type">) => {
+  const onSubmit = formContext.handleSubmit((info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit) {
       const values = {
         ...activeItem,
@@ -70,16 +75,30 @@ const ItemFormPage = () => {
         </HStack>
         <Divider borderColor='gray.800' />
       </VStack>
-      <form
-        onSubmit={onSubmit}
-        style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
-      >
-        <DynamicForm formType={activeItem.data.type} errors={errors} register={register} />
-        <HStack>
-          <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
-          <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
-        </HStack>
-      </form>
+      <FormProvider {...formContext}>
+        <form
+          onSubmit={onSubmit}
+          style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
+        >
+          <DynamicForm
+            formType={activeItem.data.type}
+            prepopData={{
+              dewar: {
+                codes: [
+                  { dewarCode: "aaaa", dewarId: 1 },
+                  { dewarCode: "bbbb", dewarId: 2 },
+                ],
+              },
+            }}
+          />
+          <GridBox positions={4} />
+          <HStack>
+            <Spacer />
+            <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
+            <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
+          </HStack>
+        </form>
+      </FormProvider>
     </VStack>
   );
 };

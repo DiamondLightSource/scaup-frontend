@@ -27,10 +27,10 @@ export interface TreeData<T = any> {
   data: T;
   /** Node children */
   children?: TreeData[];
-  /** Should 'remove' button be visible */
+  /** Should 'remove' button be invisible */
   isUndeletable?: boolean;
-  /** Should 'edit' button be visible */
-  isImmutable?: boolean;
+  /** Should 'view' button be invisible */
+  isNotViewable?: boolean;
 }
 
 export interface TreeViewProps extends AccordionProps {
@@ -85,9 +85,9 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                       Remove
                     </Button>
                   )}
-                  {!item.isImmutable && (
+                  {!item.isNotViewable && (
                     <Button size='xs' onClick={() => handleEdit(item)}>
-                      Edit
+                      View
                     </Button>
                   )}
                 </HStack>
@@ -103,9 +103,9 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                     <Text fontSize='md'>{item.label}</Text>
                   </Box>
                 </AccordionButton>
-                {!item.isImmutable && (
+                {!item.isNotViewable && (
                   <Button size='xs' onClick={() => handleEdit(item)}>
-                    Edit
+                    View
                   </Button>
                 )}
               </HStack>

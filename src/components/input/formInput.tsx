@@ -1,3 +1,4 @@
+import { JsonRef } from "@/utils/generic";
 import {
   Checkbox,
   FormControl,
@@ -6,71 +7,64 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import { FieldErrors, RegisterOptions, UseFormRegister } from "react-hook-form";
+import { RegisterOptions, useFormContext } from "react-hook-form";
 
 export interface DynamicFormEntry {
   label: string;
   id: string;
   type: "text" | "dropdown" | "checkbox";
   validation?: RegisterOptions;
-  values?: { label: string; value: string }[];
+  values?: string | { label: string; value: string }[] | JsonRef;
 }
 
-export interface DynamicFormInputProps extends DynamicFormEntry {
-  register: UseFormRegister<any>;
-  errors: FieldErrors;
-}
+const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
-const InnerDynamicFormInput = ({
-  id,
-  label,
-  type,
-  validation,
-  values,
-  register,
-  errors,
-}: DynamicFormInputProps) => {
   switch (type) {
     case "text":
       return (
         <Input isInvalid={!!errors[id]} variant='hi-contrast' {...register(id, validation)}></Input>
       );
     case "dropdown":
-      if (!values) {
-        return null;
-      }
       return (
-        <Select isInvalid={!!errors[id]} variant='hi-contrast' {...register(id, validation)}>
-          {values.map((v) => (
-            <option key={v.value} value={v.value}>
-              {v.label}
-            </option>
-          ))}
+        <Select
+          isDisabled={!values}
+          isInvalid={!!errors[id]}
+          variant='hi-contrast'
+          {...register(id, validation)}
+        >
+          {values &&
+            Array.isArray(values) &&
+            values.map((v) => (
+              <option key={v.value} value={v.value}>
+                {v.label}
+              </option>
+            ))}
         </Select>
       );
     case "checkbox":
       return <Checkbox {...register(id, validation)}>{label}</Checkbox>;
-    default:
-      return null;
   }
 };
 
-export const DynamicFormInput = ({
-  id,
-  label,
-  type,
-  validation,
-  values,
-  errors,
-  register,
-}: DynamicFormInputProps) => (
-  <FormControl isInvalid={!!errors[id]}>
-    {type !== "checkbox" && (
-      <FormLabel fontWeight='600' mb='0' htmlFor={id}>
-        {label}
-      </FormLabel>
-    )}
-    <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
-    {<InnerDynamicFormInput {...{ id, label, type, validation, values, register, errors }} />}
-  </FormControl>
-);
+export const DynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  return (
+    <FormControl isInvalid={!!errors[id]}>
+      {type !== "checkbox" && (
+        <FormLabel fontWeight='600' mb='0' htmlFor={id}>
+          {label}
+        </FormLabel>
+      )}
+      <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
+      {<InnerDynamicFormInput {...{ id, label, type, validation, values, register, errors }} />}
+    </FormControl>
+  );
+};

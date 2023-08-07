@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/treeView";
+import { TreeData } from "@/components/visualisation/treeView";
 
 export interface BasePage {
   activeStep: string;

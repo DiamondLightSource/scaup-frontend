@@ -1,9 +1,10 @@
-import { TreeData } from "@/components/treeView";
+import { TreeData } from "@/components/visualisation/treeView";
 import shipmentSlice, { ShipmentState, initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { configureStore } from "@reduxjs/toolkit";
 import { RenderOptions, render } from "@testing-library/react";
 import { PropsWithChildren } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { Provider } from "react-redux";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
@@ -28,6 +29,19 @@ export const renderWithProviders = (
   const Wrapper = ({ children }: PropsWithChildren<{}>) => (
     <Provider store={store}>{children}</Provider>
   );
+
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+};
+
+export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOptions) => {
+  const Wrapper = ({ children }: PropsWithChildren) => {
+    const formContext = useForm();
+    return (
+      <FormProvider {...formContext}>
+        <form>{children}</form>
+      </FormProvider>
+    );
+  };
 
   return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };

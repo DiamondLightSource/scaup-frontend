@@ -5,9 +5,11 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectItems,
+  selectStep,
   selectUnassigned,
   setActiveItem,
   setShipment,
+  setStep,
 } from "@/features/shipment/shipmentSlice";
 import { BasePage, BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { recursiveCountChildrenByType, setTagInPlace } from "@/utils/tree";
@@ -28,7 +30,9 @@ import {
   Stepper,
   VStack,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface ShipmentParams {
@@ -43,32 +47,42 @@ export interface ShipmentsLayoutProps {
 
 const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
+  const { data } = useSession();
 
+  const router = useRouter();
   const activeItem = useSelector(selectActiveItem);
   const shipment = useSelector(selectItems);
   const unassigned = useSelector(selectUnassigned);
-
-  const [activeStep, setActiveStep] = useState(0);
+  const activeStep = useSelector(selectStep);
 
   useEffect(() => {
     // TODO: move this to async thunk
-    if (params.shipmentId !== "new") {
-      fetch(`/api/shipments/${params.shipmentId}`).then(async (response) => {
+    if (data && params.shipmentId !== "new") {
+      fetch(`/api/shipments/${params.shipmentId}`, {
+        headers: { Authorization: `Bearer ${data.accessToken}` },
+      }).then(async (response) => {
         const newShipment = await response.json();
         setTagInPlace(newShipment);
         dispatch(setShipment(newShipment));
       });
     }
-  }, [params.shipmentId, dispatch]);
+  }, [data, params.shipmentId, dispatch]);
 
   useEffect(() => {
-    setActiveStep(getCurrentStepIndex(activeItem.data.type));
-  }, [activeItem]);
+    if (activeStep >= steps.length) {
+      return;
+    }
+
+    dispatch(setStep(getCurrentStepIndex(activeItem.data.type)));
+  }, [activeItem, dispatch, activeStep]);
 
   /** Set empty active item with selected type */
   const handleSetStep = useCallback(
     (step: number) => {
-      //router.push(`../${steps[step].id}/new`);
+      if (activeStep >= steps.length) {
+        return;
+      }
+
       const currentStep = steps[step];
       dispatch(
         setActiveItem({
@@ -85,7 +99,7 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
         }),
       );
     },
-    [dispatch],
+    [dispatch, activeStep],
   );
 
   /** Set new active item */
@@ -96,14 +110,19 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
     [dispatch],
   );
 
+  const handleEdit = useCallback(() => {
+    dispatch(setStep(0));
+    router.back();
+  }, [router, dispatch]);
+
   /** Move to next shipment step */
   const handleContinue = useCallback(() => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else {
-      // TODO: handle finish
+      router.push(`${params.shipmentId}/review`);
     }
-  }, [handleSetStep, activeStep]);
+  }, [handleSetStep, activeStep, router, params]);
 
   const typeCount = useMemo(() => {
     const count = Array<number>(steps.length).fill(0);
@@ -138,7 +157,10 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
       <Stepper index={activeStep} mb='15px' h='60px'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
-            <StepIndicator cursor='pointer' bg='white'>
+            <StepIndicator
+              cursor={activeStep > steps.length ? "not-allowed" : "pointer"}
+              bg='white'
+            >
               <StepStatus
                 complete={<StepIcon />}
                 incomplete={<StepNumber />}
@@ -161,6 +183,7 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
           <ShipmentOverview onActiveChanged={handleActiveChanged} proposal={params.proposalId} />
           <HStack w='100%'>
             <Spacer />
+            {activeStep >= steps.length && <Button onClick={handleEdit}>Edit</Button>}
             <Button onClick={handleContinue} bg='green.500'>
               {activeStep < steps.length - 1 ? "Continue" : "Finish"}
             </Button>

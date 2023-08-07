@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/treeView";
+import { TreeData } from "@/components/visualisation/treeView";
 import { rest } from "msw";
 
 const defaultData = [
