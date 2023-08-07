@@ -14,11 +14,13 @@ import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/map
 import { AppDispatch } from "@/store";
 import { genUniqueId } from "@/utils/generic";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 const ItemFormPage = () => {
+  const { data: session } = useSession();
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
@@ -28,9 +30,10 @@ const ItemFormPage = () => {
   );
 
   useEffect(() => {
-    console.log("A");
-    dispatch(fetchProposalData("cm33915"));
-  }, [dispatch]);
+    if (session) {
+      dispatch(fetchProposalData({ proposalId: "cm33915", accessToken: session.accessToken }));
+    }
+  }, [dispatch, session]);
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
