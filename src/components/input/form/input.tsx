@@ -26,11 +26,17 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
   switch (type) {
     case "text":
       return (
-        <Input isInvalid={!!errors[id]} variant='hi-contrast' {...register(id, validation)}></Input>
+        <Input
+          id={id}
+          isInvalid={!!errors[id]}
+          variant='hi-contrast'
+          {...register(id, validation)}
+        ></Input>
       );
     case "dropdown":
       return (
         <Select
+          id={id}
           isDisabled={!values}
           isInvalid={!!errors[id]}
           variant='hi-contrast'
@@ -46,7 +52,11 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
         </Select>
       );
     case "checkbox":
-      return <Checkbox {...register(id, validation)}>{label}</Checkbox>;
+      return (
+        <Checkbox id={id} {...register(id, validation)}>
+          {label}
+        </Checkbox>
+      );
   }
 };
 

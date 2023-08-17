@@ -45,4 +45,8 @@ export const handlers = [
   rest.post("http://localhost/api/shipments/:shipmentId/:itemType", (req, res, ctx) =>
     res(ctx.status(201), ctx.json({ itemId: 123 })),
   ),
+
+  rest.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ itemId: 123 })),
+  ),
 ];

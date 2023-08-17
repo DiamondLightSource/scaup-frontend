@@ -1,6 +1,7 @@
 "use client";
 import { GridBox } from "@/components/containers/gridBox";
 import { DynamicForm } from "@/components/input/form";
+import { TreeData } from "@/components/visualisation/treeView";
 import {
   addRootItem,
   addUnassigned,
@@ -11,7 +12,6 @@ import {
 import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
-import { genUniqueId } from "@/utils/generic";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
@@ -38,29 +38,50 @@ const ItemFormPageContent = ({ prepopData, shipmentId }: ItemFormPageContentProp
     formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
   }, [formContext, activeItem, activeIsEdit]);
 
-  const onSubmit = formContext.handleSubmit((info: Omit<BaseShipmentItem, "type">) => {
+  const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit) {
-      const values = {
+      const values: TreeData<BaseShipmentItem> = {
         ...activeItem,
-        id: genUniqueId(),
-        title: "TEST",
         data: { type: activeItem.data.type, ...info },
       };
-      if (checkIsRoot(values)) {
-        dispatch(addRootItem(values));
-      } else {
-        dispatch(addUnassigned(values));
+
+      const res = await authenticatedFetch(
+        `/shipments/${shipmentId}/${activeStep.endpoint}`,
+        session,
+        {
+          method: "post",
+          body: JSON.stringify(info),
+        },
+      );
+
+      if (res && res.status === 201) {
+        const newItem = await res.json();
+
+        // TODO: apply returned values in type agnostic way
+        values.id = newItem.sampleId;
+        values.label = newItem.name;
+
+        if (checkIsRoot(values)) {
+          dispatch(addRootItem(values));
+        } else {
+          dispatch(addUnassigned(values));
+        }
+        toast({ title: "Successfully created item!" });
       }
-
-      authenticatedFetch(`/shipments/${shipmentId}/${activeStep.endpoint}`, session, {
-        method: "post",
-        body: JSON.stringify(info),
-      });
-
-      toast({ title: "Successfully created item!" });
     } else {
-      dispatch(saveActiveItem({ ...activeItem, data: { ...activeItem.data, ...info } }));
-      toast({ title: "Successfully saved item!" });
+      const res = await authenticatedFetch(
+        `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
+        session,
+        {
+          method: "PATCH",
+          body: JSON.stringify(info),
+        },
+      );
+
+      if (res && res.status === 200) {
+        dispatch(saveActiveItem({ ...activeItem, data: { ...activeItem.data, ...info } }));
+        toast({ title: "Successfully saved item!" });
+      }
     }
   });
 

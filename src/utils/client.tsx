@@ -23,14 +23,18 @@ const authenticatedFetch = async (
 
   const res = await fetch(process.env.REACT_APP_API_URL! + url, {
     ...init,
-    headers: { authorization: `Bearer ${session.accessToken}`, ...(init ? init.headers : {}) },
+    headers: {
+      authorization: `Bearer ${session.accessToken}`,
+      "content-type": "application/json",
+      ...(init ? init.headers : {}),
+    },
   });
 
   if (res.status === 401 || res.status === 403) {
     throw new Error("Authentication Failure");
   }
 
-  return await res.json();
+  return res;
 };
 
 /**
@@ -42,8 +46,6 @@ const authenticatedFetch = async (
  */
 authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
   const session = await getServerSession(authOptions);
-
-  const response = await authenticatedFetch(url, session, init);
 
   try {
     return await authenticatedFetch(url, session, init);

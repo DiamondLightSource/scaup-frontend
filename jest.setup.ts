@@ -6,6 +6,7 @@ const pathnameMock = jest.fn(() => "/");
 jest.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
 window.scrollTo = () => {};
 window.structuredClone = (x: any) => JSON.parse(JSON.stringify(x));
+process.env.REACT_APP_API_URL = "http://localhost/api";
 
 beforeEach(() => server.listen());
 afterEach(() => {

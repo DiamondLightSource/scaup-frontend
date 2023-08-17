@@ -57,15 +57,16 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
 
   useEffect(() => {
     // TODO: move this to async thunk
-    authenticatedFetch
-      .client(`/shipments/${params.shipmentId}`, session)
-      .then(async (newShipment) => {
-        // TODO: use server type
+    authenticatedFetch.client(`/shipments/${params.shipmentId}`, session).then(async (res) => {
+      // TODO: use server type
+      if (res && res.status === 200) {
+        const newShipment = await res.json();
         if (Array.isArray(newShipment)) {
           setTagInPlace(newShipment);
           dispatch(setShipment(newShipment));
         }
-      });
+      }
+    });
   }, [session, params.shipmentId, dispatch]);
 
   useEffect(() => {

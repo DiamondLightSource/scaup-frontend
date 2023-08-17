@@ -1,7 +1,9 @@
 import { initialState } from "@/features/shipment/shipmentSlice";
+import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
 jest.mock("next-auth/react", () => ({
@@ -63,5 +65,59 @@ describe("Item Page", () => {
     fireEvent.click(screen.getByText(/add/i));
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(1));
+  });
+
+  it("should add item to shipment items if in creation mode and item is a root item", async () => {
+    server.use(
+      rest.post("http://localhost/api/shipments/:shipmentId/samples", (req, res, ctx) =>
+        res.once(ctx.status(201), ctx.json({ sampleId: "123", name: "new-name" })),
+      ),
+    );
+
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: {
+          ...initialState,
+          items: [],
+        },
+      },
+    });
+
+    await waitFor(() =>
+      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(0),
+    );
+
+    fireEvent.click(screen.getByText(/add/i));
+
+    await waitFor(() =>
+      expect(store.getState().shipment.unassigned[0].children![0].children![0].label).toBe(
+        "new-name",
+      ),
+    );
+
+    expect(store.getState().shipment.unassigned[0].children![0].children![0].id).toBe("123");
+  });
+
+  it("should save changes in item to store", async () => {
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: {
+          ...initialState,
+          items: [{ id: "456", label: "", data: { type: "sample" } }],
+          activeItem: { id: "456", label: "", data: { type: "sample" } },
+          isEdit: true,
+        },
+      },
+    });
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Foil" }), {
+      value: "Quantifoil copper",
+    });
+    fireEvent.click(screen.getByText(/save/i));
+    await waitFor(() =>
+      expect(store.getState().shipment.items![0].data).toMatchObject({
+        foil: "Quantifoil copper",
+      }),
+    );
   });
 });

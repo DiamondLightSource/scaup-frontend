@@ -12,6 +12,12 @@ export const sampleForm = [
     type: "text",
   },
   {
+    id: "proteinId",
+    label: "Compound",
+    type: "dropdown",
+    values: { $ref: { parent: "#/compounds", map: { value: "proteinId", label: "name" } } },
+  },
+  {
     id: "foil",
     label: "Foil",
     type: "dropdown",
@@ -49,8 +55,8 @@ export const sampleForm = [
     ],
   },
   {
-    id: "ratio",
-    label: "Ratio",
+    id: "hole",
+    label: "Hole",
     type: "dropdown",
     values: [
       { label: "R 0.6/1", value: "R 0.6/1" },
@@ -64,9 +70,14 @@ export const sampleForm = [
     ],
   },
   {
-    id: "protein",
-    label: "Compound",
+    id: "vitrification",
+    label: "Vitrification",
     type: "dropdown",
-    values: { $ref: { parent: "#/compounds", map: { value: "proteinId", label: "name" } } },
+    values: [
+      { label: "GP2", value: "GP2" },
+      { label: "Manual", value: "Manual" },
+      { label: "Vitrobot", value: "Vitrobot" },
+      { label: "High Pressure", value: "High Pressure" },
+    ],
   },
 ] as DynamicFormEntry[];
