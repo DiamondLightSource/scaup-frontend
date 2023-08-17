@@ -1,23 +1,24 @@
-"use client";
-import { Button, Divider, Heading, Text, VStack } from "@chakra-ui/react";
-import Link from "next/link";
+import { ProposalOverviewContent } from "./pageContent";
 
-const ProposalOverview = ({ params }: { params: { proposalId: string } }) => {
-  return (
-    <VStack alignItems='start'>
-      <Heading size='md' color='gray.600'>
-        {params.proposalId}
-      </Heading>
-      <Heading>Proposal</Heading>
-      <Divider borderColor='gray.800' />
-      <VStack alignItems='start' mt='10px' gap='3'>
-        <Text fontWeight='600'>This proposal has no shipments assigned to it yet. You can:</Text>
-        <Button as={Link} href={`${params.proposalId}/shipments/new`} bg='green.500'>
-          Create new shipment
-        </Button>
-      </VStack>
-    </VStack>
-  );
+const getShipments = async (proposalId: string) => {
+  //const shipments = await authenticatedFetch(`https://localtest.diamond.ac.uk/api/proposals/${proposalId}/shipments`);
+
+  const shipments = {
+    items: [
+      { shippingId: 1, shippingName: "test", creationDate: "test", isSubmitted: true },
+      { shippingId: 1, shippingName: "test", creationDate: "test" },
+      { shippingId: 1, shippingName: "test", creationDate: "test" },
+      { shippingId: 1, shippingName: "test", creationDate: "test" },
+      { shippingId: 1, shippingName: "test", creationDate: "test" },
+    ],
+  };
+
+  return shipments.items;
+};
+
+const ProposalOverview = async ({ params }: { params: { proposalId: string } }) => {
+  const data = await getShipments(params.proposalId);
+  return <ProposalOverviewContent proposalId={params.proposalId} data={data} />;
 };
 
 export default ProposalOverview;

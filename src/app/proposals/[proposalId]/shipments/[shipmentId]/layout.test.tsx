@@ -1,3 +1,4 @@
+import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
@@ -5,6 +6,14 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import ShipmentLayout from "./layout";
 
 const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
+const defaultShipmentItems: TreeData[] = [
+  { id: "dewar-1", label: "dewar-1", data: { type: "dewar" } },
+];
+
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: () => ({ data: { accessToken: "abc" } }),
+}));
 
 describe("Shipment Layout", () => {
   it("should render steps", () => {
@@ -170,5 +179,79 @@ describe("Shipment Layout", () => {
     );
 
     await waitFor(() => expect(screen.queryByText(/dewar-1/i)).not.toBeInTheDocument());
+  });
+
+  it("should not update current step if previous step is greater than final step", () => {
+    const { store } = renderWithProviders(
+      <ShipmentLayout params={{ ...defaultParams }}>
+        <></>
+      </ShipmentLayout>,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            items: [{ id: "dewar-1", label: "dewar-1", data: { type: "dewar" } }],
+            currentStep: 5,
+          },
+        },
+      },
+    );
+
+    const stepHeading = screen.getAllByRole("heading", {
+      name: /dewars/i,
+    });
+
+    fireEvent.click(stepHeading[0]);
+
+    expect(store.getState().shipment.currentStep).toBe(5);
+  });
+
+  it("should enter edit mode if edit clicked in review page", () => {
+    const { store } = renderWithProviders(
+      <ShipmentLayout params={{ ...defaultParams }}>
+        <></>
+      </ShipmentLayout>,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            items: defaultShipmentItems,
+            currentStep: 5,
+          },
+        },
+      },
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: /edit/i,
+    });
+
+    fireEvent.click(editButton);
+
+    expect(store.getState().shipment.currentStep).toBe(0);
+  });
+
+  it("should move to next step if continue clicked", () => {
+    const { store } = renderWithProviders(
+      <ShipmentLayout params={{ ...defaultParams }}>
+        <></>
+      </ShipmentLayout>,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            items: defaultShipmentItems,
+          },
+        },
+      },
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: /continue/i,
+    });
+
+    fireEvent.click(editButton);
+
+    expect(store.getState().shipment.currentStep).toBe(1);
   });
 });

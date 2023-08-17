@@ -12,12 +12,12 @@ import {
   setStep,
 } from "@/features/shipment/shipmentSlice";
 import { BasePage, BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { authenticatedFetch } from "@/utils/client";
 import { recursiveCountChildrenByType, setTagInPlace } from "@/utils/tree";
 import {
   Box,
   Button,
   HStack,
-  Skeleton,
   Spacer,
   Step,
   StepDescription,
@@ -47,7 +47,7 @@ export interface ShipmentsLayoutProps {
 
 const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
-  const { data } = useSession();
+  const { data: session } = useSession();
 
   const router = useRouter();
   const activeItem = useSelector(selectActiveItem);
@@ -57,16 +57,16 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
 
   useEffect(() => {
     // TODO: move this to async thunk
-    if (data && params.shipmentId !== "new") {
-      fetch(`/api/shipments/${params.shipmentId}`, {
-        headers: { Authorization: `Bearer ${data.accessToken}` },
-      }).then(async (response) => {
-        const newShipment = await response.json();
-        setTagInPlace(newShipment);
-        dispatch(setShipment(newShipment));
+    authenticatedFetch
+      .client(`/shipments/${params.shipmentId}`, session)
+      .then(async (newShipment) => {
+        // TODO: use server type
+        if (Array.isArray(newShipment)) {
+          setTagInPlace(newShipment);
+          dispatch(setShipment(newShipment));
+        }
       });
-    }
-  }, [data, params.shipmentId, dispatch]);
+  }, [session, params.shipmentId, dispatch]);
 
   useEffect(() => {
     if (activeStep >= steps.length) {
@@ -143,14 +143,6 @@ const ShipmentsLayout = ({ children, params }: ShipmentsLayoutProps) => {
     }
     return count;
   }, [shipment, unassigned]);
-
-  if (activeStep === undefined || shipment === undefined) {
-    return (
-      <VStack>
-        <Skeleton w='100%' h='5vh' /> <Skeleton w='100%' h='40vh' />
-      </VStack>
-    );
-  }
 
   return (
     <Box h='100%'>

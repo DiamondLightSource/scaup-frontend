@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/formInput";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
 
 export interface PositionedItem extends BaseShipmentItem {
@@ -24,7 +24,7 @@ export const dewarForm = [
     label: "Lab Contact",
     type: "dropdown",
     values: {
-      $ref: { parent: "#/proposal/labContacts", map: { value: "dewarId", label: "dewarCode" } },
+      $ref: { parent: "#/labContacts", map: { value: "personId", label: "familyName" } },
     },
   },
 ] as DynamicFormEntry[];

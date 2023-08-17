@@ -2,11 +2,16 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import ItemFormPage from "./page";
+import ItemFormPageContent from "./pageContent";
+
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: () => ({ data: { accessToken: "abc" } }),
+}));
 
 describe("Item Page", () => {
   it("should render form", () => {
-    renderWithProviders(<ItemFormPage />);
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
@@ -23,7 +28,7 @@ describe("Item Page", () => {
   });
 
   it("should add item to unassigned if in creation mode", async () => {
-    const { store } = renderWithProviders(<ItemFormPage />);
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
     fireEvent.click(screen.getByText(/add/i));
 
@@ -43,7 +48,7 @@ describe("Item Page", () => {
   });
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
-    const { store } = renderWithProviders(<ItemFormPage />, {
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
           ...initialState,

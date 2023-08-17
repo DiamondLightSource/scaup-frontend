@@ -1,20 +1,10 @@
-"use client";
-
-import { useSession } from "next-auth/react";
+import { authOptions } from "@/mappings/authOptions";
+import { getServerSession } from "next-auth/next";
 import { AppNavbarInner } from "./appNavbarInner";
 
-// TODO: move to a server component when someone adds setting cookies to server components.
-
-export const AppNavbar = () => {
-  const { data: session } = useSession();
-
-  return <AppNavbarInner session={session} />;
-};
-
-/*
+// TODO: fix hydration errors
 export const AppNavbar = async () => {
   const session = await getServerSession(authOptions);
 
   return <AppNavbarInner session={session} />;
 };
-*/

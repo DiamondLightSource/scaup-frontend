@@ -38,8 +38,8 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
         >
           {values &&
             Array.isArray(values) &&
-            values.map((v) => (
-              <option key={v.value} value={v.value}>
+            values.map((v, i) => (
+              <option key={i} value={v.value}>
                 {v.label}
               </option>
             ))}
