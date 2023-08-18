@@ -7,7 +7,7 @@ import { DynamicFormView } from "./formView";
 const sampleData: BaseShipmentItem = {
   type: "sample",
   mesh: 1,
-  ratio: 1,
+  hole: 1,
   foil: "Au-flat",
   film: 1,
 };
@@ -18,7 +18,7 @@ describe("Dynamic Form View", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Ratio")).toBeInTheDocument();
+    expect(screen.getByText("Hole")).toBeInTheDocument();
     expect(screen.getByText("Film")).toBeInTheDocument();
   });
 

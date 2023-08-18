@@ -1,4 +1,4 @@
-import { DynamicForm } from "@/mappings/forms";
+import { DynamicForm } from "@/components/input/form";
 import { renderWithForm } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
@@ -9,7 +9,7 @@ describe("Dynamic Form", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Ratio")).toBeInTheDocument();
+    expect(screen.getByText("Hole")).toBeInTheDocument();
     expect(screen.getByText("Film")).toBeInTheDocument();
   });
 
@@ -17,7 +17,14 @@ describe("Dynamic Form", () => {
     renderWithForm(
       <DynamicForm
         formType='dewar'
-        prepopData={{ dewar: { codes: ["BI-99-9999", "BI-88-8888"] } }}
+        prepopData={{
+          dewar: {
+            codes: [
+              { dewarId: 123, dewarCode: "BI-99-9999" },
+              { dewarId: 456, dewarCode: "BI-88-8888" },
+            ],
+          },
+        }}
       />,
     );
 

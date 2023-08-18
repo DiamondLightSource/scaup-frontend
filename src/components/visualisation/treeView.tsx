@@ -34,7 +34,7 @@ export interface TreeData<T = any> {
 }
 
 export interface TreeViewProps extends AccordionProps {
-  data: TreeData[];
+  data?: TreeData[] | null;
   onRemove?: (data: TreeData) => void;
   onEdit?: (data: TreeData) => void;
 }
@@ -68,6 +68,10 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
     },
     [onEdit],
   );
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <Accordion allowMultiple {...props}>

@@ -38,7 +38,15 @@ const defaultData = [
 ] as TreeData[];
 
 export const handlers = [
-  rest.get("https://api.co.uk/api/shipment/:shipmentId", (req, res, ctx) =>
+  rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
     res(ctx.status(200), ctx.json(defaultData)),
+  ),
+
+  rest.post("http://localhost/api/shipments/:shipmentId/:itemType", (req, res, ctx) =>
+    res(ctx.status(201), ctx.json({ itemId: 123 })),
+  ),
+
+  rest.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ itemId: 123 })),
   ),
 ];

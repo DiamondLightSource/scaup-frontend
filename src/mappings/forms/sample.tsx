@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/formInput";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
 
 export interface PositionedItem extends BaseShipmentItem {
@@ -6,6 +6,17 @@ export interface PositionedItem extends BaseShipmentItem {
 }
 
 export const sampleForm = [
+  {
+    id: "name",
+    label: "Name",
+    type: "text",
+  },
+  {
+    id: "proteinId",
+    label: "Compound",
+    type: "dropdown",
+    values: { $ref: { parent: "#/compounds", map: { value: "proteinId", label: "name" } } },
+  },
   {
     id: "foil",
     label: "Foil",
@@ -44,8 +55,8 @@ export const sampleForm = [
     ],
   },
   {
-    id: "ratio",
-    label: "Ratio",
+    id: "hole",
+    label: "Hole",
     type: "dropdown",
     values: [
       { label: "R 0.6/1", value: "R 0.6/1" },
@@ -56,6 +67,17 @@ export const sampleForm = [
       { label: "R 1/2", value: "R 1/2" },
       { label: "R 1/4", value: "R 1/4" },
       { label: "R 2/4", value: "R 2/4" },
+    ],
+  },
+  {
+    id: "vitrification",
+    label: "Vitrification",
+    type: "dropdown",
+    values: [
+      { label: "GP2", value: "GP2" },
+      { label: "Manual", value: "Manual" },
+      { label: "Vitrobot", value: "Vitrobot" },
+      { label: "High Pressure", value: "High Pressure" },
     ],
   },
 ] as DynamicFormEntry[];

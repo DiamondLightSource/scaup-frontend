@@ -1,4 +1,4 @@
-import { formMapping } from "@/mappings/forms";
+import { formMapping } from "@/components/input/form";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { Divider, HStack, Text, VStack } from "@chakra-ui/react";
 import { useMemo } from "react";

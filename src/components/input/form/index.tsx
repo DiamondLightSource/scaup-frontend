@@ -1,4 +1,4 @@
-import { DynamicFormEntry, DynamicFormInput } from "@/components/input/formInput";
+import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
 import { dewarForm } from "@/mappings/forms/dewar";
 import { sampleForm } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
