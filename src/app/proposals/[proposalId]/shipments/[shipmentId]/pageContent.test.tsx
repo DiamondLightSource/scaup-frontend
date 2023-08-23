@@ -6,11 +6,6 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
-jest.mock("next-auth/react", () => ({
-  ...jest.requireActual("next-auth/react"),
-  useSession: () => ({ data: { accessToken: "abc" } }),
-}));
-
 describe("Item Page", () => {
   it("should render form", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
@@ -55,7 +50,7 @@ describe("Item Page", () => {
         shipment: {
           ...initialState,
           items: [],
-          activeItem: { id: "new-dewar", label: "", data: { type: "dewar" } },
+          activeItem: { id: "new-dewar", name: "", data: { type: "dewar" } },
         },
       },
     });
@@ -90,7 +85,7 @@ describe("Item Page", () => {
     fireEvent.click(screen.getByText(/add/i));
 
     await waitFor(() =>
-      expect(store.getState().shipment.unassigned[0].children![0].children![0].label).toBe(
+      expect(store.getState().shipment.unassigned[0].children![0].children![0].name).toBe(
         "new-name",
       ),
     );
@@ -103,8 +98,8 @@ describe("Item Page", () => {
       preloadedState: {
         shipment: {
           ...initialState,
-          items: [{ id: "456", label: "", data: { type: "sample" } }],
-          activeItem: { id: "456", label: "", data: { type: "sample" } },
+          items: [{ id: "456", name: "", data: { type: "sample" } }],
+          activeItem: { id: "456", name: "", data: { type: "sample" } },
           isEdit: true,
         },
       },

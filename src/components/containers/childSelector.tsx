@@ -94,7 +94,7 @@ export const ChildSelector = ({
               >
                 <Stat>
                   <StatLabel>Sample</StatLabel>
-                  <StatNumber>{selectedItem.label}</StatNumber>
+                  <StatNumber>{selectedItem.name}</StatNumber>
                 </Stat>
               </Card>
             </Box>
@@ -107,7 +107,7 @@ export const ChildSelector = ({
                 <Card onClick={() => handleSampleClicked(sample)} key={sample.id}>
                   <Stat>
                     <StatLabel>Sample</StatLabel>
-                    <StatNumber>{sample.label}</StatNumber>
+                    <StatNumber>{sample.name}</StatNumber>
                   </Stat>
                 </Card>
               ))}

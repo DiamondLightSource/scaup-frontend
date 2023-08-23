@@ -7,12 +7,12 @@ export interface PositionedItem extends BaseShipmentItem {
 
 export const dewarForm = [
   {
-    id: "barcode",
+    id: "barCode",
     label: "Barcode",
     type: "text",
   },
   {
-    id: "dewarCode",
+    id: "code",
     label: "Dewar Code",
     type: "dropdown",
     values: {

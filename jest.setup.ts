@@ -18,7 +18,7 @@ afterAll(() => {
 
 export const mockSession = {
   expires: new Date(Date.now() + 2 * 86400).toISOString(),
-  user: { name: "admin" },
+  data: { name: "admin", accessToken: "a" },
 };
 
 jest.mock("next-auth/react", () => {

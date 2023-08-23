@@ -19,12 +19,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemFormPageContentProps {
+  shipmentId: string;
   // TODO: use actual type
   prepopData: Record<string, any>;
-  shipmentId: string;
 }
 
-const ItemFormPageContent = ({ prepopData, shipmentId }: ItemFormPageContentProps) => {
+const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
   const { data: session } = useSession();
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
@@ -59,7 +59,7 @@ const ItemFormPageContent = ({ prepopData, shipmentId }: ItemFormPageContentProp
 
         // TODO: apply returned values in type agnostic way
         values.id = newItem.sampleId;
-        values.label = newItem.name;
+        values.name = newItem.name;
 
         if (checkIsRoot(values)) {
           dispatch(addRootItem(values));
@@ -92,7 +92,7 @@ const ItemFormPageContent = ({ prepopData, shipmentId }: ItemFormPageContentProp
           {activeStep.singular}
         </Heading>
         <HStack w='100%'>
-          <Heading>{activeIsEdit ? activeItem.label : `New ${activeStep.singular}`}</Heading>
+          <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
           <Spacer />
           <Button isDisabled={!activeIsEdit}>New Item</Button>
         </HStack>

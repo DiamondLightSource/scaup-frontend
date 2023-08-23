@@ -5,20 +5,22 @@ import { BaseShipmentItem } from "@/mappings/pages";
  *
  * @param data Original tree object
  * @param key ID to search for
+ * @param itemType Type of the item to search for
  * @param callback Callback function for when item is found
  */
 export const recursiveFind = (
   data: TreeData[],
   key: string,
-  callback: (item: TreeData, index: number, siblings: TreeData[]) => void,
+  itemType: BaseShipmentItem["type"],
+  callback: (item: TreeData, index: number, siblings: TreeData<BaseShipmentItem>[]) => void,
 ) => {
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
-    if (item.id === key) {
+    if (item.id === key && item.data.type == itemType) {
       return callback(item, i, data);
     }
     if (item.children !== undefined && item.children.length > 0) {
-      recursiveFind(item.children, key, callback);
+      recursiveFind(item.children, key, itemType, callback);
     }
   }
 };
@@ -34,7 +36,7 @@ export const recursiveCountChildrenByType = (data: TreeData[], key: string | str
   let count = 0;
   for (let i = 0; i < data.length; i++) {
     const item = data[i];
-    if (item.children !== undefined) {
+    if (item.children) {
       if (Array.isArray(key) ? key.includes(item.data.type) : item.data.type === key) {
         count += item.children.length;
       } else {
@@ -54,7 +56,7 @@ export const setTagInPlace = (data: TreeData<BaseShipmentItem>[]) => {
     if (item.data !== undefined && item.data.position !== undefined) {
       item.tag = ((item.data.position as number) + 1).toString();
     }
-    if (item.children !== undefined) {
+    if (item.children !== undefined && item.children !== null) {
       setTagInPlace(item.children);
     }
   }

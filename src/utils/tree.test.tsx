@@ -5,14 +5,14 @@ import { recursiveCountChildrenByType, recursiveFind, setTagInPlace } from "./tr
 const defaultData: TreeData[] = [
   {
     id: "1",
-    label: "",
+    name: "",
     data: { type: "dewar" },
     children: [
       {
         id: "2",
-        label: "",
+        name: "",
         data: { type: "puck" },
-        children: [{ id: "3", label: "", data: { type: "gridBox" } }],
+        children: [{ id: "3", name: "", data: { type: "gridBox" } }],
       },
     ],
   },
@@ -21,7 +21,7 @@ const defaultData: TreeData[] = [
 describe("Tree Utility Functions", () => {
   it("should find leaf item", () => {
     const callback = jest.fn();
-    recursiveFind(defaultData, "3", callback);
+    recursiveFind(defaultData, "3", "gridBox", callback);
 
     expect(callback).toBeCalledWith(
       expect.objectContaining({ id: "3" }),
@@ -32,7 +32,7 @@ describe("Tree Utility Functions", () => {
 
   it("should find branch item", () => {
     const callback = jest.fn();
-    recursiveFind(defaultData, "2", callback);
+    recursiveFind(defaultData, "2", "puck", callback);
 
     expect(callback).toBeCalledWith(
       expect.objectContaining({ id: "2" }),
@@ -43,7 +43,7 @@ describe("Tree Utility Functions", () => {
 
   it("should find root item", () => {
     const callback = jest.fn();
-    recursiveFind(defaultData, "1", callback);
+    recursiveFind(defaultData, "1", "dewar", callback);
 
     expect(callback).toBeCalledWith(
       expect.objectContaining({ id: "1" }),
@@ -54,7 +54,12 @@ describe("Tree Utility Functions", () => {
 
   it("should find item amongst siblings", () => {
     const callback = jest.fn();
-    recursiveFind([...defaultData, { id: "4", label: "", data: {} }], "4", callback);
+    recursiveFind(
+      [...defaultData, { id: "4", name: "", data: { type: "dewar" } }],
+      "4",
+      "dewar",
+      callback,
+    );
 
     expect(callback).toBeCalledWith(
       expect.objectContaining({ id: "4" }),
@@ -72,9 +77,9 @@ describe("Tree Utility Functions", () => {
         ...defaultData,
         {
           id: "4",
-          label: "",
+          name: "",
           data: { type: "dewar" },
-          children: [{ id: "5", label: "", data: {} }],
+          children: [{ id: "5", name: "", data: {} }],
         },
       ],
       "dewar",
@@ -85,7 +90,7 @@ describe("Tree Utility Functions", () => {
 
   it("should count children of children", () => {
     const newData = structuredClone(defaultData);
-    newData[0].children![0].children!.push({ id: "6", data: {}, label: "" });
+    newData[0].children![0].children!.push({ id: "6", data: {}, name: "" });
 
     const count = recursiveCountChildrenByType(newData, "puck");
     expect(count).toBe(2);
@@ -96,8 +101,8 @@ describe("Tree Utility Functions", () => {
     newData[0].children!.push({
       id: "6",
       data: { type: "falconTube" },
-      label: "",
-      children: [{ id: "7", label: "", data: {} }],
+      name: "",
+      children: [{ id: "7", name: "", data: {} }],
     });
 
     const count = recursiveCountChildrenByType(defaultData, ["puck", "falconTube"]);

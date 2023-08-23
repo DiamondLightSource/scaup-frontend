@@ -1,45 +1,57 @@
-import { TreeData } from "@/components/visualisation/treeView";
 import { rest } from "msw";
 
-const defaultData = [
-  {
-    label: "Dewar",
-    id: "dewar-1",
-    data: { type: "dewar" },
-    children: [
-      {
-        label: "Falcon Tube",
-        id: "ftube",
-        data: { type: "container" },
-        children: [
-          {
-            label: "Grid Box 1",
-            data: { type: "gridBox" },
-            id: "grid-box-1",
-            children: [{ label: "Sample 1", id: "sample-1" }],
-          },
-        ],
-      },
-      {
-        label: "Puck",
-        id: "puck",
-        data: { type: "container" },
-        children: [
-          {
-            label: "Grid Box 2",
-            data: { type: "gridBox" },
-            id: "grid-box-2",
-            children: [{ label: "Sample 2", id: "sample-2" }],
-          },
-        ],
-      },
-    ],
-  },
-] as TreeData[];
+const defaultData = {
+  id: "1",
+  name: "Shipment",
+  data: {},
+  children: [
+    {
+      name: "Dewar",
+      id: "1",
+      data: { type: "dewar" },
+      children: [
+        {
+          name: "Falcon Tube",
+          id: "2",
+          data: { type: "container" },
+          children: [
+            {
+              name: "Grid Box 1",
+              data: { type: "gridBox" },
+              id: "3",
+              children: [{ name: "Sample 1", id: "7" }],
+            },
+          ],
+        },
+        {
+          name: "Puck",
+          id: "4",
+          data: { type: "container" },
+          children: [
+            {
+              name: "Grid Box 2",
+              data: { type: "gridBox" },
+              id: "5",
+              children: [{ name: "Sample 2", id: "6" }],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
 export const handlers = [
   rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
     res(ctx.status(200), ctx.json(defaultData)),
+  ),
+
+  rest.get("http://localhost/api/proposals/:proposalReference/data", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ labContacts: [], proteins: [] })),
+  ),
+
+  rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json({ samples: [], containers: [], gridBoxes: [] })),
   ),
 
   rest.post("http://localhost/api/shipments/:shipmentId/:itemType", (req, res, ctx) =>
