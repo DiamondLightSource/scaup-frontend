@@ -1,7 +1,7 @@
 import { authenticatedFetch } from "@/utils/client";
 import ItemFormPageContent from "./pageContent";
 
-export const getPrepopData = async (proposalId: string) => {
+const getPrepopData = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
   return res && res.status === 200 ? await res.json() : {};
 };

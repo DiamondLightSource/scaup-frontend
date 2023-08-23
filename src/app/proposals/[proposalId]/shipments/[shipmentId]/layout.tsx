@@ -9,7 +9,7 @@ export interface ShipmentsLayoutProps {
   params: ShipmentParams;
 }
 
-export const getShipmentData = async (
+const getShipmentData = async (
   shipmentId: string,
   suffix: string = "",
 ): Promise<Record<string, any> | null> => {
