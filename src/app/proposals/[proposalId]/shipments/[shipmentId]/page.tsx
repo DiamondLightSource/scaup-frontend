@@ -7,6 +7,7 @@ const getPrepopData = async (proposalId: string) => {
 };
 
 const ItemFormPage = async ({ params }: { params: { proposalId: string; shipmentId: string } }) => {
+  // TODO: add type
   const prepopData = await getPrepopData(params.proposalId);
 
   return <ItemFormPageContent shipmentId={params.shipmentId} prepopData={prepopData} />;

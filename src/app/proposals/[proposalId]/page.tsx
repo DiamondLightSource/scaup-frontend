@@ -1,19 +1,13 @@
+import { authenticatedFetch } from "@/utils/client";
 import { ProposalOverviewContent } from "./pageContent";
 
 const getShipments = async (proposalId: string) => {
-  //const shipments = await authenticatedFetch(`https://localtest.diamond.ac.uk/api/proposals/${proposalId}/shipments`);
+  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
 
-  const shipments = {
-    items: [
-      { shippingId: 1, shippingName: "test", creationDate: "test", isSubmitted: true },
-      { shippingId: 1, shippingName: "test", creationDate: "test" },
-      { shippingId: 1, shippingName: "test", creationDate: "test" },
-      { shippingId: 1, shippingName: "test", creationDate: "test" },
-      { shippingId: 1, shippingName: "test", creationDate: "test" },
-    ],
-  };
-
-  return shipments.items;
+  if (res && res.status === 200) {
+    const shipments = await res.json();
+    return shipments;
+  }
 };
 
 const ProposalOverview = async ({ params }: { params: { proposalId: string } }) => {

@@ -32,7 +32,7 @@ const ReviewPage = () => {
         <Heading size='md' color='gray.600'>
           {activeStep}
         </Heading>
-        <Heading>{activeItem.label}</Heading>
+        <Heading>{activeItem.name}</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       <Box display='flex' flexDirection='column' width='100%' flex='1 0 auto'>

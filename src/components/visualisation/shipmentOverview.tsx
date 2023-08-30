@@ -5,26 +5,31 @@ import {
   selectUnassigned,
   setShipment,
 } from "@/features/shipment/shipmentSlice";
-import { checkIsRoot } from "@/mappings/pages";
+import { BaseShipmentItem, checkIsRoot } from "@/mappings/pages";
 import { recursiveFind } from "@/utils/tree";
 import { Box, Divider, Heading } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 
-export interface ShipmentOverviewProps {
+export interface ShipmentOverviewInnerProps {
   onActiveChanged: (data: TreeData) => void;
   proposal: string;
+  shipmentId: string;
 }
 
-const ShipmentOverview = ({ proposal, onActiveChanged }: ShipmentOverviewProps) => {
+const ShipmentOverview = ({
+  proposal,
+  shipmentId,
+  onActiveChanged,
+}: ShipmentOverviewInnerProps) => {
   const dispatch = useDispatch();
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
 
-  const handleRemove = (item: TreeData) => {
+  const handleRemove = (item: TreeData<BaseShipmentItem>) => {
     if (checkIsRoot(item)) {
       const innerData = structuredClone(data!);
 
-      recursiveFind(innerData, item.id, (_, i, arr) => {
+      recursiveFind(innerData, item.id, item.data.type, (_, i, arr) => {
         arr.splice(i, 1);
       });
 

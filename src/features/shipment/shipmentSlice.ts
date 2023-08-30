@@ -17,15 +17,15 @@ export interface ShipmentState {
   currentStep: number;
 }
 
-const defaultUnassigned = [
+export const defaultUnassigned = [
   {
-    label: "Unassigned",
+    name: "Unassigned",
     isNotViewable: true,
     id: "root",
     data: {},
     children: [
       {
-        label: "Samples",
+        name: "Samples",
         id: "sample",
         isUndeletable: true,
         isNotViewable: true,
@@ -33,7 +33,7 @@ const defaultUnassigned = [
         children: [],
       },
       {
-        label: "Grid Boxes",
+        name: "Grid Boxes",
         id: "gridBox",
         isUndeletable: true,
         isNotViewable: true,
@@ -41,7 +41,7 @@ const defaultUnassigned = [
         children: [],
       },
       {
-        label: "Containers",
+        name: "Containers",
         id: "container",
         isUndeletable: true,
         isNotViewable: true,
@@ -50,22 +50,13 @@ const defaultUnassigned = [
       },
     ],
   },
-] as TreeData[];
+] satisfies TreeData[];
 
 const defaultActive = {
-  label: "New Sample",
+  name: "New Sample",
   id: "new-sample",
   data: { type: "sample" },
 } as TreeData<BaseShipmentItem>;
-
-const addToUnassigned = (
-  unassigned: typeof defaultUnassigned,
-  item: TreeData<BaseShipmentItem>,
-) => {
-  const newUnassigned = structuredClone(unassigned);
-  newUnassigned[0].children![getCurrentStepIndex(item.data.type)].children!.push(item);
-  return newUnassigned;
-};
 
 export const initialState: ShipmentState = {
   items: undefined,
@@ -75,12 +66,31 @@ export const initialState: ShipmentState = {
   currentStep: 0,
 };
 
+// https://github.com/reduxjs/redux/issues/368
+const addToUnassignedClone = (unassigned: TreeData[], item: TreeData<BaseShipmentItem>) => {
+  const newUnassigned = structuredClone(unassigned);
+  newUnassigned[0].children![getCurrentStepIndex(item.data.type)].children!.push(item);
+  return newUnassigned;
+};
+
 export const shipmentSlice = createSlice({
   name: "shipment",
   initialState,
   reducers: {
     setShipment: (state, action: PayloadAction<ShipmentState["items"]>) => {
       state.items = action.payload;
+    },
+    /** Set array of undefined items */
+    setUnassigned: (state, action: PayloadAction<{ items: TreeData[]; type: string }>) => {
+      const index = state.unassigned[0].children!.findIndex(
+        (item) => item.id === action.payload.type,
+      );
+
+      if (index !== -1) {
+        state.unassigned[0].children![index].children = action.payload.items;
+      } else {
+        throw Error("Invalid type provided");
+      }
     },
     /** Set active item without modifying shipment items */
     setActiveItem: (
@@ -97,24 +107,30 @@ export const shipmentSlice = createSlice({
       if (state.items) {
         // This is a proxy; we need to unwrap it to access the internal state
         const newItems = structuredClone(current(state.items));
-        recursiveFind(newItems, action.payload.id, (_, i, arr) => (arr[i] = action.payload));
+        recursiveFind(
+          newItems,
+          action.payload.id,
+          action.payload.data.type,
+          (_, i, arr) => (arr[i] = action.payload),
+        );
         state.items = newItems;
       }
     },
+    /** Add single unassigned item */
     addUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
-      state.unassigned = addToUnassigned(current(state.unassigned), action.payload);
+      state.unassigned = addToUnassignedClone(current(state.unassigned), action.payload);
     },
     removeUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
       const newUnassigned = structuredClone(current(state.unassigned));
 
-      recursiveFind(newUnassigned, action.payload.id, (_, i, arr) => {
+      recursiveFind(newUnassigned, action.payload.id, action.payload.data.type, (_, i, arr) => {
         arr.splice(i, 1);
       });
 
       state.unassigned = newUnassigned;
     },
     moveToUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
-      if (!state.items) {
+      if (!state.items || state.items.length === 0) {
         return;
       }
 
@@ -125,7 +141,7 @@ export const shipmentSlice = createSlice({
         item.data.position = null;
       }
 
-      recursiveFind(innerData, item.id, (item, i, arr) => {
+      recursiveFind(innerData, item.id, item.data.type, (item, i, arr) => {
         // Remove item by modifying passed reference
         arr.splice(i, 1);
         if (state.activeItem.id === item.id) {
@@ -140,7 +156,7 @@ export const shipmentSlice = createSlice({
         }
       });
 
-      state.unassigned = addToUnassigned(current(state.unassigned), action.payload);
+      state.unassigned = addToUnassignedClone(current(state.unassigned), action.payload);
       state.items = innerData;
     },
     addRootItem: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
@@ -160,6 +176,7 @@ export const shipmentSlice = createSlice({
 
 export const {
   setShipment,
+  setUnassigned,
   setActiveItem,
   saveActiveItem,
   addUnassigned,

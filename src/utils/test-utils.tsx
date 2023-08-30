@@ -13,7 +13,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
 }
 
 export const defaultActiveItem = {
-  label: "New Samples",
+  name: "New Samples",
   id: "new-sample",
   data: { type: "sample" },
 } as TreeData<BaseShipmentItem>;

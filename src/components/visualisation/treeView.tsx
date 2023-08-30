@@ -17,8 +17,8 @@ import {
 import React, { useCallback } from "react";
 
 export interface TreeData<T = any> {
-  /** Unique node label */
-  label: string;
+  /** Node label */
+  name: string;
   /** Unique node ID */
   id: string;
   /** Tag prefixed to label */
@@ -74,15 +74,15 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
   }
 
   return (
-    <Accordion allowMultiple {...props}>
+    <Accordion allowMultiple {...props} defaultIndex={[...Array(data.length).keys()]}>
       {data.map((item, index) => (
         <React.Fragment key={index}>
-          {item.children === undefined || item.children.length < 1 ? (
+          {!item.children || item.children.length < 1 ? (
             <List spacing={3} py={1} pt={2}>
               <ListItem ml={5}>
                 <HStack>
                   {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                  <Text>{item.label}</Text>
+                  <Text>{item.name}</Text>
                   <Spacer />
                   {!item.isUndeletable && (
                     <Button size='xs' onClick={() => handleRemove(item)}>
@@ -104,7 +104,7 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                   <AccordionIcon />
                   <Box flex='1' textAlign='left'>
                     {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                    <Text fontSize='md'>{item.label}</Text>
+                    <Text fontSize='md'>{item.name}</Text>
                   </Box>
                 </AccordionButton>
                 {!item.isNotViewable && (

@@ -4,22 +4,25 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 
 const defaultShipment = [
   {
     id: "dewar",
-    label: "dewar",
+    name: "dewar",
     data: { type: "dewar" },
-    children: [{ id: "container", label: "container", data: { type: "puck" } }],
+    children: [{ id: "container", name: "container", data: { type: "puck" } }],
   },
 ] satisfies TreeData<BaseShipmentItem>[];
 
 describe("Shipment Overview", () => {
   it("should render tree", () => {
-    renderWithProviders(<ShipmentOverview onActiveChanged={() => {}} proposal='' />, {
-      preloadedState: { shipment: { ...initialState, items: defaultShipment } },
-    });
+    renderWithProviders(
+      <ShipmentOverview shipmentId='1' onActiveChanged={() => {}} proposal='' />,
+      {
+        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+      },
+    );
 
     const dewarAccordion = screen.getByText("dewar");
     expect(dewarAccordion).toBeInTheDocument();
@@ -30,9 +33,12 @@ describe("Shipment Overview", () => {
   });
 
   it("should move non-root item to unassigned when remove is clicked", () => {
-    renderWithProviders(<ShipmentOverview proposal='' onActiveChanged={() => {}} />, {
-      preloadedState: { shipment: { ...initialState, items: defaultShipment } },
-    });
+    renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      {
+        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+      },
+    );
 
     fireEvent.click(screen.getByText("dewar"));
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
@@ -45,18 +51,32 @@ describe("Shipment Overview", () => {
   });
 
   it("should remove root item completely when remove is clicked", async () => {
-    renderWithProviders(<ShipmentOverview proposal='' onActiveChanged={() => {}} />, {
-      preloadedState: { shipment: { ...initialState, items: defaultShipment } },
-    });
+    renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      {
+        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+      },
+    );
 
-    fireEvent.click(screen.getByText("dewar"));
+    await screen.findByText("dewar");
 
     // Remove container
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
 
     // Remove dewar
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
+    fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
 
-    expect(screen.queryByText("dewar")).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText("dewar")).not.toBeInTheDocument());
+  });
+
+  it("should remove item from unassigned when clicked", async () => {
+    renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      {
+        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+      },
+    );
+
+    // TODO
   });
 });

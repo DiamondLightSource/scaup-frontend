@@ -15,7 +15,7 @@ export const sampleForm = [
     id: "proteinId",
     label: "Compound",
     type: "dropdown",
-    values: { $ref: { parent: "#/compounds", map: { value: "proteinId", label: "name" } } },
+    values: { $ref: { parent: "#/proteins", map: { value: "proteinId", label: "name" } } },
   },
   {
     id: "foil",

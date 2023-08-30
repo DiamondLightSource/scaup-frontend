@@ -21,6 +21,13 @@ export const steps = [
   { title: "Dewars", id: "dewar", singular: "Dewar", endpoint: "dewars" },
 ];
 
+export const pluralToSingular: Record<string, string> = {
+  gridBoxes: "gridBox",
+  samples: "sample",
+  containers: "container",
+  dewars: "dewar",
+};
+
 export const getCurrentStepIndex = (itemType: string) => {
   const currentIndex = steps.findIndex((step) => {
     if (Array.isArray(step.id)) {

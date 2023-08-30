@@ -8,7 +8,7 @@ import { fireEvent, screen } from "@testing-library/react";
 
 const gridBox = {
   id: "gridBox",
-  label: "gridBox",
+  name: "gridBox",
   data: { type: "gridBox" },
 } as TreeData<BaseShipmentItem>;
 
@@ -17,12 +17,12 @@ const defaultShipment = {
   items: [
     {
       id: "dewar",
-      label: "dewar",
+      name: "dewar",
       data: { type: "dewar" },
       children: [
         {
           id: "container",
-          label: "container",
+          name: "container",
           data: { type: "puck" },
           children: [gridBox],
         },
@@ -36,9 +36,9 @@ const defaultShipment = {
       children: [
         {
           id: "samples",
-          label: "samples",
+          name: "samples",
           data: {},
-          children: [{ id: "sample-1", label: "sample-1", data: { type: "sample" } }],
+          children: [{ id: "sample-1", name: "sample-1", data: { type: "sample" } }],
         },
       ],
     },

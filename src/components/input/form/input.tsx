@@ -62,7 +62,6 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
 
 export const DynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
   const {
-    register,
     formState: { errors },
   } = useFormContext();
 
