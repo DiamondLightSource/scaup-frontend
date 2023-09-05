@@ -1,6 +1,6 @@
 import { rest } from "msw";
 
-const defaultData = {
+export const defaultData = {
   id: "1",
   name: "Shipment",
   data: {},
@@ -60,5 +60,9 @@ export const handlers = [
 
   rest.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
     res(ctx.status(200), ctx.json({ itemId: 123 })),
+  ),
+
+  rest.delete("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
+    res(ctx.status(204), ctx.json({})),
   ),
 ];

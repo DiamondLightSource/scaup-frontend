@@ -2,6 +2,7 @@ import { server } from "@/mocks/server";
 import "whatwg-fetch";
 
 const pathnameMock = jest.fn(() => "/");
+export const toastMock = jest.fn();
 
 jest.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
 window.scrollTo = () => {};
@@ -14,11 +15,13 @@ afterEach(() => {
 });
 afterAll(() => {
   server.close();
+  toastMock.mockClear();
 });
 
 export const mockSession = {
   expires: new Date(Date.now() + 2 * 86400).toISOString(),
   data: { name: "admin", accessToken: "a" },
+  user: {},
 };
 
 jest.mock("next-auth/react", () => {
@@ -32,6 +35,7 @@ jest.mock("next-auth/react", () => {
     })),
   };
 });
+
 // Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
 // We also need to mock the whole next-auth package, since it's used in
 // our various pages via the `export { getServerSideProps }` function.
@@ -48,4 +52,9 @@ jest.mock("next-auth/next", () => ({
         });
       }),
   ),
+}));
+
+jest.mock("@chakra-ui/react", () => ({
+  ...jest.requireActual("@chakra-ui/react"),
+  createStandaloneToast: () => ({ toast: toastMock }),
 }));

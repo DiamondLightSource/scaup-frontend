@@ -3,13 +3,18 @@ import { GridBox } from "@/components/containers/gridBox";
 import { DynamicForm } from "@/components/input/form";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
-  addRootItem,
-  addUnassigned,
-  saveActiveItem,
   selectActiveItem,
   selectIsEdit,
+  updateShipment,
+  updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, checkIsRoot, getCurrentStepIndex, steps } from "@/mappings/pages";
+import {
+  BaseShipmentItem,
+  checkIsRoot,
+  getCurrentStepIndex,
+  separateDetails,
+  steps,
+} from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
 import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
@@ -45,12 +50,12 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      const res = await authenticatedFetch(
+      const res = await authenticatedFetch.client(
         `/shipments/${shipmentId}/${activeStep.endpoint}`,
         session,
         {
           method: "post",
-          body: JSON.stringify(info),
+          body: JSON.stringify(separateDetails(info)),
         },
       );
 
@@ -62,24 +67,24 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         values.name = newItem.name;
 
         if (checkIsRoot(values)) {
-          dispatch(addRootItem(values));
+          dispatch(updateShipment({ session, shipmentId }));
         } else {
-          dispatch(addUnassigned(values));
+          dispatch(updateUnassigned({ session, shipmentId }));
         }
         toast({ title: "Successfully created item!" });
       }
     } else {
-      const res = await authenticatedFetch(
+      const res = await authenticatedFetch.client(
         `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
         session,
         {
           method: "PATCH",
-          body: JSON.stringify(info),
+          body: JSON.stringify(separateDetails(info)),
         },
       );
 
       if (res && res.status === 200) {
-        dispatch(saveActiveItem({ ...activeItem, data: { ...activeItem.data, ...info } }));
+        dispatch(updateShipment({ session, shipmentId }));
         toast({ title: "Successfully saved item!" });
       }
     }

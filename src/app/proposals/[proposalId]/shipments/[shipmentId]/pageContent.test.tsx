@@ -1,4 +1,6 @@
+import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
+import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
@@ -27,6 +29,17 @@ describe("Item Page", () => {
   it("should add item to unassigned if in creation mode", async () => {
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            samples: [{ data: { film: "Holey carbon", foil: "Quantifoil copper" } }],
+          }),
+        ),
+      ),
+    );
+
     fireEvent.click(screen.getByText(/add/i));
 
     await waitFor(() =>
@@ -45,12 +58,29 @@ describe("Item Page", () => {
   });
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
+    const newDewar: TreeData<BaseShipmentItem> = {
+      id: "new-dewar",
+      name: "",
+      data: { type: "dewar" },
+    };
+
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            children: [newDewar],
+          }),
+        ),
+      ),
+    );
+
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
           ...initialState,
           items: [],
-          activeItem: { id: "new-dewar", name: "", data: { type: "dewar" } },
+          activeItem: newDewar,
         },
       },
     });
@@ -63,6 +93,17 @@ describe("Item Page", () => {
   });
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            samples: [{ name: "new-name", id: "123" }],
+          }),
+        ),
+      ),
+    );
+
     server.use(
       rest.post("http://localhost/api/shipments/:shipmentId/samples", (req, res, ctx) =>
         res.once(ctx.status(201), ctx.json({ sampleId: "123", name: "new-name" })),
@@ -93,7 +134,20 @@ describe("Item Page", () => {
     expect(store.getState().shipment.unassigned[0].children![0].children![0].id).toBe("123");
   });
 
-  it("should save changes in item to store", async () => {
+  it("should trigger update of stored items on save", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            children: [
+              { id: "456", name: "", data: { type: "sample", foil: "Quantifoil copper" } },
+            ],
+          }),
+        ),
+      ),
+    );
+
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {

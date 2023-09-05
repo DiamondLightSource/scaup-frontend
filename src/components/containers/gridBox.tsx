@@ -1,7 +1,6 @@
 import { ChildSelector } from "@/components/containers/childSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
-  moveToUnassigned,
   removeUnassigned,
   saveActiveItem,
   selectActiveItem,
@@ -86,7 +85,7 @@ export const GridBox = ({ positions }: GridBoxProps) => {
 
   const handleRemoveSample = useCallback(
     (sample: TreeData<PositionedItem>) => {
-      dispatch(moveToUnassigned(sample));
+      //dispatch(moveToUnassigned(sample));
     },
     [dispatch],
   );

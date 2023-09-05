@@ -1,5 +1,5 @@
+import { ProposalOverviewContent } from "@/app/proposals/[proposalId]/pageContent";
 import { authenticatedFetch } from "@/utils/client";
-import { ProposalOverviewContent } from "./pageContent";
 
 const getShipments = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
