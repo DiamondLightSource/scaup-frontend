@@ -53,8 +53,12 @@ export const recursiveCountChildrenByType = (data: TreeData[], key: string | str
  */
 export const setTagInPlace = (data: TreeData<BaseShipmentItem>[]) => {
   for (const item of data) {
-    if (item.data !== undefined && item.data.position !== undefined) {
-      item.tag = ((item.data.position as number) + 1).toString();
+    if (
+      item.data !== undefined &&
+      item.data.location !== undefined &&
+      item.data.location !== null
+    ) {
+      item.tag = ((item.data.location as number) + 1).toString();
     }
     if (item.children !== undefined && item.children !== null) {
       setTagInPlace(item.children);

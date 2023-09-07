@@ -108,8 +108,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           onSubmit={onSubmit}
           style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
         >
-          <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
-          <GridBox positions={4} />
+          <HStack>
+            <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
+            <GridBox positions={12} shipmentId={shipmentId} />
+          </HStack>
           <HStack>
             <Spacer />
             <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>

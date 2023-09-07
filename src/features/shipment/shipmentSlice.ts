@@ -161,8 +161,8 @@ export const shipmentSlice = createSlice({
     /** Save active item to shipment items list */
     saveActiveItem: (state, action: PayloadAction<ShipmentState["activeItem"]>) => {
       if (state.items) {
-        // This is a proxy; we need to unwrap it to access the internal state
         const newItems = structuredClone(current(state.items));
+        // This is a proxy; we need to unwrap it to access the internal state
         recursiveFind(
           newItems,
           action.payload.id,
@@ -170,6 +170,18 @@ export const shipmentSlice = createSlice({
           (_, i, arr) => (arr[i] = action.payload),
         );
         state.items = newItems;
+      }
+    },
+    /** Sync active item to its representation inside the shipment items state */
+    syncActiveItem: (state) => {
+      if (state.items) {
+        const newItems = structuredClone(current(state.items));
+        recursiveFind(
+          newItems,
+          state.activeItem.id,
+          state.activeItem.data.type,
+          (item) => (state.activeItem = item),
+        );
       }
     },
     /** Add single unassigned item */
@@ -199,6 +211,7 @@ export const {
   saveActiveItem,
   addUnassigned,
   removeUnassigned,
+  syncActiveItem,
   setStep,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;

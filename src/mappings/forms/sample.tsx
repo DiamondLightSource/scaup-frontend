@@ -2,7 +2,7 @@ import { DynamicFormEntry } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
 
 export interface PositionedItem extends BaseShipmentItem {
-  position: number | null;
+  location: number | null;
 }
 
 export const sampleForm = [
