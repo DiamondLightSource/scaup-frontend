@@ -5,6 +5,7 @@ import reducer, {
   removeUnassigned,
   saveActiveItem,
   setActiveItem,
+  setNewActiveItem,
   setShipment,
   updateShipment,
   updateUnassigned,
@@ -69,6 +70,16 @@ describe("Shipment Items Reducers", () => {
     expect(reducer(undefined, setActiveItem({ item: newActiveItem, isEdit: true }))).toMatchObject({
       activeItem: newActiveItem,
       isEdit: true,
+    });
+  });
+
+  it("should set active item to default new item values", () => {
+    expect(reducer(undefined, setNewActiveItem({ type: "puck", title: "Puck" }))).toMatchObject({
+      activeItem: {
+        name: "New Puck",
+        id: "new-puck",
+        data: { type: "puck" },
+      },
     });
   });
 

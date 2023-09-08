@@ -145,6 +145,20 @@ export const shipmentSlice = createSlice({
         action.payload.type,
       );
     },
+    setNewActiveItem: (
+      state,
+      action: PayloadAction<{ type: BaseShipmentItem["type"]; title: string }>,
+    ) => {
+      state.activeItem = {
+        id: `new-${action.payload.type}`,
+        name: `New ${action.payload.title}`,
+        data: {
+          type: action.payload.type,
+        },
+      };
+
+      state.isEdit = false;
+    },
     /** Set active item without modifying shipment items */
     setActiveItem: (
       state,
@@ -219,6 +233,7 @@ export const {
   removeUnassigned,
   syncActiveItem,
   setStep,
+  setNewActiveItem,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;
 export const selectActiveItem = (state: RootState) => state.shipment.activeItem;

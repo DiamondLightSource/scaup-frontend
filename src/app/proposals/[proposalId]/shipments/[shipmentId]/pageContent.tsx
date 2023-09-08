@@ -5,6 +5,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
+  setNewActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -19,7 +20,7 @@ import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
 import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -90,6 +91,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     }
   });
 
+  const handleNewItem = useCallback(() => {
+    dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
+  }, [dispatch, activeStep, activeItem]);
+
   return (
     <VStack h='100%' w='65%'>
       <VStack spacing='0' alignItems='start' w='100%'>
@@ -99,7 +104,9 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         <HStack w='100%'>
           <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
           <Spacer />
-          <Button isDisabled={!activeIsEdit}>New Item</Button>
+          <Button isDisabled={!activeIsEdit} onClick={handleNewItem}>
+            New Item
+          </Button>
         </HStack>
         <Divider borderColor='gray.800' />
       </VStack>

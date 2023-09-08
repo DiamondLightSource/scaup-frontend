@@ -2,6 +2,7 @@ import { ChildSelector } from "@/components/containers/childSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
+  selectIsEdit,
   syncActiveItem,
   updateShipment,
   updateUnassigned,
@@ -39,6 +40,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
   const currentGridBox = useSelector(selectActiveItem);
+  const isEdit = useSelector(selectIsEdit);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
   const { control } = useFormContext();
@@ -65,7 +67,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
       let actualContainerId = containerId;
 
       // If container does not exist yet in database, we must create it
-      if (containerId !== null && containerId === "new-gridBox") {
+      if (containerId !== null && !isEdit) {
         const requestBody = { capacity, type: "gridBox" };
         const response = await authenticatedFetch.client(
           `/shipments/${shipmentId}/containers`,
@@ -101,7 +103,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
         dispatch(syncActiveItem((actualContainerId as number) || undefined));
       }
     },
-    [dispatch, session, shipmentId, capacity],
+    [dispatch, session, shipmentId, capacity, isEdit],
   );
 
   const handlePopulatePosition = useCallback(

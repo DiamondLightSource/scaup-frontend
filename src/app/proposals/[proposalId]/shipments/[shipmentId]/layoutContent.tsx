@@ -8,6 +8,7 @@ import {
   selectStep,
   selectUnassigned,
   setActiveItem,
+  setNewActiveItem,
   setShipment,
   setStep,
   setUnassigned,
@@ -37,7 +38,6 @@ import {
   Stepper,
   VStack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,7 +62,6 @@ const ShipmentsLayoutContent = ({
   unassignedItems,
 }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
@@ -99,22 +98,13 @@ const ShipmentsLayoutContent = ({
       if (activeStep >= steps.length) {
         return;
       }
-
       const currentStep = steps[step];
-      dispatch(
-        setActiveItem({
-          item: {
-            id: `new-${currentStep.id}`,
-            name: `New ${currentStep.title}`,
-            data: {
-              type: (Array.isArray(currentStep.id)
-                ? currentStep.id[0]
-                : currentStep.id) as BaseShipmentItem["type"],
-            },
-          },
-          isEdit: false,
-        }),
-      );
+
+      const newType = (
+        Array.isArray(currentStep.id) ? currentStep.id[0] : currentStep.id
+      ) as BaseShipmentItem["type"];
+
+      dispatch(setNewActiveItem({ type: newType, title: currentStep.title }));
     },
     [dispatch, activeStep],
   );
