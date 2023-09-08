@@ -1,5 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
+import { setTagInPlace } from "@/utils/tree";
 
 // https://github.com/reduxjs/redux/issues/368
 
@@ -32,6 +33,7 @@ export const setInUnassignedClone = (
   const index = unassigned[0].children!.findIndex((item) => item.id === type);
 
   if (index !== -1) {
+    setTagInPlace(items);
     unassigned[0].children![index].children = items;
   } else {
     throw Error("Invalid type provided");

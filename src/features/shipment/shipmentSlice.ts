@@ -127,6 +127,7 @@ export const shipmentSlice = createSlice({
             setInUnassignedClone(newUnassigned, value, pluralToSingular[key]);
           }
 
+          setTagInPlace(newUnassigned);
           state.unassigned = newUnassigned;
         }
       },
@@ -135,7 +136,9 @@ export const shipmentSlice = createSlice({
   },
   reducers: {
     setShipment: (state, action: PayloadAction<ShipmentState["items"]>) => {
-      state.items = action.payload;
+      const newItems = structuredClone(action.payload)!;
+      setTagInPlace(newItems);
+      state.items = newItems;
     },
     /** Set array of undefined items */
     setUnassigned: (state, action: PayloadAction<{ items: TreeData[]; type: string }>) => {

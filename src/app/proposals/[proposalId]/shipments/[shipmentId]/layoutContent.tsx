@@ -21,7 +21,7 @@ import {
   steps,
 } from "@/mappings/pages";
 import { UnassignedItemResponse } from "@/types/server";
-import { recursiveCountChildrenByType, setTagInPlace } from "@/utils/tree";
+import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
   Button,
@@ -65,7 +65,6 @@ const ShipmentsLayoutContent = ({
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
-      setTagInPlace(shipmentData.children);
       dispatch(setShipment(shipmentData.children));
     }
   }, [shipmentData, dispatch]);
