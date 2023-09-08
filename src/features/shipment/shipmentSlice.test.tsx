@@ -153,4 +153,8 @@ describe("Shipment Async Thunks", () => {
 
     expect(getUnassignedByType(store.getState().shipment, "sample")).toMatchObject([sample]);
   });
+
+  it("should sync active item if in assigned items", async () => {});
+
+  it("should sync active item if in unassigned items", async () => {});
 });

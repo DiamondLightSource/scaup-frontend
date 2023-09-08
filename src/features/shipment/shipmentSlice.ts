@@ -1,13 +1,13 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem, getCurrentStepIndex, pluralToSingular } from "@/mappings/pages";
+import { addToUnassignedClone, setInUnassignedClone } from "@/features/shipment/utils";
+import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";
 import { UnassignedItemResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
-import { recursiveFind } from "@/utils/tree";
+import { recursiveFind, setTagInPlace } from "@/utils/tree";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Session } from "next-auth";
-import { setInUnassignedClone } from "./utils";
 
 const { toast } = createStandaloneToast();
 
@@ -106,19 +106,16 @@ export const initialState: ShipmentState = {
   currentStep: 0,
 };
 
-// https://github.com/reduxjs/redux/issues/368
-const addToUnassignedClone = (unassigned: TreeData[], item: TreeData<BaseShipmentItem>) => {
-  const newUnassigned = structuredClone(unassigned);
-  newUnassigned[0].children![getCurrentStepIndex(item.data.type)].children!.push(item);
-  return newUnassigned;
-};
-
 export const shipmentSlice = createSlice({
   name: "shipment",
   initialState,
   extraReducers: (builder) => {
     builder.addCase(updateShipment.fulfilled, (state, action: PayloadAction<TreeData[]>) => {
-      state.items = action.payload;
+      if (action.payload) {
+        const newItems = structuredClone(action.payload);
+        setTagInPlace(newItems);
+        state.items = newItems;
+      }
     });
     builder.addCase(
       updateUnassigned.fulfilled,
@@ -172,15 +169,24 @@ export const shipmentSlice = createSlice({
         state.items = newItems;
       }
     },
-    /** Sync active item to its representation inside the shipment items state */
-    syncActiveItem: (state) => {
+    /** Sync active item to its representation inside the shipment items state.
+     *
+     * @param id ID to search for when substituting current active item. If no id is
+     * passed, the ID of the current active item is used
+     */
+    syncActiveItem: (state, action: PayloadAction<number | undefined>) => {
+      const actualId = action.payload || state.activeItem.id;
+
       if (state.items) {
-        const newItems = structuredClone(current(state.items));
         recursiveFind(
-          newItems,
-          state.activeItem.id,
+          // Merge unassigned and assigned items, since our item could be in both
+          [...current(state.items), ...current(state.unassigned)],
+          actualId,
           state.activeItem.data.type,
-          (item) => (state.activeItem = item),
+          (item) => {
+            state.activeItem = item;
+            state.isEdit = true;
+          },
         );
       }
     },

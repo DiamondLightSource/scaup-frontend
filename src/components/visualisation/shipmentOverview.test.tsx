@@ -1,7 +1,7 @@
 import ShipmentOverview from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
@@ -17,40 +17,11 @@ const defaultShipment = [
   },
 ] satisfies TreeData<BaseShipmentItem>[];
 
-const defaultUnassigned = [
-  {
-    name: "Unassigned",
-    isNotViewable: true,
-    id: "root",
-    data: {},
-    children: [
-      {
-        name: "Samples",
-        id: "sample",
-        isUndeletable: true,
-        isNotViewable: true,
-        data: {},
-        children: [],
-      },
-      {
-        name: "Grid Boxes",
-        id: "gridBox",
-        isUndeletable: true,
-        isNotViewable: true,
-        data: {},
-        children: [],
-      },
-      {
-        name: "Containers",
-        id: "container",
-        isUndeletable: true,
-        isNotViewable: true,
-        data: {},
-        children: [defaultShipment[0].children[0]],
-      },
-    ],
-  },
-];
+const defaultUnassigned = structuredClone(initialState.unassigned);
+
+defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(
+  defaultShipment[0].children[0],
+);
 
 describe("Shipment Overview", () => {
   it("should render tree", () => {
@@ -117,6 +88,29 @@ describe("Shipment Overview", () => {
     );
 
     await screen.findByText("dewar");
+
+    fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
+
+    await waitFor(() => expect(screen.queryByText("dewar")).not.toBeInTheDocument());
+  });
+
+  it("should unassign item if assigned to unassigned item", async () => {
+    let unassignedWithAssignedItem = structuredClone(defaultUnassigned);
+
+    unassignedWithAssignedItem[0].children![2].children![0].children = [
+      { data: { type: "gridBox" }, id: "1", name: "Grid Box" },
+    ];
+
+    renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      {
+        preloadedState: {
+          shipment: { ...initialState, unassigned: unassignedWithAssignedItem },
+        },
+      },
+    );
+
+    await screen.findByText("Grid Box");
 
     fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
 

@@ -3,19 +3,20 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithStoreAndForm } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
+import { Controller } from "react-hook-form";
 
 const gridBox = {
-  id: "3",
+  id: 3,
   name: "gridBox",
   data: { type: "gridBox" },
 } as TreeData<BaseShipmentItem>;
 
 const sample = {
-  id: "5",
+  id: 5,
   name: "sample-1",
   data: { type: "sample" },
 } as TreeData<BaseShipmentItem>;
@@ -76,16 +77,8 @@ const populatedGridBoxShipment = {
 } satisfies typeof initialState;
 
 describe("Grid Box", () => {
-  it("should render all grid positions", () => {
-    renderWithProviders(<GridBox positions={12} shipmentId='1' />, {
-      preloadedState: { shipment: defaultShipment },
-    });
-
-    expect(screen.getAllByRole("button")).toHaveLength(12);
-  });
-
   it("should show modal when grid is clicked", () => {
-    renderWithProviders(<GridBox positions={4} shipmentId='1' />, {
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: defaultShipment },
     });
 
@@ -95,7 +88,7 @@ describe("Grid Box", () => {
   });
 
   it("should pre-populate positions with data from state", () => {
-    renderWithProviders(<GridBox positions={4} shipmentId='1' />, {
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -103,7 +96,7 @@ describe("Grid Box", () => {
   });
 
   it("should display message if no unassigned samples are available", () => {
-    renderWithProviders(<GridBox positions={4} shipmentId='1' />, {
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -119,7 +112,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderWithProviders(<GridBox positions={4} shipmentId='1' />, {
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: defaultShipment },
     });
 
@@ -130,7 +123,12 @@ describe("Grid Box", () => {
   });
 
   it("should remove sample from position when remove clicked", async () => {
-    renderWithProviders(<GridBox positions={4} shipmentId='1' />, {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res(ctx.status(200), ctx.json({ children: defaultShipment.items })),
+      ),
+    );
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -138,5 +136,57 @@ describe("Grid Box", () => {
     fireEvent.click(screen.getByRole("button", { name: "Remove" }));
 
     await screen.findByTestId("1-empty");
+  });
+
+  it("should render four grid slots by default", () => {
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+      preloadedState: { shipment: populatedGridBoxShipment },
+    });
+
+    expect(screen.getAllByRole("button")).toHaveLength(4);
+  });
+
+  it("should derive capacity from sibling form component", async () => {
+    renderWithStoreAndForm(
+      <>
+        <Controller
+          name='capacity'
+          render={({ field }) => <input data-testid='cap' {...field} value='3'></input>}
+        ></Controller>
+        <GridBox shipmentId='1' />
+      </>,
+      {
+        preloadedState: { shipment: populatedGridBoxShipment },
+      },
+    );
+
+    fireEvent.change(screen.getByTestId("cap"), { target: { value: "5" } });
+    await waitFor(() => expect(screen.getAllByRole("button")).toHaveLength(5));
+  });
+
+  it("should create grid box if not yet in database before populating slot", async () => {
+    const newPopulatedGridBoxItems = structuredClone(populatedGridBoxShipment.items);
+
+    newPopulatedGridBoxItems[0].children[0].children.push({ ...populatedGridBox, id: 123 });
+
+    server.use(
+      rest.post("http://localhost/api/shipments/:shipmentId/containers", (req, res, ctx) =>
+        res.once(ctx.status(201), ctx.json({ id: 123 })),
+      ),
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res.once(ctx.status(200), ctx.json({ children: newPopulatedGridBoxItems })),
+      ),
+    );
+
+    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+      preloadedState: {
+        shipment: { ...defaultShipment, activeItem: { ...gridBox, id: "new-gridBox" } },
+      },
+    });
+
+    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText(/sample-1/i));
+
+    await screen.findByTestId("1-populated");
   });
 });

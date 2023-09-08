@@ -17,7 +17,7 @@ import {
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
-import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -108,9 +108,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           onSubmit={onSubmit}
           style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
         >
-          <HStack>
-            <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
-            <GridBox positions={12} shipmentId={shipmentId} />
+          <HStack py='3' flex='1 0 auto' alignItems='start'>
+            <Box flex='1 0 auto'>
+              <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
+            </Box>
+            <GridBox shipmentId={shipmentId} />
           </HStack>
           <HStack>
             <Spacer />

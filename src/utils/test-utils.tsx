@@ -45,3 +45,23 @@ export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOpt
 
   return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
+
+export const renderWithStoreAndForm = (
+  ui: React.ReactElement,
+  {
+    preloadedState = { shipment: { ...initialState, items: [] } },
+    ...renderOptions
+  }: ExtendedRenderOptions = {},
+) => {
+  const store = configureStore({ reducer: { shipment: shipmentSlice }, preloadedState });
+  const Wrapper = ({ children }: PropsWithChildren<{}>) => {
+    const formContext = useForm();
+    return (
+      <FormProvider {...formContext}>
+        <Provider store={store}>{children}</Provider>
+      </FormProvider>
+    );
+  };
+
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+};

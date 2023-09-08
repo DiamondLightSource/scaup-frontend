@@ -10,7 +10,7 @@ import { BaseShipmentItem } from "@/mappings/pages";
  */
 export const recursiveFind = (
   data: TreeData[],
-  key: string,
+  key: string | number,
   itemType: BaseShipmentItem["type"],
   callback: (item: TreeData, index: number, siblings: TreeData<BaseShipmentItem>[]) => void,
 ) => {

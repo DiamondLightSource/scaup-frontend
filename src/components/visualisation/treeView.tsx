@@ -20,7 +20,7 @@ export interface TreeData<T = any> {
   /** Node label */
   name: string;
   /** Unique node ID */
-  id: string;
+  id: string | number;
   /** Tag prefixed to label */
   tag?: string;
   /** Node data */
