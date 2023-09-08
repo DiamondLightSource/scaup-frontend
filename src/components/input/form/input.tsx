@@ -6,13 +6,14 @@ import {
   FormLabel,
   Input,
   Select,
+  Textarea,
 } from "@chakra-ui/react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 
 export interface DynamicFormEntry {
   label: string;
   id: string;
-  type: "text" | "dropdown" | "checkbox";
+  type: "text" | "dropdown" | "checkbox" | "textarea";
   validation?: RegisterOptions;
   values?: string | { label: string; value: string }[] | JsonRef;
 }
@@ -32,6 +33,15 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
           variant='hi-contrast'
           {...register(id, validation)}
         ></Input>
+      );
+    case "textarea":
+      return (
+        <Textarea
+          id={id}
+          isInvalid={!!errors[id]}
+          variant='hi-contrast'
+          {...register(id, validation)}
+        />
       );
     case "dropdown":
       return (

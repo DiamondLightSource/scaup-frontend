@@ -1,11 +1,10 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import {
   Box,
   Button,
-  Card,
   Divider,
   Grid,
   HStack,
@@ -19,13 +18,11 @@ import {
   ModalOverlay,
   ModalProps,
   Spacer,
-  Stat,
-  StatLabel,
-  StatNumber,
   Text,
 } from "@chakra-ui/react";
 import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { GenericChildCard } from "./child";
 
 export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Currently selected item for container position */
@@ -34,25 +31,34 @@ export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
   onSelect?: (child: TreeData<BaseShipmentItem>) => void;
   /** Callback for item removal revent */
   onRemove?: (child: TreeData<PositionedItem>) => void;
+  /** Type of container's children */
+  childrenType: BaseShipmentItem["type"];
 }
 
 export const ChildSelector = ({
   selectedItem,
+  childrenType,
   onSelect,
   onRemove,
   ...props
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
+  const childrenTypeData = useMemo(() => {
+    const index = getCurrentStepIndex(childrenType);
+    return { data: steps[index], index };
+  }, [childrenType]);
 
   // TODO: make this work for non-samples
   const unassignedSamples: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
-    return unassigned[0].children![0].children!.length ? unassigned[0].children![0].children : null;
-  }, [unassigned]);
+    return unassigned[0].children![childrenTypeData.index].children!.length
+      ? unassigned[0].children![childrenTypeData.index].children
+      : null;
+  }, [unassigned, childrenTypeData]);
 
   const handleSampleClicked = useCallback(
-    (sample: TreeData<BaseShipmentItem>) => {
+    (item: TreeData<BaseShipmentItem>) => {
       if (onSelect) {
-        onSelect(sample);
+        onSelect(item);
       }
       props.onClose();
     },
@@ -83,37 +89,27 @@ export const ChildSelector = ({
                 </Button>
               </HStack>
               <Divider />
-              <Card
-                variant='filled'
-                my='2'
-                borderRadius='0'
-                backgroundColor='diamond.800'
-                color='white'
-              >
-                <Stat>
-                  <StatLabel>Sample</StatLabel>
-                  <StatNumber>{selectedItem.name}</StatNumber>
-                </Stat>
-              </Card>
+              <GenericChildCard name={selectedItem.name} type={childrenTypeData.data.singular} />
             </Box>
           )}
           <Heading size='md'>Available Items</Heading>
           <Divider />
           {unassignedSamples ? (
             <Grid py='2' templateColumns='repeat(4, 1fr)' gap='2'>
-              {unassignedSamples.map((sample) => (
-                <Card onClick={() => handleSampleClicked(sample)} key={sample.id}>
-                  <Stat>
-                    <StatLabel>Sample</StatLabel>
-                    <StatNumber>{sample.name}</StatNumber>
-                  </Stat>
-                </Card>
+              {unassignedSamples.map((item) => (
+                <GenericChildCard
+                  onClick={() => handleSampleClicked(item)}
+                  key={item.id}
+                  name={item.name}
+                  type={childrenTypeData.data.singular}
+                />
               ))}
             </Grid>
           ) : (
             <Text py='2' color='gray.600'>
-              No unassigned samples available. Add new samples or remove existing samples from their
-              containers.
+              No unassigned {childrenTypeData.data.title.toLowerCase()} available. Add a new{" "}
+              {childrenTypeData.data.singular.toLowerCase()} or remove a{" "}
+              {childrenTypeData.data.singular.toLowerCase()} from its container.
             </Text>
           )}
         </ModalBody>

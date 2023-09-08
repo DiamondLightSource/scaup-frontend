@@ -65,3 +65,15 @@ export const renderWithStoreAndForm = (
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
+
+export const gridBox = {
+  id: 3,
+  name: "gridBox",
+  data: { type: "gridBox" },
+} as TreeData<BaseShipmentItem>;
+
+export const sample = {
+  id: 5,
+  name: "sample-1",
+  data: { type: "sample" },
+} as TreeData<BaseShipmentItem>;

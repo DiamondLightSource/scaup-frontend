@@ -1,25 +1,11 @@
 import { GridBox } from "@/components/containers/gridBox";
-import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithStoreAndForm } from "@/utils/test-utils";
+import { gridBox, renderWithStoreAndForm, sample } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { Controller } from "react-hook-form";
-
-const gridBox = {
-  id: 3,
-  name: "gridBox",
-  data: { type: "gridBox" },
-} as TreeData<BaseShipmentItem>;
-
-const sample = {
-  id: 5,
-  name: "sample-1",
-  data: { type: "sample" },
-} as TreeData<BaseShipmentItem>;
 
 const defaultShipment = {
   ...initialState,

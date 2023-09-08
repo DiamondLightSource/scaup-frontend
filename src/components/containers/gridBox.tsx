@@ -166,6 +166,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
         </Button>
       ))}
       <ChildSelector
+        childrenType='sample'
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
         selectedItem={currentSample}

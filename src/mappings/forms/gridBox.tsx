@@ -12,14 +12,21 @@ export const gridBoxForm = [
     type: "dropdown",
     values: [
       { label: "4", value: 4 },
-      { label: "5", value: 5 },
-      { label: "6", value: 6 },
-      { label: "7", value: 7 },
-      { label: "8", value: 8 },
-      { label: "9", value: 9 },
-      { label: "10", value: 10 },
-      { label: "11", value: 11 },
       { label: "12", value: 12 },
     ],
+  },
+  {
+    id: "lid",
+    label: "Lid",
+    type: "dropdown",
+    values: [
+      { label: "4", value: 4 },
+      { label: "12", value: 12 },
+    ],
+  },
+  {
+    id: "comments",
+    label: "Comments",
+    type: "textarea",
   },
 ] as DynamicFormEntry[];
