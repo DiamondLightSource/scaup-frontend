@@ -1,5 +1,10 @@
 import { authenticatedFetch } from "@/utils/client";
+import { Metadata } from "next";
 import ItemFormPageContent from "./pageContent";
+
+export const metadata: Metadata = {
+  title: "Shipment Overview",
+};
 
 const getPrepopData = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
