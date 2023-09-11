@@ -9,6 +9,7 @@ import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
 describe("Item Page", () => {
+  // Must come first, https://github.com/mswjs/msw/issues/43
   it("should add item to unassigned if in creation mode", async () => {
     server.use(
       rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
