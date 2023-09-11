@@ -137,6 +137,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
     <Box
       w='296px'
       h='296px'
+      m='20px'
       position='relative'
       border='3px solid'
       borderRadius='100%'

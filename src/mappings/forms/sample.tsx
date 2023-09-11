@@ -7,6 +7,11 @@ export interface PositionedItem extends BaseShipmentItem {
 
 export const sampleForm = [
   {
+    id: "sample-separator",
+    label: "Sample",
+    type: "separator",
+  },
+  {
     id: "name",
     label: "Name",
     type: "text",
@@ -16,6 +21,11 @@ export const sampleForm = [
     label: "Compound",
     type: "dropdown",
     values: { $ref: { parent: "#/proteins", map: { value: "proteinId", label: "name" } } },
+  },
+  {
+    id: "grid-separator",
+    label: "Grid",
+    type: "separator",
   },
   {
     id: "foil",

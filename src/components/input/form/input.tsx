@@ -1,9 +1,11 @@
+import "@/styles/form.css";
 import { JsonRef } from "@/utils/generic";
 import {
   Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
   Select,
   Textarea,
@@ -13,7 +15,7 @@ import { RegisterOptions, useFormContext } from "react-hook-form";
 export interface DynamicFormEntry {
   label: string;
   id: string;
-  type: "text" | "dropdown" | "checkbox" | "textarea";
+  type: "text" | "dropdown" | "checkbox" | "textarea" | "separator";
   validation?: RegisterOptions;
   values?: string | { label: string; value: string }[] | JsonRef;
 }
@@ -74,6 +76,20 @@ export const DynamicFormInput = ({ id, label, type, validation, values }: Dynami
   const {
     formState: { errors },
   } = useFormContext();
+
+  if (type === "separator") {
+    return (
+      <Heading
+        role='separator'
+        className='separator'
+        w='100%'
+        size='md'
+        borderBottom='1px solid black'
+      >
+        {label}
+      </Heading>
+    );
+  }
 
   return (
     <FormControl isInvalid={!!errors[id]}>
