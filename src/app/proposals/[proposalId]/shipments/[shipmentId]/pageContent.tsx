@@ -95,6 +95,24 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
   }, [dispatch, activeStep, activeItem]);
 
+  const handleDelete = useCallback(async () => {
+    if (activeIsEdit) {
+      const response = await authenticatedFetch.client(
+        `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
+        session,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (response && response.status === 204) {
+        dispatch(updateShipment({ session, shipmentId }));
+        dispatch(updateUnassigned({ session, shipmentId }));
+        handleNewItem();
+      }
+    }
+  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);
+
   return (
     <VStack h='100%' w='65%'>
       <VStack spacing='0' alignItems='start' w='100%'>
@@ -123,7 +141,9 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           </HStack>
           <HStack>
             <Spacer />
-            <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
+            <Button onClick={handleDelete} bg='red.500'>
+              {activeIsEdit ? "Delete" : "Cancel"}
+            </Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
         </form>

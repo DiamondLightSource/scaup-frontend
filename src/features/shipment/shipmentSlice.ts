@@ -46,7 +46,7 @@ export const updateUnassigned = createAsyncThunk(
 
 export interface ShipmentState {
   /** Shipment items (assigned) */
-  items: TreeData<BaseShipmentItem>[] | undefined;
+  items: TreeData<BaseShipmentItem>[];
   /** Active item (item being edited, for example) */
   activeItem: TreeData<BaseShipmentItem>;
   /** Unassigned items */
@@ -99,7 +99,7 @@ const defaultActive = {
 } as TreeData<BaseShipmentItem>;
 
 export const initialState: ShipmentState = {
-  items: undefined,
+  items: [],
   activeItem: defaultActive,
   unassigned: defaultUnassigned,
   isEdit: false,
@@ -174,17 +174,15 @@ export const shipmentSlice = createSlice({
     },
     /** Save active item to shipment items list */
     saveActiveItem: (state, action: PayloadAction<ShipmentState["activeItem"]>) => {
-      if (state.items) {
-        const newItems = structuredClone(current(state.items));
-        // This is a proxy; we need to unwrap it to access the internal state
-        recursiveFind(
-          newItems,
-          action.payload.id,
-          action.payload.data.type,
-          (_, i, arr) => (arr[i] = action.payload),
-        );
-        state.items = newItems;
-      }
+      const newItems = structuredClone(current(state.items));
+      // This is a proxy; we need to unwrap it to access the internal state
+      recursiveFind(
+        newItems,
+        action.payload.id,
+        action.payload.data.type,
+        (_, i, arr) => (arr[i] = action.payload),
+      );
+      state.items = newItems;
     },
     /** Sync active item to its representation inside the shipment items state.
      *

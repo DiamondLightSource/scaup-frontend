@@ -2,7 +2,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, sample } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
@@ -16,14 +16,17 @@ describe("Item Page", () => {
     expect(screen.getByText("Mesh")).toBeInTheDocument();
   });
 
-  it("should render update active item if in edit mode", async () => {
-    /*const { store } = renderWithProviders(<ItemFormPage />);
+  it("should delete item and reset form to new item", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: { ...initialState, items: [sample], activeItem: sample, isEdit: true },
+      },
+    });
 
-    fireEvent.click(screen.getByText(/edit/i));
+    await screen.findByText(/sample-1/i);
+    fireEvent.click(screen.getByText(/delete/i));
 
-    await waitFor(() =>
-      expect(store.getState().shipment.activeItem.data).toMatchObject({ foil: "" }),
-    );*/
+    await screen.findByText("New Sample");
   });
 
   it("should add item to unassigned if in creation mode", async () => {

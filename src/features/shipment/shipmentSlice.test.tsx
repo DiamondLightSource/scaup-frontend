@@ -7,6 +7,7 @@ import reducer, {
   setActiveItem,
   setNewActiveItem,
   setShipment,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -166,10 +167,39 @@ describe("Shipment Async Thunks", () => {
   });
 
   it("should sync active item if in assigned items", async () => {
-    // TODO
+    const previousState = {
+      ...initialState,
+      items: [
+        {
+          id: "dewar",
+          name: "new-dewar",
+          data: { type: "dewar" },
+        },
+      ] as TreeData<BaseShipmentItem>[],
+      activeItem: { id: "dewar", name: "old-dewar", data: { type: "dewar" } },
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: "dewar", name: "new-dewar", data: { type: "dewar" } },
+      isEdit: true,
+    });
   });
 
   it("should sync active item if in unassigned items", async () => {
-    // TODO
+    const previousUnassigned = structuredClone(initialState).unassigned;
+    const unassignedPuckIndex = getCurrentStepIndex("puck");
+    previousUnassigned[0].children![unassignedPuckIndex].children = [puck];
+
+    const previousState = {
+      ...initialState,
+      unassigned: previousUnassigned,
+      activeItem: { id: "puck", name: "old-puck", data: { type: "puck" } },
+      isEdit: true,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: "puck", name: "puck", data: { type: "puck" } },
+      isEdit: true,
+    });
   });
 });
