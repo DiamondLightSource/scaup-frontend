@@ -9,6 +9,42 @@ import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
 describe("Item Page", () => {
+  it("should add item to unassigned if in creation mode", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            samples: [
+              {
+                name: "new-sample",
+                id: 123,
+                data: { type: "sample", film: "Holey carbon", foil: "Quantifoil copper" },
+              },
+            ],
+          }),
+          ctx.delay(0),
+        ),
+      ),
+    );
+
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+
+    fireEvent.click(screen.getByText(/add/i));
+
+    await screen.findByText(/save/i);
+
+    const unassignedSamples = store.getState().shipment.unassigned[0].children![0].children;
+
+    expect(unassignedSamples!).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          data: expect.objectContaining({ film: "Holey carbon", foil: "Quantifoil copper" }),
+        }),
+      ]),
+    );
+  });
+
   it("should render form", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
@@ -29,37 +65,6 @@ describe("Item Page", () => {
     await screen.findByText("New Sample");
   });
 
-  it("should add item to unassigned if in creation mode", async () => {
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
-
-    server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
-            samples: [{ data: { film: "Holey carbon", foil: "Quantifoil copper" } }],
-          }),
-        ),
-      ),
-    );
-
-    fireEvent.click(screen.getByText(/add/i));
-
-    await waitFor(() =>
-      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(1),
-    );
-
-    const unassignedSamples = store.getState().shipment.unassigned[0].children![0].children;
-
-    expect(unassignedSamples!).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          data: expect.objectContaining({ film: "Holey carbon", foil: "Quantifoil copper" }),
-        }),
-      ]),
-    );
-  });
-
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
     const newDewar: TreeData<BaseShipmentItem> = {
       id: "new-dewar",
@@ -74,6 +79,7 @@ describe("Item Page", () => {
           ctx.json({
             children: [newDewar],
           }),
+          ctx.delay(0),
         ),
       ),
     );
@@ -101,7 +107,7 @@ describe("Item Page", () => {
         res.once(
           ctx.status(200),
           ctx.json({
-            samples: [{ name: "new-name", id: "123" }],
+            samples: [{ name: "new-name", id: "123", data: { type: "sample" } }],
           }),
         ),
       ),
@@ -109,7 +115,10 @@ describe("Item Page", () => {
 
     server.use(
       rest.post("http://localhost/api/shipments/:shipmentId/samples", (req, res, ctx) =>
-        res.once(ctx.status(201), ctx.json({ sampleId: "123", name: "new-name" })),
+        res.once(
+          ctx.status(201),
+          ctx.json({ id: "123", name: "new-name", data: { type: "sample" } }),
+        ),
       ),
     );
 

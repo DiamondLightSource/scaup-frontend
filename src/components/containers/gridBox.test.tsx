@@ -99,7 +99,7 @@ describe("Grid Box", () => {
     );
 
     renderWithStoreAndForm(<GridBox shipmentId='1' />, {
-      preloadedState: { shipment: defaultShipment },
+      preloadedState: { shipment: { ...defaultShipment, isEdit: true } },
     });
 
     fireEvent.click(screen.getByText("2"));
@@ -111,7 +111,7 @@ describe("Grid Box", () => {
   it("should remove sample from position when remove clicked", async () => {
     server.use(
       rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res(ctx.status(200), ctx.json({ children: defaultShipment.items })),
+        res.once(ctx.status(200), ctx.json({ children: defaultShipment.items })),
       ),
     );
     renderWithStoreAndForm(<GridBox shipmentId='1' />, {

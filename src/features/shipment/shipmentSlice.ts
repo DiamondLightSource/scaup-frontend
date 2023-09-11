@@ -192,18 +192,16 @@ export const shipmentSlice = createSlice({
     syncActiveItem: (state, action: PayloadAction<number | undefined>) => {
       const actualId = action.payload || state.activeItem.id;
 
-      if (state.items) {
-        recursiveFind(
-          // Merge unassigned and assigned items, since our item could be in both
-          [...current(state.items), ...current(state.unassigned)],
-          actualId,
-          state.activeItem.data.type,
-          (item) => {
-            state.activeItem = item;
-            state.isEdit = true;
-          },
-        );
-      }
+      recursiveFind(
+        // Merge unassigned and assigned items, since our item could be in both
+        [...current(state.items), ...current(state.unassigned)],
+        actualId,
+        state.activeItem.data.type,
+        (item) => {
+          state.activeItem = item;
+          state.isEdit = true;
+        },
+      );
     },
     /** Add single unassigned item */
     addUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {

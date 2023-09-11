@@ -6,6 +6,7 @@ import {
   selectActiveItem,
   selectIsEdit,
   setNewActiveItem,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -63,15 +64,16 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       if (res && res.status === 201) {
         const newItem = await res.json();
 
-        // TODO: apply returned values in type agnostic way
-        values.id = newItem.sampleId;
+        values.id = newItem.id;
         values.name = newItem.name;
 
         if (checkIsRoot(values)) {
-          dispatch(updateShipment({ session, shipmentId }));
+          await dispatch(updateShipment({ session, shipmentId }));
         } else {
-          dispatch(updateUnassigned({ session, shipmentId }));
+          await dispatch(updateUnassigned({ session, shipmentId }));
         }
+
+        dispatch(syncActiveItem(newItem.id));
         toast({ title: "Successfully created item!" });
       }
     } else {
