@@ -39,6 +39,7 @@ export const updateUnassigned = createAsyncThunk(
     if (response && response.status === 200) {
       return await response.json();
     } else {
+      toast({ title: "An error ocurred", description: "Unable to retrieve unassigned item data" });
       thunkAPI.rejectWithValue(null);
     }
   },

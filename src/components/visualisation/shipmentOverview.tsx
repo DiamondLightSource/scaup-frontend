@@ -109,7 +109,7 @@ const ShipmentOverview = ({
       <Heading>Overview</Heading>
       <Divider borderColor='gray.800' />
       <Box w='100%' flex='1 0 auto' mt='10px' mb='20px'>
-        <TreeView flexGrow='1' data={data!} onRemove={handleUnassign} onEdit={onActiveChanged} />
+        <TreeView flexGrow='1' data={data} onRemove={handleUnassign} onEdit={onActiveChanged} />
       </Box>
       <TreeView
         mb='10px'

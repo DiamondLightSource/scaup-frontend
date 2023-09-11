@@ -3,7 +3,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { gridBox, puck, renderWithProviders, waitForRequest } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
@@ -95,11 +95,29 @@ describe("Shipment Overview", () => {
   });
 
   it("should unassign item if assigned to unassigned item", async () => {
+    const unassignItemRequest = waitForRequest(
+      "PATCH",
+      "http://localhost/api/shipments/:shipmentId/:itemType/:itemId",
+    );
+
     let unassignedWithAssignedItem = structuredClone(defaultUnassigned);
 
     unassignedWithAssignedItem[0].children![2].children![0].children = [
-      { data: { type: "gridBox" }, id: "1", name: "Grid Box" },
+      { data: { type: "gridBox", parentId: 6 }, id: 1, name: "Grid Box" },
     ];
+
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(
+          ctx.status(200),
+          ctx.json({
+            samples: [],
+            containers: [puck],
+            gridBoxes: [gridBox],
+          }),
+        ),
+      ),
+    );
 
     renderWithProviders(
       <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
@@ -112,9 +130,12 @@ describe("Shipment Overview", () => {
 
     await screen.findByText("Grid Box");
 
-    fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
+    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
 
-    await waitFor(() => expect(screen.queryByText("dewar")).not.toBeInTheDocument());
+    const request = await unassignItemRequest;
+
+    expect(await request.json()).toMatchObject({ parentId: null });
+    await waitFor(() => expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(2));
   });
 
   it("should remove item from unassigned when clicked", async () => {
