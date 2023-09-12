@@ -1,6 +1,5 @@
 import { DynamicForm } from "@/components/input/form";
 import { renderWithForm } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
 
 describe("Dynamic Form", () => {

@@ -1,5 +1,4 @@
 import { getCurrentStepIndex } from "@/mappings/pages";
-import "@testing-library/jest-dom";
 import { defaultUnassigned } from "./shipmentSlice";
 import { addToUnassignedClone, setInUnassignedClone } from "./utils";
 

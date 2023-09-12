@@ -1,5 +1,4 @@
 import { TreeView } from "@/components/visualisation/treeView";
-import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 describe("Tree View", () => {

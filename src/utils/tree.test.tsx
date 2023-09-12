@@ -1,5 +1,4 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import "@testing-library/jest-dom";
 import { recursiveCountChildrenByType, recursiveFind, setTagInPlace } from "./tree";
 
 const defaultData: TreeData[] = [

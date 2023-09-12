@@ -2,7 +2,6 @@ import ShipmentLayoutContent from "@/app/proposals/[proposalId]/shipments/[shipm
 import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { renderWithProviders } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 

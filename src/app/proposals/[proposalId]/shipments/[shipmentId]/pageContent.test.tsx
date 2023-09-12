@@ -3,7 +3,6 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { renderWithProviders, sample } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";

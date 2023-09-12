@@ -1,6 +1,5 @@
 import { BaseShipmentItem } from "@/mappings/pages";
 import { renderWithForm } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
 import { DynamicFormView } from "./formView";
 

@@ -16,7 +16,6 @@ import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
 import { UnassignedItemResponse } from "@/types/server";
 import { puck, renderWithProviders } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { mockSession, toastMock } from "../../../jest.setup";

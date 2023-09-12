@@ -1,6 +1,5 @@
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { rest } from "msw";
 import ShipmentsLayout from "./layout";
 
