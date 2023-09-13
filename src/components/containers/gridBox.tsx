@@ -11,6 +11,7 @@ import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
+import { calcCircumferencePosX, calcCircumferencePosY } from "@/utils/generic";
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
@@ -18,7 +19,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface GridBoxProps {
-  /** Number of positions available in grid box */
+  /** Shipment ID */
   shipmentId: string;
 }
 
@@ -160,8 +161,8 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
            * in circumference of circle, use sine/cosine to get cartesian coordinates.
            * Multiply by radius of inner circle, then apply offset to centre (radius +
            * half of button's width (20px) + margin (5px)) of outer circle */
-          left={`${Math.cos(((2 * Math.PI) / samples.length) * i) * 105 + 125}px`}
-          top={`${Math.sin(((2 * Math.PI) / samples.length) * i) * 105 + 125}px`}
+          left={`${calcCircumferencePosX(i, samples.length, 105)}px`}
+          top={`${calcCircumferencePosY(i, samples.length, 105)}px`}
         >
           {i + 1}
         </Button>

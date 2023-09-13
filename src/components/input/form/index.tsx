@@ -1,6 +1,8 @@
 import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
 import { dewarForm } from "@/mappings/forms/dewar";
+import { falconTubeForm } from "@/mappings/forms/falconTube";
 import { gridBoxForm } from "@/mappings/forms/gridBox";
+import { puckForm } from "@/mappings/forms/puck";
 import { sampleForm } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { parseJsonReferences } from "@/utils/generic";
@@ -16,8 +18,9 @@ export interface DynamicFormProps {
 
 export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
   sample: sampleForm,
-  puck: [],
-  falconTube: [],
+  genericContainer: [],
+  puck: puckForm,
+  falconTube: falconTubeForm,
   dewar: dewarForm,
   grid: [],
   gridBox: gridBoxForm,

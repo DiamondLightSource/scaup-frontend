@@ -59,3 +59,9 @@ export const parseArrayUsingMap = (valueMap: Record<string, string>, arr: Record
   arr.map((item) =>
     Object.fromEntries(Object.entries(valueMap).map(([key, value]) => [key, item[value]])),
   );
+
+export const calcCircumferencePosX = (i: number, len: number, radius: number) =>
+  Math.cos(((2 * Math.PI) / len) * i) * radius + (radius + 20);
+
+export const calcCircumferencePosY = (i: number, len: number, radius: number) =>
+  Math.sin(((2 * Math.PI) / len) * i) * radius + (radius + 20);
