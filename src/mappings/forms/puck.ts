@@ -3,5 +3,12 @@ import { containerForm } from "@/mappings/forms/container";
 
 export const puckForm = [
   ...containerForm,
-  { id: "puckData", label: "Puck Data", type: "text" },
+  {
+    id: "registeredContainer", // External ID?
+    label: "Registered Container",
+    type: "dropdown",
+    values: {
+      $ref: { parent: "#/containers", map: { value: "containerRegistryId", label: "barcode" } },
+    },
+  },
 ] as DynamicFormEntry[];

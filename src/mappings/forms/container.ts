@@ -1,4 +1,5 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { BaseShipmentItem } from "../pages";
 
 export const containerForm = [
   {
@@ -7,14 +8,15 @@ export const containerForm = [
     type: "text",
   },
   {
-    id: "containerType",
-    label: "Container Type",
+    id: "type",
+    label: "Type",
     type: "dropdown",
     values: [
       { label: "Falcon Tube", value: "falconTube" },
       { label: "Puck", value: "puck" },
-      { label: "Generic", value: "generic" },
-    ],
+      { label: "Generic", value: "genericContainer" },
+    ] as { label: string; value: BaseShipmentItem["type"] }[],
+    watch: true,
   },
   {
     id: "comments",

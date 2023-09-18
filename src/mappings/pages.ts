@@ -9,7 +9,14 @@ export interface BaseShipmentItem {
   [x: string]: any;
 }
 
-export const steps = [
+export interface Step {
+  title: string;
+  id: BaseShipmentItem["type"] | BaseShipmentItem["type"][];
+  singular: string;
+  endpoint: string;
+}
+
+export const steps: Step[] = [
   { title: "Samples", id: "sample", singular: "Sample", endpoint: "samples" },
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
@@ -28,7 +35,7 @@ export const pluralToSingular: Record<string, string> = {
   dewars: "dewar",
 };
 
-export const getCurrentStepIndex = (itemType: string) => {
+export const getCurrentStepIndex = (itemType: BaseShipmentItem["type"]) => {
   const currentIndex = steps.findIndex((step) => {
     if (Array.isArray(step.id)) {
       return step.id.includes(itemType);

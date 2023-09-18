@@ -11,7 +11,7 @@ export const dewarForm = [
     label: "Dewar Code",
     type: "dropdown",
     values: {
-      $ref: { parent: "#/dewar/codes", map: { value: "dewarId", label: "dewarCode" } },
+      $ref: { parent: "#/dewars", map: { value: "dewarRegistryId", label: "facilityCode" } },
     },
   },
   {

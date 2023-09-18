@@ -151,8 +151,8 @@ const ShipmentsLayoutContent = ({
   }, [shipment, unassigned]);
 
   return (
-    <Box h='100%'>
-      <Stepper index={activeStep} mb='15px' h='60px'>
+    <VStack h='100%' w='100%'>
+      <Stepper index={activeStep} mb='15px' h='60px' w='100%'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
             <StepIndicator
@@ -175,9 +175,9 @@ const ShipmentsLayoutContent = ({
           </Step>
         ))}
       </Stepper>
-      <HStack alignItems='start' h='80%'>
+      <HStack alignItems='stretch' flex='1 0 0' w='100%' pb='20px'>
         {children}
-        <VStack spacing='0' alignItems='start' w='45%' h='100%'>
+        <VStack spacing='0' alignItems='start' w='45%'>
           <ShipmentOverview
             shipmentId={params.shipmentId}
             onActiveChanged={handleActiveChanged}
@@ -192,7 +192,7 @@ const ShipmentsLayoutContent = ({
           </HStack>
         </VStack>
       </HStack>
-    </Box>
+    </VStack>
   );
 };
 

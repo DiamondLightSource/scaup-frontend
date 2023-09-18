@@ -5,6 +5,7 @@ export const gridBoxForm = [
     id: "name",
     label: "Name",
     type: "text",
+    hint: "Ensure name matches name on grid box",
   },
   {
     id: "capacity",
@@ -20,9 +21,19 @@ export const gridBoxForm = [
     label: "Lid",
     type: "dropdown",
     values: [
-      { label: "4", value: 4 },
-      { label: "12", value: 12 },
+      { label: "Screw", value: "screw" },
+      { label: "No screw", value: "noScrew" },
     ],
+  },
+  {
+    id: "keepGrid",
+    label: "Keep grid for future use",
+    type: "checkbox",
+  },
+  {
+    id: "fibSession",
+    label: "FIB session",
+    type: "checkbox",
   },
   {
     id: "comments",

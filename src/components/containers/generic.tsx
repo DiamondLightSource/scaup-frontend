@@ -11,8 +11,16 @@ import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
-import { calcCircumferencePos } from "@/utils/generic";
-import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  Heading,
+  List,
+  ListItem,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -36,11 +44,11 @@ export interface GridItemProps {
  * Grid box component. Should be used in conjunction with a field allowing the user to select
  * how many slots (capacity) the grid box should have, inside the parent form.
  */
-export const GridBox = ({ shipmentId }: GridBoxProps) => {
+export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
-  const currentGridBox = useSelector(selectActiveItem);
+  const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -48,16 +56,6 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
 
   const capacity = useWatch({ control, name: "capacity", defaultValue: 4 });
   const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
-
-  const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
-    const newSamples = Array(parsedCapacity).fill(null);
-    if (currentGridBox.children) {
-      for (const innerSample of currentGridBox.children) {
-        newSamples[innerSample.data.location] = innerSample;
-      }
-    }
-    return newSamples;
-  }, [currentGridBox, parsedCapacity]);
 
   const setLocation = useCallback(
     async (
@@ -68,22 +66,16 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
       let actualContainerId = containerId;
 
       // If container does not exist yet in database, we must create it
-      if (containerId !== null && !isEdit) {
-        const newContainer = await Item.create(
-          session,
-          shipmentId,
-          { capacity, type: "gridBox" },
-          "containers",
-        );
-        actualContainerId = newContainer.id;
+      if (!isEdit) {
+        await Item.create(session, shipmentId, { type: currentContainer.data.type }, "containers");
       }
 
-      await Item.patch(
+      Item.patch(
         session,
         shipmentId,
         sample.id,
         { location, containerId: actualContainerId },
-        "samples",
+        "containers",
       ).then(async () => {
         await Promise.all([
           dispatch(updateShipment({ session, shipmentId })),
@@ -92,14 +84,14 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
         dispatch(syncActiveItem((actualContainerId as number) || undefined));
       });
     },
-    [dispatch, session, shipmentId, capacity, isEdit],
+    [isEdit, session, shipmentId, currentContainer.data.type, dispatch],
   );
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox.id, currentPosition, sample);
+      setLocation(currentContainer.id, null, sample);
     },
-    [currentGridBox, currentPosition, setLocation],
+    [currentContainer, currentPosition, setLocation],
   );
 
   const handleRemoveSample = useCallback(
@@ -109,7 +101,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
     [setLocation],
   );
 
-  const handleGridClicked = useCallback(
+  const handleRowClicked = useCallback(
     (sample: TreeData<PositionedItem> | null, i: number) => {
       setCurrentSample(sample);
       setCurrentPosition(i);
@@ -119,36 +111,31 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
   );
 
   return (
-    <Box
-      w='296px'
-      h='296px'
-      m='20px'
-      position='relative'
-      border='3px solid'
-      borderRadius='100%'
-      borderColor='diamond.700'
-      bg='#D0E0FF'
-    >
-      {samples.map((sample, i) => (
-        <Button
-          key={i}
-          data-testid={`${i}-${sample !== null ? "populated" : "empty"}`}
-          position='absolute'
-          onClick={() => handleGridClicked(sample, i)}
-          variant={sample !== null ? "default" : "outline"}
-          bgColor={sample !== null ? "diamond.700" : "diamond.75"}
-          border='3px solid'
-          borderColor='diamond.700'
-          h='40px'
-          w='40px'
-          left={`${calcCircumferencePos(i, samples.length, 105, false)}px`}
-          top={`${calcCircumferencePos(i, samples.length, 105)}px`}
-        >
-          {i + 1}
+    <Box w='200px' h='70%' p='10px' border='3px solid' borderColor='gray.800'>
+      <HStack w='100%' borderBottom='1px solid' borderColor='gray.800' mb='5px' pb='3px'>
+        <Heading fontSize='24px' flex='1 0 0'>
+          Contents
+        </Heading>
+        <Button size='sm' onClick={onOpen}>
+          Add
         </Button>
-      ))}
+      </HStack>
+      <List overflowY='scroll' h='80%'>
+        {(currentContainer.children ?? []).map((item) => (
+          <ListItem
+            key={item.id}
+            borderBottom='1px solid'
+            borderColor='gray.300'
+            py='5px'
+            display='flex'
+          >
+            <Text flex='1 0 0'>{item.name}</Text>
+            <Button size='xs'>Remove</Button>
+          </ListItem>
+        ))}
+      </List>
       <ChildSelector
-        childrenType='sample'
+        childrenType='gridBox'
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
         selectedItem={currentSample}

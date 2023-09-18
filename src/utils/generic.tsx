@@ -60,8 +60,23 @@ export const parseArrayUsingMap = (valueMap: Record<string, string>, arr: Record
     Object.fromEntries(Object.entries(valueMap).map(([key, value]) => [key, item[value]])),
   );
 
-export const calcCircumferencePosX = (i: number, len: number, radius: number) =>
-  Math.cos(((2 * Math.PI) / len) * i) * radius + (radius + 20);
+const calcAngleByIndex = (i: number, len: number) => ((2 * Math.PI) / len) * i + (3 / 2) * Math.PI;
 
-export const calcCircumferencePosY = (i: number, len: number, radius: number) =>
-  Math.sin(((2 * Math.PI) / len) * i) * radius + (radius + 20);
+/**
+ * Calculate angular spacing between items, multiply by item index to obtain position
+ * in circumference of circle, use sine/cosine to get cartesian coordinates.
+ * Multiply by radius of inner circle, then apply offset to centre (radius +
+ * half of button's width (20px) + margin (5px)) of outer circle
+ *
+ * @param i Index of point in circumference
+ * @param len Total number of points in circumference
+ * @param radius Radius of circle (in pixels)
+ * @param sine Use sine to calculate position
+ * @returns X/Y position of point in pixels
+ */
+export const calcCircumferencePos = (
+  i: number,
+  len: number,
+  radius: number,
+  sine: boolean = true,
+) => (sine ? Math.sin : Math.cos)(calcAngleByIndex(i, len)) * radius + (radius + 20);

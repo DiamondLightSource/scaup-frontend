@@ -1,32 +1,30 @@
 import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
-import { dewarForm } from "@/mappings/forms/dewar";
-import { falconTubeForm } from "@/mappings/forms/falconTube";
-import { gridBoxForm } from "@/mappings/forms/gridBox";
-import { puckForm } from "@/mappings/forms/puck";
-import { sampleForm } from "@/mappings/forms/sample";
+import { formMapping } from "@/mappings/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { parseJsonReferences } from "@/utils/generic";
 import { VStack } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { FieldValues, useFormContext, useWatch } from "react-hook-form";
 
 export interface DynamicFormProps {
   /** Form input type */
   formType: BaseShipmentItem["type"];
-  /** Data to prepopulate the form with. Useful for dynamic dropdowns */
+  /** Default values */
+  defaultValues?: Record<string, any>;
+  /** Data to prepopulate the form fields with. Useful for dynamic dropdowns */
   prepopData?: Record<string, any>;
+  /** Callback for updated watched items */
+  onWatchedUpdated?: (formValues: FieldValues) => void;
 }
 
-export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
-  sample: sampleForm,
-  genericContainer: [],
-  puck: puckForm,
-  falconTube: falconTubeForm,
-  dewar: dewarForm,
-  grid: [],
-  gridBox: gridBoxForm,
-};
-
-export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps) => {
+export const DynamicForm = ({
+  defaultValues,
+  prepopData,
+  formType,
+  onWatchedUpdated,
+  ...props
+}: DynamicFormProps) => {
+  const { getValues } = useFormContext();
   const activeForm = useMemo(() => {
     const form = structuredClone(formMapping[formType]);
 
@@ -43,6 +41,24 @@ export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps
     return form;
   }, [prepopData, formType]);
 
+  const toWatch = useMemo(() => {
+    const newToWatch: string[] = [];
+    for (const field of activeForm) {
+      if (field.watch) {
+        newToWatch.push(field.id);
+      }
+    }
+    return newToWatch;
+  }, [activeForm]);
+
+  const watchedItems = useWatch({ name: toWatch });
+
+  useEffect(() => {
+    if (onWatchedUpdated && watchedItems.length) {
+      onWatchedUpdated(getValues());
+    }
+  }, [watchedItems, getValues, onWatchedUpdated]);
+
   return (
     <VStack spacing='3'>
       {activeForm.map((entry) => (
@@ -51,3 +67,4 @@ export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps
     </VStack>
   );
 };
+export { formMapping };

@@ -1,5 +1,6 @@
 import { Providers } from "@/app/providers";
 import { AppNavbar } from "@/components/navigation/appNavbar";
+import { Footer } from "@/components/navigation/footer";
 import "@/styles/main.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -10,6 +11,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <div className='rootContainer'>
             <AppNavbar />
             <div className='main'>{children}</div>
+            <Footer />
           </div>
         </Providers>
       </body>
