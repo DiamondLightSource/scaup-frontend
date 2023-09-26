@@ -19,7 +19,7 @@ export const recursiveFind = (
     if (item.id === key && item.data.type == itemType) {
       return callback(item, i, data);
     }
-    if (item.children !== undefined && item.children.length > 0) {
+    if (item.children && item.children.length > 0) {
       recursiveFind(item.children, key, itemType, callback);
     }
   }

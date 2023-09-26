@@ -2,23 +2,29 @@ import { TreeData } from "@/components/visualisation/treeView";
 import reducer, {
   addUnassigned,
   initialState,
-  moveToUnassigned,
   removeUnassigned,
   saveActiveItem,
   setActiveItem,
   setShipment,
+  updateShipment,
+  updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
+import { defaultData } from "@/mocks/handlers";
+import { server } from "@/mocks/server";
+import { UnassignedItemResponse } from "@/types/server";
+import { renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
+import { waitFor } from "@testing-library/react";
+import { rest } from "msw";
+import { mockSession, toastMock } from "../../../jest.setup";
 
-const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
+const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
+const puck: TreeData<BaseShipmentItem> = { id: "puck", name: "puck", data: { type: "puck" } };
+const getUnassignedByType = (state: typeof initialState, type: string) =>
+  state.unassigned[0].children!.find((item) => item.id === type)!.children;
 
 describe("Shipment Unassigned Items Reducers", () => {
-  const puck: TreeData<BaseShipmentItem> = { id: "puck", name: "puck", data: { type: "puck" } };
-
-  const getUnassignedContainers = (state: typeof initialState) =>
-    state.unassigned[0].children!.find((item) => item.id === "container")!.children;
-
   it("should add new unassigned items", () => {
     const newUnassigned: TreeData<BaseShipmentItem> = {
       id: "Foo",
@@ -29,51 +35,6 @@ describe("Shipment Unassigned Items Reducers", () => {
     expect(
       newState.unassigned[0].children!.find((item) => item.id === "sample")!.children,
     ).toContain(newUnassigned);
-  });
-
-  it("should move items to unassigned", () => {
-    const previousState = {
-      ...initialState,
-      items: [
-        {
-          id: "dewar",
-          name: "dewar",
-          data: { type: "dewar" },
-          children: [puck],
-        },
-      ] as TreeData<BaseShipmentItem>[],
-    };
-
-    const newState = reducer(previousState, moveToUnassigned(puck));
-    expect(getUnassignedContainers(newState)).toContain(puck);
-    expect(newState.items![0].children).toEqual([]);
-  });
-
-  it("should not do anything if move to unassigned is attempted with no items in store", () => {
-    const previousState = {
-      ...initialState,
-      items: [] as TreeData<BaseShipmentItem>[],
-    };
-
-    const newState = reducer(previousState, moveToUnassigned(puck));
-    expect(getUnassignedContainers(newState)).not.toContain(puck);
-  });
-
-  it("should update active item if children are moved to unassigned", () => {
-    const activeItem: TreeData<BaseShipmentItem> = {
-      id: "dewar",
-      name: "dewar",
-      data: { type: "dewar" },
-      children: [puck],
-    };
-    const previousState = {
-      ...initialState,
-      activeItem,
-      items: [activeItem] as TreeData<BaseShipmentItem>[],
-    };
-
-    const newState = reducer(previousState, moveToUnassigned(puck));
-    expect(newState.activeItem).toEqual({ ...activeItem, children: [] });
   });
 
   it("should remove items from unassigned", () => {
@@ -119,7 +80,7 @@ describe("Shipment Items Reducers", () => {
           id: "dewar",
           name: "dewar",
           data: { type: "dewar" },
-          children: [{ id: "puck", name: "puck", data: { type: "puck" } }],
+          children: [puck],
         },
       ] as TreeData<BaseShipmentItem>[],
     };
@@ -131,5 +92,65 @@ describe("Shipment Items Reducers", () => {
     expect(reducer(previousState, saveActiveItem(newPuck)).items![0].children![0]).toMatchObject({
       data: { type: "puck", newValue: "newValue" },
     });
+  });
+});
+
+describe("Shipment Async Thunks", () => {
+  it("should display toast if shipment response is not valid", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res.once(ctx.status(404), ctx.json({})),
+      ),
+    );
+
+    const { store } = renderWithProviders(<></>);
+    store.dispatch(updateShipment({ session: mockSession, shipmentId: "1" }));
+
+    await waitFor(() => expect(toastMock).toBeCalled());
+  });
+
+  it("should display toast if unassigned item response is not valid", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(ctx.status(404), ctx.json({})),
+      ),
+    );
+
+    const { store } = renderWithProviders(<></>);
+    store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+
+    await waitFor(() => expect(toastMock).toBeCalled());
+  });
+
+  it("should update store with new shipment when thunk called", async () => {
+    const { store } = renderWithProviders(<></>);
+    store.dispatch(updateShipment({ session: mockSession, shipmentId: "1" }));
+
+    await waitFor(() =>
+      expect(store.getState().shipment.items).toMatchObject(defaultData.children),
+    );
+  });
+
+  it("should update store with new unassigned items when thunk called", async () => {
+    const unassignedResponse = {
+      samples: [sample],
+      containers: [puck],
+      gridBoxes: [],
+    } satisfies UnassignedItemResponse;
+
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(ctx.status(200), ctx.json(unassignedResponse)),
+      ),
+    );
+
+    const { store } = renderWithProviders(<></>);
+    store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+
+    await waitFor(() =>
+      expect(getUnassignedByType(store.getState().shipment, "container")).toMatchObject([puck]),
+    );
+
+    expect(getUnassignedByType(store.getState().shipment, "sample")).toMatchObject([sample]);
   });
 });

@@ -18,7 +18,7 @@ export const steps = [
     singular: "Container",
     endpoint: "containers",
   },
-  { title: "Dewars", id: "dewar", singular: "Dewar", endpoint: "dewars" },
+  { title: "Dewars", id: "dewar", singular: "Dewar", endpoint: "topLevelContainers" },
 ];
 
 export const pluralToSingular: Record<string, string> = {
@@ -42,3 +42,8 @@ export const getCurrentStepIndex = (itemType: string) => {
 /** Check if a given item is a root item */
 export const checkIsRoot = (item: TreeData<BaseShipmentItem>) =>
   getCurrentStepIndex(item.data.type) === steps.length - 1;
+
+export const separateDetails = (info: Record<string, any>) => {
+  const details = { ...info, name: undefined, type: undefined };
+  return { details, type: info.type, name: info.name, proteinId: info.proteinId };
+};
