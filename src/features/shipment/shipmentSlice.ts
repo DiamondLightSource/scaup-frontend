@@ -190,14 +190,30 @@ export const shipmentSlice = createSlice({
      * @param id ID to search for when substituting current active item. If no id is
      * passed, the ID of the current active item is used
      */
-    syncActiveItem: (state, action: PayloadAction<number | undefined>) => {
-      const actualId = action.payload || state.activeItem.id;
+    syncActiveItem: (
+      state,
+      action: PayloadAction<
+        { id?: number | string | undefined; type?: BaseShipmentItem["type"] } | undefined
+      >,
+    ) => {
+      let actualId = state.activeItem.id;
+      let actualType = state.activeItem.data.type;
+
+      if (action.payload) {
+        if (action.payload.id) {
+          actualId = action.payload.id;
+        }
+
+        if (action.payload.type) {
+          actualType = action.payload.type;
+        }
+      }
 
       recursiveFind(
         // Merge unassigned and assigned items, since our item could be in both
         [...current(state.items), ...current(state.unassigned)],
         actualId,
-        state.activeItem.data.type,
+        actualType,
         (item) => {
           state.activeItem = item;
           state.isEdit = true;

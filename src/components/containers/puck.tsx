@@ -15,7 +15,7 @@ import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { GenericChildSlot } from "./child";
 
@@ -33,11 +33,7 @@ export interface GridItemProps {
   onSampleClick: () => void;
 }
 
-/**
- * Grid box component. Should be used in conjunction with a field allowing the user to select
- * how many slots (capacity) the grid box should have, inside the parent form.
- */
-export const GridBox = ({ shipmentId }: GridBoxProps) => {
+export const Puck = ({ shipmentId }: GridBoxProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
@@ -47,18 +43,15 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
   const [currentPosition, setCurrentPosition] = useState(0);
   const { control } = useFormContext();
 
-  const capacity = useWatch({ control, name: "capacity", defaultValue: 4 });
-  const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
-
   const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
-    const newSamples = Array(parsedCapacity).fill(null);
+    const newSamples = Array(16).fill(null);
     if (currentGridBox.children) {
       for (const innerSample of currentGridBox.children) {
         newSamples[innerSample.data.location] = innerSample;
       }
     }
     return newSamples;
-  }, [currentGridBox, parsedCapacity]);
+  }, [currentGridBox]);
 
   const setLocation = useCallback(
     async (
@@ -73,7 +66,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
         const newContainer = await Item.create(
           session,
           shipmentId,
-          { capacity, type: "gridBox" },
+          { capacity: 16, type: "puck" },
           "containers",
         );
         actualContainerId = newContainer.id;
@@ -83,17 +76,17 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
         session,
         shipmentId,
         sample.id,
-        { location, containerId: actualContainerId },
-        "samples",
+        { location, parentId: actualContainerId },
+        "containers",
       ).then(async () => {
         await Promise.all([
           dispatch(updateShipment({ session, shipmentId })),
           dispatch(updateUnassigned({ session, shipmentId })),
         ]);
-        dispatch(syncActiveItem({ id: actualContainerId || undefined }));
+        dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: "puck" }));
       });
     },
-    [dispatch, session, shipmentId, capacity, isEdit],
+    [dispatch, session, shipmentId, isEdit],
   );
 
   const handlePopulatePosition = useCallback(
@@ -130,19 +123,28 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
       borderColor='diamond.700'
       bg='#D0E0FF'
     >
-      {samples.map((sample, i) => (
+      {samples.slice(0, 5).map((sample, i) => (
         <GenericChildSlot
           key={i}
           label={i + 1}
           hasSample={sample !== null}
           onClick={() => handleGridClicked(sample, i)}
-          left={`${calcCircumferencePos(i, samples.length, 105, false)}px`}
-          top={`${calcCircumferencePos(i, samples.length, 105)}px`}
-          borderRadius='0'
+          right={`${50 + calcCircumferencePos(i, 5, 55, false)}px`}
+          top={`${50 + calcCircumferencePos(i, 5, 55)}px`}
+        />
+      ))}
+      {samples.slice(5).map((sample, i) => (
+        <GenericChildSlot
+          key={i}
+          onClick={() => handleGridClicked(sample, i + 5)}
+          label={i + 6}
+          hasSample={sample !== null}
+          right={`${calcCircumferencePos(i, 11, 105, false)}px`}
+          top={`${calcCircumferencePos(i, 11, 105)}px`}
         />
       ))}
       <ChildSelector
-        childrenType='sample'
+        childrenType='gridBox'
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
         selectedItem={currentSample}

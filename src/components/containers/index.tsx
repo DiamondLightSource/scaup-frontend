@@ -1,6 +1,7 @@
 import { GenericContainer } from "@/components/containers/generic";
 import { GridBox } from "@/components/containers/gridBox";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { Puck } from "./puck";
 
 export interface ContainerProps {
   /** Shipment ID */
@@ -18,7 +19,7 @@ export const Container = ({ shipmentId, containerType }: ContainerProps) => {
     case "gridBox":
       return <GridBox shipmentId={shipmentId} />;
     case "puck":
-      return <>aaaaaaaaaaaaaaaaaaaa</>;
+      return <Puck shipmentId='1' />;
     case "falconTube":
       return <GenericContainer shipmentId={shipmentId} />;
     default:

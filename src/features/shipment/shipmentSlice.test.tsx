@@ -129,7 +129,12 @@ describe("Shipment Async Thunks", () => {
     const { store } = renderWithProviders(<></>);
     store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
 
-    await waitFor(() => expect(toastMock).toBeCalled());
+    await waitFor(() =>
+      expect(toastMock).toBeCalledWith({
+        title: "An error ocurred",
+        description: "Unable to retrieve unassigned item data",
+      }),
+    );
   });
 
   it("should update store with new shipment when thunk called", async () => {
@@ -197,6 +202,18 @@ describe("Shipment Async Thunks", () => {
 
     expect(reducer(previousState, syncActiveItem())).toMatchObject({
       activeItem: { id: 9, name: "puck", data: { type: "puck" } },
+      isEdit: true,
+    });
+  });
+
+  it("should use passed ID and type when syncing active item", async () => {
+    const previousState = {
+      ...initialState,
+      items: defaultData.children,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem({ id: 1, type: "dewar" }))).toMatchObject({
+      activeItem: { id: 1, name: "Dewar", data: { type: "dewar" } },
       isEdit: true,
     });
   });

@@ -7,6 +7,7 @@ import { Session } from "next-auth";
 const { toast } = createStandaloneToast();
 
 export class Item {
+  // TODO: type this properly
   static async patch(
     session: Session | null,
     shipmentId: TreeData["id"],
@@ -27,14 +28,15 @@ export class Item {
       return await response.json();
     } else {
       toast({ title: "Failed to modify item", status: "error" });
-      Promise.reject();
+      throw new Error("Failed to modify item");
     }
   }
 
+  // TODO: type this properly
   static async create(
     session: Session | null,
     shipmentId: TreeData["id"],
-    data: BaseShipmentItem,
+    data: Record<string, any>,
     endpoint: Step["endpoint"],
   ) {
     const response = await authenticatedFetch.client(
@@ -50,7 +52,7 @@ export class Item {
       return await response.json();
     } else {
       toast({ title: "Failed to create item", status: "error" });
-      Promise.reject();
+      throw new Error("Failed to create item");
     }
   }
 }

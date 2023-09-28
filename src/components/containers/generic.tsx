@@ -7,8 +7,7 @@ import {
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
-import { PositionedItem } from "@/mappings/forms/sample";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { BaseShipmentItem, separateDetails } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
 import {
@@ -22,8 +21,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useCallback, useMemo, useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useCallback } from "react";
+import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface GridBoxProps {
@@ -50,12 +49,7 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
-  const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const { control } = useFormContext();
-
-  const capacity = useWatch({ control, name: "capacity", defaultValue: 4 });
-  const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
+  const { getValues } = useFormContext();
 
   const setLocation = useCallback(
     async (
@@ -64,34 +58,39 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
       sample: TreeData<BaseShipmentItem>,
     ) => {
       let actualContainerId = containerId;
+      const values = separateDetails(getValues(), "containers");
 
       // If container does not exist yet in database, we must create it
       if (!isEdit) {
-        await Item.create(session, shipmentId, { type: currentContainer.data.type }, "containers");
+        const newItem = await Item.create(session, shipmentId, values, "containers");
+
+        // TODO: type return of above properly
+        actualContainerId = newItem.id as number;
       }
 
-      Item.patch(
+      await Item.patch(
         session,
         shipmentId,
         sample.id,
-        { location, containerId: actualContainerId },
+        { location, parentId: actualContainerId },
         "containers",
-      ).then(async () => {
-        await Promise.all([
-          dispatch(updateShipment({ session, shipmentId })),
-          dispatch(updateUnassigned({ session, shipmentId })),
-        ]);
-        dispatch(syncActiveItem((actualContainerId as number) || undefined));
-      });
+      );
+
+      await Promise.all([
+        dispatch(updateShipment({ session, shipmentId })),
+        dispatch(updateUnassigned({ session, shipmentId })),
+      ]);
+
+      dispatch(syncActiveItem({ id: actualContainerId || undefined, type: values.type }));
     },
-    [isEdit, session, shipmentId, currentContainer.data.type, dispatch],
+    [isEdit, session, shipmentId, dispatch, getValues],
   );
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
       setLocation(currentContainer.id, null, sample);
     },
-    [currentContainer, currentPosition, setLocation],
+    [currentContainer, setLocation],
   );
 
   const handleRemoveSample = useCallback(
@@ -99,15 +98,6 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
       setLocation(null, null, sample);
     },
     [setLocation],
-  );
-
-  const handleRowClicked = useCallback(
-    (sample: TreeData<PositionedItem> | null, i: number) => {
-      setCurrentSample(sample);
-      setCurrentPosition(i);
-      onOpen();
-    },
-    [onOpen],
   );
 
   return (
@@ -130,7 +120,9 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
             display='flex'
           >
             <Text flex='1 0 0'>{item.name}</Text>
-            <Button size='xs'>Remove</Button>
+            <Button size='xs' onClick={() => handleRemoveSample(item)}>
+              Remove
+            </Button>
           </ListItem>
         ))}
       </List>
@@ -138,7 +130,7 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
         childrenType='gridBox'
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
-        selectedItem={currentSample}
+        selectedItem={null}
         isOpen={isOpen}
         onClose={onClose}
       />

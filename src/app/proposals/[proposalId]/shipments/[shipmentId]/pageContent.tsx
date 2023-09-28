@@ -54,26 +54,29 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      Item.create(session, shipmentId, separateDetails(info), activeStep.endpoint).then(
-        async (newItem) => {
-          values.id = newItem.id;
-          values.name = newItem.name;
+      Item.create(
+        session,
+        shipmentId,
+        separateDetails(info, activeStep.endpoint),
+        activeStep.endpoint,
+      ).then(async (newItem) => {
+        values.id = newItem.id;
+        values.name = newItem.name;
 
-          if (checkIsRoot(values)) {
-            await dispatch(updateShipment({ session, shipmentId }));
-          } else {
-            await dispatch(updateUnassigned({ session, shipmentId }));
-          }
+        if (checkIsRoot(values)) {
+          await dispatch(updateShipment({ session, shipmentId }));
+        } else {
+          await dispatch(updateUnassigned({ session, shipmentId }));
+        }
 
-          dispatch(syncActiveItem(newItem.id));
-        },
-      );
+        dispatch(syncActiveItem({ id: newItem.id }));
+      });
     } else {
       Item.patch(
         session,
         shipmentId,
         activeItem.id,
-        separateDetails(info),
+        separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       ).then(() => {
         dispatch(updateShipment({ session, shipmentId }));
