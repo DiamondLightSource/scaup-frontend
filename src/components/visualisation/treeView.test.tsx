@@ -56,7 +56,7 @@ describe("Tree View", () => {
             id: "1",
             name: "Test",
             tag: "Tag Value",
-            data: { position: 7 },
+            data: { location: 7 },
             children: [{ id: "2", name: "Test", data: {} }],
           },
         ]}

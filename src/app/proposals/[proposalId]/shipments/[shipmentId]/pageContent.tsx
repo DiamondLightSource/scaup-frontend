@@ -5,6 +5,8 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
+  setNewActiveItem,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -17,9 +19,9 @@ import {
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { authenticatedFetch } from "@/utils/client";
-import { Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -62,15 +64,16 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       if (res && res.status === 201) {
         const newItem = await res.json();
 
-        // TODO: apply returned values in type agnostic way
-        values.id = newItem.sampleId;
+        values.id = newItem.id;
         values.name = newItem.name;
 
         if (checkIsRoot(values)) {
-          dispatch(updateShipment({ session, shipmentId }));
+          await dispatch(updateShipment({ session, shipmentId }));
         } else {
-          dispatch(updateUnassigned({ session, shipmentId }));
+          await dispatch(updateUnassigned({ session, shipmentId }));
         }
+
+        dispatch(syncActiveItem(newItem.id));
         toast({ title: "Successfully created item!" });
       }
     } else {
@@ -90,6 +93,28 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     }
   });
 
+  const handleNewItem = useCallback(() => {
+    dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
+  }, [dispatch, activeStep, activeItem]);
+
+  const handleDelete = useCallback(async () => {
+    if (activeIsEdit) {
+      const response = await authenticatedFetch.client(
+        `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
+        session,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (response && response.status === 204) {
+        dispatch(updateShipment({ session, shipmentId }));
+        dispatch(updateUnassigned({ session, shipmentId }));
+        handleNewItem();
+      }
+    }
+  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);
+
   return (
     <VStack h='100%' w='65%'>
       <VStack spacing='0' alignItems='start' w='100%'>
@@ -99,7 +124,9 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         <HStack w='100%'>
           <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
           <Spacer />
-          <Button isDisabled={!activeIsEdit}>New Item</Button>
+          <Button isDisabled={!activeIsEdit} onClick={handleNewItem}>
+            New Item
+          </Button>
         </HStack>
         <Divider borderColor='gray.800' />
       </VStack>
@@ -108,11 +135,17 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           onSubmit={onSubmit}
           style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
         >
-          <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
-          <GridBox positions={4} />
+          <HStack py='3' flex='1 0 auto' alignItems='start'>
+            <Box flex='1 0 auto'>
+              <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
+            </Box>
+            <GridBox shipmentId={shipmentId} />
+          </HStack>
           <HStack>
             <Spacer />
-            <Button bg='red.500'>{activeIsEdit ? "Delete" : "Cancel"}</Button>
+            <Button onClick={handleDelete} bg='red.500'>
+              {activeIsEdit ? "Delete" : "Cancel"}
+            </Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
         </form>

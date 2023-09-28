@@ -111,7 +111,7 @@ describe("Tree Utility Functions", () => {
 
   it("should set tags for all objects with positions set", () => {
     const newData = structuredClone(defaultData);
-    newData[0].children![0].children![0].data.position = 4;
+    newData[0].children![0].children![0].data.location = 4;
 
     setTagInPlace(newData);
 

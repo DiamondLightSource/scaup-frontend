@@ -5,7 +5,9 @@ import reducer, {
   removeUnassigned,
   saveActiveItem,
   setActiveItem,
+  setNewActiveItem,
   setShipment,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -13,14 +15,13 @@ import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
 import { UnassignedItemResponse } from "@/types/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { puck, renderWithProviders } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { mockSession, toastMock } from "../../../jest.setup";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
-const puck: TreeData<BaseShipmentItem> = { id: "puck", name: "puck", data: { type: "puck" } };
 const getUnassignedByType = (state: typeof initialState, type: string) =>
   state.unassigned[0].children!.find((item) => item.id === type)!.children;
 
@@ -72,6 +73,16 @@ describe("Shipment Items Reducers", () => {
     });
   });
 
+  it("should set active item to default new item values", () => {
+    expect(reducer(undefined, setNewActiveItem({ type: "puck", title: "Puck" }))).toMatchObject({
+      activeItem: {
+        name: "New Puck",
+        id: "new-puck",
+        data: { type: "puck" },
+      },
+    });
+  });
+
   it("should save nested item", () => {
     const previousState = {
       ...initialState,
@@ -85,7 +96,7 @@ describe("Shipment Items Reducers", () => {
       ] as TreeData<BaseShipmentItem>[],
     };
     const newPuck: TreeData<BaseShipmentItem> = {
-      id: "puck",
+      id: 9,
       name: "puck",
       data: { type: "puck", newValue: "newValue" },
     };
@@ -152,5 +163,42 @@ describe("Shipment Async Thunks", () => {
     );
 
     expect(getUnassignedByType(store.getState().shipment, "sample")).toMatchObject([sample]);
+  });
+
+  it("should sync active item if in assigned items", async () => {
+    const previousState = {
+      ...initialState,
+      items: [
+        {
+          id: "dewar",
+          name: "new-dewar",
+          data: { type: "dewar" },
+        },
+      ] as TreeData<BaseShipmentItem>[],
+      activeItem: { id: "dewar", name: "old-dewar", data: { type: "dewar" } },
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: "dewar", name: "new-dewar", data: { type: "dewar" } },
+      isEdit: true,
+    });
+  });
+
+  it("should sync active item if in unassigned items", async () => {
+    const previousUnassigned = structuredClone(initialState).unassigned;
+    const unassignedPuckIndex = getCurrentStepIndex("puck");
+    previousUnassigned[0].children![unassignedPuckIndex].children = [puck];
+
+    const previousState = {
+      ...initialState,
+      unassigned: previousUnassigned,
+      activeItem: { id: 9, name: "old-puck", data: { type: "puck" } },
+      isEdit: true,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: 9, name: "puck", data: { type: "puck" } },
+      isEdit: true,
+    });
   });
 });

@@ -2,49 +2,38 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, sample } from "@/utils/test-utils";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
 describe("Item Page", () => {
-  it("should render form", () => {
-    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
-
-    expect(screen.getByText("Foil")).toBeInTheDocument();
-    expect(screen.getByText("Mesh")).toBeInTheDocument();
-  });
-
-  it("should render update active item if in edit mode", async () => {
-    /*const { store } = renderWithProviders(<ItemFormPage />);
-
-    fireEvent.click(screen.getByText(/edit/i));
-
-    await waitFor(() =>
-      expect(store.getState().shipment.activeItem.data).toMatchObject({ foil: "" }),
-    );*/
-  });
-
+  // Must come first, https://github.com/mswjs/msw/issues/43
   it("should add item to unassigned if in creation mode", async () => {
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
-
     server.use(
       rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
         res.once(
           ctx.status(200),
           ctx.json({
-            samples: [{ data: { film: "Holey carbon", foil: "Quantifoil copper" } }],
+            samples: [
+              {
+                name: "new-sample",
+                id: 123,
+                data: { type: "sample", film: "Holey carbon", foil: "Quantifoil copper" },
+              },
+            ],
           }),
+          ctx.delay(0),
         ),
       ),
     );
 
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+
     fireEvent.click(screen.getByText(/add/i));
 
-    await waitFor(() =>
-      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(1),
-    );
+    await screen.findByText(/save/i);
 
     const unassignedSamples = store.getState().shipment.unassigned[0].children![0].children;
 
@@ -55,6 +44,26 @@ describe("Item Page", () => {
         }),
       ]),
     );
+  });
+
+  it("should render form", () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+
+    expect(screen.getByText("Foil")).toBeInTheDocument();
+    expect(screen.getByText("Mesh")).toBeInTheDocument();
+  });
+
+  it("should delete item and reset form to new item", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: { ...initialState, items: [sample], activeItem: sample, isEdit: true },
+      },
+    });
+
+    await screen.findByText(/sample-1/i);
+    fireEvent.click(screen.getByText(/delete/i));
+
+    await screen.findByText("New Sample");
   });
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
@@ -71,6 +80,7 @@ describe("Item Page", () => {
           ctx.json({
             children: [newDewar],
           }),
+          ctx.delay(0),
         ),
       ),
     );
@@ -98,7 +108,7 @@ describe("Item Page", () => {
         res.once(
           ctx.status(200),
           ctx.json({
-            samples: [{ name: "new-name", id: "123" }],
+            samples: [{ name: "new-name", id: "123", data: { type: "sample" } }],
           }),
         ),
       ),
@@ -106,7 +116,10 @@ describe("Item Page", () => {
 
     server.use(
       rest.post("http://localhost/api/shipments/:shipmentId/samples", (req, res, ctx) =>
-        res.once(ctx.status(201), ctx.json({ sampleId: "123", name: "new-name" })),
+        res.once(
+          ctx.status(201),
+          ctx.json({ id: "123", name: "new-name", data: { type: "sample" } }),
+        ),
       ),
     );
 

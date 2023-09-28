@@ -1,13 +1,13 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem, getCurrentStepIndex, pluralToSingular } from "@/mappings/pages";
+import { addToUnassignedClone, setInUnassignedClone } from "@/features/shipment/utils";
+import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";
 import { UnassignedItemResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
-import { recursiveFind } from "@/utils/tree";
+import { recursiveFind, setTagInPlace } from "@/utils/tree";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Session } from "next-auth";
-import { setInUnassignedClone } from "./utils";
 
 const { toast } = createStandaloneToast();
 
@@ -39,6 +39,7 @@ export const updateUnassigned = createAsyncThunk(
     if (response && response.status === 200) {
       return await response.json();
     } else {
+      toast({ title: "An error ocurred", description: "Unable to retrieve unassigned item data" });
       thunkAPI.rejectWithValue(null);
     }
   },
@@ -46,7 +47,7 @@ export const updateUnassigned = createAsyncThunk(
 
 export interface ShipmentState {
   /** Shipment items (assigned) */
-  items: TreeData<BaseShipmentItem>[] | undefined;
+  items: TreeData<BaseShipmentItem>[];
   /** Active item (item being edited, for example) */
   activeItem: TreeData<BaseShipmentItem>;
   /** Unassigned items */
@@ -99,18 +100,11 @@ const defaultActive = {
 } as TreeData<BaseShipmentItem>;
 
 export const initialState: ShipmentState = {
-  items: undefined,
+  items: [],
   activeItem: defaultActive,
   unassigned: defaultUnassigned,
   isEdit: false,
   currentStep: 0,
-};
-
-// https://github.com/reduxjs/redux/issues/368
-const addToUnassignedClone = (unassigned: TreeData[], item: TreeData<BaseShipmentItem>) => {
-  const newUnassigned = structuredClone(unassigned);
-  newUnassigned[0].children![getCurrentStepIndex(item.data.type)].children!.push(item);
-  return newUnassigned;
 };
 
 export const shipmentSlice = createSlice({
@@ -118,7 +112,11 @@ export const shipmentSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder.addCase(updateShipment.fulfilled, (state, action: PayloadAction<TreeData[]>) => {
-      state.items = action.payload;
+      if (action.payload) {
+        const newItems = structuredClone(action.payload);
+        setTagInPlace(newItems);
+        state.items = newItems;
+      }
     });
     builder.addCase(
       updateUnassigned.fulfilled,
@@ -130,6 +128,7 @@ export const shipmentSlice = createSlice({
             setInUnassignedClone(newUnassigned, value, pluralToSingular[key]);
           }
 
+          setTagInPlace(newUnassigned);
           state.unassigned = newUnassigned;
         }
       },
@@ -138,7 +137,9 @@ export const shipmentSlice = createSlice({
   },
   reducers: {
     setShipment: (state, action: PayloadAction<ShipmentState["items"]>) => {
-      state.items = action.payload;
+      const newItems = structuredClone(action.payload)!;
+      setTagInPlace(newItems);
+      state.items = newItems;
     },
     /** Set array of undefined items */
     setUnassigned: (state, action: PayloadAction<{ items: TreeData[]; type: string }>) => {
@@ -147,6 +148,20 @@ export const shipmentSlice = createSlice({
         action.payload.items,
         action.payload.type,
       );
+    },
+    setNewActiveItem: (
+      state,
+      action: PayloadAction<{ type: BaseShipmentItem["type"]; title: string }>,
+    ) => {
+      state.activeItem = {
+        id: `new-${action.payload.type}`,
+        name: `New ${action.payload.title}`,
+        data: {
+          type: action.payload.type,
+        },
+      };
+
+      state.isEdit = false;
     },
     /** Set active item without modifying shipment items */
     setActiveItem: (
@@ -160,17 +175,34 @@ export const shipmentSlice = createSlice({
     },
     /** Save active item to shipment items list */
     saveActiveItem: (state, action: PayloadAction<ShipmentState["activeItem"]>) => {
-      if (state.items) {
-        // This is a proxy; we need to unwrap it to access the internal state
-        const newItems = structuredClone(current(state.items));
-        recursiveFind(
-          newItems,
-          action.payload.id,
-          action.payload.data.type,
-          (_, i, arr) => (arr[i] = action.payload),
-        );
-        state.items = newItems;
-      }
+      const newItems = structuredClone(current(state.items));
+      // This is a proxy; we need to unwrap it to access the internal state
+      recursiveFind(
+        newItems,
+        action.payload.id,
+        action.payload.data.type,
+        (_, i, arr) => (arr[i] = action.payload),
+      );
+      state.items = newItems;
+    },
+    /** Sync active item to its representation inside the shipment items state.
+     *
+     * @param id ID to search for when substituting current active item. If no id is
+     * passed, the ID of the current active item is used
+     */
+    syncActiveItem: (state, action: PayloadAction<number | undefined>) => {
+      const actualId = action.payload || state.activeItem.id;
+
+      recursiveFind(
+        // Merge unassigned and assigned items, since our item could be in both
+        [...current(state.items), ...current(state.unassigned)],
+        actualId,
+        state.activeItem.data.type,
+        (item) => {
+          state.activeItem = item;
+          state.isEdit = true;
+        },
+      );
     },
     /** Add single unassigned item */
     addUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
@@ -199,7 +231,9 @@ export const {
   saveActiveItem,
   addUnassigned,
   removeUnassigned,
+  syncActiveItem,
   setStep,
+  setNewActiveItem,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;
 export const selectActiveItem = (state: RootState) => state.shipment.activeItem;

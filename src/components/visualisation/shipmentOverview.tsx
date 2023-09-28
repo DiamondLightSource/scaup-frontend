@@ -2,6 +2,7 @@ import { TreeData, TreeView } from "@/components/visualisation/treeView";
 import {
   selectItems,
   selectUnassigned,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -29,49 +30,75 @@ const ShipmentOverview = ({
   const data = useSelector(selectItems);
   const { data: session } = useSession();
 
-  /** Remove item from assigned item list (or delete, if root item) */
-  const handleRemove = (item: TreeData<BaseShipmentItem>) => {
-    const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
-
-    if (endpoint === "topLevelContainers") {
-      handleDelete(item);
-      dispatch(updateShipment({ session, shipmentId }));
-    } else {
+  const unassignItem = useCallback(
+    async (item: TreeData<BaseShipmentItem>, endpoint: string) => {
       const body =
         endpoint === "samples"
-          ? { containerId: null }
-          : { topLevelContainerId: null, parentId: null };
+          ? { containerId: null, location: null }
+          : { topLevelContainerId: null, parentId: null, location: null };
 
       authenticatedFetch
         .client(`/shipments/${shipmentId}/${endpoint}/${item.id}`, session, {
           method: "PATCH",
           body: JSON.stringify(body),
         })
-        .then((response) => {
+        .then(async (response) => {
           if (response && response.status === 200) {
-            dispatch(updateShipment({ session, shipmentId }));
-            dispatch(updateUnassigned({ session, shipmentId }));
+            await Promise.all([
+              dispatch(updateShipment({ session, shipmentId })),
+              dispatch(updateUnassigned({ session, shipmentId })),
+            ]);
+            dispatch(syncActiveItem());
           }
         });
+    },
+    [dispatch, session, shipmentId],
+  );
+
+  const deleteItem = useCallback(
+    async (item: TreeData<BaseShipmentItem>, endpoint: string) => {
+      return await authenticatedFetch.client(
+        `/shipments/${shipmentId}/${endpoint}/${item.id}`,
+        session,
+        {
+          method: "DELETE",
+        },
+      );
+    },
+    [session, shipmentId],
+  );
+
+  /** Remove item from assigned item list (or delete, if root item) */
+  const handleUnassign = async (item: TreeData<BaseShipmentItem>) => {
+    const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
+
+    if (endpoint === "topLevelContainers") {
+      deleteItem(item, endpoint).then((response) => {
+        if (response && response.status === 204) {
+          dispatch(updateShipment({ session, shipmentId }));
+        }
+      });
+    } else {
+      unassignItem(item, endpoint);
     }
   };
 
   /** Delete item permanently */
   const handleDelete = useCallback(
-    (item: TreeData<BaseShipmentItem>) => {
+    async (item: TreeData<BaseShipmentItem>) => {
       const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
+      // TODO: type item object
+      if (item.data.containerId || item.data.parentId || item.data.topLevelContainerId) {
+        unassignItem(item, endpoint);
+      } else {
+        const response = await deleteItem(item, endpoint);
 
-      authenticatedFetch
-        .client(`/shipments/${shipmentId}/${endpoint}/${item.id}`, session, {
-          method: "DELETE",
-        })
-        .then((response) => {
-          if (response && response.status === 204) {
-            dispatch(updateUnassigned({ session, shipmentId }));
-          }
-        });
+        if (response && response.status === 204) {
+          dispatch(updateUnassigned({ session, shipmentId }));
+        }
+      }
     },
-    [session, shipmentId, dispatch],
+    [session, shipmentId, dispatch, unassignItem, deleteItem],
   );
 
   return (
@@ -82,7 +109,7 @@ const ShipmentOverview = ({
       <Heading>Overview</Heading>
       <Divider borderColor='gray.800' />
       <Box w='100%' flex='1 0 auto' mt='10px' mb='20px'>
-        <TreeView flexGrow='1' data={data!} onRemove={handleRemove} onEdit={onActiveChanged} />
+        <TreeView flexGrow='1' data={data} onRemove={handleUnassign} onEdit={onActiveChanged} />
       </Box>
       <TreeView
         mb='10px'

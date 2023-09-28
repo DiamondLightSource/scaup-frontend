@@ -1,5 +1,6 @@
 import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
 import { dewarForm } from "@/mappings/forms/dewar";
+import { gridBoxForm } from "@/mappings/forms/gridBox";
 import { sampleForm } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { parseJsonReferences } from "@/utils/generic";
@@ -19,7 +20,7 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   falconTube: [],
   dewar: dewarForm,
   grid: [],
-  gridBox: [],
+  gridBox: gridBoxForm,
 };
 
 export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps) => {
@@ -40,7 +41,7 @@ export const DynamicForm = ({ formType, prepopData, ...props }: DynamicFormProps
   }, [prepopData, formType]);
 
   return (
-    <VStack flex='1 0 auto' py='3' spacing='3'>
+    <VStack spacing='3'>
       {activeForm.map((entry) => (
         <DynamicFormInput key={entry.id} {...props} {...entry} />
       ))}
