@@ -3,7 +3,6 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { getCurrentStepIndex } from "@/mappings/pages";
 import { renderWithProviders, sample } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { ChildSelector } from "./childSelector";
 

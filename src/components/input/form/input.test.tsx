@@ -1,6 +1,5 @@
 import { DynamicFormInput } from "@/components/input/form/input";
 import { renderWithForm } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
 
 describe("Dynamic Form Field", () => {
@@ -40,6 +39,12 @@ describe("Dynamic Form Field", () => {
     renderWithForm(<DynamicFormInput id='1' label='Mesh' type='checkbox' />);
 
     expect(screen.getByRole("checkbox")).toBeInTheDocument();
+  });
+
+  it("should render separator", () => {
+    renderWithForm(<DynamicFormInput id='1' label='Separator' type='separator' />);
+
+    expect(screen.getByText(/separator/i)).toBeInTheDocument();
   });
 
   it("should render error message if value does not pass validation", () => {

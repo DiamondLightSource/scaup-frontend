@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import { genUniqueId } from "./generic";
 
 describe("Generic Utility Functions", () => {

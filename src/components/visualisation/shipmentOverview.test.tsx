@@ -4,7 +4,6 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { gridBox, puck, renderWithProviders, waitForRequest } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 

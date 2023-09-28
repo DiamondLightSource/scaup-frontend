@@ -2,7 +2,6 @@ import { GridBox } from "@/components/containers/gridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { server } from "@/mocks/server";
 import { gridBox, renderWithStoreAndForm, sample } from "@/utils/test-utils";
-import "@testing-library/jest-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { Controller } from "react-hook-form";

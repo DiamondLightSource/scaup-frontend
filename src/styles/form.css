@@ -1,0 +1,3 @@
+.separator:not(:first-of-type) {
+  padding-top: 24px;
+}
