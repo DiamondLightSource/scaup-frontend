@@ -138,7 +138,12 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       <FormProvider {...formContext}>
         <form
           onSubmit={onSubmit}
-          style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            flex: "1 0 auto",
+          }}
         >
           <HStack py='3' flex='1 0 auto' alignItems='start'>
             <Box flex='1 0 auto'>

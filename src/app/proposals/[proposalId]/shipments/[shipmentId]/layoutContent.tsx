@@ -152,7 +152,7 @@ const ShipmentsLayoutContent = ({
 
   return (
     <VStack h='100%' w='100%'>
-      <Stepper index={activeStep} mb='15px' h='60px' w='100%'>
+      <Stepper colorScheme='green' index={activeStep} mb='15px' h='60px' w='100%'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
             <StepIndicator

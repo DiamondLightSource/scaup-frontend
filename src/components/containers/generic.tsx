@@ -10,16 +10,7 @@ import {
 import { BaseShipmentItem, separateDetails } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
-import {
-  Box,
-  Button,
-  HStack,
-  Heading,
-  List,
-  ListItem,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Heading, List, ListItem, Text, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
@@ -101,30 +92,46 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
   );
 
   return (
-    <Box w='200px' h='70%' p='10px' border='3px solid' borderColor='gray.800'>
-      <HStack w='100%' borderBottom='1px solid' borderColor='gray.800' mb='5px' pb='3px'>
-        <Heading fontSize='24px' flex='1 0 0'>
-          Contents
-        </Heading>
-        <Button size='sm' onClick={onOpen}>
-          Add
-        </Button>
-      </HStack>
+    <Box
+      w='296px'
+      h='70%'
+      p='10px'
+      m='20px'
+      border='3px solid'
+      borderColor='diamond.700'
+      bg='#D0E0FF'
+    >
+      <Heading
+        fontSize='24px'
+        w='100%'
+        borderBottom='1px solid'
+        borderColor='gray.800'
+        mb='5px'
+        pb='3px'
+      >
+        Contents
+      </Heading>
       <List overflowY='scroll' h='80%'>
         {(currentContainer.children ?? []).map((item) => (
           <ListItem
             key={item.id}
-            borderBottom='1px solid'
-            borderColor='gray.300'
-            py='5px'
+            p='5px'
             display='flex'
+            bg='diamond.50'
+            mb='3px'
+            borderRadius='4px'
           >
             <Text flex='1 0 0'>{item.name}</Text>
-            <Button size='xs' onClick={() => handleRemoveSample(item)}>
+            <Button bg='red.600' size='xs' onClick={() => handleRemoveSample(item)}>
               Remove
             </Button>
           </ListItem>
         ))}
+        <ListItem mt='5px'>
+          <Button w='100%' size='sm' onClick={onOpen}>
+            Add
+          </Button>
+        </ListItem>
       </List>
       <ChildSelector
         childrenType='gridBox'
