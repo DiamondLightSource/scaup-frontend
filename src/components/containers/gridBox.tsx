@@ -17,12 +17,8 @@ import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { BaseContainerProps } from ".";
 import { GenericChildSlot } from "./child";
-
-export interface GridBoxProps {
-  /** Shipment ID */
-  shipmentId: string;
-}
 
 export interface GridItemProps {
   /** Whether or not this grid position has a sample in it */
@@ -37,7 +33,7 @@ export interface GridItemProps {
  * Grid box component. Should be used in conjunction with a field allowing the user to select
  * how many slots (capacity) the grid box should have, inside the parent form.
  */
-export const GridBox = ({ shipmentId }: GridBoxProps) => {
+export const GridBox = ({ shipmentId }: BaseContainerProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();

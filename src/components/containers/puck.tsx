@@ -15,25 +15,11 @@ import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
-import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { BaseContainerProps } from ".";
 import { GenericChildSlot } from "./child";
 
-export interface GridBoxProps {
-  /** Shipment ID */
-  shipmentId: string;
-}
-
-export interface GridItemProps {
-  /** Whether or not this grid position has a sample in it */
-  hasSample: boolean;
-  /** Position of the grid in the parent grid box */
-  position: number;
-  /** Callback for clicking on a given position */
-  onSampleClick: () => void;
-}
-
-export const Puck = ({ shipmentId }: GridBoxProps) => {
+export const Puck = ({ shipmentId }: BaseContainerProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +27,6 @@ export const Puck = ({ shipmentId }: GridBoxProps) => {
   const isEdit = useSelector(selectIsEdit);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
-  const { control } = useFormContext();
 
   const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
     const newSamples = Array(16).fill(null);

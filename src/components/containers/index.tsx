@@ -3,9 +3,12 @@ import { GridBox } from "@/components/containers/gridBox";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { Puck } from "./puck";
 
-export interface ContainerProps {
+export interface BaseContainerProps {
   /** Shipment ID */
   shipmentId: string;
+}
+
+export interface ContainerProps extends BaseContainerProps {
   /** Container type */
   containerType: BaseShipmentItem["type"];
 }
