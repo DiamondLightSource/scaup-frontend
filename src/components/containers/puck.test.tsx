@@ -41,7 +41,22 @@ describe("Puck", () => {
       ),
     );
 
+    renderWithStoreAndForm(<Puck shipmentId='1' />, {
+      preloadedState: defaultShipment,
+    });
+
+    fireEvent.click(screen.getByText("6"));
+    fireEvent.click(screen.getByText(/gridbox/i));
+
+    await screen.findByTestId("6-populated");
+  });
+
+  it("should render 16 puck slots", () => {
     renderWithStoreAndForm(<Puck shipmentId='1' />);
+
+    expect(screen.getAllByRole("button")).toHaveLength(16);
+    screen.getByTestId("1-empty");
+    screen.getByTestId("16-empty");
   });
 
   it("should add item to container and update", async () => {
@@ -58,7 +73,7 @@ describe("Puck", () => {
     fireEvent.click(screen.getByText("6"));
     fireEvent.click(screen.getByText(/gridbox/i));
 
-    await screen.findByTestId(/6-populated/i);
+    await screen.findByTestId("6-populated");
   });
 
   it("should populate slots with data from state", () => {
@@ -72,10 +87,10 @@ describe("Puck", () => {
       },
     });
 
-    screen.getByTestId(/6-populated/i);
+    screen.getByTestId("6-populated");
   });
 
-  it.skip("should remove item when remove is clicked", async () => {
+  it("should remove item when remove is clicked", async () => {
     const unpopulatedContainerShipment = structuredClone(populatedContainerShipment);
     unpopulatedContainerShipment[0].children[0].children = [];
 
@@ -95,8 +110,9 @@ describe("Puck", () => {
       },
     });
 
-    fireEvent.click(screen.getByTestId(/6-populated/i));
-    fireEvent.click(screen.getByText("Remove"));
-    await screen.findByTestId(/6-empty/i);
+    fireEvent.click(screen.getByTestId("6-populated"));
+    fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+
+    await screen.findByTestId("6-empty");
   });
 });

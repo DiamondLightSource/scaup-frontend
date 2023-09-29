@@ -12,15 +12,13 @@ const defaultShipment = [
     id: "dewar",
     name: "dewar",
     data: { type: "dewar" },
-    children: [{ id: "container", name: "container", data: { type: "puck" } }],
+    children: [puck],
   },
 ] satisfies TreeData<BaseShipmentItem>[];
 
 const defaultUnassigned = structuredClone(initialState.unassigned);
 
-defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(
-  defaultShipment[0].children[0],
-);
+defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck);
 
 describe("Shipment Overview", () => {
   it("should render tree", () => {
@@ -36,7 +34,7 @@ describe("Shipment Overview", () => {
 
     fireEvent.click(dewarAccordion);
 
-    expect(screen.getByText("container")).toBeInTheDocument();
+    expect(screen.getByText("puck")).toBeInTheDocument();
   });
 
   it("should move non-root item to unassigned when remove is clicked", async () => {
@@ -72,7 +70,7 @@ describe("Shipment Overview", () => {
     fireEvent.click(screen.getByText(/unassigned/i));
     fireEvent.click(screen.getByText(/containers/i));
 
-    expect(screen.getByText("container")).toBeInTheDocument();
+    expect(screen.getByText("puck")).toBeInTheDocument();
     await waitFor(() => expect(screen.getAllByText("Remove")).toHaveLength(2));
   });
 
@@ -91,6 +89,25 @@ describe("Shipment Overview", () => {
     fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
 
     await waitFor(() => expect(screen.queryByText("dewar")).not.toBeInTheDocument());
+  });
+
+  it("should update active item if removed item is the active item", async () => {
+    const { store } = renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            unassigned: defaultUnassigned,
+            activeItem: puck,
+            isEdit: true,
+          },
+        },
+      },
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
+    await waitFor(() => expect(store.getState().shipment.isEdit).toBe(false));
   });
 
   it("should unassign item if assigned to unassigned item", async () => {

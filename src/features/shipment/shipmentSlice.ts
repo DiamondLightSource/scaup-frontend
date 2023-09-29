@@ -198,6 +198,7 @@ export const shipmentSlice = createSlice({
     ) => {
       let actualId = state.activeItem.id;
       let actualType = state.activeItem.data.type;
+      let activeItemExists = false;
 
       if (action.payload) {
         if (action.payload.id) {
@@ -216,9 +217,11 @@ export const shipmentSlice = createSlice({
         actualType,
         (item) => {
           state.activeItem = item;
-          state.isEdit = true;
+          activeItemExists = true;
         },
       );
+
+      state.isEdit = activeItemExists;
     },
     /** Add single unassigned item */
     addUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {

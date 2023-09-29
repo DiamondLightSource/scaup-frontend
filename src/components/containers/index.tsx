@@ -22,6 +22,8 @@ export const Container = ({ shipmentId, containerType }: ContainerProps) => {
       return <Puck shipmentId='1' />;
     case "falconTube":
       return <GenericContainer shipmentId={shipmentId} />;
+    case "genericContainer":
+      return <GenericContainer shipmentId={shipmentId} />;
     default:
       return null;
   }

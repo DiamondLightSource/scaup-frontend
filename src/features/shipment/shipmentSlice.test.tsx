@@ -105,6 +105,84 @@ describe("Shipment Items Reducers", () => {
   });
 });
 
+describe("Active Item Sync", () => {
+  it("should sync active item if in assigned items", () => {
+    const previousState = {
+      ...initialState,
+      items: [
+        {
+          id: "dewar",
+          name: "new-dewar",
+          data: { type: "dewar" },
+        },
+      ] as TreeData<BaseShipmentItem>[],
+      activeItem: { id: "dewar", name: "old-dewar", data: { type: "dewar" } },
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: "dewar", name: "new-dewar", data: { type: "dewar" } },
+      isEdit: true,
+    });
+  });
+
+  it("should sync active item if in unassigned items", () => {
+    const previousUnassigned = structuredClone(initialState).unassigned;
+    const unassignedPuckIndex = getCurrentStepIndex("puck");
+    previousUnassigned[0].children![unassignedPuckIndex].children = [puck];
+
+    const previousState = {
+      ...initialState,
+      unassigned: previousUnassigned,
+      activeItem: { id: 9, name: "old-puck", data: { type: "puck" } },
+      isEdit: true,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: { id: 9, name: "puck", data: { type: "puck" } },
+      isEdit: true,
+    });
+  });
+
+  it("should use passed ID and type when syncing active item", () => {
+    const previousState = {
+      ...initialState,
+      items: defaultData.children,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem({ id: 1, type: "dewar" }))).toMatchObject({
+      activeItem: { id: 1, name: "Dewar", data: { type: "dewar" } },
+      isEdit: true,
+    });
+  });
+
+  it("should set edit status to false if current item no longer exists", async () => {
+    const oldItem = { id: "doesnotexist", name: "doesnotexist", data: { type: "puck" } };
+    const previousState = {
+      ...initialState,
+      activeItem: oldItem,
+      isEdit: true,
+    } as typeof initialState;
+
+    expect(reducer(previousState, syncActiveItem())).toMatchObject({
+      activeItem: oldItem,
+      isEdit: false,
+    });
+  });
+
+  it("should set edit status to false if item being searched for does not exist", async () => {
+    const previousState = {
+      ...initialState,
+      isEdit: true,
+    } as typeof initialState;
+
+    expect(
+      reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
+    ).toMatchObject({
+      isEdit: false,
+    });
+  });
+});
+
 describe("Shipment Async Thunks", () => {
   it("should display toast if shipment response is not valid", async () => {
     server.use(
@@ -167,54 +245,5 @@ describe("Shipment Async Thunks", () => {
     );
 
     expect(getUnassignedByType(store.getState().shipment, "sample")).toMatchObject([sample]);
-  });
-
-  it("should sync active item if in assigned items", async () => {
-    const previousState = {
-      ...initialState,
-      items: [
-        {
-          id: "dewar",
-          name: "new-dewar",
-          data: { type: "dewar" },
-        },
-      ] as TreeData<BaseShipmentItem>[],
-      activeItem: { id: "dewar", name: "old-dewar", data: { type: "dewar" } },
-    } as typeof initialState;
-
-    expect(reducer(previousState, syncActiveItem())).toMatchObject({
-      activeItem: { id: "dewar", name: "new-dewar", data: { type: "dewar" } },
-      isEdit: true,
-    });
-  });
-
-  it("should sync active item if in unassigned items", async () => {
-    const previousUnassigned = structuredClone(initialState).unassigned;
-    const unassignedPuckIndex = getCurrentStepIndex("puck");
-    previousUnassigned[0].children![unassignedPuckIndex].children = [puck];
-
-    const previousState = {
-      ...initialState,
-      unassigned: previousUnassigned,
-      activeItem: { id: 9, name: "old-puck", data: { type: "puck" } },
-      isEdit: true,
-    } as typeof initialState;
-
-    expect(reducer(previousState, syncActiveItem())).toMatchObject({
-      activeItem: { id: 9, name: "puck", data: { type: "puck" } },
-      isEdit: true,
-    });
-  });
-
-  it("should use passed ID and type when syncing active item", async () => {
-    const previousState = {
-      ...initialState,
-      items: defaultData.children,
-    } as typeof initialState;
-
-    expect(reducer(previousState, syncActiveItem({ id: 1, type: "dewar" }))).toMatchObject({
-      activeItem: { id: 1, name: "Dewar", data: { type: "dewar" } },
-      isEdit: true,
-    });
   });
 });

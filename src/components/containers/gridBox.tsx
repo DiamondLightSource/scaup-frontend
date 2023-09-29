@@ -90,7 +90,7 @@ export const GridBox = ({ shipmentId }: GridBoxProps) => {
           dispatch(updateShipment({ session, shipmentId })),
           dispatch(updateUnassigned({ session, shipmentId })),
         ]);
-        dispatch(syncActiveItem({ id: actualContainerId || undefined }));
+        dispatch(syncActiveItem({ id: actualContainerId ?? undefined }));
       });
     },
     [dispatch, session, shipmentId, capacity, isEdit],

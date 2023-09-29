@@ -18,7 +18,6 @@ import {
   steps,
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { authenticatedFetch } from "@/utils/client/";
 import { Item } from "@/utils/client/item";
 import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
@@ -89,7 +88,13 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
   }, [dispatch, activeStep, activeItem]);
 
-  const handleDelete = useCallback(async () => {
+  /*
+   * Should we perform a cascade delete, and delete the entire chain of children for the current object?
+   * I'd rather have the user perform this "explicitly", hence, why they should use the overview on
+   * the right
+   */
+
+  /*const handleDelete = useCallback(async () => {
     if (activeIsEdit) {
       const response = await authenticatedFetch.client(
         `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
@@ -105,7 +110,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         handleNewItem();
       }
     }
-  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);
+  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);*/
 
   useEffect(() => {
     setFormType(activeItem.data.type);
@@ -148,9 +153,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           </HStack>
           <HStack>
             <Spacer />
-            <Button onClick={handleDelete} bg='red.500'>
-              {activeIsEdit ? "Delete" : "Cancel"}
-            </Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
         </form>

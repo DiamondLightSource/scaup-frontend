@@ -16,11 +16,18 @@ const config = {
   coverageDirectory: "coverage",
   coveragePathIgnorePatterns: [
     "/node_modules/",
+    // Test mocks
     "src/mocks",
+    // NextAuth
+    "src/app/nextauth",
+    // Auth options, part of NextAuth's configuration
+    "src/mappings/authOptions.ts",
     "src/styles",
+    // "Static" navigation objects, or objects otherwise imported from external libraries
+    "src/components/navigation",
     "src/index.ts",
+    // Interfaces, contains no runtime code
     "src/utils/interfaces.tsx",
-    ".*\\.stories.tsx",
   ],
 };
 

@@ -81,7 +81,7 @@ export const GenericContainer = ({ shipmentId }: GridBoxProps) => {
         dispatch(updateUnassigned({ session, shipmentId })),
       ]);
 
-      dispatch(syncActiveItem({ id: actualContainerId || undefined, type: values.type }));
+      dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
     },
     [isEdit, session, shipmentId, dispatch, getValues],
   );
