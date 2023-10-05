@@ -6,6 +6,9 @@ export const gridBoxForm = [
     label: "Name",
     type: "text",
     hint: "Ensure name matches name on grid box",
+    validation: {
+      required: "Grid box must have name",
+    },
   },
   {
     id: "capacity",
