@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionProps,
-  Box,
   Button,
   HStack,
   List,
@@ -99,11 +98,11 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
             <AccordionItem border='none'>
               <HStack w='100%' borderBottom='1px solid' borderBottomColor='gray.800'>
                 <AccordionButton>
-                  <AccordionIcon />
-                  <Box flex='1' textAlign='left'>
+                  <HStack>
+                    <AccordionIcon />
                     {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
                     <Text fontSize='md'>{item.name}</Text>
-                  </Box>
+                  </HStack>
                 </AccordionButton>
                 {!item.isNotViewable && (
                   <Button size='xs' onClick={() => handleEdit(item)}>

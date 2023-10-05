@@ -14,7 +14,7 @@ export const containerForm = [
     values: [
       { label: "Falcon Tube", value: "falconTube" },
       { label: "Puck", value: "puck" },
-      { label: "Generic", value: "genericContainer" },
+      { label: "Other", value: "genericContainer" },
     ] as { label: string; value: BaseShipmentItem["type"] }[],
     watch: true,
   },

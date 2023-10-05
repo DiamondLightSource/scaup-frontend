@@ -32,9 +32,12 @@ export const setInUnassignedClone = (
 ) => {
   const index = unassigned[0].children!.findIndex((item) => item.id === type);
 
+  // Object might be frozen, copying it is safer
+  const itemCopy = structuredClone(items);
+
   if (index !== -1) {
-    setTagInPlace(items);
-    unassigned[0].children![index].children = items;
+    setTagInPlace(itemCopy);
+    unassigned[0].children![index].children = itemCopy;
   } else {
     throw Error("Invalid type provided");
   }

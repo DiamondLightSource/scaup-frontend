@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { ProposalOverviewContent } from "./pageContent";
+import { ProposalOverviewContent } from "@/app/proposals/[proposalId]/pageContent";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import mockRouter from "next-router-mock";
 
 describe("Proposal Page Content", () => {
   it("should display message if there are no shipments in this proposal", () => {
@@ -20,5 +21,31 @@ describe("Proposal Page Content", () => {
     render(<ProposalOverviewContent proposalId='cm1234' data={[{ shippingId: 1 }]} />);
 
     expect(screen.getByText("?")).toBeInTheDocument();
+  });
+
+  it("should display 'submitted' as tag if item is submitted", () => {
+    render(
+      <ProposalOverviewContent proposalId='cm1234' data={[{ shippingId: 1, isSubmitted: true }]} />,
+    );
+
+    expect(screen.getByText("Submitted")).toBeInTheDocument();
+  });
+
+  it("should display 'draft' as tag if item is not submitted", () => {
+    render(
+      <ProposalOverviewContent
+        proposalId='cm1234'
+        data={[{ shippingId: 1, isSubmitted: false }]}
+      />,
+    );
+
+    expect(screen.getByText("Draft")).toBeInTheDocument();
+  });
+
+  it("should redirect to new shipment when created", async () => {
+    render(<ProposalOverviewContent proposalId='cm1234' data={null} />);
+
+    fireEvent.click(screen.getByText(/create new shipment/i));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/proposals/cm1234/shipments/123"));
   });
 });
