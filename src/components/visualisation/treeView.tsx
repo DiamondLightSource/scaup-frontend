@@ -14,7 +14,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -69,8 +69,10 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
     [onEdit],
   );
 
+  const defaultIndex = useMemo(() => [...Array(data.length).keys()], [data]);
+
   return (
-    <Accordion allowMultiple {...props} defaultIndex={[...Array(data.length).keys()]}>
+    <Accordion allowMultiple {...props} defaultIndex={defaultIndex}>
       {data.map((item, index) => (
         <React.Fragment key={index}>
           {!item.children || item.children.length < 1 ? (
@@ -81,7 +83,7 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                   <Text>{item.name}</Text>
                   <Spacer />
                   {!item.isUndeletable && (
-                    <Button size='xs' onClick={() => handleRemove(item)}>
+                    <Button bg='red.600' size='xs' onClick={() => handleRemove(item)}>
                       Remove
                     </Button>
                   )}

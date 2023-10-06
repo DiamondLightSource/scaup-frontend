@@ -14,7 +14,7 @@ export const defaultData = {
         {
           name: "Falcon Tube",
           id: 2,
-          data: { type: "container" },
+          data: { type: "falconTube" },
           children: [
             {
               name: "Grid Box 1",
@@ -27,7 +27,7 @@ export const defaultData = {
         {
           name: "Puck",
           id: 4,
-          data: { type: "container" },
+          data: { type: "puck" },
           children: [
             {
               name: "Grid Box 2",

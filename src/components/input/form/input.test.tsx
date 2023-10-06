@@ -9,6 +9,12 @@ describe("Dynamic Form Field", () => {
     expect(screen.getByText("Mesh")).toBeInTheDocument();
   });
 
+  it("should render hint", () => {
+    renderWithForm(<DynamicFormInput id='1' label='Mesh' type='text' hint='hint' />);
+
+    expect(screen.getByText(/hint/i)).toBeInTheDocument();
+  });
+
   it("should render disabled dropdown if no values are provided", () => {
     renderWithForm(
       <DynamicFormInput

@@ -18,9 +18,19 @@ export const sampleForm = [
   },
   {
     id: "proteinId",
-    label: "Compound",
+    label: "Macromolecule",
     type: "dropdown",
     values: { $ref: { parent: "#/proteins", map: { value: "proteinId", label: "name" } } },
+  },
+  {
+    id: "buffer",
+    label: "Buffer",
+    type: "text",
+  },
+  {
+    id: "concentration",
+    label: "Concentration",
+    type: "text",
   },
   {
     id: "grid-separator",
@@ -66,7 +76,7 @@ export const sampleForm = [
   },
   {
     id: "hole",
-    label: "Hole",
+    label: "Hole Diameter",
     type: "dropdown",
     values: [
       { label: "R 0.6/1", value: "R 0.6/1" },
@@ -89,5 +99,10 @@ export const sampleForm = [
       { label: "Vitrobot", value: "Vitrobot" },
       { label: "High Pressure", value: "High Pressure" },
     ],
+  },
+  {
+    id: "vitrificationConditions",
+    label: "Vitrification Conditions",
+    type: "textarea",
   },
 ] as DynamicFormEntry[];

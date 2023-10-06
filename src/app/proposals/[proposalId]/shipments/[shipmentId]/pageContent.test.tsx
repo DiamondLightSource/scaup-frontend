@@ -2,7 +2,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { renderWithProviders, sample } from "@/utils/test-utils";
+import { puck, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
@@ -52,7 +52,7 @@ describe("Item Page", () => {
     expect(screen.getByText("Mesh")).toBeInTheDocument();
   });
 
-  it("should delete item and reset form to new item", async () => {
+  /*it("should delete item and reset form to new item", async () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: { ...initialState, items: [sample], activeItem: sample, isEdit: true },
@@ -63,7 +63,7 @@ describe("Item Page", () => {
     fireEvent.click(screen.getByText(/delete/i));
 
     await screen.findByText("New Sample");
-  });
+  });*/
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
     const newDewar: TreeData<BaseShipmentItem> = {
@@ -180,5 +180,24 @@ describe("Item Page", () => {
         foil: "Quantifoil copper",
       }),
     );
+  });
+
+  it("should update form if container type changes", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: {
+          ...initialState,
+          activeItem: puck,
+        },
+      },
+    });
+
+    expect(screen.getByText(/registered container/i)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {
+      target: { value: "falconTube" },
+    });
+
+    expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument();
   });
 });

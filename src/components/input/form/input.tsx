@@ -4,6 +4,7 @@ import {
   Checkbox,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -13,11 +14,19 @@ import {
 import { RegisterOptions, useFormContext } from "react-hook-form";
 
 export interface DynamicFormEntry {
+  /** Field label, displayed above/next to input */
   label: string;
+  /** Field ID */
   id: string;
+  /** Field type */
   type: "text" | "dropdown" | "checkbox" | "textarea" | "separator";
+  /** Validation options */
   validation?: RegisterOptions;
   values?: string | { label: string; value: string }[] | JsonRef;
+  /** Fire event when this field changes */
+  watch?: boolean;
+  /** Text to be displayed underneath label, commonly used for further clarification */
+  hint?: string;
 }
 
 const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
@@ -72,7 +81,14 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
   }
 };
 
-export const DynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
+export const DynamicFormInput = ({
+  id,
+  label,
+  type,
+  validation,
+  values,
+  hint,
+}: DynamicFormEntry) => {
   const {
     formState: { errors },
   } = useFormContext();
@@ -83,7 +99,7 @@ export const DynamicFormInput = ({ id, label, type, validation, values }: Dynami
         role='separator'
         className='separator'
         w='100%'
-        size='md'
+        fontSize='24px'
         borderBottom='1px solid black'
       >
         {label}
@@ -94,9 +110,12 @@ export const DynamicFormInput = ({ id, label, type, validation, values }: Dynami
   return (
     <FormControl isInvalid={!!errors[id]}>
       {type !== "checkbox" && (
-        <FormLabel fontWeight='600' mb='0' htmlFor={id}>
-          {label}
-        </FormLabel>
+        <>
+          <FormLabel fontWeight='600' fontSize='18px' mb='0' htmlFor={id}>
+            {label}
+          </FormLabel>
+          <FormHelperText mt='0'>{hint}</FormHelperText>
+        </>
       )}
       <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
       {<InnerDynamicFormInput {...{ id, label, type, validation, values }} />}

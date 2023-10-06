@@ -94,8 +94,10 @@ const ShipmentOverview = ({
         const response = await deleteItem(item, endpoint);
 
         if (response && response.status === 204) {
-          dispatch(updateUnassigned({ session, shipmentId }));
+          await dispatch(updateUnassigned({ session, shipmentId }));
         }
+
+        dispatch(syncActiveItem());
       }
     },
     [session, shipmentId, dispatch, unassignItem, deleteItem],

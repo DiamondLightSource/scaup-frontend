@@ -17,7 +17,6 @@ describe("Dynamic Form View", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Hole")).toBeInTheDocument();
     expect(screen.getByText("Film")).toBeInTheDocument();
   });
 

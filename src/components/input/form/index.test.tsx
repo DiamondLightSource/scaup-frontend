@@ -1,6 +1,6 @@
 import { DynamicForm } from "@/components/input/form";
 import { renderWithForm } from "@/utils/test-utils";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 
 describe("Dynamic Form", () => {
   it("should render form with all fields generated dynamically", () => {
@@ -8,7 +8,6 @@ describe("Dynamic Form", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Hole")).toBeInTheDocument();
     expect(screen.getByText("Film")).toBeInTheDocument();
   });
 
@@ -17,17 +16,31 @@ describe("Dynamic Form", () => {
       <DynamicForm
         formType='dewar'
         prepopData={{
-          dewar: {
-            codes: [
-              { dewarId: 123, dewarCode: "BI-99-9999" },
-              { dewarId: 456, dewarCode: "BI-88-8888" },
-            ],
-          },
+          dewars: [
+            { dewarRegistryId: 123, facilityCode: "BI-99-9999" },
+            { dewarRegistryId: 456, facilityCode: "BI-88-8888" },
+          ],
         }}
       />,
     );
 
     expect(screen.getByText("BI-99-9999")).toBeInTheDocument();
     expect(screen.getByText("BI-88-8888")).toBeInTheDocument();
+  });
+
+  it("should watch provided fields", () => {
+    const watchCallback = jest.fn();
+    renderWithForm(<DynamicForm formType='puck' onWatchedUpdated={watchCallback} />);
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {
+      target: { value: "falconTube" },
+    });
+
+    expect(watchCallback).toBeCalledWith({
+      comments: "",
+      name: "",
+      registeredContainer: "",
+      type: "falconTube",
+    });
   });
 });

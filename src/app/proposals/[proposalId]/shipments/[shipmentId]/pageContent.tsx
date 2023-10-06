@@ -1,5 +1,5 @@
 "use client";
-import { GridBox } from "@/components/containers/gridBox";
+import { Container } from "@/components/containers";
 import { DynamicForm } from "@/components/input/form";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
@@ -18,11 +18,11 @@ import {
   steps,
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { authenticatedFetch } from "@/utils/client";
+import { Item } from "@/utils/client/item";
 import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemFormPageContentProps {
@@ -39,10 +39,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const activeStep = useMemo(() => steps[getCurrentStepIndex(activeItem.data.type)], [activeItem]);
 
   const activeIsEdit = useSelector(selectIsEdit);
-  const formContext = useForm<BaseShipmentItem>({ defaultValues: activeItem.data });
+  const formContext = useForm<BaseShipmentItem>();
+  const [formType, setFormType] = useState(activeItem.data.type);
 
   useEffect(() => {
-    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: true });
+    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
   }, [formContext, activeItem, activeIsEdit]);
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
@@ -52,18 +53,12 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      const res = await authenticatedFetch.client(
-        `/shipments/${shipmentId}/${activeStep.endpoint}`,
+      Item.create(
         session,
-        {
-          method: "post",
-          body: JSON.stringify(separateDetails(info)),
-        },
-      );
-
-      if (res && res.status === 201) {
-        const newItem = await res.json();
-
+        shipmentId,
+        separateDetails(info, activeStep.endpoint),
+        activeStep.endpoint,
+      ).then(async (newItem) => {
         values.id = newItem.id;
         values.name = newItem.name;
 
@@ -73,23 +68,19 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           await dispatch(updateUnassigned({ session, shipmentId }));
         }
 
-        dispatch(syncActiveItem(newItem.id));
-        toast({ title: "Successfully created item!" });
-      }
+        dispatch(syncActiveItem({ id: newItem.id }));
+      });
     } else {
-      const res = await authenticatedFetch.client(
-        `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
+      Item.patch(
         session,
-        {
-          method: "PATCH",
-          body: JSON.stringify(separateDetails(info)),
-        },
-      );
-
-      if (res && res.status === 200) {
+        shipmentId,
+        activeItem.id,
+        separateDetails(info, activeStep.endpoint),
+        activeStep.endpoint,
+      ).then(() => {
         dispatch(updateShipment({ session, shipmentId }));
         toast({ title: "Successfully saved item!" });
-      }
+      });
     }
   });
 
@@ -97,7 +88,13 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
   }, [dispatch, activeStep, activeItem]);
 
-  const handleDelete = useCallback(async () => {
+  /*
+   * Should we perform a cascade delete, and delete the entire chain of children for the current object?
+   * I'd rather have the user perform this "explicitly", hence, why they should use the overview on
+   * the right
+   */
+
+  /*const handleDelete = useCallback(async () => {
     if (activeIsEdit) {
       const response = await authenticatedFetch.client(
         `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
@@ -113,10 +110,18 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         handleNewItem();
       }
     }
-  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);
+  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);*/
+
+  useEffect(() => {
+    setFormType(activeItem.data.type);
+  }, [activeItem]);
+
+  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
+    setFormType(formValues.type);
+  }, []);
 
   return (
-    <VStack h='100%' w='65%'>
+    <VStack alignItems='stretch' w='65%'>
       <VStack spacing='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {activeStep.singular}
@@ -133,19 +138,26 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       <FormProvider {...formContext}>
         <form
           onSubmit={onSubmit}
-          style={{ display: "flex", flexDirection: "column", width: "100%", flex: "1 0 auto" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            flex: "1 0 auto",
+          }}
         >
           <HStack py='3' flex='1 0 auto' alignItems='start'>
             <Box flex='1 0 auto'>
-              <DynamicForm formType={activeItem.data.type} prepopData={prepopData} />
+              <DynamicForm
+                onWatchedUpdated={handleWatchedUpdated}
+                formType={formType}
+                defaultValues={activeItem.data}
+                prepopData={prepopData}
+              />
             </Box>
-            <GridBox shipmentId={shipmentId} />
+            <Container containerType={formType} shipmentId={shipmentId} />
           </HStack>
           <HStack>
             <Spacer />
-            <Button onClick={handleDelete} bg='red.500'>
-              {activeIsEdit ? "Delete" : "Cancel"}
-            </Button>
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
         </form>
