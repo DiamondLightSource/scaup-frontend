@@ -36,3 +36,19 @@ describe("Item Modification", () => {
     await expect(Item.patch(mockSession, 1, 1, {}, "samples")).rejects.toThrow();
   });
 });
+
+describe("Item Deletion", () => {
+  it("should return item deletion response", async () => {
+    const itemResponse = await Item.delete(mockSession, 1, 1, "samples");
+  });
+
+  it("should throw if request fails", async () => {
+    server.use(
+      rest.delete("http://localhost/api/shipments/:shipmentId/samples/1", (req, res, ctx) =>
+        res.once(ctx.status(404)),
+      ),
+    );
+
+    await expect(Item.delete(mockSession, 1, 1, "samples")).rejects.toThrow();
+  });
+});

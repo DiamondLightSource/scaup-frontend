@@ -55,4 +55,26 @@ export class Item {
       throw new Error("Failed to create item");
     }
   }
+
+  static async delete(
+    session: Session | null,
+    shipmentId: TreeData["id"],
+    itemId: TreeData["id"],
+    endpoint: Step["endpoint"],
+  ) {
+    const response = await authenticatedFetch.client(
+      `/shipments/${shipmentId}/${endpoint}/${itemId}`,
+      session,
+      {
+        method: "DELETE",
+      },
+    );
+
+    if (response && response.status === 204) {
+      return { status: "OK" };
+    } else {
+      toast({ title: "Failed to delete item", status: "error" });
+      throw new Error("Failed to delete item");
+    }
+  }
 }

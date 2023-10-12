@@ -336,4 +336,31 @@ describe("Shipment Layout", () => {
 
     expect(screen.getByText("Grid Box 01")).toBeInTheDocument();
   });
+
+  it("should not let user click finish if there are unassigned items", () => {
+    renderWithProviders(
+      <ShipmentLayoutContent
+        shipmentData={defaultShipmentItems}
+        unassignedItems={{
+          ...baseUnassigned,
+          gridBoxes: [{ data: { type: "gridBox" }, id: "gridBox", name: "Grid Box 01" }],
+        }}
+        params={{ ...defaultParams }}
+      >
+        <></>
+      </ShipmentLayoutContent>,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            activeItem: { ...initialState.activeItem, data: { type: "dewar" } },
+          },
+        },
+      },
+    );
+
+    expect(
+      screen.getByText("Cannot progress without assigning all items to a container!"),
+    ).toBeInTheDocument();
+  });
 });

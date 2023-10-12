@@ -36,12 +36,15 @@ export const updateUnassigned = createAsyncThunk(
       `/shipments/${shipmentId}/unassigned`,
       session,
     );
-    if (response && response.status === 200) {
-      return await response.json();
-    } else {
-      toast({ title: "An error ocurred", description: "Unable to retrieve unassigned item data" });
-      thunkAPI.rejectWithValue(null);
+    if (response) {
+      if (response.status === 200) {
+        return await response.json();
+      } else if (response.status === 404) {
+        return { gridBoxes: [], samples: [], containers: [] };
+      }
     }
+    toast({ title: "An error ocurred", description: "Unable to retrieve unassigned item data" });
+    thunkAPI.rejectWithValue(null);
   },
 );
 

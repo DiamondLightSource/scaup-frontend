@@ -200,7 +200,7 @@ describe("Shipment Async Thunks", () => {
   it("should display toast if unassigned item response is not valid", async () => {
     server.use(
       rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(ctx.status(404), ctx.json({})),
+        res.once(ctx.status(500), ctx.json({})),
       ),
     );
 
@@ -212,6 +212,21 @@ describe("Shipment Async Thunks", () => {
         title: "An error ocurred",
         description: "Unable to retrieve unassigned item data",
       }),
+    );
+  });
+
+  it("should set all unassigned collections to empty if endpoint returns 404", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(ctx.status(404), ctx.json({})),
+      ),
+    );
+
+    const { store } = renderWithProviders(<></>);
+    store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+
+    await waitFor(() =>
+      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(0),
     );
   });
 

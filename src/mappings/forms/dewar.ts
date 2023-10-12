@@ -5,13 +5,16 @@ export const dewarForm = [
     id: "barCode",
     label: "Barcode",
     type: "text",
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "code",
     label: "Dewar Code",
     type: "dropdown",
     values: {
-      $ref: { parent: "#/dewars", map: { value: "dewarRegistryId", label: "facilityCode" } },
+      $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
     },
   },
   {
@@ -19,7 +22,7 @@ export const dewarForm = [
     label: "Lab Contact",
     type: "dropdown",
     values: {
-      $ref: { parent: "#/labContacts", map: { value: "personId", label: "familyName" } },
+      $ref: { parent: "#/labContacts", map: { value: "labContactId", label: "cardName" } },
     },
   },
 ] as DynamicFormEntry[];

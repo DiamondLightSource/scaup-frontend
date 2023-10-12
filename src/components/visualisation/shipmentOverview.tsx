@@ -6,9 +6,9 @@ import {
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { authenticatedFetch } from "@/utils/client";
+import { Item } from "@/utils/client/item";
 import { Box, Divider, Heading } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
@@ -31,41 +31,33 @@ const ShipmentOverview = ({
   const { data: session } = useSession();
 
   const unassignItem = useCallback(
-    async (item: TreeData<BaseShipmentItem>, endpoint: string) => {
+    async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
       const body =
         endpoint === "samples"
           ? { containerId: null, location: null }
           : { topLevelContainerId: null, parentId: null, location: null };
 
-      authenticatedFetch
-        .client(`/shipments/${shipmentId}/${endpoint}/${item.id}`, session, {
-          method: "PATCH",
-          body: JSON.stringify(body),
-        })
-        .then(async (response) => {
-          if (response && response.status === 200) {
-            await Promise.all([
-              dispatch(updateShipment({ session, shipmentId })),
-              dispatch(updateUnassigned({ session, shipmentId })),
-            ]);
-            dispatch(syncActiveItem());
-          }
-        });
+      await Item.patch(session, shipmentId, item.id, body, endpoint);
+      await Promise.all([
+        dispatch(updateShipment({ session, shipmentId })),
+        dispatch(updateUnassigned({ session, shipmentId })),
+      ]);
+      dispatch(syncActiveItem());
     },
     [dispatch, session, shipmentId],
   );
 
   const deleteItem = useCallback(
-    async (item: TreeData<BaseShipmentItem>, endpoint: string) => {
-      return await authenticatedFetch.client(
-        `/shipments/${shipmentId}/${endpoint}/${item.id}`,
-        session,
-        {
-          method: "DELETE",
-        },
-      );
+    async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
+      await Item.delete(session, shipmentId, item.id, endpoint);
+      if (endpoint === "topLevelContainers") {
+        await dispatch(updateShipment({ session, shipmentId }));
+      } else {
+        await dispatch(updateUnassigned({ session, shipmentId }));
+      }
+      dispatch(syncActiveItem());
     },
-    [session, shipmentId],
+    [session, shipmentId, dispatch],
   );
 
   /** Remove item from assigned item list (or delete, if root item) */
@@ -73,11 +65,7 @@ const ShipmentOverview = ({
     const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
 
     if (endpoint === "topLevelContainers") {
-      deleteItem(item, endpoint).then((response) => {
-        if (response && response.status === 204) {
-          dispatch(updateShipment({ session, shipmentId }));
-        }
-      });
+      deleteItem(item, endpoint);
     } else {
       unassignItem(item, endpoint);
     }
@@ -91,16 +79,10 @@ const ShipmentOverview = ({
       if (item.data.containerId || item.data.parentId || item.data.topLevelContainerId) {
         unassignItem(item, endpoint);
       } else {
-        const response = await deleteItem(item, endpoint);
-
-        if (response && response.status === 204) {
-          await dispatch(updateUnassigned({ session, shipmentId }));
-        }
-
-        dispatch(syncActiveItem());
+        await deleteItem(item, endpoint);
       }
     },
-    [session, shipmentId, dispatch, unassignItem, deleteItem],
+    [unassignItem, deleteItem],
   );
 
   return (

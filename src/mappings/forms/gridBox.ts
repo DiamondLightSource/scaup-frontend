@@ -7,7 +7,7 @@ export const gridBoxForm = [
     type: "text",
     hint: "Ensure name matches name on grid box",
     validation: {
-      required: "Grid box must have name",
+      required: "Required",
     },
   },
   {

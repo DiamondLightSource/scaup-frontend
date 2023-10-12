@@ -21,7 +21,7 @@ export const steps: Step[] = [
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
     title: "Containers",
-    id: ["puck", "falconTube"],
+    id: ["puck", "falconTube", "genericContainer"],
     singular: "Container",
     endpoint: "containers",
   },
@@ -62,7 +62,7 @@ const rootKeyMap: Record<Step["endpoint"], string[]> = {
     "capacity",
   ],
   samples: [...commonRootKeys, "proteinId"],
-  topLevelContainers: [...commonRootKeys, "code", "barCode", "status"],
+  topLevelContainers: [...commonRootKeys, "code", "barCode", "status", "labContact"],
   shipments: [...commonRootKeys, "proposalReference"],
 };
 
