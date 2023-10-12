@@ -132,16 +132,22 @@ const ShipmentsLayoutContent = ({
 
   const typeCount = useMemo(() => {
     const count = Array<number>(steps.length).fill(0);
+    const unassignedItems: TreeData[] = unassigned[0].children!;
 
     if (shipment) {
       count[count.length - 1] = shipment.length;
 
       for (let i = 1; i < steps.length; i++) {
+        /*
+         * Count assigned/unassigned items separetely, as there is no benefit of creating a
+         * new object containing both
+         */
         count[i - 1] = recursiveCountChildrenByType(shipment, steps[i].id);
+        count[i - 1] += recursiveCountChildrenByType(unassignedItems, steps[i].id);
       }
     }
 
-    const unassignedItems: TreeData[] = unassigned[0].children!;
+    // Count orphaned unassigned items directly, since they have no parent
     for (const i in unassignedItems) {
       if (unassignedItems[i].children !== undefined) {
         count[i] += unassignedItems[i].children!.length;

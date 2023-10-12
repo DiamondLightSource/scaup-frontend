@@ -5,6 +5,9 @@ export const dewarForm = [
     id: "barCode",
     label: "Barcode",
     type: "text",
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "code",
