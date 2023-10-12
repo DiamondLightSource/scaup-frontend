@@ -96,6 +96,9 @@ describe("Item Page", () => {
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(0));
 
+    fireEvent.change(screen.getByRole("textbox", { name: "Barcode" }), {
+      target: { value: "Test" },
+    });
     fireEvent.click(screen.getAllByText(/add/i)[1]);
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(1));

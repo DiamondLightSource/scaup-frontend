@@ -40,7 +40,6 @@ describe("Item Modification", () => {
 describe("Item Deletion", () => {
   it("should return item deletion response", async () => {
     const itemResponse = await Item.delete(mockSession, 1, 1, "samples");
-    console.log(itemResponse);
   });
 
   it("should throw if request fails", async () => {

@@ -156,7 +156,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
             </Box>
             <Container containerType={formType} shipmentId={shipmentId} />
           </HStack>
-          <HStack>
+          <HStack p='0.5em' bg='gray.200'>
             <Spacer />
             <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
           </HStack>
