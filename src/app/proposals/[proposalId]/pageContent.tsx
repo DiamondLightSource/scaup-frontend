@@ -29,7 +29,12 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
   const router = useRouter();
 
   const handleNewShipment = useCallback(async () => {
-    const newShipment = await Item.create(session, proposalId, { name: "Test" }, "shipments");
+    const newShipment = await Item.create(
+      session,
+      proposalId,
+      { name: "New Shipment" },
+      "shipments",
+    );
     router.push(`/proposals/${proposalId}/shipments/${newShipment.id}`);
   }, [session, proposalId, router]);
 
