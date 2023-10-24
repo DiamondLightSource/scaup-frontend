@@ -22,7 +22,7 @@ export const Container = ({ shipmentId, containerType }: ContainerProps) => {
     case "gridBox":
       return <GridBox shipmentId={shipmentId} />;
     case "puck":
-      return <Puck shipmentId='1' />;
+      return <Puck shipmentId={shipmentId} />;
     case "falconTube":
       return <GenericContainer shipmentId={shipmentId} />;
     case "genericContainer":

@@ -60,6 +60,14 @@ export const handlers = [
     return res(ctx.status(201), ctx.json({ id: 123, data: { type: itemType } }), ctx.delay(0));
   }),
 
+  rest.post("http://localhost/api/proposals/:proposalId/shipments", (req, res, ctx) =>
+    res(
+      ctx.status(201),
+      ctx.json({ id: 123, data: { name: "Test" }, proposalReference: req.params.proposalId }),
+      ctx.delay(0),
+    ),
+  ),
+
   rest.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
     res(ctx.status(200), ctx.json({ id: 123 }), ctx.delay(0)),
   ),

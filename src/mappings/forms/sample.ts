@@ -98,6 +98,7 @@ export const sampleForm = [
       { label: "Manual", value: "Manual" },
       { label: "Vitrobot", value: "Vitrobot" },
       { label: "High Pressure", value: "High Pressure" },
+      { label: "Other", value: "Other" },
     ],
   },
   {

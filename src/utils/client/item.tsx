@@ -35,18 +35,19 @@ export class Item {
   // TODO: type this properly
   static async create(
     session: Session | null,
-    shipmentId: TreeData["id"],
+    parentId: TreeData["id"],
     data: Record<string, any>,
     endpoint: Step["endpoint"],
   ) {
-    const response = await authenticatedFetch.client(
-      `/shipments/${shipmentId}/${endpoint}`,
-      session,
-      {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-    );
+    const requestUrl =
+      endpoint === "shipments"
+        ? `/proposals/${parentId}/shipments`
+        : `/shipments/${parentId}/${endpoint}`;
+
+    const response = await authenticatedFetch.client(requestUrl, session, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
 
     if (response && response.status === 201) {
       return await response.json();

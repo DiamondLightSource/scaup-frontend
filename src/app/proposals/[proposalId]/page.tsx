@@ -6,7 +6,7 @@ const getShipments = async (proposalId: string) => {
 
   if (res && res.status === 200) {
     const shipments = await res.json();
-    return shipments;
+    return shipments.items;
   }
 };
 

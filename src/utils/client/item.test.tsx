@@ -18,6 +18,17 @@ describe("Item Creation", () => {
     const itemResponse = await Item.create(mockSession, 1, {}, "samples");
     expect(itemResponse).toEqual({ data: { type: "sample" }, id: 123 });
   });
+
+  it("should use different URL for creating shipments", async () => {
+    server.use(
+      rest.post("http://localhost/api/proposals/1/shipments", (req, res, ctx) =>
+        res.once(ctx.status(201), ctx.json({ name: "Test" })),
+      ),
+    );
+
+    const itemResponse = await Item.create(mockSession, 1, { name: "Test " }, "shipments");
+    expect(itemResponse).toEqual({ name: "Test" });
+  });
 });
 
 describe("Item Modification", () => {
