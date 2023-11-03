@@ -79,10 +79,12 @@ const rootKeyMap: Record<Step["endpoint"], string[]> = {
 export const separateDetails = (info: Record<string, any>, endpoint: Step["endpoint"]) => {
   const base: Record<string, any> = { details: info.details ?? ({} as Record<string, any>) };
   Object.entries(info).map(([key, val]) => {
-    if (rootKeyMap[endpoint].includes(key)) {
-      base[key] = val;
-    } else {
-      base.details[key] = val;
+    if (val !== null) {
+      if (rootKeyMap[endpoint].includes(key)) {
+        base[key] = val;
+      } else {
+        base.details[key] = val;
+      }
     }
   });
 

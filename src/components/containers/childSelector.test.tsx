@@ -90,4 +90,37 @@ describe("Child Selector", () => {
 
     await waitFor(() => expect(itemRemoveCallback).toBeCalledWith(selectedSample));
   });
+
+  it("should not render remove button if in read only mode", () => {
+    renderWithProviders(
+      <ChildSelector
+        selectedItem={selectedSample}
+        childrenType='sample'
+        isOpen={true}
+        onClose={() => {}}
+        readOnly={true}
+      />,
+    );
+
+    expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
+  });
+
+  it("should not render unassigned samples if in read only mode", () => {
+    const itemClickCallback = jest.fn();
+
+    renderWithProviders(
+      <ChildSelector
+        childrenType='sample'
+        isOpen={true}
+        onClose={() => {}}
+        onSelect={itemClickCallback}
+        readOnly={true}
+      />,
+      {
+        preloadedState: { shipment: { ...initialState, unassigned: defaultUnassigned } },
+      },
+    );
+
+    expect(screen.queryByText("Sample")).not.toBeInTheDocument();
+  });
 });

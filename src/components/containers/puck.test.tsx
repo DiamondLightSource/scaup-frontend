@@ -3,7 +3,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, puck, renderWithStoreAndForm } from "@/utils/test-utils";
+import { gridBox, puck, renderAndInjectForm } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import { rest } from "msw";
 
@@ -41,7 +41,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderWithStoreAndForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: defaultShipment,
     });
 
@@ -52,7 +52,7 @@ describe("Puck", () => {
   });
 
   it("should render 16 puck slots", () => {
-    renderWithStoreAndForm(<Puck shipmentId='1' />);
+    renderAndInjectForm(<Puck shipmentId='1' />);
 
     expect(screen.getAllByRole("button")).toHaveLength(16);
     screen.getByTestId("1-empty");
@@ -66,7 +66,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderWithStoreAndForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
     });
 
@@ -77,7 +77,7 @@ describe("Puck", () => {
   });
 
   it("should populate slots with data from state", () => {
-    renderWithStoreAndForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,
@@ -100,7 +100,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderWithStoreAndForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,

@@ -41,6 +41,12 @@ describe("Tree View", () => {
     expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(1);
   });
 
+  it("should not render remove button if component is set to read only mode", () => {
+    render(<TreeView readOnly={true} data={[{ id: "1", name: "Parent", data: {} }]} />);
+
+    expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+  });
+
   it("should render item tag", () => {
     render(<TreeView data={[{ id: "1", name: "Test", tag: "Tag Value", data: {} }]} />);
 

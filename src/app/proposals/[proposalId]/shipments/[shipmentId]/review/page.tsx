@@ -1,5 +1,6 @@
 "use client";
 
+import { Container } from "@/components/containers";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import {
   selectActiveItem,
@@ -12,7 +13,7 @@ import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const ReviewPage = () => {
+const ReviewPage = ({ params }: { params: { shipmentId: string } }) => {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
@@ -22,7 +23,9 @@ const ReviewPage = () => {
   );
 
   useEffect(() => {
-    dispatch(setActiveItem({ item: items![0], isEdit: true }));
+    if (items.length > 0) {
+      dispatch(setActiveItem({ item: items![0], isEdit: true }));
+    }
     dispatch(setStep(steps.length));
   }, [dispatch, items]);
 
@@ -37,6 +40,7 @@ const ReviewPage = () => {
       </VStack>
       <Box display='flex' flexDirection='column' width='100%' flex='1 0 auto'>
         <DynamicFormView formType={activeItem.data.type} data={activeItem.data} />
+        <Container shipmentId={params.shipmentId} containerType={activeItem.data.type} />
       </Box>
       <Text fontWeight='600' color='gray.600'>
         You can still edit your shipment after submitting

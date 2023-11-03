@@ -31,4 +31,12 @@ describe("Dynamic Form View", () => {
 
     expect(screen.getByText(/au-flat/i)).toBeInTheDocument();
   });
+
+  it("should render booleans as a yes/no", () => {
+    renderWithForm(
+      <DynamicFormView formType='gridBox' data={{ type: "gridBox", requestedReturn: true }} />,
+    );
+
+    expect(screen.getByText(/yes/i)).toBeInTheDocument();
+  });
 });

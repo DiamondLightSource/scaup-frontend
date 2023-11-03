@@ -33,6 +33,8 @@ export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
   onRemove?: (child: TreeData<PositionedItem>) => void;
   /** Type of container's children */
   childrenType: BaseShipmentItem["type"];
+  /** Disable editing controls */
+  readOnly?: boolean;
 }
 
 export const ChildSelector = ({
@@ -40,6 +42,7 @@ export const ChildSelector = ({
   childrenType,
   onSelect,
   onRemove,
+  readOnly = false,
   ...props
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
@@ -84,33 +87,39 @@ export const ChildSelector = ({
               <HStack w='100%'>
                 <Heading size='md'>Current Item</Heading>
                 <Spacer />
-                <Button onClick={handleRemoveClicked} bg='red.500' size='sm'>
-                  Remove
-                </Button>
+                {!readOnly && (
+                  <Button onClick={handleRemoveClicked} bg='red.500' size='sm'>
+                    Remove
+                  </Button>
+                )}
               </HStack>
               <Divider />
               <GenericChildCard name={selectedItem.name} type={childrenTypeData.data.singular} />
             </Box>
           )}
-          <Heading size='md'>Available Items</Heading>
-          <Divider />
-          {unassignedSamples ? (
-            <Grid py='2' templateColumns='repeat(4, 1fr)' gap='2'>
-              {unassignedSamples.map((item) => (
-                <GenericChildCard
-                  onClick={() => handleSampleClicked(item)}
-                  key={item.id}
-                  name={item.name}
-                  type={childrenTypeData.data.singular}
-                />
-              ))}
-            </Grid>
-          ) : (
-            <Text py='2' color='gray.600'>
-              No unassigned {childrenTypeData.data.title.toLowerCase()} available. Add a new{" "}
-              {childrenTypeData.data.singular.toLowerCase()} or remove a{" "}
-              {childrenTypeData.data.singular.toLowerCase()} from its container.
-            </Text>
+          {!readOnly && (
+            <>
+              <Heading size='md'>Available Items</Heading>
+              <Divider />
+              {unassignedSamples ? (
+                <Grid py='2' templateColumns='repeat(4, 1fr)' gap='2'>
+                  {unassignedSamples.map((item) => (
+                    <GenericChildCard
+                      onClick={() => handleSampleClicked(item)}
+                      key={item.id}
+                      name={item.name}
+                      type={childrenTypeData.data.singular}
+                    />
+                  ))}
+                </Grid>
+              ) : (
+                <Text py='2' color='gray.600'>
+                  No unassigned {childrenTypeData.data.title.toLowerCase()} available. Add a new{" "}
+                  {childrenTypeData.data.singular.toLowerCase()} or remove a{" "}
+                  {childrenTypeData.data.singular.toLowerCase()} from its container.
+                </Text>
+              )}
+            </>
           )}
         </ModalBody>
         <ModalFooter>

@@ -154,7 +154,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
                 prepopData={prepopData}
               />
             </Box>
-            <Container containerType={formType} shipmentId={shipmentId} />
+            <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
           </HStack>
           <HStack>
             <Spacer />

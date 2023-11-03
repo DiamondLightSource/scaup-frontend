@@ -200,4 +200,16 @@ describe("Item Page", () => {
 
     expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument();
   });
+
+  it("should update active item if new item is added", async () => {
+    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+      target: { value: "New Name" },
+    });
+
+    fireEvent.click(screen.getByText(/add/i));
+
+    await waitFor(() => store.getState().shipment.activeItem.data.name === "New Name");
+  });
 });

@@ -179,6 +179,7 @@ const ShipmentsLayoutContent = ({
         {children}
         <VStack spacing='0' alignItems='start' w='45%'>
           <ShipmentOverview
+            readOnly={activeStep >= steps.length}
             shipmentId={params.shipmentId}
             onActiveChanged={handleActiveChanged}
             proposal={params.proposalId}

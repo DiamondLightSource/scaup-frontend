@@ -36,9 +36,11 @@ export interface TreeViewProps extends AccordionProps {
   data: TreeData[];
   onRemove?: (data: TreeData) => void;
   onEdit?: (data: TreeData) => void;
+  /** Disable edit/remove buttons */
+  readOnly?: boolean;
 }
 
-export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) => {
+export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }: TreeViewProps) => {
   /*
   const handleDrag = useCallback((event: React.DragEvent<HTMLDivElement>, data: TreeData) => {
     event.dataTransfer.setData("text", JSON.stringify(data));
@@ -81,7 +83,7 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                   {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
                   <Text>{item.name}</Text>
                   <Spacer />
-                  {!item.isUndeletable && (
+                  {!(item.isUndeletable || readOnly) && (
                     <Button bg='red.600' size='xs' onClick={() => handleRemove(item)}>
                       Remove
                     </Button>
@@ -111,7 +113,13 @@ export const TreeView = ({ data, onRemove, onEdit, ...props }: TreeViewProps) =>
                 )}
               </HStack>
               <AccordionPanel py='0' pr='0'>
-                <TreeView data={item.children} onRemove={onRemove} onEdit={onEdit} {...props} />
+                <TreeView
+                  data={item.children}
+                  onRemove={onRemove}
+                  onEdit={onEdit}
+                  readOnly={readOnly}
+                  {...props}
+                />
               </AccordionPanel>
             </AccordionItem>
           )}

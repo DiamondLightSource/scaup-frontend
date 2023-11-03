@@ -15,7 +15,6 @@ import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { BaseContainerProps } from ".";
 import { GenericChildSlot } from "./child";
@@ -33,7 +32,7 @@ export interface GridItemProps {
  * Grid box component. Should be used in conjunction with a field allowing the user to select
  * how many slots (capacity) the grid box should have, inside the parent form.
  */
-export const GridBox = ({ shipmentId }: BaseContainerProps) => {
+export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,9 +40,9 @@ export const GridBox = ({ shipmentId }: BaseContainerProps) => {
   const isEdit = useSelector(selectIsEdit);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
-  const { control } = useFormContext();
 
-  const capacity = useWatch({ control, name: "capacity", defaultValue: 4 });
+  const capacity =
+    formContext !== undefined ? formContext.watch("capacity", 4) : currentGridBox.data.capacity;
   const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
 
   const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
@@ -144,6 +143,7 @@ export const GridBox = ({ shipmentId }: BaseContainerProps) => {
         selectedItem={currentSample}
         isOpen={isOpen}
         onClose={onClose}
+        readOnly={formContext === undefined}
       />
     </Box>
   );

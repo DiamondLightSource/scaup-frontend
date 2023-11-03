@@ -36,9 +36,15 @@ describe("Detail Separator", () => {
     expect(output.details).toEqual({ a: "z" });
     expect(output).toMatchObject({ barCode: 3, code: 1 });
   });
+
   it("should not include shipment root keys in details", () => {
     const output = separateDetails({ proposalReference: "cm00001", a: "z" }, "shipments");
     expect(output.details).toEqual({ a: "z" });
     expect(output).toMatchObject({ proposalReference: "cm00001" });
+  });
+
+  it("should ignore null fields", () => {
+    const output = separateDetails({ a: "z", details: null, b: null }, "shipments");
+    expect(output.details).toEqual({ a: "z" });
   });
 });
