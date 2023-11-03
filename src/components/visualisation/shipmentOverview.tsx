@@ -18,12 +18,14 @@ export interface ShipmentOverviewInnerProps {
   onActiveChanged: (data: TreeData) => void;
   proposal: string;
   shipmentId: string;
+  readOnly?: boolean;
 }
 
 const ShipmentOverview = ({
   proposal,
   shipmentId,
   onActiveChanged,
+  readOnly = false,
 }: ShipmentOverviewInnerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const unassigned = useSelector(selectUnassigned);
@@ -93,9 +95,16 @@ const ShipmentOverview = ({
       <Heading>Overview</Heading>
       <Divider borderColor='gray.800' />
       <Box w='100%' flex='1 0 auto' mt='10px' mb='20px'>
-        <TreeView flexGrow='1' data={data} onRemove={handleUnassign} onEdit={onActiveChanged} />
+        <TreeView
+          readOnly={readOnly}
+          flexGrow='1'
+          data={data}
+          onRemove={handleUnassign}
+          onEdit={onActiveChanged}
+        />
       </Box>
       <TreeView
+        readOnly={readOnly}
         mb='10px'
         w='100%'
         data={unassigned}

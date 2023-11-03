@@ -19,7 +19,11 @@ export const DynamicFormView = ({ formType, data }: DynamicFormViewProps) => {
     for (const [key, value] of Object.entries(data)) {
       const field = formMapping[formType].find((field) => field.id === key);
       if (field) {
-        form[field.label] = value;
+        let actualValue = value;
+        if (typeof actualValue === "boolean") {
+          actualValue = actualValue ? "Yes" : "No";
+        }
+        form[field.label] = actualValue;
       }
     }
     return form;

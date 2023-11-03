@@ -1,3 +1,4 @@
+import { BaseContainerProps } from "@/components/containers";
 import { TreeData } from "@/components/visualisation/treeView";
 import shipmentSlice, { ShipmentState, initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
@@ -5,7 +6,7 @@ import { server } from "@/mocks/server";
 import { configureStore } from "@reduxjs/toolkit";
 import { RenderOptions, render } from "@testing-library/react";
 import { MockedRequest, matchRequestUrl } from "msw";
-import { PropsWithChildren } from "react";
+import React, { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Provider } from "react-redux";
 
@@ -35,6 +36,7 @@ export const renderWithProviders = (
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
+/** Render provided component with form context (passed in the form of a provider) */
 export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOptions) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     const formContext = useForm();
@@ -48,8 +50,9 @@ export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOpt
   return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
-export const renderWithStoreAndForm = (
-  ui: React.ReactElement,
+/** Render provided component with form context and store */
+export const renderWithFormAndStore = (
+  ui: React.ReactElement<BaseContainerProps>,
   {
     preloadedState = { shipment: { ...initialState, items: [] } },
     ...renderOptions
@@ -57,10 +60,31 @@ export const renderWithStoreAndForm = (
 ) => {
   const store = configureStore({ reducer: { shipment: shipmentSlice }, preloadedState });
   const Wrapper = ({ children }: PropsWithChildren<{}>) => {
-    const formContext = useForm();
+    const formContext = useForm<BaseShipmentItem>();
     return (
       <FormProvider {...formContext}>
         <Provider store={store}>{children}</Provider>
+      </FormProvider>
+    );
+  };
+
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+};
+
+/** Render provided component with form context (passed as prop) and store */
+export const renderAndInjectForm = (
+  ui: React.ReactElement<BaseContainerProps>,
+  {
+    preloadedState = { shipment: { ...initialState, items: [] } },
+    ...renderOptions
+  }: ExtendedRenderOptions = {},
+) => {
+  const store = configureStore({ reducer: { shipment: shipmentSlice }, preloadedState });
+  const Wrapper = ({ children }: PropsWithChildren<{}>) => {
+    const formContext = useForm<BaseShipmentItem>();
+    return (
+      <FormProvider {...formContext}>
+        <Provider store={store}>{React.cloneElement(ui, { ...ui.props, formContext })}</Provider>
       </FormProvider>
     );
   };

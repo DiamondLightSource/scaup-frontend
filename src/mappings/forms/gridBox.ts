@@ -24,13 +24,13 @@ export const gridBoxForm = [
     label: "Lid",
     type: "dropdown",
     values: [
-      { label: "Screw", value: "screw" },
-      { label: "No screw", value: "noScrew" },
+      { label: "Screw", value: "Screw" },
+      { label: "No screw", value: "No screw" },
     ],
   },
   {
-    id: "keepGrid",
-    label: "Keep grid for future use",
+    id: "requestedReturn",
+    label: "Return/discard grid",
     type: "checkbox",
   },
   {

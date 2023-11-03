@@ -13,7 +13,6 @@ import { Item } from "@/utils/client/item";
 import { Box, Button, Heading, List, ListItem, Text, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo } from "react";
-import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { BaseContainerProps } from ".";
 
@@ -24,6 +23,7 @@ export interface GenericContainerProps extends BaseContainerProps {
 
 export const GenericContainer = ({
   shipmentId,
+  formContext,
   parent = "containers",
   child = "containers",
 }: GenericContainerProps) => {
@@ -32,7 +32,6 @@ export const GenericContainer = ({
   const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
-  const { getValues } = useFormContext();
 
   const setLocation = useCallback(
     async (
@@ -41,7 +40,9 @@ export const GenericContainer = ({
       sample: TreeData<BaseShipmentItem>,
     ) => {
       let actualContainerId = containerId;
-      const values = separateDetails(getValues(), parent);
+
+      // There is no way of calling this callback if form context is undefined
+      const values = separateDetails(formContext!.getValues(), "containers");
 
       // If container does not exist yet in database, we must create it
       if (!isEdit) {
@@ -69,7 +70,7 @@ export const GenericContainer = ({
 
       dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
     },
-    [isEdit, session, shipmentId, dispatch, getValues, parent, child],
+    [isEdit, session, shipmentId, dispatch, formContext, parent, child],
   );
 
   const handlePopulatePosition = useCallback(
@@ -126,15 +127,19 @@ export const GenericContainer = ({
             borderRadius='4px'
           >
             <Text flex='1 0 0'>{item.name}</Text>
-            <Button bg='red.600' size='xs' onClick={() => handleRemoveSample(item)}>
-              Remove
-            </Button>
+            {formContext !== undefined && (
+              <Button bg='red.600' size='xs' onClick={() => handleRemoveSample(item)}>
+                Remove
+              </Button>
+            )}
           </ListItem>
         ))}
         <ListItem mt='5px'>
-          <Button w='100%' size='sm' onClick={onOpen}>
-            Add
-          </Button>
+          {formContext !== undefined && (
+            <Button w='100%' size='sm' onClick={onOpen}>
+              Add
+            </Button>
+          )}
         </ListItem>
       </List>
       <ChildSelector
@@ -144,6 +149,7 @@ export const GenericContainer = ({
         selectedItem={null}
         isOpen={isOpen}
         onClose={onClose}
+        readOnly={formContext === undefined}
       />
     </Box>
   );

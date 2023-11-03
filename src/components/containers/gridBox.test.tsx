@@ -1,10 +1,11 @@
 import { GridBox } from "@/components/containers/gridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
+import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, renderWithStoreAndForm, sample } from "@/utils/test-utils";
+import { gridBox, renderAndInjectForm, renderWithFormAndStore, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 const defaultShipment = {
   ...initialState,
@@ -63,7 +64,7 @@ const populatedGridBoxShipment = {
 
 describe("Grid Box", () => {
   it("should show modal when grid is clicked", () => {
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: defaultShipment },
     });
 
@@ -73,7 +74,7 @@ describe("Grid Box", () => {
   });
 
   it("should pre-populate positions with data from state", () => {
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -81,7 +82,7 @@ describe("Grid Box", () => {
   });
 
   it("should display message if no unassigned samples are available", () => {
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -97,7 +98,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: { ...defaultShipment, isEdit: true } },
     });
 
@@ -113,7 +114,7 @@ describe("Grid Box", () => {
         res.once(ctx.status(200), ctx.json({ children: defaultShipment.items })),
       ),
     );
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -124,7 +125,7 @@ describe("Grid Box", () => {
   });
 
   it("should render four grid slots by default", () => {
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -132,18 +133,22 @@ describe("Grid Box", () => {
   });
 
   it("should derive capacity from sibling form component", async () => {
-    renderWithStoreAndForm(
-      <>
-        <Controller
-          name='capacity'
-          render={({ field }) => <input data-testid='cap' {...field} value='3'></input>}
-        ></Controller>
-        <GridBox shipmentId='1' />
-      </>,
-      {
-        preloadedState: { shipment: populatedGridBoxShipment },
-      },
-    );
+    const FormParent = () => {
+      const formContext = useFormContext<BaseShipmentItem>();
+      return (
+        <>
+          <Controller
+            name='capacity'
+            render={({ field }) => <input data-testid='cap' {...field} value='3'></input>}
+          ></Controller>
+          <GridBox shipmentId='1' formContext={formContext} />
+        </>
+      );
+    };
+
+    renderWithFormAndStore(<FormParent />, {
+      preloadedState: { shipment: populatedGridBoxShipment },
+    });
 
     fireEvent.change(screen.getByTestId("cap"), { target: { value: "5" } });
     await waitFor(() => expect(screen.getAllByRole("button")).toHaveLength(5));
@@ -163,7 +168,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderWithStoreAndForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: {
         shipment: { ...defaultShipment, activeItem: { ...gridBox, id: "new-gridBox" } },
       },

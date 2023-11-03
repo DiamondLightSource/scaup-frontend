@@ -2,7 +2,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, renderWithStoreAndForm } from "@/utils/test-utils";
+import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { GenericContainer } from "./generic";
@@ -41,7 +41,7 @@ describe("Generic Container", () => {
       ),
     );
 
-    renderWithStoreAndForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
       preloadedState: defaultShipment,
     });
 
@@ -58,7 +58,7 @@ describe("Generic Container", () => {
       ),
     );
 
-    renderWithStoreAndForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
       preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
     });
 
@@ -69,7 +69,7 @@ describe("Generic Container", () => {
   });
 
   it("should populate slots with data from state", () => {
-    renderWithStoreAndForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,
@@ -90,7 +90,7 @@ describe("Generic Container", () => {
       getCurrentStepIndex("falconTube")
     ].children!.push(falconTube);
 
-    renderWithStoreAndForm(
+    renderAndInjectForm(
       <GenericContainer shipmentId='1' child='containers' parent='topLevelContainers' />,
       {
         preloadedState: unassignedContainers,
@@ -113,7 +113,7 @@ describe("Generic Container", () => {
       ),
     );
 
-    renderWithStoreAndForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,
@@ -125,5 +125,12 @@ describe("Generic Container", () => {
 
     fireEvent.click(screen.getByText(/remove/i));
     await waitFor(() => expect(screen.queryByText(/gridbox/i)).not.toBeInTheDocument());
+  });
+
+  it("should not render remove/add buttons if form context is not present", async () => {
+    renderWithProviders(<GenericContainer shipmentId='1' />, {});
+
+    expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/add/i)).not.toBeInTheDocument();
   });
 });

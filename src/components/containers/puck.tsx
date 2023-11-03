@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BaseContainerProps } from ".";
 import { GenericChildSlot } from "./child";
 
-export const Puck = ({ shipmentId }: BaseContainerProps) => {
+export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
@@ -121,6 +121,7 @@ export const Puck = ({ shipmentId }: BaseContainerProps) => {
       {samples.slice(5).map((sample, i) => (
         <GenericChildSlot
           key={i}
+          // Disable click if in read only mode?
           onClick={() => handleGridClicked(sample, i + 5)}
           label={i + 6}
           hasSample={sample !== null}
@@ -135,6 +136,7 @@ export const Puck = ({ shipmentId }: BaseContainerProps) => {
         selectedItem={currentSample}
         isOpen={isOpen}
         onClose={onClose}
+        readOnly={formContext === undefined}
       />
     </Box>
   );
