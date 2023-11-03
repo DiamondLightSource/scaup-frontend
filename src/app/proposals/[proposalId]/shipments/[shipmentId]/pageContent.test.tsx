@@ -7,24 +7,22 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import ItemFormPageContent from "./pageContent";
 
+const unassignedSampleApiReturn = {
+  samples: [
+    {
+      name: "new-sample",
+      id: 123,
+      data: { type: "sample", film: "Holey carbon", foil: "Quantifoil copper" },
+    },
+  ],
+};
+
 describe("Item Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
   it("should add item to unassigned if in creation mode", async () => {
     server.use(
       rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
-            samples: [
-              {
-                name: "new-sample",
-                id: 123,
-                data: { type: "sample", film: "Holey carbon", foil: "Quantifoil copper" },
-              },
-            ],
-          }),
-          ctx.delay(0),
-        ),
+        res.once(ctx.status(200), ctx.json(unassignedSampleApiReturn), ctx.delay(0)),
       ),
     );
 
@@ -205,6 +203,12 @@ describe("Item Page", () => {
   });
 
   it("should update active item if new item is added", async () => {
+    server.use(
+      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
+        res.once(ctx.status(200), ctx.json(unassignedSampleApiReturn), ctx.delay(0)),
+      ),
+    );
+
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
@@ -212,7 +216,12 @@ describe("Item Page", () => {
     });
 
     fireEvent.click(screen.getByText(/add/i));
+    await screen.findByText(/save/i);
 
     await waitFor(() => store.getState().shipment.activeItem.data.name === "New Name");
+
+    await waitFor(() =>
+      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(1),
+    );
   });
 });

@@ -90,7 +90,7 @@ describe("Generic Container", () => {
       getCurrentStepIndex("falconTube")
     ].children!.push(falconTube);
 
-    renderWithStoreAndForm(
+    renderAndInjectForm(
       <GenericContainer shipmentId='1' child='containers' parent='topLevelContainers' />,
       {
         preloadedState: unassignedContainers,
