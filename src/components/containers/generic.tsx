@@ -7,16 +7,26 @@ import {
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, separateDetails } from "@/mappings/pages";
+import { BaseShipmentItem, Step, separateDetails } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
 import { Box, Button, Heading, List, ListItem, Text, useDisclosure } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BaseContainerProps } from ".";
 
-export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps) => {
+export interface GenericContainerProps extends BaseContainerProps {
+  parent?: Step["endpoint"];
+  child?: Step["endpoint"];
+}
+
+export const GenericContainer = ({
+  shipmentId,
+  formContext,
+  parent = "containers",
+  child = "containers",
+}: GenericContainerProps) => {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch<AppDispatch>();
@@ -36,7 +46,7 @@ export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps
 
       // If container does not exist yet in database, we must create it
       if (!isEdit) {
-        const newItem = await Item.create(session, shipmentId, values, "containers");
+        const newItem = await Item.create(session, shipmentId, values, parent);
 
         // TODO: type return of above properly
         actualContainerId = newItem.id as number;
@@ -46,8 +56,11 @@ export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps
         session,
         shipmentId,
         sample.id,
-        { location, parentId: actualContainerId },
-        "containers",
+        {
+          location,
+          [parent === "topLevelContainers" ? "topLevelContainerId" : "parentId"]: actualContainerId,
+        },
+        child,
       );
 
       await Promise.all([
@@ -57,7 +70,7 @@ export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps
 
       dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
     },
-    [isEdit, session, shipmentId, dispatch, formContext],
+    [isEdit, session, shipmentId, dispatch, formContext, parent, child],
   );
 
   const handlePopulatePosition = useCallback(
@@ -73,6 +86,15 @@ export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps
     },
     [setLocation],
   );
+
+  const childSpecificType = useMemo((): BaseShipmentItem["type"] => {
+    switch (parent) {
+      case "topLevelContainers":
+        return "genericContainer";
+      default:
+        return "gridBox";
+    }
+  }, [parent]);
 
   return (
     <Box
@@ -121,7 +143,7 @@ export const GenericContainer = ({ shipmentId, formContext }: BaseContainerProps
         </ListItem>
       </List>
       <ChildSelector
-        childrenType='gridBox'
+        childrenType={childSpecificType}
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
         selectedItem={null}

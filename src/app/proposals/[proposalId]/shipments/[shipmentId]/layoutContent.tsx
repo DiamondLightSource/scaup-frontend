@@ -36,6 +36,7 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -131,24 +132,44 @@ const ShipmentsLayoutContent = ({
   }, [handleSetStep, activeStep, router, params]);
 
   const typeCount = useMemo(() => {
-    const count = Array<number>(steps.length).fill(0);
+    const count: { total: number; unassigned: number }[] = Array.from(
+      { length: steps.length },
+      () => ({
+        total: 0,
+        unassigned: 0,
+      }),
+    );
+    const unassignedItems: TreeData[] = unassigned[0].children!;
 
     if (shipment) {
-      count[count.length - 1] = shipment.length;
+      count[count.length - 1].total = shipment.length;
 
       for (let i = 1; i < steps.length; i++) {
-        count[i - 1] = recursiveCountChildrenByType(shipment, steps[i].id);
+        /*
+         * Count assigned/unassigned items separetely, as there is no benefit of creating a
+         * new object containing both
+         */
+        count[i - 1].total = recursiveCountChildrenByType(shipment, steps[i].id);
+        count[i - 1].unassigned = recursiveCountChildrenByType(unassignedItems, steps[i].id);
+        count[i - 1].total += count[i - 1].unassigned;
       }
     }
 
-    const unassignedItems: TreeData[] = unassigned[0].children!;
+    // Count orphaned unassigned items directly, since they have no parent
     for (const i in unassignedItems) {
       if (unassignedItems[i].children !== undefined) {
-        count[i] += unassignedItems[i].children!.length;
+        const unassignedCount = unassignedItems[i].children!.length;
+        count[i].total += unassignedCount;
+        count[i].unassigned += unassignedCount;
       }
     }
     return count;
   }, [shipment, unassigned]);
+
+  const cannotFinish = useMemo(
+    () => activeStep >= steps.length - 1 && typeCount.some((count) => count.unassigned > 0),
+    [activeStep, typeCount],
+  );
 
   return (
     <VStack h='100%' w='100%'>
@@ -168,7 +189,7 @@ const ShipmentsLayoutContent = ({
             <Box flexShrink='0'>
               <StepTitle>{step.title}</StepTitle>
               <StepDescription>
-                {typeCount[index]} {step.title}
+                {typeCount[index].total} {step.title}
               </StepDescription>
             </Box>
             <StepSeparator />
@@ -184,10 +205,15 @@ const ShipmentsLayoutContent = ({
             onActiveChanged={handleActiveChanged}
             proposal={params.proposalId}
           />
-          <HStack w='100%'>
+          <HStack w='100%' p='0.5em' bg='gray.200'>
+            {cannotFinish && (
+              <Text fontWeight='600' color='gray.600'>
+                Cannot progress without assigning all items to a container!
+              </Text>
+            )}
             <Spacer />
             {activeStep >= steps.length && <Button onClick={handleEdit}>Edit</Button>}
-            <Button onClick={handleContinue} bg='green.500'>
+            <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
               {activeStep < steps.length - 1 ? "Continue" : "Finish"}
             </Button>
           </HStack>

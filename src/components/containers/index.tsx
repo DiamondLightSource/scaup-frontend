@@ -28,7 +28,11 @@ export const Container = ({ containerType, ...props }: ContainerProps) => {
     case "falconTube":
       return <GenericContainer {...props} />;
     case "genericContainer":
-      return <GenericContainer {...props} />;
+      return <GenericContainer shipmentId={shipmentId} />;
+    case "dewar":
+      return (
+        <GenericContainer shipmentId={shipmentId} parent='topLevelContainers' child='containers' {...props}  />
+      );
     default:
       return null;
   }

@@ -83,6 +83,26 @@ describe("Generic Container", () => {
     screen.getByText(/remove/i);
   });
 
+  it("should display containers as children if parent is top level container", async () => {
+    const unassignedContainers = structuredClone(defaultShipment);
+
+    unassignedContainers.shipment.unassigned[0].children![
+      getCurrentStepIndex("falconTube")
+    ].children!.push(falconTube);
+
+    renderWithStoreAndForm(
+      <GenericContainer shipmentId='1' child='containers' parent='topLevelContainers' />,
+      {
+        preloadedState: unassignedContainers,
+      },
+    );
+
+    // TODO: fix this test
+
+    fireEvent.click(screen.getByText(/add/i));
+    await screen.findByText("Container");
+  });
+
   it("should remove item when remove is clicked", async () => {
     const unpopulatedContainerShipment = structuredClone(populatedContainerShipment);
     unpopulatedContainerShipment[0].children[0].children = [];
