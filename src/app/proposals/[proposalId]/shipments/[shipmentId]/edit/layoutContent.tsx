@@ -95,7 +95,7 @@ const ShipmentsLayoutContent = ({
   /** Set empty active item with selected type */
   const handleSetStep = useCallback(
     (step: number) => {
-      if (activeStep >= steps.length) {
+      if (step >= steps.length || activeStep >= steps.length) {
         return;
       }
       const currentStep = steps[step];
@@ -126,10 +126,12 @@ const ShipmentsLayoutContent = ({
   const handleContinue = useCallback(() => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
+    } else if (activeStep + 1 === steps.length) {
+      router.push("edit/review");
     } else {
-      router.push(`${params.shipmentId}/review`);
+      router.push("../submitted");
     }
-  }, [handleSetStep, activeStep, router, params]);
+  }, [handleSetStep, activeStep, router]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(

@@ -13,7 +13,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -70,10 +70,8 @@ export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }:
     [onEdit],
   );
 
-  const defaultIndex = useMemo(() => [...Array(data.length).keys()], [data]);
-
   return (
-    <Accordion allowMultiple {...props} defaultIndex={defaultIndex}>
+    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2]}>
       {data.map((item, index) => (
         <React.Fragment key={index}>
           {!item.children || item.children.length < 1 ? (
