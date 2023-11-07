@@ -133,6 +133,9 @@ describe("Shipment Overview", () => {
           }),
         ),
       ),
+      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
+        res.once(ctx.status(404)),
+      ),
     );
 
     renderWithProviders(

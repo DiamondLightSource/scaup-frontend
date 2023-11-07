@@ -22,8 +22,6 @@ const ReviewPage = ({ params }: { params: { shipmentId: string } }) => {
     [activeItem],
   );
 
-  console.log(activeItem.id);
-
   useEffect(() => {
     if (items.length > 0) {
       dispatch(setActiveItem({ item: items![0], isEdit: true }));
