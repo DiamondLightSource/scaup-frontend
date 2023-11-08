@@ -1,96 +1,53 @@
 import { ChildSelector } from "@/components/containers/childSelector";
 import { TreeData } from "@/components/visualisation/treeView";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  syncActiveItem,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
+import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
-import { Item } from "@/utils/client/item";
 import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BaseContainerProps } from ".";
+import { useSelector } from "react-redux";
+import { BaseContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "./child";
 
 export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
-  const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const dispatch = useDispatch<AppDispatch>();
   const currentGridBox = useSelector(selectActiveItem);
-  const isEdit = useSelector(selectIsEdit);
-  const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
+  const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
 
-  const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
-    const newSamples = Array(16).fill(null);
+  const items = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
+    const newItems = Array(16).fill(null);
     if (currentGridBox.children) {
       for (const innerSample of currentGridBox.children) {
-        newSamples[innerSample.data.location] = innerSample;
+        newItems[innerSample.data.location] = innerSample;
       }
     }
-    return newSamples;
+    return newItems;
   }, [currentGridBox]);
 
-  const setLocation = useCallback(
-    async (
-      containerId: string | number | null,
-      location: number | null,
-      sample: TreeData<BaseShipmentItem>,
-    ) => {
-      let actualContainerId = containerId;
-
-      // If container does not exist yet in database, we must create it
-      if (containerId !== null && !isEdit) {
-        const newContainer = await Item.create(
-          session,
-          shipmentId,
-          { capacity: 16, type: "puck" },
-          "containers",
-        );
-        actualContainerId = newContainer.id;
-      }
-
-      await Item.patch(
-        session,
-        shipmentId,
-        sample.id,
-        { location, parentId: actualContainerId },
-        "containers",
-      ).then(async () => {
-        await Promise.all([
-          dispatch(updateShipment({ session, shipmentId })),
-          dispatch(updateUnassigned({ session, shipmentId })),
-        ]);
-        dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: "puck" }));
-      });
-    },
-    [dispatch, session, shipmentId, isEdit],
-  );
+  const setLocation = useChildLocationManager({
+    shipmentId,
+    containerCreationPreset: { capacity: 16, type: "puck" },
+  });
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox.id, currentPosition, sample);
+      setLocation(currentGridBox.id, sample, currentPosition);
     },
     [currentGridBox, currentPosition, setLocation],
   );
 
   const handleRemoveSample = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(null, null, sample);
+      setLocation(null, sample, null);
     },
     [setLocation],
   );
 
   const handleGridClicked = useCallback(
     (sample: TreeData<PositionedItem> | null, i: number) => {
-      setCurrentSample(sample);
+      setCurrentItem(sample);
       setCurrentPosition(i);
       onOpen();
     },
@@ -108,23 +65,22 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
       borderColor='diamond.700'
       bg='#D0E0FF'
     >
-      {samples.slice(0, 5).map((sample, i) => (
+      {items.slice(0, 5).map((item, i) => (
         <GenericChildSlot
           key={i}
           label={i + 1}
-          hasSample={sample !== null}
-          onClick={() => handleGridClicked(sample, i)}
+          hasSample={item !== null}
+          onClick={() => handleGridClicked(item, i)}
           right={`${50 + calcCircumferencePos(i, 5, 55, false)}px`}
           top={`${50 + calcCircumferencePos(i, 5, 55)}px`}
         />
       ))}
-      {samples.slice(5).map((sample, i) => (
+      {items.slice(5).map((item, i) => (
         <GenericChildSlot
           key={i}
-          // Disable click if in read only mode?
-          onClick={() => handleGridClicked(sample, i + 5)}
+          onClick={() => handleGridClicked(item, i + 5)}
           label={i + 6}
-          hasSample={sample !== null}
+          hasSample={item !== null}
           right={`${calcCircumferencePos(i, 11, 105, false)}px`}
           top={`${calcCircumferencePos(i, 11, 105)}px`}
         />
@@ -133,7 +89,7 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
         childrenType='gridBox'
         onSelect={handlePopulatePosition}
         onRemove={handleRemoveSample}
-        selectedItem={currentSample}
+        selectedItem={currentItem}
         isOpen={isOpen}
         onClose={onClose}
         readOnly={formContext === undefined}

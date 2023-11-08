@@ -60,6 +60,7 @@ const populatedGridBoxShipment = {
       ],
     },
   ],
+  isEdit: true,
 } satisfies typeof initialState;
 
 describe("Grid Box", () => {
@@ -114,12 +115,15 @@ describe("Grid Box", () => {
         res.once(ctx.status(200), ctx.json({ children: defaultShipment.items })),
       ),
     );
+
     renderAndInjectForm(<GridBox shipmentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
     fireEvent.click(screen.getByText("2"));
-    fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+
+    const removeButton = await screen.findByRole("button", { name: "Remove" });
+    fireEvent.click(removeButton);
 
     await screen.findByTestId("2-empty");
   });

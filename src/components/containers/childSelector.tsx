@@ -51,14 +51,13 @@ export const ChildSelector = ({
     return { data: steps[index], index };
   }, [childrenType]);
 
-  // TODO: make this work for non-samples
-  const unassignedSamples: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
+  const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
     return unassigned[0].children![childrenTypeData.index].children!.length
       ? unassigned[0].children![childrenTypeData.index].children
       : null;
   }, [unassigned, childrenTypeData]);
 
-  const handleSampleClicked = useCallback(
+  const handleItemClicked = useCallback(
     (item: TreeData<BaseShipmentItem>) => {
       if (onSelect) {
         onSelect(item);
@@ -101,11 +100,11 @@ export const ChildSelector = ({
             <>
               <Heading size='md'>Available Items</Heading>
               <Divider />
-              {unassignedSamples ? (
+              {unassignedItems ? (
                 <Grid py='2' templateColumns='repeat(4, 1fr)' gap='2'>
-                  {unassignedSamples.map((item) => (
+                  {unassignedItems.map((item) => (
                     <GenericChildCard
-                      onClick={() => handleSampleClicked(item)}
+                      onClick={() => handleItemClicked(item)}
                       key={item.id}
                       name={item.name}
                       type={childrenTypeData.data.singular}
