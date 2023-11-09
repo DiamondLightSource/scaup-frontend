@@ -107,7 +107,7 @@ export const sample: TreeData<BaseShipmentItem> = {
 export const puck: TreeData<BaseShipmentItem> = {
   id: 9,
   name: "puck",
-  data: { type: "puck" },
+  data: { type: "puck", registeredContainer: "DLS-0001" },
 };
 
 export const waitForRequest = (method: string, url: string) => {

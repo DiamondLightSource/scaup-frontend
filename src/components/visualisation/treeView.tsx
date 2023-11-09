@@ -76,7 +76,7 @@ export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }:
         <React.Fragment key={index}>
           {!item.children || item.children.length < 1 ? (
             <List spacing={3} py={1} pt={2}>
-              <ListItem ml={5}>
+              <ListItem ml={10}>
                 <HStack>
                   {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
                   <Text>{item.name}</Text>
@@ -97,13 +97,15 @@ export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }:
           ) : (
             <AccordionItem border='none'>
               <HStack w='100%' borderBottom='1px solid' borderBottomColor='gray.800'>
-                <AccordionButton>
-                  <HStack>
-                    <AccordionIcon />
-                    {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                    <Text fontSize='md'>{item.name}</Text>
-                  </HStack>
-                </AccordionButton>
+                <h2 style={{ width: "100%" }}>
+                  <AccordionButton>
+                    <HStack>
+                      <AccordionIcon />
+                      {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
+                      <Text fontSize='md'>{item.name}</Text>
+                    </HStack>
+                  </AccordionButton>
+                </h2>
                 {!item.isNotViewable && (
                   <Button size='xs' onClick={() => handleEdit(item)}>
                     View

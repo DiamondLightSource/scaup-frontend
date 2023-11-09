@@ -1,33 +1,32 @@
-"use client";
+import { DynamicFormEntry } from "@/components/input/form/input";
+import { authenticatedFetch } from "@/utils/client";
+import { pascalToSpace } from "@/utils/generic";
+import { recursiveCountTypeInstances } from "@/utils/tree";
+import SubmissionOverviewContent from "./pageContent";
 
-import { Button, Divider, HStack, Heading, Link, Text, VStack } from "@chakra-ui/react";
+const getShipmentData = async (shipmentId: string) => {
+  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+  const data = res && res.status === 200 ? await res.json() : [];
 
-const SubmissionOverview = ({
+  const counts = recursiveCountTypeInstances(data.children);
+  const formModel: DynamicFormEntry[] = Object.keys(counts).map((key) => ({
+    id: key,
+    label: pascalToSpace(key),
+    type: "text",
+  }));
+
+  return { counts, formModel };
+};
+
+const SubmissionOverview = async ({
   params,
 }: {
-  params: { proposalId: string; submittedId: string };
+  params: { shipmentId: string; proposalId: string };
 }) => {
-  return (
-    <VStack alignItems='start' mt='1em'>
-      <VStack gap='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {params.proposalId}
-        </Heading>
-        <Heading>Shipment Submitted</Heading>
-        <Divider borderColor='gray.800' />
-      </VStack>
-      <VStack alignItems='start' w='100%'>
-        <Text fontSize='18px' mt='2'>
-          Your shipment was <b>successfully submitted!</b> You may now arrange for your samples to
-          be shipped to Diamond, or return to the shipment list.
-        </Text>
-        <HStack>
-          <Button>Arrange shipping</Button>
-          <Link>Return to shipment list</Link>
-        </HStack>
-      </VStack>
-    </VStack>
-  );
+  // TODO: add type
+  const shipmentData = await getShipmentData(params.shipmentId);
+
+  return <SubmissionOverviewContent params={params} data={shipmentData} />;
 };
 
 export default SubmissionOverview;

@@ -46,6 +46,6 @@ describe("Proposal Page Content", () => {
     render(<ProposalOverviewContent proposalId='cm1234' data={null} />);
 
     fireEvent.click(screen.getByText(/create new shipment/i));
-    await waitFor(() => expect(mockRouter.pathname).toBe("/proposals/cm1234/shipments/123"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/proposals/cm1234/shipments/123/edit"));
   });
 });

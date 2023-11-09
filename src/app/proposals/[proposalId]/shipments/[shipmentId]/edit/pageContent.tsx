@@ -18,18 +18,13 @@ import {
   steps,
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
+import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-
-export interface ItemFormPageContentProps {
-  shipmentId: string;
-  // TODO: use actual type
-  prepopData: Record<string, any>;
-}
 
 const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
   const { data: session } = useSession();

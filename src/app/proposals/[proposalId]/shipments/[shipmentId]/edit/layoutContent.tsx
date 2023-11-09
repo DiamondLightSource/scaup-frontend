@@ -25,6 +25,7 @@ import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
   Button,
+  Divider,
   HStack,
   Spacer,
   Step,
@@ -174,8 +175,8 @@ const ShipmentsLayoutContent = ({
   );
 
   return (
-    <VStack h='100%' w='100%'>
-      <Stepper colorScheme='green' index={activeStep} mb='15px' h='60px' w='100%'>
+    <VStack h='100%' w='100%' mt='1em'>
+      <Stepper colorScheme='green' index={activeStep} h='60px' w='100%'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
             <StepIndicator
@@ -198,6 +199,7 @@ const ShipmentsLayoutContent = ({
           </Step>
         ))}
       </Stepper>
+      <Divider mb='10px' />
       <HStack alignItems='stretch' flex='1 0 0' w='100%' pb='20px'>
         {children}
         <VStack spacing='0' alignItems='start' w='45%'>
