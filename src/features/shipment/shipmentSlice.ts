@@ -1,5 +1,5 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { addToUnassignedClone, setInUnassignedClone } from "@/features/shipment/utils";
+import { setInUnassignedClone } from "@/features/shipment/utils";
 import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";
 import { UnassignedItemResponse } from "@/types/server";
@@ -176,18 +176,6 @@ export const shipmentSlice = createSlice({
         state.isEdit = action.payload.isEdit;
       }
     },
-    /** Save active item to shipment items list */
-    saveActiveItem: (state, action: PayloadAction<ShipmentState["activeItem"]>) => {
-      const newItems = structuredClone(current(state.items));
-      // This is a proxy; we need to unwrap it to access the internal state
-      recursiveFind(
-        newItems,
-        action.payload.id,
-        action.payload.data.type,
-        (_, i, arr) => (arr[i] = action.payload),
-      );
-      state.items = newItems;
-    },
     /** Sync active item to its representation inside the shipment items state.
      *
      * @param id ID to search for when substituting current active item. If no id is
@@ -226,20 +214,6 @@ export const shipmentSlice = createSlice({
 
       state.isEdit = activeItemExists;
     },
-    /** Add single unassigned item */
-    addUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
-      state.unassigned = addToUnassignedClone(current(state.unassigned), action.payload);
-    },
-    /** Remove item from list of unassigned items */
-    removeUnassigned: (state, action: PayloadAction<TreeData<BaseShipmentItem>>) => {
-      const newUnassigned = structuredClone(current(state.unassigned));
-
-      recursiveFind(newUnassigned, action.payload.id, action.payload.data.type, (_, i, arr) => {
-        arr.splice(i, 1);
-      });
-
-      state.unassigned = newUnassigned;
-    },
     setStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload;
     },
@@ -250,9 +224,6 @@ export const {
   setShipment,
   setUnassigned,
   setActiveItem,
-  saveActiveItem,
-  addUnassigned,
-  removeUnassigned,
   syncActiveItem,
   setStep,
   setNewActiveItem,

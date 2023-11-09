@@ -1,9 +1,10 @@
-import ShipmentLayoutContent from "@/app/proposals/[proposalId]/shipments/[shipmentId]/layoutContent";
 import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
+import { steps } from "@/mappings/pages";
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
+import ShipmentLayoutContent from "./layoutContent";
 
 const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
 const defaultShipmentItems: TreeData = {
@@ -94,7 +95,35 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(finishButton);
 
-    expect(mockRouter.pathname).toBe("/new/review");
+    expect(mockRouter.pathname).toBe("/edit/review");
+  });
+
+  it("should redirect user to successful submission page after submitting", () => {
+    renderWithProviders(
+      <ShipmentLayoutContent
+        shipmentData={null}
+        unassignedItems={baseUnassigned}
+        params={{ ...defaultParams }}
+      >
+        <></>
+      </ShipmentLayoutContent>,
+      {
+        preloadedState: {
+          shipment: {
+            ...initialState,
+            currentStep: steps.length,
+          },
+        },
+      },
+    );
+
+    const finishButton = screen.getByRole("button", {
+      name: /finish/i,
+    });
+
+    fireEvent.click(finishButton);
+
+    expect(mockRouter.pathname).toBe("/submitted");
   });
 
   it("should display 'finish' button in overview on last step", async () => {

@@ -1,22 +1,13 @@
 import { ChildSelector } from "@/components/containers/childSelector";
 import { TreeData } from "@/components/visualisation/treeView";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  syncActiveItem,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
+import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
-import { Item } from "@/utils/client/item";
 import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useCallback, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BaseContainerProps } from ".";
+import { useSelector } from "react-redux";
+import { BaseContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "./child";
 
 export interface GridItemProps {
@@ -33,11 +24,8 @@ export interface GridItemProps {
  * how many slots (capacity) the grid box should have, inside the parent form.
  */
 export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
-  const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const dispatch = useDispatch<AppDispatch>();
   const currentGridBox = useSelector(selectActiveItem);
-  const isEdit = useSelector(selectIsEdit);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
 
@@ -55,52 +43,22 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
     return newSamples;
   }, [currentGridBox, parsedCapacity]);
 
-  const setLocation = useCallback(
-    async (
-      containerId: string | number | null,
-      location: number | null,
-      sample: TreeData<BaseShipmentItem>,
-    ) => {
-      let actualContainerId = containerId;
-
-      // If container does not exist yet in database, we must create it
-      if (containerId !== null && !isEdit) {
-        const newContainer = await Item.create(
-          session,
-          shipmentId,
-          { capacity, type: "gridBox" },
-          "containers",
-        );
-        actualContainerId = newContainer.id;
-      }
-
-      await Item.patch(
-        session,
-        shipmentId,
-        sample.id,
-        { location, containerId: actualContainerId },
-        "samples",
-      ).then(async () => {
-        await Promise.all([
-          dispatch(updateShipment({ session, shipmentId })),
-          dispatch(updateUnassigned({ session, shipmentId })),
-        ]);
-        dispatch(syncActiveItem({ id: actualContainerId ?? undefined }));
-      });
-    },
-    [dispatch, session, shipmentId, capacity, isEdit],
-  );
+  const setLocation = useChildLocationManager({
+    shipmentId,
+    parent: "containers",
+    child: "samples",
+  });
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox.id, currentPosition, sample);
+      setLocation(currentGridBox.id, sample, currentPosition);
     },
     [currentGridBox, currentPosition, setLocation],
   );
 
   const handleRemoveSample = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(null, null, sample);
+      setLocation(null, sample, null);
     },
     [setLocation],
   );

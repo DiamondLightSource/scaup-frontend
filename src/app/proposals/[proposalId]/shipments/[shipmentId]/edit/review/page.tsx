@@ -9,7 +9,7 @@ import {
   setStep,
 } from "@/features/shipment/shipmentSlice";
 import { getCurrentStepIndex, steps } from "@/mappings/pages";
-import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Divider, Heading, Skeleton, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -39,10 +39,14 @@ const ReviewPage = ({ params }: { params: { shipmentId: string } }) => {
         <Divider borderColor='gray.800' />
       </VStack>
       <Box display='flex' flexDirection='column' width='100%' flex='1 0 auto'>
-        <DynamicFormView formType={activeItem.data.type} data={activeItem.data} />
+        {activeItem.id === "new-sample" ? (
+          <Skeleton h='20%'></Skeleton>
+        ) : (
+          <DynamicFormView formType={activeItem.data.type} data={activeItem.data} />
+        )}
         <Container shipmentId={params.shipmentId} containerType={activeItem.data.type} />
       </Box>
-      <Text fontWeight='600' color='gray.600'>
+      <Text w='100%' p='1em' bg='gray.200' fontWeight='600' color='gray.600'>
         You can still edit your shipment after submitting
       </Text>
     </VStack>

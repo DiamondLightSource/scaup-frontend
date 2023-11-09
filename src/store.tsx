@@ -5,6 +5,7 @@ export const store = configureStore({
   reducer: {
     shipment: shipmentSlice,
   },
+  preloadedState: {},
 });
 
 export type RootState = ReturnType<typeof store.getState>;

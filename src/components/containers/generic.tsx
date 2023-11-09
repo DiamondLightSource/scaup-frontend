@@ -1,20 +1,11 @@
+import { BaseContainerProps, useChildLocationManager } from "@/components/containers";
 import { ChildSelector } from "@/components/containers/childSelector";
 import { TreeData } from "@/components/visualisation/treeView";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  syncActiveItem,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, Step, separateDetails } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
-import { Item } from "@/utils/client/item";
+import { selectActiveItem } from "@/features/shipment/shipmentSlice";
+import { BaseShipmentItem, Step } from "@/mappings/pages";
 import { Box, Button, Heading, List, ListItem, Text, useDisclosure } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BaseContainerProps } from ".";
+import { useSelector } from "react-redux";
 
 export interface GenericContainerProps extends BaseContainerProps {
   parent?: Step["endpoint"];
@@ -27,62 +18,20 @@ export const GenericContainer = ({
   parent = "containers",
   child = "containers",
 }: GenericContainerProps) => {
-  const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
-  const isEdit = useSelector(selectIsEdit);
-
-  const setLocation = useCallback(
-    async (
-      containerId: string | number | null,
-      location: number | null,
-      sample: TreeData<BaseShipmentItem>,
-    ) => {
-      let actualContainerId = containerId;
-
-      // There is no way of calling this callback if form context is undefined
-      const values = separateDetails(formContext!.getValues(), "containers");
-
-      // If container does not exist yet in database, we must create it
-      if (!isEdit) {
-        const newItem = await Item.create(session, shipmentId, values, parent);
-
-        // TODO: type return of above properly
-        actualContainerId = newItem.id as number;
-      }
-
-      await Item.patch(
-        session,
-        shipmentId,
-        sample.id,
-        {
-          location,
-          [parent === "topLevelContainers" ? "topLevelContainerId" : "parentId"]: actualContainerId,
-        },
-        child,
-      );
-
-      await Promise.all([
-        dispatch(updateShipment({ session, shipmentId })),
-        dispatch(updateUnassigned({ session, shipmentId })),
-      ]);
-
-      dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
-    },
-    [isEdit, session, shipmentId, dispatch, formContext, parent, child],
-  );
+  const setLocation = useChildLocationManager({ shipmentId, parent, child });
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentContainer.id, null, sample);
+      setLocation(currentContainer.id, sample);
     },
     [currentContainer, setLocation],
   );
 
   const handleRemoveSample = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(null, null, sample);
+      setLocation(null, sample);
     },
     [setLocation],
   );

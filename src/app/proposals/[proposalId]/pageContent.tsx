@@ -60,7 +60,7 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
         <>
           <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
             {data.map((shipment: any, i: number) => (
-              <Link href={`${proposalId}/shipments/${shipment.id}`} key={i}>
+              <Link href={`${proposalId}/shipments/${shipment.id}/edit`} key={i}>
                 <Stat
                   key={i}
                   _hover={{
