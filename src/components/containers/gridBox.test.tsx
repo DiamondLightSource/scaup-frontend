@@ -4,7 +4,7 @@ import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { gridBox, renderAndInjectForm, renderWithFormAndStore, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { Controller, useFormContext } from "react-hook-form";
 
 const defaultShipment = {
@@ -94,8 +94,10 @@ describe("Grid Box", () => {
 
   it("should refresh position with clicked sample", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: populatedGridBoxShipment.items })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedGridBoxShipment.items }),
+        { once: true },
       ),
     );
 
@@ -111,8 +113,10 @@ describe("Grid Box", () => {
 
   it("should remove sample from position when remove clicked", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: defaultShipment.items })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: defaultShipment.items }),
+        { once: true },
       ),
     );
 
@@ -164,11 +168,15 @@ describe("Grid Box", () => {
     newPopulatedGridBoxItems[0].children[0].children.push({ ...populatedGridBox, id: 123 });
 
     server.use(
-      rest.post("http://localhost/api/shipments/:shipmentId/containers", (req, res, ctx) =>
-        res.once(ctx.status(201), ctx.json({ id: 123 })),
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/containers",
+        () => HttpResponse.json({ id: 123 }, { status: 201 }),
+        { once: true },
       ),
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: newPopulatedGridBoxItems })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: newPopulatedGridBoxItems }),
+        { once: true },
       ),
     );
 

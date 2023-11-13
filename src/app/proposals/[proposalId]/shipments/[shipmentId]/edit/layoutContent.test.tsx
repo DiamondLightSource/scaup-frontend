@@ -98,7 +98,7 @@ describe("Shipment Layout", () => {
     expect(mockRouter.pathname).toBe("/edit/review");
   });
 
-  it("should redirect user to successful submission page after submitting", () => {
+  it("should redirect user to successful submission page after submitting", async () => {
     renderWithProviders(
       <ShipmentLayoutContent
         shipmentData={null}
@@ -123,7 +123,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(finishButton);
 
-    expect(mockRouter.pathname).toBe("/submitted");
+    await waitFor(() => expect(mockRouter.pathname).toBe("/submitted"));
   });
 
   it("should display 'finish' button in overview on last step", async () => {
@@ -238,11 +238,7 @@ describe("Shipment Layout", () => {
 
     expect(stepHeading[0]).toHaveAttribute("data-status", "incomplete");
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /view/i,
-      }),
-    );
+    fireEvent.click(screen.getByLabelText(/view/i));
 
     expect(stepHeading[0]).toHaveAttribute("data-status", "active");
   });

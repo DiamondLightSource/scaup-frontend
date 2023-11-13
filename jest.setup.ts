@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 
 import { server } from "@/mocks/server";
-import "whatwg-fetch";
 
 const pathnameMock = jest.fn(() => "/");
 export const toastMock = jest.fn();

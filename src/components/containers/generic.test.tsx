@@ -4,7 +4,7 @@ import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { GenericContainer } from "./generic";
 
 const defaultShipment = { shipment: structuredClone(initialState) };
@@ -36,8 +36,10 @@ const populatedContainerShipment = [
 describe("Generic Container", () => {
   it("should create container if not yet in database before populating slot", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: populatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedContainerShipment }),
+        { once: true },
       ),
     );
 
@@ -53,14 +55,15 @@ describe("Generic Container", () => {
 
   it("should add item to container and update", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: populatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedContainerShipment }),
+        { once: true },
       ),
-    );
-
-    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
-      preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
-    });
+    ),
+      renderAndInjectForm(<GenericContainer shipmentId='1' />, {
+        preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
+      });
 
     fireEvent.click(screen.getByText(/add/i));
     fireEvent.click(screen.getByText(/gridbox/i));
@@ -108,8 +111,10 @@ describe("Generic Container", () => {
     unpopulatedContainerShipment[0].children[0].children = [];
 
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: unpopulatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: unpopulatedContainerShipment }, { status: 200 }),
+        { once: true },
       ),
     );
 

@@ -5,7 +5,7 @@ import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { gridBox, puck, renderAndInjectForm } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 
 const defaultShipment = { shipment: structuredClone(initialState) };
 
@@ -32,12 +32,16 @@ const populatedContainerShipment = [
 describe("Puck", () => {
   it("should create container if not yet in database before populating slot", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: populatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedContainerShipment }),
+        { once: true },
       ),
 
-      rest.post("http://localhost/api/shipments/:shipmentId/containers", (req, res, ctx) =>
-        res.once(ctx.status(201), ctx.json({ id: 9 })),
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/containers",
+        () => HttpResponse.json({ id: 9 }, { status: 201 }),
+        { once: true },
       ),
     );
 
@@ -61,8 +65,10 @@ describe("Puck", () => {
 
   it("should add item to container and update", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: populatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedContainerShipment }),
+        { once: true },
       ),
     );
 
@@ -95,8 +101,10 @@ describe("Puck", () => {
     unpopulatedContainerShipment[0].children[0].children = [];
 
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json({ children: unpopulatedContainerShipment })),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: unpopulatedContainerShipment }),
+        { once: true },
       ),
     );
 

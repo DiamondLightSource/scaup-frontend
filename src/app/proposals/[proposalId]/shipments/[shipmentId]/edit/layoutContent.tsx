@@ -21,6 +21,7 @@ import {
   steps,
 } from "@/mappings/pages";
 import { UnassignedItemResponse } from "@/types/server";
+import { authenticatedFetch } from "@/utils/client";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
@@ -40,6 +41,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -64,6 +66,7 @@ const ShipmentsLayoutContent = ({
   unassignedItems,
 }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
@@ -124,15 +127,21 @@ const ShipmentsLayoutContent = ({
   }, [router, dispatch]);
 
   /** Move to next shipment step */
-  const handleContinue = useCallback(() => {
+  const handleContinue = useCallback(async () => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else if (activeStep + 1 === steps.length) {
       router.push("edit/review");
     } else {
-      router.push("../submitted");
+      const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
+        method: "POST",
+      });
+
+      if (response && response.status === 200) {
+        router.push("../submitted");
+      }
     }
-  }, [handleSetStep, activeStep, router]);
+  }, [handleSetStep, activeStep, router, params, session]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(

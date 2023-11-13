@@ -14,7 +14,7 @@ import { server } from "@/mocks/server";
 import { UnassignedItemResponse } from "@/types/server";
 import { puck, renderWithProviders } from "@/utils/test-utils";
 import { waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { mockSession, toastMock } from "../../../jest.setup";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
@@ -135,8 +135,10 @@ describe("Shipment Unassigned Items Reducers", () => {
     describe("Shipment Async Thunks", () => {
       it("should display toast if shipment response is not valid", async () => {
         server.use(
-          rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-            res.once(ctx.status(404), ctx.json({})),
+          http.get(
+            "http://localhost/api/shipments/:shipmentId",
+            () => HttpResponse.json({}, { status: 404 }),
+            { once: true },
           ),
         );
 
@@ -148,8 +150,10 @@ describe("Shipment Unassigned Items Reducers", () => {
 
       it("should display toast if unassigned item response is not valid", async () => {
         server.use(
-          rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-            res.once(ctx.status(500), ctx.json({})),
+          http.get(
+            "http://localhost/api/shipments/:shipmentId/unassigned",
+            () => HttpResponse.json({}, { status: 500 }),
+            { once: true },
           ),
         );
 
@@ -166,8 +170,10 @@ describe("Shipment Unassigned Items Reducers", () => {
 
       it("should set all unassigned collections to empty if endpoint returns 404", async () => {
         server.use(
-          rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-            res.once(ctx.status(404), ctx.json({})),
+          http.get(
+            "http://localhost/api/shipments/:shipmentId/unassigned",
+            () => HttpResponse.json({}, { status: 404 }),
+            { once: true },
           ),
         );
 
@@ -196,8 +202,10 @@ describe("Shipment Unassigned Items Reducers", () => {
         } satisfies UnassignedItemResponse;
 
         server.use(
-          rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-            res.once(ctx.status(200), ctx.json(unassignedResponse)),
+          http.get(
+            "http://localhost/api/shipments/:shipmentId/unassigned",
+            () => HttpResponse.json(unassignedResponse),
+            { once: true },
           ),
         );
 

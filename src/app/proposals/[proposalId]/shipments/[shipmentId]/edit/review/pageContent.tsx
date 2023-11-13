@@ -39,15 +39,17 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
         <Heading>{activeItem.name}</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
-      <Box display='flex' flexDirection='column' width='100%' flex='1 0 auto'>
+      <Box display='flex' flexDirection='row' width='100%' flex='1 0 auto'>
         {activeItem.id === "new-sample" ? (
-          <Skeleton h='20%'></Skeleton>
+          <Skeleton h='80%' w='100%' />
         ) : (
-          <DynamicFormView
-            formType={activeItem.data.type}
-            data={activeItem.data}
-            prepopData={prepopData}
-          />
+          <VStack flex='1 0 auto'>
+            <DynamicFormView
+              formType={activeItem.data.type}
+              data={activeItem.data}
+              prepopData={prepopData}
+            />
+          </VStack>
         )}
         <Container shipmentId={shipmentId} containerType={activeItem.data.type} />
       </Box>

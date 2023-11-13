@@ -1,6 +1,6 @@
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import ItemFormPage from "./page";
 
 describe("Item Form Page", () => {
@@ -10,8 +10,10 @@ describe("Item Form Page", () => {
 
   it("should return empty object if no data is available in data fetch", async () => {
     server.use(
-      rest.get("http://localhost/api/proposals/:proposalReference/data", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.get(
+        "http://localhost/api/proposals/:proposalReference/data",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
       ),
     );
 

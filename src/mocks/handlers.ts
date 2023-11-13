@@ -1,5 +1,5 @@
 import { pluralToSingular } from "@/mappings/pages";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 export const defaultData = {
   id: 1,
@@ -43,36 +43,38 @@ export const defaultData = {
 };
 
 export const handlers = [
-  rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json(defaultData), ctx.delay(0)),
+  http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(defaultData)),
+
+  http.post("http://localhost/api/shipments/:shipmentId/push", () =>
+    HttpResponse.json({}, { status: 200 }),
   ),
 
-  rest.get("http://localhost/api/proposals/:proposalReference/data", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ labContacts: [], proteins: [] }), ctx.delay(0)),
+  http.get("http://localhost/api/proposals/:proposalReference/data", () =>
+    HttpResponse.json({ labContacts: [], proteins: [] }),
   ),
 
-  rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ samples: [], containers: [], gridBoxes: [] }), ctx.delay(0)),
+  http.get("http://localhost/api/shipments/:shipmentId/unassigned", () =>
+    HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
   ),
 
-  rest.post("http://localhost/api/shipments/:shipmentId/:itemType", (req, res, ctx) => {
-    const itemType = pluralToSingular[req.params.itemType as string];
-    return res(ctx.status(201), ctx.json({ id: 123, data: { type: itemType } }), ctx.delay(0));
+  http.post("http://localhost/api/shipments/:shipmentId/:itemType", ({ params }) => {
+    const itemType = pluralToSingular[params.itemType as string];
+    return HttpResponse.json({ id: 123, data: { type: itemType } }, { status: 201 });
   }),
 
-  rest.post("http://localhost/api/proposals/:proposalId/shipments", (req, res, ctx) =>
-    res(
-      ctx.status(201),
-      ctx.json({ id: 123, data: { name: "Test" }, proposalReference: req.params.proposalId }),
-      ctx.delay(0),
+  http.post("http://localhost/api/proposals/:proposalId/shipments", ({ params }) =>
+    HttpResponse.json(
+      { id: 123, data: { name: "Test" }, proposalReference: params.proposalId },
+      { status: 201 },
     ),
   ),
 
-  rest.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ id: 123 }), ctx.delay(0)),
+  http.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", () =>
+    HttpResponse.json({ id: 123 }),
   ),
 
-  rest.delete("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", (req, res, ctx) =>
-    res(ctx.status(204), ctx.json({}), ctx.delay(0)),
+  http.delete(
+    "http://localhost/api/shipments/:shipmentId/:itemType/:itemId",
+    () => new HttpResponse(null, { status: 204 }),
   ),
 ];
