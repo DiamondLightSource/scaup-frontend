@@ -34,9 +34,71 @@ describe("Dynamic Form View", () => {
 
   it("should render booleans as a yes/no", () => {
     renderWithForm(
-      <DynamicFormView formType='gridBox' data={{ type: "gridBox", requestedReturn: true }} />,
+      <DynamicFormView
+        formType='gridBox'
+        data={{ type: "gridBox", requestedReturn: true, fibSession: false }}
+      />,
     );
 
     expect(screen.getByText(/yes/i)).toBeInTheDocument();
+    expect(screen.getByText(/no/i)).toBeInTheDocument();
+  });
+
+  it("should render custom forms", () => {
+    renderWithForm(
+      <DynamicFormView
+        formType={[{ label: "Label", id: "itemId", type: "text" }]}
+        data={{ itemId: "Item Value" }}
+      />,
+    );
+
+    expect(screen.getByText(/item value/i)).toBeInTheDocument();
+    expect(screen.getByText(/label/i)).toBeInTheDocument();
+  });
+
+  it("should obtain 'human' values from prepopulation data if available", () => {
+    renderWithForm(
+      <DynamicFormView
+        formType={[
+          {
+            label: "Label",
+            id: "itemId",
+            type: "dropdown",
+            values: { $ref: { parent: "#/a/b", map: { value: "value", label: "label" } } },
+          },
+        ]}
+        data={{ itemId: "1" }}
+        prepopData={{
+          a: {
+            b: [
+              { value: "1", label: "a human value" },
+              { value: "2", label: "not used" },
+            ],
+          },
+        }}
+      />,
+    );
+
+    expect(screen.getByText(/a human value/i)).toBeInTheDocument();
+    expect(screen.getByText(/label/i)).toBeInTheDocument();
+  });
+
+  it("should display original value if field is dropdown, there is a pointer, but no prepop. data", () => {
+    renderWithForm(
+      <DynamicFormView
+        formType={[
+          {
+            label: "Label",
+            id: "itemId",
+            type: "dropdown",
+            values: { $ref: { parent: "#/a", map: { value: "value", label: "label" } } },
+          },
+        ]}
+        data={{ itemId: "a random id" }}
+      />,
+    );
+
+    expect(screen.getByText(/a random id/i)).toBeInTheDocument();
+    expect(screen.getByText(/label/i)).toBeInTheDocument();
   });
 });

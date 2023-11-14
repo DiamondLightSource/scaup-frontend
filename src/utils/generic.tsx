@@ -80,3 +80,12 @@ export const calcCircumferencePos = (
   radius: number,
   sine: boolean = true,
 ) => (sine ? Math.sin : Math.cos)(calcAngleByIndex(i, len)) * radius + (radius + 20);
+
+/**
+ * Convert pascal case string to space separated, title-capitalised string
+ *
+ * @param input Input string
+ * @returns Title-capitalised string
+ */
+export const pascalToSpace = (input: string) =>
+  input.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());

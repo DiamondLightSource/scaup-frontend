@@ -4,7 +4,7 @@ import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { puck, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import ItemFormPageContent from "./pageContent";
 
 const unassignedSampleApiReturn = {
@@ -21,8 +21,10 @@ describe("Item Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
   it("should add item to unassigned if in creation mode", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json(unassignedSampleApiReturn), ctx.delay(0)),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId/unassigned",
+        () => HttpResponse.json(unassignedSampleApiReturn),
+        { once: true },
       ),
     );
 
@@ -71,14 +73,10 @@ describe("Item Page", () => {
     };
 
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
-            children: [newDewar],
-          }),
-          ctx.delay(0),
-        ),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: [newDewar] }),
+        { once: true },
       ),
     );
 
@@ -94,9 +92,6 @@ describe("Item Page", () => {
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(0));
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Barcode" }), {
-      target: { value: "Test" },
-    });
     fireEvent.click(screen.getAllByText(/add/i)[1]);
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(1));
@@ -104,22 +99,22 @@ describe("Item Page", () => {
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/api/shipments/:shipmentId/unassigned",
+        () =>
+          HttpResponse.json({
             samples: [{ name: "new-name", id: "123", data: { type: "sample" } }],
           }),
-        ),
+        { once: true },
       ),
-    );
-
-    server.use(
-      rest.post("http://localhost/api/shipments/:shipmentId/samples", (req, res, ctx) =>
-        res.once(
-          ctx.status(201),
-          ctx.json({ id: "123", name: "new-name", data: { type: "sample" } }),
-        ),
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/samples",
+        () =>
+          HttpResponse.json(
+            { id: "123", name: "new-name", data: { type: "sample" } },
+            { status: 201 },
+          ),
+        { once: true },
       ),
     );
 
@@ -149,15 +144,15 @@ describe("Item Page", () => {
 
   it("should trigger update of stored items on save", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(
-          ctx.status(200),
-          ctx.json({
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () =>
+          HttpResponse.json({
             children: [
               { id: "456", name: "", data: { type: "sample", foil: "Quantifoil copper" } },
             ],
           }),
-        ),
+        { once: true },
       ),
     );
 
@@ -204,8 +199,10 @@ describe("Item Page", () => {
 
   it("should update active item if new item is added", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(ctx.status(200), ctx.json(unassignedSampleApiReturn), ctx.delay(0)),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId/unassigned",
+        () => HttpResponse.json(unassignedSampleApiReturn),
+        { once: true },
       ),
     );
 

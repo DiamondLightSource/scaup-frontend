@@ -2,10 +2,8 @@ import { BaseContainerProps } from "@/components/containers";
 import { TreeData } from "@/components/visualisation/treeView";
 import shipmentSlice, { ShipmentState, initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { server } from "@/mocks/server";
 import { configureStore } from "@reduxjs/toolkit";
 import { RenderOptions, render } from "@testing-library/react";
-import { MockedRequest, matchRequestUrl } from "msw";
 import React, { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Provider } from "react-redux";
@@ -107,33 +105,5 @@ export const sample: TreeData<BaseShipmentItem> = {
 export const puck: TreeData<BaseShipmentItem> = {
   id: 9,
   name: "puck",
-  data: { type: "puck" },
-};
-
-export const waitForRequest = (method: string, url: string) => {
-  let requestId = "";
-
-  return new Promise<MockedRequest>((resolve, reject) => {
-    server.events.on("request:start", (req) => {
-      const matchesMethod = req.method.toLowerCase() === method.toLowerCase();
-
-      const matchesUrl = matchRequestUrl(req.url, url).matches;
-
-      if (matchesMethod && matchesUrl) {
-        requestId = req.id;
-      }
-    });
-
-    server.events.on("request:match", (req) => {
-      if (req.id === requestId) {
-        resolve(req);
-      }
-    });
-
-    server.events.on("request:unhandled", (req) => {
-      if (req.id === requestId) {
-        reject(new Error(`The ${req.method} ${req.url.href} request was unhandled.`));
-      }
-    });
-  });
+  data: { type: "puck", registeredContainer: "DLS-0001" },
 };

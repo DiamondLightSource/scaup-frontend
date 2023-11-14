@@ -12,7 +12,7 @@ describe("Tree View", () => {
     render(<TreeView data={[{ id: "1", name: "Test", data: {} }]} />);
 
     expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "View" })).toBeInTheDocument();
+    expect(screen.getByLabelText(/view/i)).toBeInTheDocument();
   });
 
   it("should not render remove button if specified", () => {
@@ -21,10 +21,10 @@ describe("Tree View", () => {
     expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
   });
 
-  it("should not render view button if specified", () => {
+  it("should not apply viewable styling if item is not viewable", () => {
     render(<TreeView data={[{ id: "1", isNotViewable: true, name: "Test", data: {} }]} />);
 
-    expect(screen.queryByRole("button", { name: "Edit" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/view/i)).not.toBeInTheDocument();
   });
 
   it("should not render remove button in parents with children", () => {
@@ -36,7 +36,7 @@ describe("Tree View", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Parent" }));
+    fireEvent.click(screen.getByText(/parent/i));
 
     expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(1);
   });

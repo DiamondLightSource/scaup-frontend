@@ -1,13 +1,13 @@
 import { server } from "@/mocks/server";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { mockSession } from "../../../jest.setup";
 import { Item } from "./item";
 
 describe("Item Creation", () => {
   it("should throw if request fails", async () => {
     server.use(
-      rest.post("http://localhost/api/shipments/1/samples", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.post("http://localhost/api/shipments/1/samples", () =>
+        HttpResponse.json({}, { status: 404 }),
       ),
     );
 
@@ -21,8 +21,10 @@ describe("Item Creation", () => {
 
   it("should use different URL for creating shipments", async () => {
     server.use(
-      rest.post("http://localhost/api/proposals/1/shipments", (req, res, ctx) =>
-        res.once(ctx.status(201), ctx.json({ name: "Test" })),
+      http.post(
+        "http://localhost/api/proposals/1/shipments",
+        () => HttpResponse.json({ name: "Test" }, { status: 201 }),
+        { once: true },
       ),
     );
 
@@ -39,8 +41,10 @@ describe("Item Modification", () => {
 
   it("should throw if request fails", async () => {
     server.use(
-      rest.patch("http://localhost/api/shipments/:shipmentId/samples/1", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.patch(
+        "http://localhost/api/shipments/:shipmentId/samples/1",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
       ),
     );
 
@@ -55,8 +59,10 @@ describe("Item Deletion", () => {
 
   it("should throw if request fails", async () => {
     server.use(
-      rest.delete("http://localhost/api/shipments/:shipmentId/samples/1", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.delete(
+        "http://localhost/api/shipments/:shipmentId/samples/1",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
       ),
     );
 

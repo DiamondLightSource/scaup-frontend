@@ -7,11 +7,17 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const config = {
   testEnvironment: "jsdom",
+  // https://mswjs.io/docs/migrations/1.x-to-2.x#remap-fetch-api-globals
+  setupFiles: ["<rootDir>/jest.polyfills.js"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   coverageProvider: "v8",
   coverageReporters: ["json", "text", "cobertura"],
   roots: ["<rootDir>/src"],
   collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+  // https://mswjs.io/docs/migrations/1.x-to-2.x#remap-fetch-api-globals
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
   collectCoverage: true,
   coverageDirectory: "coverage",
   coveragePathIgnorePatterns: [

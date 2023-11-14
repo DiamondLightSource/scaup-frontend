@@ -1,5 +1,10 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { recursiveCountChildrenByType, recursiveFind, setTagInPlace } from "./tree";
+import {
+  recursiveCountChildrenByType,
+  recursiveCountTypeInstances,
+  recursiveFind,
+  setTagInPlace,
+} from "./tree";
 
 const defaultData: TreeData[] = [
   {
@@ -17,7 +22,7 @@ const defaultData: TreeData[] = [
   },
 ];
 
-describe("Tree Utility Functions", () => {
+describe("Recursively Find Item", () => {
   it("should find leaf item", () => {
     const callback = jest.fn();
     recursiveFind(defaultData, "3", "gridBox", callback);
@@ -70,6 +75,17 @@ describe("Tree Utility Functions", () => {
     );
   });
 
+  it("should set tags for all objects with positions set", () => {
+    const newData = structuredClone(defaultData);
+    newData[0].children![0].children![0].data.location = 4;
+
+    setTagInPlace(newData);
+
+    expect(newData[0].children![0].children![0].tag).toBe("5");
+  });
+});
+
+describe("Recursively Count Children", () => {
   it("should count children of type that exists in multiple places in tree", () => {
     const count = recursiveCountChildrenByType(
       [
@@ -107,13 +123,33 @@ describe("Tree Utility Functions", () => {
     const count = recursiveCountChildrenByType(defaultData, ["puck", "falconTube"]);
     expect(count).toBe(1);
   });
+});
 
-  it("should set tags for all objects with positions set", () => {
-    const newData = structuredClone(defaultData);
-    newData[0].children![0].children![0].data.location = 4;
+describe("Recursively Count Identical Types", () => {
+  it("should count item type instances", () => {
+    const count = recursiveCountTypeInstances([
+      {
+        id: "dewar",
+        name: "Dewar",
+        data: { type: "dewar" },
+        children: [
+          {
+            id: "puck1",
+            name: "Puck 1",
+            data: { type: "puck" },
+            children: [
+              { id: "s1", name: "Sample", data: { type: "sample" } },
+              { id: "s2", name: "Sample", data: { type: "sample" } },
+              { id: "s3", name: "Sample", data: { type: "sample" } },
+            ],
+          },
+          { id: "puck2", name: "Puck 2", data: { type: "puck" } },
+        ],
+      },
+    ]);
 
-    setTagInPlace(newData);
-
-    expect(newData[0].children![0].children![0].tag).toBe("5");
+    expect(count.dewar).toBe(1);
+    expect(count.puck).toBe(2);
+    expect(count.sample).toBe(3);
   });
 });

@@ -1,56 +1,10 @@
-"use client";
+import { getPrepopData } from "@/utils/client";
+import ReviewPageContent from "./pageContent";
 
-import { Container } from "@/components/containers";
-import { DynamicFormView } from "@/components/visualisation/formView";
-import {
-  selectActiveItem,
-  selectItems,
-  setActiveItem,
-  setStep,
-} from "@/features/shipment/shipmentSlice";
-import { getCurrentStepIndex, steps } from "@/mappings/pages";
-import { Box, Divider, Heading, Skeleton, Text, VStack } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+const ReviewPage = async ({ params }: { params: { proposalId: string; shipmentId: string } }) => {
+  const prepopData = await getPrepopData(params.proposalId);
 
-const ReviewPage = ({ params }: { params: { shipmentId: string } }) => {
-  const dispatch = useDispatch();
-  const items = useSelector(selectItems);
-  const activeItem = useSelector(selectActiveItem);
-  const activeStep = useMemo(
-    () => steps[getCurrentStepIndex(activeItem.data.type)].singular,
-    [activeItem],
-  );
-
-  useEffect(() => {
-    if (items.length > 0) {
-      dispatch(setActiveItem({ item: items![0], isEdit: true }));
-    }
-    dispatch(setStep(steps.length));
-  }, [dispatch, items]);
-
-  return (
-    <VStack h='100%' w='65%' alignItems='start'>
-      <VStack spacing='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {activeStep}
-        </Heading>
-        <Heading>{activeItem.name}</Heading>
-        <Divider borderColor='gray.800' />
-      </VStack>
-      <Box display='flex' flexDirection='column' width='100%' flex='1 0 auto'>
-        {activeItem.id === "new-sample" ? (
-          <Skeleton h='20%'></Skeleton>
-        ) : (
-          <DynamicFormView formType={activeItem.data.type} data={activeItem.data} />
-        )}
-        <Container shipmentId={params.shipmentId} containerType={activeItem.data.type} />
-      </Box>
-      <Text w='100%' p='1em' bg='gray.200' fontWeight='600' color='gray.600'>
-        You can still edit your shipment after submitting
-      </Text>
-    </VStack>
-  );
+  return <ReviewPageContent shipmentId={params.shipmentId} prepopData={prepopData} />;
 };
 
 export default ReviewPage;

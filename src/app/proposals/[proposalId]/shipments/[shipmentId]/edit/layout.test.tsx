@@ -1,6 +1,6 @@
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import ShipmentsLayout from "./layout";
 
 describe("Shipment Layout", () => {
@@ -12,8 +12,10 @@ describe("Shipment Layout", () => {
 
   it("should return null if no shipment details are available in data fetch", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
       ),
     );
 
@@ -24,8 +26,10 @@ describe("Shipment Layout", () => {
 
   it("should return null if no unassigned items are available (with suffix) in data fetch", async () => {
     server.use(
-      rest.get("http://localhost/api/shipments/:shipmentId/unassigned", (req, res, ctx) =>
-        res.once(ctx.status(404)),
+      http.get(
+        "http://localhost/api/shipments/:shipmentId/unassigned",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
       ),
     );
 

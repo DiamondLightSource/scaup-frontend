@@ -35,11 +35,11 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
       { name: "New Shipment" },
       "shipments",
     );
-    router.push(`/proposals/${proposalId}/shipments/${newShipment.id}`);
+    router.push(`/proposals/${proposalId}/shipments/${newShipment.id}/edit`);
   }, [session, proposalId, router]);
 
   return (
-    <VStack alignItems='start' mt='1em'>
+    <VStack alignItems='start' mt='2.5em'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {proposalId}

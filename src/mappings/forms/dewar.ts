@@ -2,14 +2,6 @@ import { DynamicFormEntry } from "@/components/input/form/input";
 
 export const dewarForm = [
   {
-    id: "barCode",
-    label: "Barcode",
-    type: "text",
-    validation: {
-      required: "Required",
-    },
-  },
-  {
     id: "code",
     label: "Dewar Code",
     type: "dropdown",

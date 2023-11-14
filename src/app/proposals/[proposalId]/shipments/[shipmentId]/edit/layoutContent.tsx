@@ -21,10 +21,12 @@ import {
   steps,
 } from "@/mappings/pages";
 import { UnassignedItemResponse } from "@/types/server";
+import { authenticatedFetch } from "@/utils/client";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
   Button,
+  Divider,
   HStack,
   Spacer,
   Step,
@@ -39,6 +41,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,6 +66,7 @@ const ShipmentsLayoutContent = ({
   unassignedItems,
 }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
@@ -123,15 +127,21 @@ const ShipmentsLayoutContent = ({
   }, [router, dispatch]);
 
   /** Move to next shipment step */
-  const handleContinue = useCallback(() => {
+  const handleContinue = useCallback(async () => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else if (activeStep + 1 === steps.length) {
       router.push("edit/review");
     } else {
-      router.push("../submitted");
+      const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
+        method: "POST",
+      });
+
+      if (response && response.status === 200) {
+        router.push("../submitted");
+      }
     }
-  }, [handleSetStep, activeStep, router]);
+  }, [handleSetStep, activeStep, router, params, session]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(
@@ -174,8 +184,8 @@ const ShipmentsLayoutContent = ({
   );
 
   return (
-    <VStack h='100%' w='100%'>
-      <Stepper colorScheme='green' index={activeStep} mb='15px' h='60px' w='100%'>
+    <VStack h='100%' w='100%' mt='1em'>
+      <Stepper colorScheme='green' index={activeStep} h='60px' w='100%'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
             <StepIndicator
@@ -198,6 +208,7 @@ const ShipmentsLayoutContent = ({
           </Step>
         ))}
       </Stepper>
+      <Divider mb='10px' />
       <HStack alignItems='stretch' flex='1 0 0' w='100%' pb='20px'>
         {children}
         <VStack spacing='0' alignItems='start' w='45%'>

@@ -1,4 +1,4 @@
-import { genUniqueId, parseJsonReferences } from "./generic";
+import { genUniqueId, parseJsonReferences, pascalToSpace } from "./generic";
 
 describe("Unique ID generator", () => {
   it("should generate random ID", () => {
@@ -34,5 +34,11 @@ describe("Pointer resolver", () => {
       { result: 1, result2: 3 },
       { result: 99, result2: 100 },
     ]);
+  });
+});
+
+describe("Pascal to Space Separated String", () => {
+  it("should covert pascal-case to space separated string", () => {
+    expect(pascalToSpace("testString")).toBe("Test String");
   });
 });

@@ -47,6 +47,45 @@ export const recursiveCountChildrenByType = (data: TreeData[], key: string | str
   return count;
 };
 
+/**
+ * Increment value in dictionary by passed value or add key/value pair to dictionary if it
+ * does not exist already
+ *
+ * @param obj Source object
+ * @param key Key to search/add
+ * @param value Increment value
+ */
+const addOrSetObjectInPlace = (obj: Record<string, number>, key: string, value: number) => {
+  if (key in obj) {
+    obj[key] += value;
+  } else {
+    obj[key] = value;
+  }
+};
+
+/**
+ * Count instances of all types present in a tree data structure
+ *
+ * @param data Data to traverse
+ * @returns Object mapping types to number of instances found
+ */
+export const recursiveCountTypeInstances = (data: TreeData<BaseShipmentItem>[]) => {
+  const counts: Record<string, number> = {};
+
+  for (const item of data) {
+    addOrSetObjectInPlace(counts, item.data.type, 1);
+
+    if (item.children) {
+      const childCounts = recursiveCountTypeInstances(item.children);
+      for (const [key, value] of Object.entries(childCounts)) {
+        addOrSetObjectInPlace(counts, key, value);
+      }
+    }
+  }
+
+  return counts;
+};
+
 /** Recursively tag shipment items in place based on their position.
  *
  * @param data Original tree object

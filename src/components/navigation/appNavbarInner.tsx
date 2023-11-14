@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 
 export const AppNavbarInner = ({ session }: { session: null | Session }) => (
-  <Navbar>
+  <Navbar logo='/diamondgs.png'>
     <User
       user={
         session && session.user ? { fedid: session.user.email!, name: session.user.name! } : null

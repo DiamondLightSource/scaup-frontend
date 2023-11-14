@@ -7,9 +7,6 @@ import {
   AccordionProps,
   Button,
   HStack,
-  List,
-  ListItem,
-  Spacer,
   Tag,
   Text,
 } from "@chakra-ui/react";
@@ -32,6 +29,8 @@ export interface TreeData<T = any> {
   isNotViewable?: boolean;
 }
 
+import "@/styles/tree.css";
+
 export interface TreeViewProps extends AccordionProps {
   data: TreeData[];
   onRemove?: (data: TreeData) => void;
@@ -39,6 +38,8 @@ export interface TreeViewProps extends AccordionProps {
   /** Disable edit/remove buttons */
   readOnly?: boolean;
 }
+
+const hasChildren = (item: TreeData) => !!(item.children && item.children.length > 0);
 
 export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }: TreeViewProps) => {
   /*
@@ -74,53 +75,52 @@ export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }:
     <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2]}>
       {data.map((item, index) => (
         <React.Fragment key={index}>
-          {!item.children || item.children.length < 1 ? (
-            <List spacing={3} py={1} pt={2}>
-              <ListItem ml={5}>
-                <HStack>
-                  {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                  <Text>{item.name}</Text>
-                  <Spacer />
-                  {!(item.isUndeletable || readOnly) && (
-                    <Button bg='red.600' size='xs' onClick={() => handleRemove(item)}>
-                      Remove
-                    </Button>
-                  )}
-                  {!item.isNotViewable && (
-                    <Button size='xs' onClick={() => handleEdit(item)}>
-                      View
-                    </Button>
-                  )}
-                </HStack>
-              </ListItem>
-            </List>
-          ) : (
-            <AccordionItem border='none'>
-              <HStack w='100%' borderBottom='1px solid' borderBottomColor='gray.800'>
-                <AccordionButton>
-                  <HStack>
+          <AccordionItem border='none'>
+            <HStack
+              w='100%'
+              h='36px'
+              className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
+            >
+              <h2 style={{ width: "100%", display: "flex", height: "100%", alignItems: "center" }}>
+                {hasChildren(item) ? (
+                  <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
                     <AccordionIcon />
-                    {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                    <Text fontSize='md'>{item.name}</Text>
-                  </HStack>
-                </AccordionButton>
-                {!item.isNotViewable && (
-                  <Button size='xs' onClick={() => handleEdit(item)}>
-                    View
-                  </Button>
+                  </AccordionButton>
+                ) : (
+                  <Text px='15px' aria-hidden='true'>
+                    ⦁
+                  </Text>
                 )}
-              </HStack>
+                <HStack
+                  alignItems='center'
+                  w='100%'
+                  h='100%'
+                  onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
+                  aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
+                >
+                  {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
+                  <Text fontSize='md'>{item.name}</Text>
+                </HStack>
+              </h2>
+
+              {!(item.isUndeletable || readOnly || hasChildren(item)) && (
+                <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
+                  Remove
+                </Button>
+              )}
+            </HStack>
+            {hasChildren(item) && (
               <AccordionPanel py='0' pr='0'>
                 <TreeView
-                  data={item.children}
+                  data={item.children!}
                   onRemove={onRemove}
                   onEdit={onEdit}
                   readOnly={readOnly}
                   {...props}
                 />
               </AccordionPanel>
-            </AccordionItem>
-          )}
+            )}
+          </AccordionItem>
         </React.Fragment>
       ))}
     </Accordion>

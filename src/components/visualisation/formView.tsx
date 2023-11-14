@@ -1,11 +1,19 @@
 import { formMapping } from "@/components/input/form";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { parseJsonReferences } from "@/utils/generic";
 import { Divider, HStack, Text, VStack } from "@chakra-ui/react";
 import { useMemo } from "react";
 
 export interface DynamicFormViewProps {
-  formType: BaseShipmentItem["type"];
-  data: BaseShipmentItem;
+  /** Predefined form type to use for displaying data, or custom form definition */
+  formType: BaseShipmentItem["type"] | DynamicFormEntry[];
+  data: Record<string, any>;
+  /**
+   * Same prepopulation data passed to original form, used for displaying the original
+   * human readable values. TODO: type this with the return value from the server
+   */
+  prepopData?: Record<string, any>;
 }
 
 interface DynamicFormViewFieldProps {
@@ -13,21 +21,46 @@ interface DynamicFormViewFieldProps {
   label: string;
 }
 
-export const DynamicFormView = ({ formType, data }: DynamicFormViewProps) => {
+export const DynamicFormView = ({ formType, data, prepopData }: DynamicFormViewProps) => {
   const formData = useMemo(() => {
     const form: Record<string, any> = {};
+    const formDefinition = typeof formType === "string" ? formMapping[formType] : formType;
+
     for (const [key, value] of Object.entries(data)) {
-      const field = formMapping[formType].find((field) => field.id === key);
+      const field = formDefinition.find((field) => field.id === key);
       if (field) {
         let actualValue = value;
         if (typeof actualValue === "boolean") {
           actualValue = actualValue ? "Yes" : "No";
+        } else if (
+          field.type === "dropdown" &&
+          field.values &&
+          !Array.isArray(field.values) &&
+          prepopData
+        ) {
+          /*
+           * An alternative to remapping IDs to human readable values in the front end would be
+           * assigning these values in the backend, so that both the ID and the label are returned.
+           *
+           * However, this would break the "simple" key/value model used in the shipment object and
+           * would greatly increase parsing complexity anyway. This is a compromise that aims to
+           * implement an optimal alternative.
+           */
+          const options: DynamicFormEntry["values"] = parseJsonReferences(field.values, prepopData);
+
+          if (Array.isArray(options)) {
+            const option = options.find((option) => option.value === value);
+            if (option) {
+              actualValue = option.label;
+            }
+          }
         }
+
         form[field.label] = actualValue;
       }
     }
     return form;
-  }, [data, formType]);
+  }, [data, formType, prepopData]);
 
   return (
     <>
@@ -42,7 +75,7 @@ export const DynamicFormView = ({ formType, data }: DynamicFormViewProps) => {
 
 const DynamicFormViewField = ({ children, label }: DynamicFormViewFieldProps) => {
   return (
-    <VStack alignItems='start' gap='0'>
+    <VStack alignItems='start' gap='0' w='100%'>
       <HStack py='9px'>
         <Text w='170px' fontWeight='800'>
           {label}

@@ -1,0 +1,12 @@
+.clickable-row {
+  cursor: pointer;
+  border-bottom: 1px solid var(--chakra-colors-diamond-100);
+}
+
+.clickable-row:hover {
+  background-color: var(--chakra-colors-diamond-100);
+}
+
+.unclickable-row {
+  border-bottom: 1px solid var(--chakra-colors-diamond-100);
+}
