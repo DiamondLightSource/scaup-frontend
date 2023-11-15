@@ -68,7 +68,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     } else {
       Item.patch(
         session,
-        shipmentId,
         activeItem.id,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
