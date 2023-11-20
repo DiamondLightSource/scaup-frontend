@@ -87,7 +87,6 @@ export const useChildLocationManager = ({
        */
       Item.patch(
         session,
-        shipmentId,
         currentContainer.id,
         { ...currentContainer.data, type: values.type },
         parent,
@@ -106,7 +105,6 @@ export const useChildLocationManager = ({
 
     await Item.patch(
       session,
-      shipmentId,
       childItem.id,
       {
         location,

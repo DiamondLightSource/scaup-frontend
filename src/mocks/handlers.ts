@@ -69,12 +69,10 @@ export const handlers = [
     ),
   ),
 
-  http.patch("http://localhost/api/shipments/:shipmentId/:itemType/:itemId", () =>
-    HttpResponse.json({ id: 123 }),
-  ),
+  http.patch("http://localhost/api/:itemType/:itemId", () => HttpResponse.json({ id: 123 })),
 
   http.delete(
-    "http://localhost/api/shipments/:shipmentId/:itemType/:itemId",
+    "http://localhost/api/:itemType/:itemId",
     () => new HttpResponse(null, { status: 204 }),
   ),
 ];

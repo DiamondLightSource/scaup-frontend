@@ -39,7 +39,7 @@ const ShipmentOverview = ({
           ? { containerId: null, location: null }
           : { topLevelContainerId: null, parentId: null, location: null };
 
-      await Item.patch(session, shipmentId, item.id, body, endpoint);
+      await Item.patch(session, item.id, body, endpoint);
       await Promise.all([
         dispatch(updateShipment({ session, shipmentId })),
         dispatch(updateUnassigned({ session, shipmentId })),
@@ -51,7 +51,7 @@ const ShipmentOverview = ({
 
   const deleteItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
-      await Item.delete(session, shipmentId, item.id, endpoint);
+      await Item.delete(session, item.id, endpoint);
       if (endpoint === "topLevelContainers") {
         await dispatch(updateShipment({ session, shipmentId }));
       } else {

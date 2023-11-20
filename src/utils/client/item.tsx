@@ -10,19 +10,14 @@ export class Item {
   // TODO: type this properly
   static async patch(
     session: Session | null,
-    shipmentId: TreeData["id"],
     itemId: TreeData["id"],
     data: Omit<BaseShipmentItem, "type">,
     endpoint: Step["endpoint"],
   ) {
-    const response = await authenticatedFetch.client(
-      `/shipments/${shipmentId}/${endpoint}/${itemId}`,
-      session,
-      {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      },
-    );
+    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, session, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
 
     if (response && response.status === 200) {
       return await response.json();
@@ -57,19 +52,10 @@ export class Item {
     }
   }
 
-  static async delete(
-    session: Session | null,
-    shipmentId: TreeData["id"],
-    itemId: TreeData["id"],
-    endpoint: Step["endpoint"],
-  ) {
-    const response = await authenticatedFetch.client(
-      `/shipments/${shipmentId}/${endpoint}/${itemId}`,
-      session,
-      {
-        method: "DELETE",
-      },
-    );
+  static async delete(session: Session | null, itemId: TreeData["id"], endpoint: Step["endpoint"]) {
+    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, session, {
+      method: "DELETE",
+    });
 
     if (response && response.status === 204) {
       return { status: "OK" };
