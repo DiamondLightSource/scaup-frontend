@@ -1,5 +1,6 @@
 import { TreeData, TreeView } from "@/components/visualisation/treeView";
 import {
+  selectActiveItem,
   selectItems,
   selectUnassigned,
   syncActiveItem,
@@ -30,6 +31,7 @@ const ShipmentOverview = ({
   const dispatch = useDispatch<AppDispatch>();
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
+  const activeItem = useSelector(selectActiveItem);
   const { data: session } = useSession();
 
   const unassignItem = useCallback(
@@ -101,6 +103,7 @@ const ShipmentOverview = ({
           data={data}
           onRemove={handleUnassign}
           onEdit={onActiveChanged}
+          selectedItem={activeItem}
         />
       </Box>
       <TreeView
@@ -110,6 +113,7 @@ const ShipmentOverview = ({
         data={unassigned}
         onEdit={onActiveChanged}
         onRemove={handleDelete}
+        selectedItem={activeItem}
       />
     </>
   );

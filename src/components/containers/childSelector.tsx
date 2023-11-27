@@ -78,7 +78,7 @@ export const ChildSelector = ({
     <Modal size='2xl' {...props}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Select Item</ModalHeader>
+        <ModalHeader>Select {childrenTypeData.data.singular}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {selectedItem && (
@@ -98,7 +98,7 @@ export const ChildSelector = ({
           )}
           {!readOnly && (
             <>
-              <Heading size='md'>Available Items</Heading>
+              <Heading size='md'>Available {childrenTypeData.data.title}</Heading>
               <Divider />
               {unassignedItems ? (
                 <Grid py='2' templateColumns='repeat(4, 1fr)' gap='2'>

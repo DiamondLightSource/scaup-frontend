@@ -71,7 +71,7 @@ describe("Grid Box", () => {
 
     fireEvent.click(screen.getByText("2"));
 
-    expect(screen.getByText(/select item/i)).toBeInTheDocument();
+    expect(screen.getByText(/select sample/i)).toBeInTheDocument();
   });
 
   it("should pre-populate positions with data from state", () => {

@@ -209,7 +209,7 @@ const ShipmentsLayoutContent = ({
         ))}
       </Stepper>
       <Divider mb='10px' />
-      <HStack alignItems='stretch' flex='1 0 0' w='100%' pb='20px'>
+      <HStack alignItems='stretch' flex='1 0 0' w='100%' gap='2em' pb='20px'>
         {children}
         <VStack spacing='0' alignItems='start' w='45%'>
           <ShipmentOverview

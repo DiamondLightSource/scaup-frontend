@@ -18,7 +18,7 @@ const authenticatedFetch = async (
   init?: RequestInit,
 ) => {
   if (!session) {
-    return null;
+    throw new Error("Authentication Failure");
   }
 
   const res = await fetch(process.env.REACT_APP_API_URL! + url, {
@@ -51,7 +51,7 @@ authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
     return await authenticatedFetch(url, session, init);
   } catch (e) {
     if (e instanceof Error && e.message === "Authentication Failure") {
-      redirect("/");
+      redirect("/nextauth/signin");
     }
   }
 };

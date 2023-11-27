@@ -6,6 +6,7 @@ import { Navbar, User } from "@diamondlightsource/ui-components";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { MdHome } from "react-icons/md";
 
 const Breadcrumbs = ({ pathname }: { pathname: string }) => {
   const pathCrumbs = pathname.split("/").filter((name) => name !== "");
@@ -28,7 +29,7 @@ const Breadcrumbs = ({ pathname }: { pathname: string }) => {
     >
       <BreadcrumbItem>
         <BreadcrumbLink _hover={{ opacity: "0.6" }} aria-label='Home' href='/'>
-          HOME
+          <MdHome />
         </BreadcrumbLink>
       </BreadcrumbItem>
       {pathCrumbs.map((pathname, i) => {

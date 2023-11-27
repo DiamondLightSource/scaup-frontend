@@ -1,9 +1,9 @@
 "use client";
 
 import { store } from "@/store";
+import { customTheme } from "@/styles/theme";
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider, ColorModeScript, createStandaloneToast } from "@chakra-ui/react";
-import { theme } from "@diamondlightsource/ui-components";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 
@@ -14,7 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <CacheProvider>
       <SessionProvider basePath='/nextauth' refetchOnWindowFocus={false}>
         <Provider store={store}>
-          <ChakraProvider theme={theme}>
+          <ChakraProvider theme={customTheme}>
             <ColorModeScript initialColorMode='light' />
             <ToastContainer />
             {children}

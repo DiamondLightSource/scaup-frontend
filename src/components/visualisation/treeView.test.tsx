@@ -70,4 +70,24 @@ describe("Tree View", () => {
 
     expect(screen.getByText("Tag Value")).toBeInTheDocument();
   });
+
+  it("should find and render selected item", () => {
+    const selectedItem = { id: "2", name: "Test 2", data: {} };
+    render(
+      <TreeView
+        selectedItem={selectedItem}
+        data={[
+          {
+            id: "1",
+            name: "Test 1",
+            tag: "Tag Value",
+            data: { location: 7 },
+            children: [selectedItem],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByLabelText("View Test 2")).toHaveAttribute("aria-current", "true");
+  });
 });
