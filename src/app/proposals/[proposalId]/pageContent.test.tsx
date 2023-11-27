@@ -25,7 +25,10 @@ describe("Proposal Page Content", () => {
 
   it("should display 'submitted' as tag if item is submitted", () => {
     render(
-      <ProposalOverviewContent proposalId='cm1234' data={[{ shippingId: 1, isSubmitted: true }]} />,
+      <ProposalOverviewContent
+        proposalId='cm1234'
+        data={[{ shippingId: 1, creationStatus: "submitted" }]}
+      />,
     );
 
     expect(screen.getByText("Submitted")).toBeInTheDocument();
@@ -35,7 +38,7 @@ describe("Proposal Page Content", () => {
     render(
       <ProposalOverviewContent
         proposalId='cm1234'
-        data={[{ shippingId: 1, isSubmitted: false }]}
+        data={[{ shippingId: 1, creationStatus: "draft" }]}
       />,
     );
 
@@ -45,7 +48,11 @@ describe("Proposal Page Content", () => {
   it("should redirect to new shipment when created", async () => {
     render(<ProposalOverviewContent proposalId='cm1234' data={null} />);
 
-    fireEvent.click(screen.getByText(/create new shipment/i));
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+      target: { value: "New Name" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Create" }));
     await waitFor(() => expect(mockRouter.pathname).toBe("/proposals/cm1234/shipments/123/edit"));
   });
 });

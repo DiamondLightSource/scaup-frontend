@@ -8,7 +8,7 @@ import { FieldValues, useFormContext, useWatch } from "react-hook-form";
 
 export interface DynamicFormProps {
   /** Form input type */
-  formType: BaseShipmentItem["type"];
+  formType: BaseShipmentItem["type"] | DynamicFormEntry[];
   /** Default values */
   defaultValues?: Record<string, any>;
   /** Data to prepopulate the form fields with. Useful for dynamic dropdowns */
@@ -26,6 +26,10 @@ export const DynamicForm = ({
 }: DynamicFormProps) => {
   const { getValues } = useFormContext();
   const activeForm = useMemo(() => {
+    if (Array.isArray(formType)) {
+      return formType;
+    }
+
     const form = structuredClone(formMapping[formType]);
 
     for (const field of form) {
@@ -61,6 +65,9 @@ export const DynamicForm = ({
 
   return (
     <VStack spacing='3'>
+      {/*<HStack alignItems='center' borderLeft='3px solid' borderColor='gray.600' h='40px' w='100%'>
+        <Text px='1em'>Assign containers to dewar</Text>
+  </HStack>*/}
       {activeForm.map((entry) => (
         <DynamicFormInput key={entry.id} {...props} {...entry} />
       ))}
