@@ -1,5 +1,5 @@
 import { alertAnatomy } from "@chakra-ui/anatomy";
-import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
+import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 import { theme } from "@diamondlightsource/ui-components";
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
@@ -19,4 +19,7 @@ const baseInfo = definePartsStyle({
 
 const alertTheme = defineMultiStyleConfig({ variants: { info: baseInfo } });
 
-export const customTheme = { ...theme, components: { ...theme.components, Alert: alertTheme } };
+export const customTheme = extendTheme({
+  ...theme,
+  components: { ...theme.components, Alert: alertTheme },
+});
