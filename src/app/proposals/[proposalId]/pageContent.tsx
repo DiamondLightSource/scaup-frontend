@@ -1,4 +1,6 @@
 "use client";
+import { DynamicForm } from "@/components/input/form";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { Item } from "@/utils/client/item";
 import {
   Button,
@@ -16,7 +18,7 @@ import {
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 export interface ProposalOverviewProps {
   proposalId: string;
@@ -24,22 +26,27 @@ export interface ProposalOverviewProps {
   data: Record<string, any> | null;
 }
 
+interface ShipmentData {
+  name: string;
+}
+
+const shipmentForm = [
+  { id: "name", label: "Name", type: "text", validation: { required: "Required" } },
+] as DynamicFormEntry[];
+
 export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewProps) => {
   const { data: session } = useSession();
   const router = useRouter();
+  const formContext = useForm<ShipmentData>();
 
-  const handleNewShipment = useCallback(async () => {
-    const newShipment = await Item.create(
-      session,
-      proposalId,
-      { name: "New Shipment" },
-      "shipments",
-    );
+  const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
+    const newShipment = await Item.create(session, proposalId, { name: info.name }, "shipments");
+
     router.push(`/proposals/${proposalId}/shipments/${newShipment.id}/edit`);
-  }, [session, proposalId, router]);
+  });
 
   return (
-    <VStack alignItems='start' mt='2.5em'>
+    <VStack alignItems='start' mt='1.5em'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {proposalId}
@@ -50,12 +57,11 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
       <VStack alignItems='start' w='100%'>
         <Text fontSize='18px' mt='2'>
           View existing shipments for this proposal, or add new shipments.
-        </Text>
+        </Text>{" "}
         <Heading mt='3' size='lg' color='grey.700'>
-          Select Shipment
+          Select Existing Shipment
         </Heading>
       </VStack>
-      <Divider borderColor='gray.800' />
       {data ? (
         <>
           <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
@@ -66,7 +72,7 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
                   _hover={{
                     borderColor: "diamond.400",
                   }}
-                  bg='diamond.50'
+                  bg='white'
                   overflow='hidden'
                   p={2}
                   border='1px solid grey'
@@ -75,8 +81,8 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
                   cursor='pointer'
                 >
                   <StatLabel>
-                    <Tag colorScheme={shipment.isSubmitted ? "green" : "gray"}>
-                      {shipment.isSubmitted ? "Submitted" : "Draft"}
+                    <Tag colorScheme={shipment.creationStatus === "submitted" ? "green" : "gray"}>
+                      {shipment.creationStatus === "submitted" ? "Submitted" : "Draft"}
                     </Tag>
                   </StatLabel>
                   <StatNumber>
@@ -99,9 +105,25 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
       ) : (
         <Text fontWeight='600'>This proposal has no shipments assigned to it yet. You can:</Text>
       )}
-      <Button onClick={handleNewShipment} bg='green.500'>
-        Create new shipment
-      </Button>
+      <FormProvider {...formContext}>
+        <form
+          onSubmit={onSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "20em",
+            flex: "1 0 auto",
+          }}
+        >
+          <Heading mt='3' mb='0.5em' size='lg' color='grey.700'>
+            Create New Shipment
+          </Heading>
+          <DynamicForm formType={shipmentForm} />
+          <Button w='150px' mt='1em' type='submit' bg='green.500'>
+            Create
+          </Button>
+        </form>
+      </FormProvider>
     </VStack>
   );
 };

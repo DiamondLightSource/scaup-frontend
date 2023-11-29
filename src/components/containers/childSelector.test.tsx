@@ -70,7 +70,7 @@ describe("Child Selector", () => {
 
     fireEvent.click(screen.getByText("Sample"));
 
-    await waitFor(() => expect(itemClickCallback).toBeCalledWith(sample));
+    await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith(sample));
   });
 
   it("should fire event if item is removed", async () => {
@@ -88,7 +88,7 @@ describe("Child Selector", () => {
 
     fireEvent.click(screen.getByText("Remove"));
 
-    await waitFor(() => expect(itemRemoveCallback).toBeCalledWith(selectedSample));
+    await waitFor(() => expect(itemRemoveCallback).toHaveBeenCalledWith(selectedSample));
   });
 
   it("should not render remove button if in read only mode", () => {

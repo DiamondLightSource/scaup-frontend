@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
       wellKnown: process.env.OAUTH_DISCOVERY_ENDPOINT,
       checks: ["pkce", "state"],
       profile: async (profile, tokens) => {
-        const response = await fetch(process.env.OAUTH_PROFILE_ENDPOINT || "", {
+        const response = await fetch(process.env.OAUTH_PROFILE_INFO_ENDPOINT || "", {
           headers: { Authorization: `Bearer ${tokens.access_token}` },
         });
 

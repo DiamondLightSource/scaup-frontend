@@ -2,7 +2,17 @@
 
 import { DynamicFormEntry } from "@/components/input/form/input";
 import { DynamicFormView } from "@/components/visualisation/formView";
-import { Button, Divider, Heading, Link, Text, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Button,
+  Divider,
+  Heading,
+  Link,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 
 const SubmissionOverviewContent = ({
@@ -38,6 +48,13 @@ const SubmissionOverviewContent = ({
           <Heading alignSelf='start'>Contents</Heading>
           <DynamicFormView formType={data.formModel} data={data.counts} />
         </VStack>
+        <Alert status='info' variant='info'>
+          <AlertIcon />
+          <AlertDescription>
+            Once your shipment is booked with the courier service, you will not be able to edit the
+            contents of the shipment any further.
+          </AlertDescription>
+        </Alert>
         <Button
           as={NextLink}
           href='https://sample-shipping-staging.diamond.ac.uk/shipment-requests/1/incoming'

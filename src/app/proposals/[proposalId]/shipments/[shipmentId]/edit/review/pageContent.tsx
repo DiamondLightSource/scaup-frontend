@@ -10,7 +10,16 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { getCurrentStepIndex, steps } from "@/mappings/pages";
 import { ItemFormPageContentProps } from "@/types/generic";
-import { Box, Divider, Heading, Skeleton, Text, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Box,
+  Divider,
+  Heading,
+  Skeleton,
+  VStack,
+} from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -53,9 +62,10 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
         )}
         <Container shipmentId={shipmentId} containerType={activeItem.data.type} />
       </Box>
-      <Text w='100%' p='1em' bg='gray.200' fontWeight='600' color='gray.600'>
-        You can still edit your shipment after submitting
-      </Text>
+      <Alert status='info' variant='info'>
+        <AlertIcon />
+        <AlertDescription>You can still edit your shipment after submitting.</AlertDescription>
+      </Alert>
     </VStack>
   );
 };

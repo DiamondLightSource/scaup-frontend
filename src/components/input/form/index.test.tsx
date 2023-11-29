@@ -36,11 +36,17 @@ describe("Dynamic Form", () => {
       target: { value: "falconTube" },
     });
 
-    expect(watchCallback).toBeCalledWith({
+    expect(watchCallback).toHaveBeenCalledWith({
       comments: "",
       name: "",
       registeredContainer: "",
       type: "falconTube",
     });
+  });
+
+  it("should render passed form if form is dynamic form entry array", () => {
+    renderWithForm(<DynamicForm formType={[{ id: "name", label: "Name", type: "text" }]} />);
+
+    expect(screen.getByText("Name")).toBeInTheDocument();
   });
 });

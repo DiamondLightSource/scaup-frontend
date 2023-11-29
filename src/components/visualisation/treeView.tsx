@@ -37,11 +37,19 @@ export interface TreeViewProps extends AccordionProps {
   onEdit?: (data: TreeData) => void;
   /** Disable edit/remove buttons */
   readOnly?: boolean;
+  selectedItem?: TreeData;
 }
 
 const hasChildren = (item: TreeData) => !!(item.children && item.children.length > 0);
 
-export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }: TreeViewProps) => {
+export const TreeView = ({
+  data,
+  onRemove,
+  readOnly = false,
+  onEdit,
+  selectedItem,
+  ...props
+}: TreeViewProps) => {
   /*
   const handleDrag = useCallback((event: React.DragEvent<HTMLDivElement>, data: TreeData) => {
     event.dataTransfer.setData("text", JSON.stringify(data));
@@ -71,58 +79,74 @@ export const TreeView = ({ data, onRemove, readOnly = false, onEdit, ...props }:
     [onEdit],
   );
 
+  // Whenever comparing items in the list, I actually want to compare by reference, not by value.
   return (
     <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2]}>
-      {data.map((item, index) => (
-        <React.Fragment key={index}>
-          <AccordionItem border='none'>
-            <HStack
-              w='100%'
-              h='36px'
-              className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
-            >
-              <h2 style={{ width: "100%", display: "flex", height: "100%", alignItems: "center" }}>
-                {hasChildren(item) ? (
-                  <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
-                    <AccordionIcon />
-                  </AccordionButton>
-                ) : (
-                  <Text px='15px' aria-hidden='true'>
-                    ⦁
-                  </Text>
-                )}
-                <HStack
-                  alignItems='center'
-                  w='100%'
-                  h='100%'
-                  onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
-                  aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
+      {data.map((item, index) => {
+        const isSelected = item === selectedItem;
+        return (
+          <React.Fragment key={index}>
+            <AccordionItem border='none'>
+              <HStack
+                w='100%'
+                h='36px'
+                className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
+                bg={isSelected ? "diamond.100" : "transparent"}
+              >
+                <h2
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    height: "100%",
+                    alignItems: "center",
+                  }}
                 >
-                  {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                  <Text fontSize='md'>{item.name}</Text>
-                </HStack>
-              </h2>
+                  {hasChildren(item) ? (
+                    <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  ) : (
+                    <Text px='15px' aria-hidden='true'>
+                      ⦁
+                    </Text>
+                  )}
+                  <HStack
+                    alignItems='center'
+                    w='100%'
+                    h='100%'
+                    onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
+                    aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
+                    aria-current={isSelected}
+                  >
+                    {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
+                    <Text fontSize='md' fontWeight={isSelected ? "600" : "200"}>
+                      {item.name}
+                    </Text>
+                  </HStack>
+                </h2>
 
-              {!(item.isUndeletable || readOnly || hasChildren(item)) && (
-                <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
-                  Remove
-                </Button>
+                {!(item.isUndeletable || readOnly || hasChildren(item)) && (
+                  <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
+                    Remove
+                  </Button>
+                )}
+              </HStack>
+              {hasChildren(item) && (
+                <AccordionPanel py='0' pr='0'>
+                  <TreeView
+                    data={item.children!}
+                    onRemove={onRemove}
+                    onEdit={onEdit}
+                    readOnly={readOnly}
+                    selectedItem={selectedItem}
+                    {...props}
+                  />
+                </AccordionPanel>
               )}
-            </HStack>
-            {hasChildren(item) && (
-              <AccordionPanel py='0' pr='0'>
-                <TreeView
-                  data={item.children!}
-                  onRemove={onRemove}
-                  onEdit={onEdit}
-                  readOnly={readOnly}
-                  {...props}
-                />
-              </AccordionPanel>
-            )}
-          </AccordionItem>
-        </React.Fragment>
-      ))}
+            </AccordionItem>
+          </React.Fragment>
+        );
+      })}
     </Accordion>
   );
 };
