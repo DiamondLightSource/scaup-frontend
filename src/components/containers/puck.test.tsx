@@ -50,7 +50,8 @@ describe("Puck", () => {
     });
 
     fireEvent.click(screen.getByText("6"));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("6-populated");
   });
@@ -77,7 +78,8 @@ describe("Puck", () => {
     });
 
     fireEvent.click(screen.getByText("6"));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("6-populated");
   });

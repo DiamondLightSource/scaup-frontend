@@ -48,7 +48,8 @@ describe("Generic Container", () => {
     });
 
     fireEvent.click(screen.getByText(/add/i));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByText(/remove/i);
   });
@@ -66,7 +67,8 @@ describe("Generic Container", () => {
       });
 
     fireEvent.click(screen.getByText(/add/i));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByText(/remove/i);
   });

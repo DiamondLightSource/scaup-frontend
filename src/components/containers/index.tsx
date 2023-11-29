@@ -103,6 +103,24 @@ export const useChildLocationManager = ({
       }
     }
 
+    if (location !== null && currentContainer.children) {
+      const conflictingChild = currentContainer.children.find(
+        (item) => item.data.location === location,
+      );
+
+      if (conflictingChild) {
+        await Item.patch(
+          session,
+          conflictingChild.id,
+          {
+            location: null,
+            [parentKey]: null,
+          },
+          child,
+        );
+      }
+    }
+
     await Item.patch(
       session,
       childItem.id,
