@@ -1,7 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { initialState } from "@/features/shipment/shipmentSlice";
 import { steps } from "@/mappings/pages";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import ShipmentLayoutContent from "./layoutContent";
@@ -82,8 +81,9 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
-            activeItem: { ...initialState.activeItem, data: { type: "dewar" } },
+            ...testInitialState,
+            activeItem: { ...testInitialState.activeItem, data: { type: "dewar" } },
+            items: [testInitialState.activeItem],
           },
         },
       },
@@ -95,7 +95,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(finishButton);
 
-    expect(mockRouter.pathname).toBe("/edit/review");
+    expect(mockRouter.pathname).toBe("/sample/new-sample/review");
   });
 
   it("should redirect user to successful submission page after submitting", async () => {
@@ -110,7 +110,7 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
+            ...testInitialState,
             currentStep: steps.length,
           },
         },
@@ -138,8 +138,8 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
-            activeItem: { ...initialState.activeItem, data: { type: "dewar" } },
+            ...testInitialState,
+            activeItem: { ...testInitialState.activeItem, data: { type: "dewar" } },
           },
         },
       },
@@ -167,11 +167,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(screen.getByLabelText("Grid Boxes Step"));
 
-    const stepHeading = screen.getAllByRole("heading", {
-      name: /grid boxes/i,
-    });
-
-    expect(stepHeading[0]).toHaveAttribute("data-status", "active");
+    expect(mockRouter.pathname).toBe("/gridBox/new/edit");
   });
 
   it("should navigate to first subtype if current step type is overloaded with array of subtypes", () => {
@@ -187,11 +183,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(screen.getByLabelText("Containers Step"));
 
-    const stepHeading = screen.getAllByRole("heading", {
-      name: /containers/i,
-    });
-
-    expect(stepHeading[0]).toHaveAttribute("data-status", "active");
+    expect(mockRouter.pathname).toBe("/puck/new/edit");
   });
 
   it("should match current step to current path", () => {
@@ -206,9 +198,9 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
+            ...testInitialState,
             items: [],
-            activeItem: { ...initialState.activeItem, data: { type: "dewar" } },
+            activeItem: { ...testInitialState.activeItem, data: { type: "dewar" } },
           },
         },
       },
@@ -232,15 +224,11 @@ describe("Shipment Layout", () => {
       </ShipmentLayoutContent>,
     );
 
-    const stepHeading = screen.getAllByRole("heading", {
-      name: /dewars/i,
-    });
-
-    expect(stepHeading[0]).toHaveAttribute("data-status", "incomplete");
+    expect(mockRouter.pathname).toBe("/puck/new/edit");
 
     fireEvent.click(screen.getByLabelText(/view/i));
 
-    expect(stepHeading[0]).toHaveAttribute("data-status", "active");
+    expect(mockRouter.pathname).toBe("/dewar/dewar-1/edit");
   });
 
   it("should remove item from overview if remove clicked", async () => {
@@ -281,7 +269,7 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
+            ...testInitialState,
             currentStep: 5,
           },
         },
@@ -309,7 +297,7 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
+            ...testInitialState,
             currentStep: 5,
           },
         },
@@ -325,7 +313,7 @@ describe("Shipment Layout", () => {
     expect(store.getState().shipment.currentStep).toBe(0);
   });
 
-  it("should move to next step if continue clicked", () => {
+  it("should move to next step if continue clicked", async () => {
     const { store } = renderWithProviders(
       <ShipmentLayoutContent
         shipmentData={defaultShipmentItems}
@@ -342,7 +330,7 @@ describe("Shipment Layout", () => {
 
     fireEvent.click(editButton);
 
-    expect(store.getState().shipment.currentStep).toBe(1);
+    expect(mockRouter.pathname).toBe("/gridBox/new/edit");
   });
 
   it("should render unassigned items provided by prop", () => {
@@ -377,8 +365,8 @@ describe("Shipment Layout", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
-            activeItem: { ...initialState.activeItem, data: { type: "dewar" } },
+            ...testInitialState,
+            activeItem: { ...testInitialState.activeItem, data: { type: "dewar" } },
           },
         },
       },

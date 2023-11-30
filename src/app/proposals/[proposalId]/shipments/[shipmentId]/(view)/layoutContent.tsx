@@ -7,8 +7,6 @@ import {
   selectItems,
   selectStep,
   selectUnassigned,
-  setActiveItem,
-  setNewActiveItem,
   setShipment,
   setStep,
   setUnassigned,
@@ -45,7 +43,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 export interface ShipmentParams {
   proposalId: string;
   shipmentId: string;
@@ -67,6 +64,12 @@ const ShipmentsLayoutContent = ({
 }: ShipmentsLayoutProps) => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
+  const router = useRouter();
+
+  const activeItem = useSelector(selectActiveItem);
+  const shipment = useSelector(selectItems);
+  const unassigned = useSelector(selectUnassigned);
+  const activeStep = useSelector(selectStep);
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
@@ -82,18 +85,14 @@ const ShipmentsLayoutContent = ({
     }
   }, [unassignedItems, dispatch]);
 
-  const router = useRouter();
-  const activeItem = useSelector(selectActiveItem);
-  const shipment = useSelector(selectItems);
-  const unassigned = useSelector(selectUnassigned);
-  const activeStep = useSelector(selectStep);
-
   useEffect(() => {
     if (activeStep >= steps.length) {
       return;
     }
 
-    dispatch(setStep(getCurrentStepIndex(activeItem.data.type)));
+    if (activeItem) {
+      dispatch(setStep(getCurrentStepIndex(activeItem.data.type)));
+    }
   }, [activeItem, dispatch, activeStep]);
 
   /** Set empty active item with selected type */
@@ -108,40 +107,43 @@ const ShipmentsLayoutContent = ({
         Array.isArray(currentStep.id) ? currentStep.id[0] : currentStep.id
       ) as BaseShipmentItem["type"];
 
-      dispatch(setNewActiveItem({ type: newType, title: currentStep.title }));
+      router.push(`../../${newType}/new/edit`);
     },
-    [dispatch, activeStep],
+    [router, activeStep],
   );
 
   /** Set new active item */
   const handleActiveChanged = useCallback(
     (item: TreeData<BaseShipmentItem>) => {
-      dispatch(setActiveItem({ item, isEdit: true }));
+      console.log(activeStep);
+      router.push(
+        `../../${item.data.type}/${item.id}/${activeStep === steps.length ? "review" : "edit"}`,
+      );
     },
-    [dispatch],
+    [router, activeStep],
   );
 
   const handleEdit = useCallback(() => {
     dispatch(setStep(0));
-    router.back();
-  }, [router, dispatch]);
+    router.push(`../../${activeItem!.data.type}/${activeItem!.id}/edit`);
+  }, [router, activeItem, dispatch]);
 
   /** Move to next shipment step */
   const handleContinue = useCallback(async () => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else if (activeStep + 1 === steps.length) {
-      router.push("edit/review");
+      router.push(`../../${shipment[0].data.type}/${shipment[0].id}/review`);
     } else {
       const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
         method: "POST",
       });
 
       if (response && response.status === 200) {
-        router.push("../submitted");
+        router.push("../../submitted");
       }
     }
-  }, [handleSetStep, activeStep, router, params, session]);
+  }, [handleSetStep, activeStep, router, params, session, shipment]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(
@@ -211,6 +213,7 @@ const ShipmentsLayoutContent = ({
       <Divider mb='10px' />
       <HStack alignItems='stretch' flex='1 0 0' w='100%' gap='2em' pb='20px'>
         {children}
+
         <VStack spacing='0' alignItems='start' w='45%'>
           <ShipmentOverview
             readOnly={activeStep >= steps.length}

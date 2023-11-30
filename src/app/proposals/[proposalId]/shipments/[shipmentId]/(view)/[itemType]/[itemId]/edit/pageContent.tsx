@@ -5,7 +5,6 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
-  setNewActiveItem,
   syncActiveItem,
   updateShipment,
   updateUnassigned,
@@ -20,8 +19,9 @@ import {
 import { AppDispatch } from "@/store";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
-import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,18 +31,17 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
-  const activeStep = useMemo(() => steps[getCurrentStepIndex(activeItem.data.type)], [activeItem]);
+  const activeStep = useMemo(
+    () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
+    [activeItem],
+  );
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
-  const [formType, setFormType] = useState(activeItem.data.type);
-
-  useEffect(() => {
-    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
-  }, [formContext, activeItem, activeIsEdit]);
+  const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
-    if (!activeIsEdit) {
+    if (!activeIsEdit && activeItem) {
       const values: TreeData<BaseShipmentItem> = {
         ...activeItem,
         data: { type: activeItem.data.type, ...info },
@@ -68,7 +67,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     } else {
       Item.patch(
         session,
-        activeItem.id,
+        activeItem!.id,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       ).then(() => {
@@ -77,10 +76,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       });
     }
   });
-
-  const handleNewItem = useCallback(() => {
-    dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
-  }, [dispatch, activeStep, activeItem]);
 
   /*
    * Should we perform a cascade delete, and delete the entire chain of children for the current object?
@@ -107,56 +102,50 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);*/
 
   useEffect(() => {
-    setFormType(activeItem.data.type);
+    if (activeItem) {
+      setFormType(activeItem.data.type);
+    }
   }, [activeItem]);
 
   const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
     setFormType(formValues.type);
   }, []);
 
+  if (!activeItem) {
+    return null;
+  }
+
   return (
-    <VStack alignItems='stretch' w='65%'>
-      <VStack spacing='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {activeStep.singular}
-        </Heading>
-        <HStack w='100%'>
-          <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
+    <FormProvider {...formContext}>
+      <form
+        onSubmit={onSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          flex: "1 0 auto",
+        }}
+      >
+        <HStack py='3' flex='1 0 auto' alignItems='start'>
+          <Box flex='1 0 auto'>
+            <DynamicForm
+              onWatchedUpdated={handleWatchedUpdated}
+              formType={formType}
+              defaultValues={activeItem.data}
+              prepopData={prepopData}
+            />
+          </Box>
+          <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
+        </HStack>
+        <HStack p='0.5em' bg='gray.200'>
           <Spacer />
-          <Button isDisabled={!activeIsEdit} onClick={handleNewItem}>
+          <Button as={Link} href='new' isDisabled={!activeIsEdit}>
             New Item
           </Button>
+          <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
         </HStack>
-        <Divider borderColor='gray.800' />
-      </VStack>
-      <FormProvider {...formContext}>
-        <form
-          onSubmit={onSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            flex: "1 0 auto",
-          }}
-        >
-          <HStack py='3' flex='1 0 auto' alignItems='start'>
-            <Box flex='1 0 auto'>
-              <DynamicForm
-                onWatchedUpdated={handleWatchedUpdated}
-                formType={formType}
-                defaultValues={activeItem.data}
-                prepopData={prepopData}
-              />
-            </Box>
-            <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
-          </HStack>
-          <HStack p='0.5em' bg='gray.200'>
-            <Spacer />
-            <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
-          </HStack>
-        </form>
-      </FormProvider>
-    </VStack>
+      </form>
+    </FormProvider>
   );
 };
 

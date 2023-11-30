@@ -1,21 +1,13 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BasePage, BaseShipmentItem } from "@/mappings/pages";
 import { UnassignedItemResponse } from "@/types/server";
-import { authenticatedFetch } from "@/utils/client";
+import { getShipmentData } from "@/utils/client/shipment";
 import ShipmentsLayoutContent, { ShipmentParams } from "./layoutContent";
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
   params: ShipmentParams;
 }
-
-const getShipmentData = async (
-  shipmentId: string,
-  suffix: string = "",
-): Promise<Record<string, any> | null> => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}${suffix}`);
-  return res && res.status === 200 ? await res.json() : null;
-};
 
 const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
   // TODO: add type

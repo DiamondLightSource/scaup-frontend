@@ -18,8 +18,8 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
 
   const items = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
     const newItems = Array(16).fill(null);
-    if (currentGridBox.children) {
-      for (const innerSample of currentGridBox.children) {
+    if (currentGridBox!.children) {
+      for (const innerSample of currentGridBox!.children) {
         newItems[innerSample.data.location] = innerSample;
       }
     }
@@ -33,7 +33,7 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox.id, sample, currentPosition);
+      setLocation(currentGridBox!.id, sample, currentPosition);
     },
     [currentGridBox, currentPosition, setLocation],
   );

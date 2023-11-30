@@ -103,7 +103,7 @@ const ShipmentOverview = ({
           data={data}
           onRemove={handleUnassign}
           onEdit={onActiveChanged}
-          selectedItem={activeItem}
+          selectedItem={activeItem ?? undefined}
         />
       </Box>
       <TreeView
@@ -113,7 +113,7 @@ const ShipmentOverview = ({
         data={unassigned}
         onEdit={onActiveChanged}
         onRemove={handleDelete}
-        selectedItem={activeItem}
+        selectedItem={activeItem ?? undefined}
       />
     </>
   );

@@ -52,7 +52,7 @@ export interface ShipmentState {
   /** Shipment items (assigned) */
   items: TreeData<BaseShipmentItem>[];
   /** Active item (item being edited, for example) */
-  activeItem: TreeData<BaseShipmentItem>;
+  activeItem: TreeData<BaseShipmentItem> | null;
   /** Unassigned items */
   unassigned: TreeData[];
   /** Whether or not active item is an existing item being edited or a new item */
@@ -96,15 +96,9 @@ export const defaultUnassigned = [
   },
 ] satisfies TreeData[];
 
-const defaultActive = {
-  name: "New Sample",
-  id: "new-sample",
-  data: { type: "sample" },
-} as TreeData<BaseShipmentItem>;
-
 export const initialState: ShipmentState = {
   items: [],
-  activeItem: defaultActive,
+  activeItem: null, //defaultActive,
   unassigned: defaultUnassigned,
   isEdit: false,
   currentStep: 0,
@@ -187,8 +181,8 @@ export const shipmentSlice = createSlice({
         { id?: number | string | undefined; type?: BaseShipmentItem["type"] } | undefined
       >,
     ) => {
-      let actualId = state.activeItem.id;
-      let actualType = state.activeItem.data.type;
+      let actualId = state.activeItem ? state.activeItem.id : 0;
+      let actualType = state.activeItem ? state.activeItem.data.type : "sample";
       let activeItemExists = false;
 
       if (action.payload) {

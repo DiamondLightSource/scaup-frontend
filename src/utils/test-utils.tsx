@@ -19,10 +19,15 @@ export const defaultActiveItem = {
   data: { type: "sample" },
 } as TreeData<BaseShipmentItem>;
 
+export const testInitialState = {
+  ...initialState,
+  activeItem: defaultActiveItem,
+};
+
 export const renderWithProviders = (
   ui: React.ReactElement,
   {
-    preloadedState = { shipment: { ...initialState, items: [] } },
+    preloadedState = { shipment: { ...testInitialState, items: [] } },
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) => {
@@ -52,7 +57,7 @@ export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOpt
 export const renderWithFormAndStore = (
   ui: React.ReactElement<BaseContainerProps>,
   {
-    preloadedState = { shipment: { ...initialState, items: [] } },
+    preloadedState = { shipment: { ...testInitialState, items: [] } },
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) => {
@@ -73,7 +78,7 @@ export const renderWithFormAndStore = (
 export const renderAndInjectForm = (
   ui: React.ReactElement<BaseContainerProps>,
   {
-    preloadedState = { shipment: { ...initialState, items: [] } },
+    preloadedState = { shipment: { ...testInitialState, items: [] } },
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) => {

@@ -1,9 +1,8 @@
 import ShipmentOverview from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
-import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, puck, renderWithProviders } from "@/utils/test-utils";
+import { gridBox, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
@@ -16,7 +15,7 @@ const defaultShipment = [
   },
 ] satisfies TreeData<BaseShipmentItem>[];
 
-const defaultUnassigned = structuredClone(initialState.unassigned);
+const defaultUnassigned = structuredClone(testInitialState.unassigned);
 
 defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck);
 
@@ -25,7 +24,7 @@ describe("Shipment Overview", () => {
     renderWithProviders(
       <ShipmentOverview shipmentId='1' onActiveChanged={() => {}} proposal='' />,
       {
-        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+        preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
       },
     );
 
@@ -60,7 +59,7 @@ describe("Shipment Overview", () => {
     renderWithProviders(
       <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
       {
-        preloadedState: { shipment: { ...initialState, items: defaultShipment } },
+        preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
       },
     );
 
@@ -79,7 +78,7 @@ describe("Shipment Overview", () => {
       <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
       {
         preloadedState: {
-          shipment: { ...initialState, items: [{ ...defaultShipment[0], children: [] }] },
+          shipment: { ...testInitialState, items: [{ ...defaultShipment[0], children: [] }] },
         },
       },
     );
@@ -97,7 +96,7 @@ describe("Shipment Overview", () => {
       {
         preloadedState: {
           shipment: {
-            ...initialState,
+            ...testInitialState,
             unassigned: defaultUnassigned,
             activeItem: puck,
             isEdit: true,
@@ -139,7 +138,7 @@ describe("Shipment Overview", () => {
       <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
       {
         preloadedState: {
-          shipment: { ...initialState, unassigned: unassignedWithAssignedItem },
+          shipment: { ...testInitialState, unassigned: unassignedWithAssignedItem },
         },
       },
     );
@@ -170,7 +169,7 @@ describe("Shipment Overview", () => {
       <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
       {
         preloadedState: {
-          shipment: { ...initialState, unassigned: defaultUnassigned },
+          shipment: { ...testInitialState, unassigned: defaultUnassigned },
         },
       },
     );

@@ -32,6 +32,10 @@ export const DynamicForm = ({
 
     const form = structuredClone(formMapping[formType]);
 
+    if (!form) {
+      return [];
+    }
+
     for (const field of form) {
       if (field.values && !Array.isArray(field.values)) {
         let fieldValues: DynamicFormEntry["values"] = [];

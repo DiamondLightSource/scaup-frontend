@@ -1,8 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { puck, renderWithProviders } from "@/utils/test-utils";
+import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ItemFormPageContent from "./pageContent";
@@ -83,7 +82,7 @@ describe("Item Page", () => {
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           items: [],
           activeItem: newDewar,
         },
@@ -121,7 +120,7 @@ describe("Item Page", () => {
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           items: [],
         },
       },
@@ -159,7 +158,7 @@ describe("Item Page", () => {
     const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           items: [{ id: "456", name: "", data: { type: "sample" } }],
           activeItem: { id: "456", name: "", data: { type: "sample" } },
           isEdit: true,
@@ -182,7 +181,7 @@ describe("Item Page", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           activeItem: puck,
         },
       },
@@ -215,7 +214,7 @@ describe("Item Page", () => {
     fireEvent.click(screen.getByText(/add/i));
     await screen.findByText(/save/i);
 
-    await waitFor(() => store.getState().shipment.activeItem.data.name === "New Name");
+    await waitFor(() => store.getState().shipment.activeItem!.data.name === "New Name");
 
     await waitFor(() =>
       expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(1),
