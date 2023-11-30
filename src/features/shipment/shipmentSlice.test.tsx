@@ -110,10 +110,9 @@ describe("Shipment Unassigned Items Reducers", () => {
           ...testInitialState,
           activeItem: oldItem,
           isEdit: true,
-        } as typeof testInitialState;
+        } as typeof initialState;
 
         expect(reducer(previousState, syncActiveItem())).toMatchObject({
-          activeItem: oldItem,
           isEdit: false,
         });
       });
@@ -122,12 +121,30 @@ describe("Shipment Unassigned Items Reducers", () => {
         const previousState = {
           ...testInitialState,
           isEdit: true,
-        } as typeof testInitialState;
+        } as typeof initialState;
 
         expect(
           reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
         ).toMatchObject({
           isEdit: false,
+        });
+      });
+
+      it("should use blank item if existence check fails and current active item is null", async () => {
+        const previousState = {
+          ...testInitialState,
+          activeItem: null,
+        } as typeof initialState;
+
+        expect(
+          reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
+        ).toMatchObject({
+          isEdit: false,
+          activeItem: {
+            data: { type: "puck" },
+            id: "new-puck",
+            name: "New puck",
+          },
         });
       });
     });

@@ -8,7 +8,7 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { Divider, HStack, Heading, Spacer, VStack } from "@chakra-ui/react";
+import { Divider, HStack, Heading, Skeleton, Spacer, VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,13 +42,18 @@ const ItemLayoutContent = ({ itemType, itemId, children }: ItemLayoutContentProp
       if (itemId !== "new") {
         dispatch(syncActiveItem({ id: Number(itemId), type: itemType }));
       } else {
-        dispatch(setNewActiveItem({ type: itemType, title: "lol" }));
+        dispatch(setNewActiveItem({ type: itemType, title: itemType }));
       }
     }
   }, [itemId, itemType, dispatch, shipment]);
 
   if (!activeItem) {
-    return null;
+    return (
+      <VStack alignItems='stretch' w='65%'>
+        <Skeleton h='4em' />
+        <Skeleton flex='1 0 0' />
+      </VStack>
+    );
   }
 
   return (

@@ -111,9 +111,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     setFormType(formValues.type);
   }, []);
 
-  if (!activeItem) {
-    return null;
-  }
+  // This does not get rendered if there is no active item, so it's safe to assume it's not null
 
   return (
     <FormProvider {...formContext}>
@@ -131,7 +129,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
             <DynamicForm
               onWatchedUpdated={handleWatchedUpdated}
               formType={formType}
-              defaultValues={activeItem.data}
+              defaultValues={activeItem!.data}
               prepopData={prepopData}
             />
           </Box>
@@ -139,7 +137,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         </HStack>
         <HStack p='0.5em' bg='gray.200'>
           <Spacer />
-          <Button as={Link} href='new' isDisabled={!activeIsEdit}>
+          <Button as={Link} href='../new/edit' isDisabled={!activeIsEdit}>
             New Item
           </Button>
           <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>

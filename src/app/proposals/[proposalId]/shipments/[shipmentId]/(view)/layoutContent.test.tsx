@@ -314,7 +314,7 @@ describe("Shipment Layout", () => {
   });
 
   it("should move to next step if continue clicked", async () => {
-    const { store } = renderWithProviders(
+    renderWithProviders(
       <ShipmentLayoutContent
         shipmentData={defaultShipmentItems}
         unassignedItems={baseUnassigned}
@@ -334,7 +334,7 @@ describe("Shipment Layout", () => {
   });
 
   it("should render unassigned items provided by prop", () => {
-    const { store } = renderWithProviders(
+    renderWithProviders(
       <ShipmentLayoutContent
         shipmentData={defaultShipmentItems}
         unassignedItems={{

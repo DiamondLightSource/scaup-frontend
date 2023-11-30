@@ -1,6 +1,7 @@
 import { steps } from "@/mappings/pages";
 import { renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
+import mockRouter from "next-router-mock";
 import { default as ReviewPageContent } from "./pageContent";
 
 describe("Review Page", () => {
@@ -45,5 +46,30 @@ describe("Review Page", () => {
     );
 
     expect(screen.getByText(/john doe/i)).toBeInTheDocument();
+  });
+
+  it("should redirect user to default shipment item if active item does not exist", () => {
+    renderWithProviders(
+      <ReviewPageContent
+        shipmentId='1'
+        prepopData={{ labContacts: [{ cardName: "John Doe", labContactId: 1 }] }}
+      />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            activeItem: {
+              id: "doesnotexist",
+              name: "doesnotexist",
+              data: { type: "dewar" },
+            },
+            isEdit: false,
+            items: [{ data: { type: "dewar" }, id: 5, name: "dewar" }],
+          },
+        },
+      },
+    );
+
+    expect(mockRouter.pathname).toBe("/dewar/5/review");
   });
 });

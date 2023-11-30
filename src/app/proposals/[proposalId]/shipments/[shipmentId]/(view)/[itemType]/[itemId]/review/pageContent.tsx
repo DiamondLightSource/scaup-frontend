@@ -4,6 +4,7 @@ import { Container } from "@/components/containers";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import {
   selectActiveItem,
+  selectIsEdit,
   selectItems,
   setActiveItem,
   setStep,
@@ -11,20 +12,27 @@ import {
 import { steps } from "@/mappings/pages";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Alert, AlertDescription, AlertIcon, Box, Skeleton, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const items = useSelector(selectItems);
+  const isEdit = useSelector(selectIsEdit);
   const activeItem = useSelector(selectActiveItem);
 
   useEffect(() => {
-    if (items.length > 0) {
-      dispatch(setActiveItem({ item: items![0], isEdit: true }));
+    console.log(isEdit, activeItem);
+    if (!isEdit && activeItem && items.length > 0) {
+      // If current active item does not exist
+      const newItem = items[0];
+      dispatch(setActiveItem({ item: newItem, isEdit: true }));
+      router.replace(`../../${newItem.data.type}/${newItem.id}/review`);
     }
     dispatch(setStep(steps.length));
-  }, [dispatch, items]);
+  }, [dispatch, items, router, activeItem, isEdit]);
 
   return (
     <VStack h='100%' w='100%'>

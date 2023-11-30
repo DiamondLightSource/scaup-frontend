@@ -207,6 +207,16 @@ export const shipmentSlice = createSlice({
       );
 
       state.isEdit = activeItemExists;
+
+      if (!activeItemExists) {
+        state.activeItem = {
+          id: `new-${actualType}`,
+          name: `New ${actualType}`,
+          data: {
+            type: actualType,
+          },
+        };
+      }
     },
     setStep: (state, action: PayloadAction<number>) => {
       state.currentStep = action.payload;
