@@ -109,6 +109,15 @@ describe("Shipment Overview", () => {
     await waitFor(() => expect(store.getState().shipment.isEdit).toBe(false));
   });
 
+  it("should not render body if shipment data is null", async () => {
+    const { store } = renderWithProviders(
+      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      { preloadedState: { shipment: { ...testInitialState, items: null } } },
+    );
+
+    expect(screen.queryByText(/unassigned/i)).not.toBeInTheDocument();
+  });
+
   it("should unassign item if assigned to unassigned item", async () => {
     let unassignedWithAssignedItem = structuredClone(defaultUnassigned);
 

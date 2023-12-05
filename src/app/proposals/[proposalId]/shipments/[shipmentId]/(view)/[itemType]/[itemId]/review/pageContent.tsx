@@ -24,8 +24,7 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
   const activeItem = useSelector(selectActiveItem);
 
   useEffect(() => {
-    console.log(isEdit, activeItem);
-    if (!isEdit && activeItem && items.length > 0) {
+    if (!isEdit && activeItem && items && items.length > 0) {
       // If current active item does not exist
       const newItem = items[0];
       dispatch(setActiveItem({ item: newItem, isEdit: true }));

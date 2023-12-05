@@ -2,7 +2,6 @@
 import {
   selectActiveItem,
   selectIsEdit,
-  selectItems,
   setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
@@ -10,7 +9,6 @@ import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Divider, HStack, Heading, Skeleton, Spacer, VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemLayoutContentProps {
@@ -21,7 +19,6 @@ export interface ItemLayoutContentProps {
 
 const ItemLayoutContent = ({ itemType, itemId, children }: ItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const shipment = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
@@ -29,29 +26,21 @@ const ItemLayoutContent = ({ itemType, itemId, children }: ItemLayoutContentProp
   );
 
   const activeIsEdit = useSelector(selectIsEdit);
-  const formContext = useForm<BaseShipmentItem>();
 
   useEffect(() => {
-    if (activeItem) {
-      formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
+    if (itemId !== "new") {
+      dispatch(syncActiveItem({ id: Number(itemId), type: itemType }));
+    } else {
+      dispatch(setNewActiveItem({ type: itemType, title: itemType }));
     }
-  }, [formContext, activeItem, activeIsEdit]);
-
-  useEffect(() => {
-    if (shipment.length > 0) {
-      if (itemId !== "new") {
-        dispatch(syncActiveItem({ id: Number(itemId), type: itemType }));
-      } else {
-        dispatch(setNewActiveItem({ type: itemType, title: itemType }));
-      }
-    }
-  }, [itemId, itemType, dispatch, shipment]);
+  }, [itemId, itemType, dispatch]);
 
   if (!activeItem) {
     return (
       <VStack alignItems='stretch' w='65%'>
         <Skeleton h='4em' />
         <Skeleton flex='1 0 0' />
+        <Skeleton h='3.5em' />
       </VStack>
     );
   }

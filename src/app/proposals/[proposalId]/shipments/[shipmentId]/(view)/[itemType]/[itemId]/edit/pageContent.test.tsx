@@ -4,6 +4,7 @@ import { server } from "@/mocks/server";
 import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
+import mockRouter from "next-router-mock";
 import ItemFormPageContent from "./pageContent";
 
 const unassignedSampleApiReturn = {
@@ -18,32 +19,6 @@ const unassignedSampleApiReturn = {
 
 describe("Item Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
-  it("should add item to unassigned if in creation mode", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId/unassigned",
-        () => HttpResponse.json(unassignedSampleApiReturn),
-        { once: true },
-      ),
-    );
-
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
-
-    fireEvent.click(screen.getByText(/add/i));
-
-    await screen.findByText(/save/i);
-
-    const unassignedSamples = store.getState().shipment.unassigned[0].children![0].children;
-
-    expect(unassignedSamples!).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          data: expect.objectContaining({ film: "Holey carbon", foil: "Quantifoil copper" }),
-        }),
-      ]),
-    );
-  });
-
   it("should render form", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
@@ -198,26 +173,39 @@ describe("Item Page", () => {
 
   it("should update active item if new item is added", async () => {
     server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId/unassigned",
-        () => HttpResponse.json(unassignedSampleApiReturn),
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/samples",
+        () => HttpResponse.json({ id: 456 }, { status: 201 }),
         { once: true },
       ),
     );
 
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
       target: { value: "New Name" },
     });
 
     fireEvent.click(screen.getByText(/add/i));
-    await screen.findByText(/save/i);
+    await waitFor(() => expect(mockRouter.pathname).toBe("/456/edit"));
+  });
 
-    await waitFor(() => store.getState().shipment.activeItem!.data.name === "New Name");
+  it("should go to new item page if 'new item' clicked", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          isEdit: true,
+        },
+      },
+    });
 
-    await waitFor(() =>
-      expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(1),
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /create new item/i,
+      }),
     );
+    screen.logTestingPlaygroundURL();
+    await waitFor(() => expect(mockRouter.pathname).toBe("/new/edit"));
   });
 });

@@ -81,7 +81,7 @@ export const TreeView = ({
 
   // Whenever comparing items in the list, I actually want to compare by reference, not by value.
   return (
-    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2]}>
+    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2, 3]}>
       {data.map((item, index) => {
         const isSelected = item === selectedItem;
         return (

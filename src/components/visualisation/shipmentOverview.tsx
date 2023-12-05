@@ -10,7 +10,7 @@ import {
 import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Divider, Heading, Skeleton } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,25 +96,31 @@ const ShipmentOverview = ({
       </Heading>
       <Heading>Overview</Heading>
       <Divider borderColor='gray.800' />
-      <Box w='100%' flex='1 0 auto' mt='10px' mb='20px'>
-        <TreeView
-          readOnly={readOnly}
-          flexGrow='1'
-          data={data}
-          onRemove={handleUnassign}
-          onEdit={onActiveChanged}
-          selectedItem={activeItem ?? undefined}
-        />
-      </Box>
-      <TreeView
-        readOnly={readOnly}
-        mb='10px'
-        w='100%'
-        data={unassigned}
-        onEdit={onActiveChanged}
-        onRemove={handleDelete}
-        selectedItem={activeItem ?? undefined}
-      />
+      {data === null ? (
+        <Skeleton flex='1 0 auto' w='100%' mt='10px' mb='20px' />
+      ) : (
+        <>
+          <Box w='100%' flex='1 0 auto' mt='10px' mb='20px'>
+            <TreeView
+              readOnly={readOnly}
+              flexGrow='1'
+              data={data}
+              onRemove={handleUnassign}
+              onEdit={onActiveChanged}
+              selectedItem={activeItem ?? undefined}
+            />
+          </Box>
+          <TreeView
+            readOnly={readOnly}
+            mb='10px'
+            w='100%'
+            data={unassigned}
+            onEdit={onActiveChanged}
+            onRemove={handleDelete}
+            selectedItem={activeItem ?? undefined}
+          />
+        </>
+      )}
     </>
   );
 };

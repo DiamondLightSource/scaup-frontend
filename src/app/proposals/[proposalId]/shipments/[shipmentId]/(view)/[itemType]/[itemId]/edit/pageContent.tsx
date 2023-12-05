@@ -5,7 +5,6 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
-  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -21,7 +20,7 @@ import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { Box, Button, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,10 +34,17 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
     [activeItem],
   );
+  const router = useRouter();
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
+
+  useEffect(() => {
+    if (activeItem) {
+      formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
+    }
+  }, [formContext, activeItem, activeIsEdit]);
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
@@ -47,33 +53,33 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      Item.create(
+      const newItem = await Item.create(
         session,
         shipmentId,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
-      ).then(async (newItem) => {
-        values.id = newItem.id;
-        values.name = newItem.name;
+      );
 
-        if (checkIsRoot(values)) {
-          await dispatch(updateShipment({ session, shipmentId }));
-        } else {
-          await dispatch(updateUnassigned({ session, shipmentId }));
-        }
+      values.id = newItem.id;
+      values.name = newItem.name;
 
-        dispatch(syncActiveItem({ id: newItem.id }));
-      });
+      if (checkIsRoot(values)) {
+        await dispatch(updateShipment({ session, shipmentId }));
+      } else {
+        await dispatch(updateUnassigned({ session, shipmentId }));
+      }
+
+      toast({ title: "Successfully created item!" });
+      router.replace(`../${newItem.id}/edit`);
     } else {
-      Item.patch(
+      await Item.patch(
         session,
         activeItem!.id,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
-      ).then(() => {
-        dispatch(updateShipment({ session, shipmentId }));
-        toast({ title: "Successfully saved item!" });
-      });
+      );
+      dispatch(updateShipment({ session, shipmentId }));
+      toast({ title: "Successfully saved item!" });
     }
   });
 
@@ -111,6 +117,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     setFormType(formValues.type);
   }, []);
 
+  const redirectToNew = useCallback(() => {
+    router.replace("../new/edit");
+  }, [router]);
+
   // This does not get rendered if there is no active item, so it's safe to assume it's not null
 
   return (
@@ -137,8 +147,8 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         </HStack>
         <HStack p='0.5em' bg='gray.200'>
           <Spacer />
-          <Button as={Link} href='../new/edit' isDisabled={!activeIsEdit}>
-            New Item
+          <Button onClick={redirectToNew} isDisabled={!activeIsEdit}>
+            Create New Item
           </Button>
           <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
         </HStack>

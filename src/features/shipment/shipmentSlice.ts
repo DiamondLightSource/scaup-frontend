@@ -50,7 +50,7 @@ export const updateUnassigned = createAsyncThunk(
 
 export interface ShipmentState {
   /** Shipment items (assigned) */
-  items: TreeData<BaseShipmentItem>[];
+  items: TreeData<BaseShipmentItem>[] | null;
   /** Active item (item being edited, for example) */
   activeItem: TreeData<BaseShipmentItem> | null;
   /** Unassigned items */
@@ -97,8 +97,8 @@ export const defaultUnassigned = [
 ] satisfies TreeData[];
 
 export const initialState: ShipmentState = {
-  items: [],
-  activeItem: null, //defaultActive,
+  items: null,
+  activeItem: null,
   unassigned: defaultUnassigned,
   isEdit: false,
   currentStep: 0,
@@ -195,16 +195,18 @@ export const shipmentSlice = createSlice({
         }
       }
 
-      recursiveFind(
-        // Merge unassigned and assigned items, since our item could be in both
-        [...current(state.items), ...current(state.unassigned)],
-        actualId,
-        actualType,
-        (item) => {
-          state.activeItem = item;
-          activeItemExists = true;
-        },
-      );
+      if (state.items !== null) {
+        recursiveFind(
+          // Merge unassigned and assigned items, since our item could be in both
+          [...current(state.items), ...current(state.unassigned)],
+          actualId,
+          actualType,
+          (item) => {
+            state.activeItem = item;
+            activeItemExists = true;
+          },
+        );
+      }
 
       state.isEdit = activeItemExists;
 

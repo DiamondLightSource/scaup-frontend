@@ -21,6 +21,7 @@ export const defaultActiveItem = {
 
 export const testInitialState = {
   ...initialState,
+  items: [],
   activeItem: defaultActiveItem,
 };
 

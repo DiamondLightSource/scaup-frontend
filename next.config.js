@@ -13,6 +13,11 @@ const nextConfig = {
         destination: "/proposals/:proposalId/shipments/:shipmentId/sample/new/edit",
         permanent: true,
       },
+      {
+        source: "/proposals/:proposalId/shipments/:shipmentId/review",
+        destination: "/proposals/:proposalId/shipments/:shipmentId/sample/new/review",
+        permanent: true,
+      },
     ];
   },
 };

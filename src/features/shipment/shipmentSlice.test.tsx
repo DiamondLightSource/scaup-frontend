@@ -147,6 +147,24 @@ describe("Shipment Unassigned Items Reducers", () => {
           },
         });
       });
+
+      it("should use blank item if current shipment is null", async () => {
+        const previousState = {
+          ...testInitialState,
+          items: null,
+        } as typeof initialState;
+
+        expect(
+          reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
+        ).toMatchObject({
+          isEdit: false,
+          activeItem: {
+            data: { type: "puck" },
+            id: "new-puck",
+            name: "New puck",
+          },
+        });
+      });
     });
 
     describe("Shipment Async Thunks", () => {

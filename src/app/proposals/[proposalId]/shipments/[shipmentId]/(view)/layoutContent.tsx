@@ -38,6 +38,7 @@ import {
   Stepper,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -70,6 +71,7 @@ const ShipmentsLayoutContent = ({
   const shipment = useSelector(selectItems);
   const unassigned = useSelector(selectUnassigned);
   const activeStep = useSelector(selectStep);
+  const toast = useToast();
 
   useEffect(() => {
     if (shipmentData && shipmentData.children) {
@@ -115,7 +117,6 @@ const ShipmentsLayoutContent = ({
   /** Set new active item */
   const handleActiveChanged = useCallback(
     (item: TreeData<BaseShipmentItem>) => {
-      console.log(activeStep);
       router.push(
         `../../${item.data.type}/${item.id}/${activeStep === steps.length ? "review" : "edit"}`,
       );
@@ -133,7 +134,7 @@ const ShipmentsLayoutContent = ({
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else if (activeStep + 1 === steps.length) {
-      router.push(`../../${shipment[0].data.type}/${shipment[0].id}/review`);
+      router.push(`../../${shipment![0].data.type}/${shipment![0].id}/review`);
     } else {
       const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
         method: "POST",
@@ -181,8 +182,10 @@ const ShipmentsLayoutContent = ({
   }, [shipment, unassigned]);
 
   const cannotFinish = useMemo(
-    () => activeStep >= steps.length - 1 && typeCount.some((count) => count.unassigned > 0),
-    [activeStep, typeCount],
+    () =>
+      activeStep >= steps.length - 1 &&
+      (typeCount.some((count) => count.unassigned > 0) || shipment === null),
+    [activeStep, typeCount, shipment],
   );
 
   return (
