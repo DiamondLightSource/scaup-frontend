@@ -14,7 +14,6 @@ const Breadcrumbs = ({ pathname }: { pathname: string }) => {
   if (pathCrumbs.length === 0) return null;
 
   const currentPage = pathCrumbs.pop();
-  let partialPath: Array<string> = Array(pathCrumbs.length + 1).fill(".");
 
   return (
     <Breadcrumb
@@ -33,7 +32,6 @@ const Breadcrumbs = ({ pathname }: { pathname: string }) => {
         </BreadcrumbLink>
       </BreadcrumbItem>
       {pathCrumbs.map((pathname, i) => {
-        partialPath.pop();
         return (
           <BreadcrumbItem key={`${pathname}-${i}`}>
             <BreadcrumbLink href={"/" + pathCrumbs.slice(0, i + 1).join("/")}>

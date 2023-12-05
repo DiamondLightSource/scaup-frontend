@@ -21,6 +21,7 @@ export interface ShipmentHomeData {
   samples: any[];
   // TODO: type this properly
   dispatch: Record<string, any>;
+  name: string;
 }
 
 interface LinkCardProps {
@@ -58,7 +59,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
         <Heading size='md' color='gray.600'>
           Shipment
         </Heading>
-        <Heading>Shipment Name Here</Heading>
+        <Heading>{data.name}</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       <HStack w='100%' mb='1em'>

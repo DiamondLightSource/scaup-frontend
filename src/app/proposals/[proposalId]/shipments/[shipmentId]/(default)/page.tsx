@@ -17,7 +17,7 @@ const getShipmentData = async (shipmentId: string) => {
   const samples: any[] = [];
   const dispatch = { status: "Unknown" };
 
-  return { counts, samples, dispatch };
+  return { counts, samples, dispatch, name: data.name };
 };
 
 const ShipmentHome = async ({ params }: { params: { shipmentId: string; proposalId: string } }) => {

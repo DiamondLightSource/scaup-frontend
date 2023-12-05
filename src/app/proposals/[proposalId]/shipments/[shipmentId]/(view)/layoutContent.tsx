@@ -194,7 +194,7 @@ const ShipmentsLayoutContent = ({
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
             <StepIndicator
-              cursor={activeStep > steps.length ? "not-allowed" : "pointer"}
+              cursor={activeStep >= steps.length ? "not-allowed" : "pointer"}
               bg='white'
             >
               <StepStatus
