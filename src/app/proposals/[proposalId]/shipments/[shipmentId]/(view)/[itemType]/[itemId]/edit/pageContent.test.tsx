@@ -7,16 +7,6 @@ import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
 import ItemFormPageContent from "./pageContent";
 
-const unassignedSampleApiReturn = {
-  samples: [
-    {
-      name: "new-sample",
-      id: 123,
-      data: { type: "sample", film: "Holey carbon", foil: "Quantifoil copper" },
-    },
-  ],
-};
-
 describe("Item Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
   it("should render form", () => {
@@ -205,7 +195,6 @@ describe("Item Page", () => {
         name: /create new item/i,
       }),
     );
-    screen.logTestingPlaygroundURL();
     await waitFor(() => expect(mockRouter.pathname).toBe("/new/edit"));
   });
 });

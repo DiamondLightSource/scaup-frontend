@@ -1,10 +1,6 @@
-import { BasePage, BaseShipmentItem } from "@/mappings/pages";
+import { BasePage } from "@/mappings/pages";
+import { ItemParams } from "@/types/generic";
 import ShipmentsLayoutContent from "./layoutContent";
-
-export interface ItemParams {
-  itemId: string;
-  itemType: string;
-}
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
@@ -12,14 +8,7 @@ export interface ShipmentsLayoutProps {
 }
 
 const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
-  return (
-    <ShipmentsLayoutContent
-      itemId={params.itemId}
-      itemType={params.itemType as BaseShipmentItem["type"]}
-    >
-      {children}
-    </ShipmentsLayoutContent>
-  );
+  return <ShipmentsLayoutContent params={params}>{children}</ShipmentsLayoutContent>;
 };
 
 export default ShipmentsLayout;

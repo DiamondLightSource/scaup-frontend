@@ -1,8 +1,9 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BasePage, BaseShipmentItem } from "@/mappings/pages";
+import { ShipmentParams } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
 import { getShipmentData } from "@/utils/client/shipment";
-import ShipmentsLayoutContent, { ShipmentParams } from "./layoutContent";
+import ShipmentsLayoutContent from "./layoutContent";
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;

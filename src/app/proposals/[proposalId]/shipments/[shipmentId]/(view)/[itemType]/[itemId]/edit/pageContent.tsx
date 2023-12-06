@@ -5,6 +5,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
+  setIsReview,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -41,10 +42,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
 
   useEffect(() => {
+    dispatch(setIsReview(false));
     if (activeItem) {
       formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
     }
-  }, [formContext, activeItem, activeIsEdit]);
+  }, [formContext, activeItem, activeIsEdit, dispatch]);
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
@@ -132,6 +134,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           flexDirection: "column",
           width: "100%",
           flex: "1 0 auto",
+          gap: "1em",
         }}
       >
         <HStack py='3' flex='1 0 auto' alignItems='start'>
@@ -145,7 +148,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           </Box>
           <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
         </HStack>
-        <HStack p='0.5em' bg='gray.200'>
+        <HStack h='3.5em' px='1em' bg='gray.200'>
           <Spacer />
           <Button onClick={redirectToNew} isDisabled={!activeIsEdit}>
             Create New Item

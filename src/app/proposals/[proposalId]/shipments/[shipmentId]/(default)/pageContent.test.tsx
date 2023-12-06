@@ -13,11 +13,10 @@ describe("Shipment Submission Overview", () => {
           samples: [{ macromolecule: "Proteinase K", status: "Data Collected", name: "C01" }],
           counts: {},
           dispatch: {},
+          name: "",
         }}
       />,
     );
-
-    screen.debug();
 
     expect(screen.getByText(/data collected/i)).toBeInTheDocument();
   });
@@ -26,7 +25,7 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" } }}
+        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
       />,
     );
 
@@ -37,7 +36,7 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" } }}
+        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
       />,
     );
 
@@ -48,7 +47,7 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" } }}
+        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
       />,
     );
 
@@ -59,7 +58,7 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: { "Grid Box": 5 }, dispatch: {} }}
+        data={{ samples: [], counts: { "Grid Box": 5 }, dispatch: {}, name: "" }}
       />,
     );
 
