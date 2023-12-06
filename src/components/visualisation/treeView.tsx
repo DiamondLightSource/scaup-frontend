@@ -101,15 +101,15 @@ export const TreeView = ({
                     alignItems: "center",
                   }}
                 >
-                  {hasChildren(item) ? (
-                    <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                  <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                    {hasChildren(item) ? (
                       <AccordionIcon />
-                    </AccordionButton>
-                  ) : (
-                    <Text px='15px' aria-hidden='true'>
-                      ⦁
-                    </Text>
-                  )}
+                    ) : (
+                      <Text px='15px' aria-hidden='true'>
+                        ⦁
+                      </Text>
+                    )}
+                  </AccordionButton>
                   <HStack
                     alignItems='center'
                     w='100%'

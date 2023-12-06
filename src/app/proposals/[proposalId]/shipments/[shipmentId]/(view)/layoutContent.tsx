@@ -142,9 +142,11 @@ const ShipmentsLayoutContent = ({
 
       if (response && response.status === 200) {
         router.push("../../submitted");
+      } else {
+        toast({ description: "Could not update items! Please try again later", status: "error" });
       }
     }
-  }, [handleSetStep, activeStep, router, params, session, shipment]);
+  }, [handleSetStep, activeStep, router, params, session, shipment, toast]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(

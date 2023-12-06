@@ -2,6 +2,7 @@ import { DynamicFormEntry } from "@/components/input/form/input";
 import { authenticatedFetch } from "@/utils/client";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
+import { revalidateTag } from "next/cache";
 import SubmissionOverviewContent from "./pageContent";
 
 const getShipmentData = async (shipmentId: string) => {
@@ -25,6 +26,7 @@ const SubmissionOverview = async ({
 }) => {
   // TODO: add type
   const shipmentData = await getShipmentData(params.shipmentId);
+  revalidateTag(`shipments-${params.proposalId}`);
 
   return <SubmissionOverviewContent params={params} data={shipmentData} />;
 };

@@ -5,7 +5,7 @@ export const getShipmentData = async (
   suffix: string = "",
 ): Promise<Record<string, any> | null> => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}${suffix}`, {
-    next: { tags: ["shipment"] },
+    next: { tags: [`shipment-${shipmentId}`] },
   });
 
   return res && res.status === 200 ? await res.json() : null;
