@@ -7,9 +7,8 @@ import {
   selectIsEdit,
   selectItems,
   setActiveItem,
-  setStep,
+  setIsReview,
 } from "@/features/shipment/shipmentSlice";
-import { steps } from "@/mappings/pages";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Alert, AlertDescription, AlertIcon, Box, Skeleton, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -30,7 +29,7 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
       dispatch(setActiveItem({ item: newItem, isEdit: true }));
       router.replace(`../../${newItem.data.type}/${newItem.id}/review`);
     }
-    dispatch(setStep(steps.length));
+    dispatch(setIsReview(true));
   }, [dispatch, items, router, activeItem, isEdit]);
 
   return (

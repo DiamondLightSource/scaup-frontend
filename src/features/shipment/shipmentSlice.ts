@@ -57,8 +57,8 @@ export interface ShipmentState {
   unassigned: TreeData[];
   /** Whether or not active item is an existing item being edited or a new item */
   isEdit: boolean;
-  /** Current step index */
-  currentStep: number;
+  /** Current item is being reviewed */
+  isReview: boolean;
 }
 
 export const defaultUnassigned = [
@@ -101,7 +101,7 @@ export const initialState: ShipmentState = {
   activeItem: null,
   unassigned: defaultUnassigned,
   isEdit: false,
-  currentStep: 0,
+  isReview: false,
 };
 
 export const shipmentSlice = createSlice({
@@ -220,8 +220,8 @@ export const shipmentSlice = createSlice({
         };
       }
     },
-    setStep: (state, action: PayloadAction<number>) => {
-      state.currentStep = action.payload;
+    setIsReview: (state, action: PayloadAction<boolean>) => {
+      state.isReview = action.payload;
     },
   },
 });
@@ -231,13 +231,13 @@ export const {
   setUnassigned,
   setActiveItem,
   syncActiveItem,
-  setStep,
+  setIsReview,
   setNewActiveItem,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;
 export const selectActiveItem = (state: RootState) => state.shipment.activeItem;
 export const selectUnassigned = (state: RootState) => state.shipment.unassigned;
 export const selectIsEdit = (state: RootState) => state.shipment.isEdit;
-export const selectStep = (state: RootState) => state.shipment.currentStep;
+export const selectIsReview = (state: RootState) => state.shipment.isReview;
 
 export default shipmentSlice.reducer;

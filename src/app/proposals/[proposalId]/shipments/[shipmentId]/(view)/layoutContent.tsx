@@ -4,11 +4,10 @@ import ShipmentOverview from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
+  selectIsReview,
   selectItems,
-  selectStep,
   selectUnassigned,
   setShipment,
-  setStep,
   setUnassigned,
 } from "@/features/shipment/shipmentSlice";
 import {
@@ -70,7 +69,7 @@ const ShipmentsLayoutContent = ({
   const activeItem = useSelector(selectActiveItem);
   const shipment = useSelector(selectItems);
   const unassigned = useSelector(selectUnassigned);
-  const activeStep = useSelector(selectStep);
+  const isReview = useSelector(selectIsReview);
   const toast = useToast();
 
   useEffect(() => {
@@ -87,20 +86,19 @@ const ShipmentsLayoutContent = ({
     }
   }, [unassignedItems, dispatch]);
 
-  useEffect(() => {
-    if (activeStep >= steps.length) {
-      return;
+  const activeStep = useMemo(() => {
+    /* check if review */
+    if (activeItem) {
+      return getCurrentStepIndex(activeItem.data.type);
     }
 
-    if (activeItem) {
-      dispatch(setStep(getCurrentStepIndex(activeItem.data.type)));
-    }
-  }, [activeItem, dispatch, activeStep]);
+    return 0;
+  }, [activeItem]);
 
   /** Set empty active item with selected type */
   const handleSetStep = useCallback(
     (step: number) => {
-      if (step >= steps.length || activeStep >= steps.length) {
+      if (step >= steps.length || isReview) {
         return;
       }
       const currentStep = steps[step];
@@ -111,7 +109,7 @@ const ShipmentsLayoutContent = ({
 
       router.push(`../../${newType}/new/edit`);
     },
-    [router, activeStep],
+    [router, isReview],
   );
 
   /** Set new active item */
@@ -125,17 +123,14 @@ const ShipmentsLayoutContent = ({
   );
 
   const handleEdit = useCallback(() => {
-    dispatch(setStep(0));
     router.push(`../../${activeItem!.data.type}/${activeItem!.id}/edit`);
-  }, [router, activeItem, dispatch]);
+  }, [router, activeItem]);
 
   /** Move to next shipment step */
   const handleContinue = useCallback(async () => {
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
-    } else if (activeStep + 1 === steps.length) {
-      router.push(`../../${shipment![0].data.type}/${shipment![0].id}/review`);
-    } else {
+    } else if (isReview) {
       const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
         method: "POST",
       });
@@ -145,8 +140,10 @@ const ShipmentsLayoutContent = ({
       } else {
         toast({ description: "Could not update items! Please try again later", status: "error" });
       }
+    } else {
+      router.push(`../../${shipment![0].data.type}/${shipment![0].id}/review`);
     }
-  }, [handleSetStep, activeStep, router, params, session, shipment, toast]);
+  }, [handleSetStep, activeStep, router, params, session, shipment, toast, isReview]);
 
   const typeCount = useMemo(() => {
     const count: { total: number; unassigned: number }[] = Array.from(
@@ -195,10 +192,7 @@ const ShipmentsLayoutContent = ({
       <Stepper colorScheme='green' index={activeStep} h='60px' w='100%'>
         {steps.map((step, index) => (
           <Step aria-label={`${step.title} Step`} key={index} onClick={() => handleSetStep(index)}>
-            <StepIndicator
-              cursor={activeStep >= steps.length ? "not-allowed" : "pointer"}
-              bg='white'
-            >
+            <StepIndicator cursor={isReview ? "not-allowed" : "pointer"} bg='white'>
               <StepStatus
                 complete={<StepIcon />}
                 incomplete={<StepNumber />}
@@ -221,7 +215,7 @@ const ShipmentsLayoutContent = ({
 
         <VStack spacing='0' alignItems='start' w='45%'>
           <ShipmentOverview
-            readOnly={activeStep >= steps.length}
+            readOnly={isReview}
             shipmentId={params.shipmentId}
             onActiveChanged={handleActiveChanged}
             proposal={params.proposalId}
@@ -233,7 +227,7 @@ const ShipmentsLayoutContent = ({
               </Text>
             )}
             <Spacer />
-            {activeStep >= steps.length && <Button onClick={handleEdit}>Edit</Button>}
+            {isReview && <Button onClick={handleEdit}>Edit</Button>}
             <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
               {activeStep < steps.length - 1 ? "Continue" : "Finish"}
             </Button>
