@@ -5,8 +5,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
-  setNewActiveItem,
-  syncActiveItem,
+  setIsReview,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -20,8 +19,9 @@ import {
 import { AppDispatch } from "@/store";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
-import { Box, Button, Divider, HStack, Heading, Spacer, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,56 +31,59 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
-  const activeStep = useMemo(() => steps[getCurrentStepIndex(activeItem.data.type)], [activeItem]);
+  const activeStep = useMemo(
+    () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
+    [activeItem],
+  );
+  const router = useRouter();
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
-  const [formType, setFormType] = useState(activeItem.data.type);
+  const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
 
   useEffect(() => {
-    formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
-  }, [formContext, activeItem, activeIsEdit]);
+    dispatch(setIsReview(false));
+    if (activeItem) {
+      formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
+    }
+  }, [formContext, activeItem, activeIsEdit, dispatch]);
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
-    if (!activeIsEdit) {
+    if (!activeIsEdit && activeItem) {
       const values: TreeData<BaseShipmentItem> = {
         ...activeItem,
         data: { type: activeItem.data.type, ...info },
       };
 
-      Item.create(
+      const newItem = await Item.create(
         session,
         shipmentId,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
-      ).then(async (newItem) => {
-        values.id = newItem.id;
-        values.name = newItem.name;
+      );
 
-        if (checkIsRoot(values)) {
-          await dispatch(updateShipment({ session, shipmentId }));
-        } else {
-          await dispatch(updateUnassigned({ session, shipmentId }));
-        }
+      values.id = newItem.id;
+      values.name = newItem.name;
 
-        dispatch(syncActiveItem({ id: newItem.id }));
-      });
+      if (checkIsRoot(values)) {
+        await dispatch(updateShipment({ session, shipmentId }));
+      } else {
+        await dispatch(updateUnassigned({ session, shipmentId }));
+      }
+
+      toast({ title: "Successfully created item!" });
+      router.replace(`../${newItem.id}/edit`);
     } else {
-      Item.patch(
+      await Item.patch(
         session,
-        activeItem.id,
+        activeItem!.id,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
-      ).then(() => {
-        dispatch(updateShipment({ session, shipmentId }));
-        toast({ title: "Successfully saved item!" });
-      });
+      );
+      dispatch(updateShipment({ session, shipmentId }));
+      toast({ title: "Successfully saved item!" });
     }
   });
-
-  const handleNewItem = useCallback(() => {
-    dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeStep.title }));
-  }, [dispatch, activeStep, activeItem]);
 
   /*
    * Should we perform a cascade delete, and delete the entire chain of children for the current object?
@@ -107,56 +110,53 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);*/
 
   useEffect(() => {
-    setFormType(activeItem.data.type);
+    if (activeItem) {
+      setFormType(activeItem.data.type);
+    }
   }, [activeItem]);
 
   const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
     setFormType(formValues.type);
   }, []);
 
+  const redirectToNew = useCallback(() => {
+    router.replace("../new/edit");
+  }, [router]);
+
+  // This does not get rendered if there is no active item, so it's safe to assume it's not null
+
   return (
-    <VStack alignItems='stretch' w='65%'>
-      <VStack spacing='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {activeStep.singular}
-        </Heading>
-        <HStack w='100%'>
-          <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
-          <Spacer />
-          <Button isDisabled={!activeIsEdit} onClick={handleNewItem}>
-            New Item
-          </Button>
+    <FormProvider {...formContext}>
+      <form
+        onSubmit={onSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          flex: "1 0 auto",
+          gap: "1em",
+        }}
+      >
+        <HStack py='3' flex='1 0 auto' alignItems='start'>
+          <Box flex='1 0 auto'>
+            <DynamicForm
+              onWatchedUpdated={handleWatchedUpdated}
+              formType={formType}
+              defaultValues={activeItem!.data}
+              prepopData={prepopData}
+            />
+          </Box>
+          <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
         </HStack>
-        <Divider borderColor='gray.800' />
-      </VStack>
-      <FormProvider {...formContext}>
-        <form
-          onSubmit={onSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            flex: "1 0 auto",
-          }}
-        >
-          <HStack py='3' flex='1 0 auto' alignItems='start'>
-            <Box flex='1 0 auto'>
-              <DynamicForm
-                onWatchedUpdated={handleWatchedUpdated}
-                formType={formType}
-                defaultValues={activeItem.data}
-                prepopData={prepopData}
-              />
-            </Box>
-            <Container containerType={formType} shipmentId={shipmentId} formContext={formContext} />
-          </HStack>
-          <HStack p='0.5em' bg='gray.200'>
-            <Spacer />
-            <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
-          </HStack>
-        </form>
-      </FormProvider>
-    </VStack>
+        <HStack h='3.5em' px='1em' bg='gray.200'>
+          <Spacer />
+          <Button onClick={redirectToNew} isDisabled={!activeIsEdit}>
+            Create New Item
+          </Button>
+          <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
+        </HStack>
+      </form>
+    </FormProvider>
   );
 };
 

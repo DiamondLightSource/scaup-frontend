@@ -50,15 +50,15 @@ export const updateUnassigned = createAsyncThunk(
 
 export interface ShipmentState {
   /** Shipment items (assigned) */
-  items: TreeData<BaseShipmentItem>[];
+  items: TreeData<BaseShipmentItem>[] | null;
   /** Active item (item being edited, for example) */
-  activeItem: TreeData<BaseShipmentItem>;
+  activeItem: TreeData<BaseShipmentItem> | null;
   /** Unassigned items */
   unassigned: TreeData[];
   /** Whether or not active item is an existing item being edited or a new item */
   isEdit: boolean;
-  /** Current step index */
-  currentStep: number;
+  /** Current item is being reviewed */
+  isReview: boolean;
 }
 
 export const defaultUnassigned = [
@@ -96,18 +96,12 @@ export const defaultUnassigned = [
   },
 ] satisfies TreeData[];
 
-const defaultActive = {
-  name: "New Sample",
-  id: "new-sample",
-  data: { type: "sample" },
-} as TreeData<BaseShipmentItem>;
-
 export const initialState: ShipmentState = {
-  items: [],
-  activeItem: defaultActive,
+  items: null,
+  activeItem: null,
   unassigned: defaultUnassigned,
   isEdit: false,
-  currentStep: 0,
+  isReview: false,
 };
 
 export const shipmentSlice = createSlice({
@@ -187,8 +181,8 @@ export const shipmentSlice = createSlice({
         { id?: number | string | undefined; type?: BaseShipmentItem["type"] } | undefined
       >,
     ) => {
-      let actualId = state.activeItem.id;
-      let actualType = state.activeItem.data.type;
+      let actualId = state.activeItem ? state.activeItem.id : 0;
+      let actualType = state.activeItem ? state.activeItem.data.type : "sample";
       let activeItemExists = false;
 
       if (action.payload) {
@@ -201,21 +195,33 @@ export const shipmentSlice = createSlice({
         }
       }
 
-      recursiveFind(
-        // Merge unassigned and assigned items, since our item could be in both
-        [...current(state.items), ...current(state.unassigned)],
-        actualId,
-        actualType,
-        (item) => {
-          state.activeItem = item;
-          activeItemExists = true;
-        },
-      );
+      if (state.items !== null) {
+        recursiveFind(
+          // Merge unassigned and assigned items, since our item could be in both
+          [...current(state.items), ...current(state.unassigned)],
+          actualId,
+          actualType,
+          (item) => {
+            state.activeItem = item;
+            activeItemExists = true;
+          },
+        );
+      }
 
       state.isEdit = activeItemExists;
+
+      if (!activeItemExists) {
+        state.activeItem = {
+          id: `new-${actualType}`,
+          name: `New ${actualType}`,
+          data: {
+            type: actualType,
+          },
+        };
+      }
     },
-    setStep: (state, action: PayloadAction<number>) => {
-      state.currentStep = action.payload;
+    setIsReview: (state, action: PayloadAction<boolean>) => {
+      state.isReview = action.payload;
     },
   },
 });
@@ -225,13 +231,13 @@ export const {
   setUnassigned,
   setActiveItem,
   syncActiveItem,
-  setStep,
+  setIsReview,
   setNewActiveItem,
 } = shipmentSlice.actions;
 export const selectItems = (state: RootState) => state.shipment.items;
 export const selectActiveItem = (state: RootState) => state.shipment.activeItem;
 export const selectUnassigned = (state: RootState) => state.shipment.unassigned;
 export const selectIsEdit = (state: RootState) => state.shipment.isEdit;
-export const selectStep = (state: RootState) => state.shipment.currentStep;
+export const selectIsReview = (state: RootState) => state.shipment.isReview;
 
 export default shipmentSlice.reducer;

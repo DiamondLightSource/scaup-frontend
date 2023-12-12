@@ -9,12 +9,4 @@ export const dewarForm = [
       $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
     },
   },
-  {
-    id: "labContact",
-    label: "Lab Contact",
-    type: "dropdown",
-    values: {
-      $ref: { parent: "#/labContacts", map: { value: "labContactId", label: "cardName" } },
-    },
-  },
 ] as DynamicFormEntry[];

@@ -30,7 +30,7 @@ export const DynamicForm = ({
       return formType;
     }
 
-    const form = structuredClone(formMapping[formType]);
+    const form = structuredClone(formMapping[formType] ?? []);
 
     for (const field of form) {
       if (field.values && !Array.isArray(field.values)) {

@@ -2,7 +2,9 @@ import { ProposalOverviewContent } from "@/app/proposals/[proposalId]/pageConten
 import { authenticatedFetch } from "@/utils/client";
 
 const getShipments = async (proposalId: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
+  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`, {
+    next: { tags: [`shipments-${proposalId}`] },
+  });
 
   if (res && res.status === 200) {
     const shipments = await res.json();

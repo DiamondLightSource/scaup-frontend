@@ -68,7 +68,8 @@ describe("Child Selector", () => {
       },
     );
 
-    fireEvent.click(screen.getByText("Sample"));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith(sample));
   });

@@ -81,7 +81,7 @@ export const TreeView = ({
 
   // Whenever comparing items in the list, I actually want to compare by reference, not by value.
   return (
-    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2]}>
+    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2, 3]}>
       {data.map((item, index) => {
         const isSelected = item === selectedItem;
         return (
@@ -101,15 +101,15 @@ export const TreeView = ({
                     alignItems: "center",
                   }}
                 >
-                  {hasChildren(item) ? (
-                    <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                  <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                    {hasChildren(item) ? (
                       <AccordionIcon />
-                    </AccordionButton>
-                  ) : (
-                    <Text px='15px' aria-hidden='true'>
-                      ⦁
-                    </Text>
-                  )}
+                    ) : (
+                      <Text px='15px' aria-hidden='true'>
+                        ⦁
+                      </Text>
+                    )}
+                  </AccordionButton>
                   <HStack
                     alignItems='center'
                     w='100%'

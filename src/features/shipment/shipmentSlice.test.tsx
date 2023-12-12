@@ -12,7 +12,7 @@ import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
 import { UnassignedItemResponse } from "@/types/server";
-import { puck, renderWithProviders } from "@/utils/test-utils";
+import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { mockSession, toastMock } from "../../../jest.setup";
@@ -57,7 +57,7 @@ describe("Shipment Unassigned Items Reducers", () => {
     describe("Active Item Sync", () => {
       it("should sync active item if in assigned items", () => {
         const previousState = {
-          ...initialState,
+          ...testInitialState,
           items: [
             {
               id: "dewar",
@@ -66,7 +66,7 @@ describe("Shipment Unassigned Items Reducers", () => {
             },
           ] as TreeData<BaseShipmentItem>[],
           activeItem: { id: "dewar", name: "old-dewar", data: { type: "dewar" } },
-        } as typeof initialState;
+        } as typeof testInitialState;
 
         expect(reducer(previousState, syncActiveItem())).toMatchObject({
           activeItem: { id: "dewar", name: "new-dewar", data: { type: "dewar" } },
@@ -75,16 +75,16 @@ describe("Shipment Unassigned Items Reducers", () => {
       });
 
       it("should sync active item if in unassigned items", () => {
-        const previousUnassigned = structuredClone(initialState).unassigned;
+        const previousUnassigned = structuredClone(testInitialState).unassigned;
         const unassignedPuckIndex = getCurrentStepIndex("puck");
         previousUnassigned[0].children![unassignedPuckIndex].children = [puck];
 
         const previousState = {
-          ...initialState,
+          ...testInitialState,
           unassigned: previousUnassigned,
           activeItem: { id: 9, name: "old-puck", data: { type: "puck" } },
           isEdit: true,
-        } as typeof initialState;
+        } as typeof testInitialState;
 
         expect(reducer(previousState, syncActiveItem())).toMatchObject({
           activeItem: { id: 9, name: "puck", data: { type: "puck" } },
@@ -94,7 +94,7 @@ describe("Shipment Unassigned Items Reducers", () => {
 
       it("should use passed ID and type when syncing active item", () => {
         const previousState = {
-          ...initialState,
+          ...testInitialState,
           items: defaultData.children,
         } as typeof initialState;
 
@@ -107,20 +107,19 @@ describe("Shipment Unassigned Items Reducers", () => {
       it("should set edit status to false if current item no longer exists", async () => {
         const oldItem = { id: "doesnotexist", name: "doesnotexist", data: { type: "puck" } };
         const previousState = {
-          ...initialState,
+          ...testInitialState,
           activeItem: oldItem,
           isEdit: true,
         } as typeof initialState;
 
         expect(reducer(previousState, syncActiveItem())).toMatchObject({
-          activeItem: oldItem,
           isEdit: false,
         });
       });
 
       it("should set edit status to false if item being searched for does not exist", async () => {
         const previousState = {
-          ...initialState,
+          ...testInitialState,
           isEdit: true,
         } as typeof initialState;
 
@@ -128,6 +127,42 @@ describe("Shipment Unassigned Items Reducers", () => {
           reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
         ).toMatchObject({
           isEdit: false,
+        });
+      });
+
+      it("should use blank item if existence check fails and current active item is null", async () => {
+        const previousState = {
+          ...testInitialState,
+          activeItem: null,
+        } as typeof initialState;
+
+        expect(
+          reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
+        ).toMatchObject({
+          isEdit: false,
+          activeItem: {
+            data: { type: "puck" },
+            id: "new-puck",
+            name: "New puck",
+          },
+        });
+      });
+
+      it("should use blank item if current shipment is null", async () => {
+        const previousState = {
+          ...testInitialState,
+          items: null,
+        } as typeof initialState;
+
+        expect(
+          reducer(previousState, syncActiveItem({ id: "doesnotexist", type: "puck" })),
+        ).toMatchObject({
+          isEdit: false,
+          activeItem: {
+            data: { type: "puck" },
+            id: "new-puck",
+            name: "New puck",
+          },
         });
       });
     });

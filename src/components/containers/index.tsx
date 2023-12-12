@@ -87,8 +87,8 @@ export const useChildLocationManager = ({
        */
       Item.patch(
         session,
-        currentContainer.id,
-        { ...currentContainer.data, type: values.type },
+        currentContainer!.id,
+        { ...currentContainer!.data, type: values.type },
         parent,
       );
     }
@@ -100,6 +100,24 @@ export const useChildLocationManager = ({
         parentKey = "containerId";
       } else {
         parentKey = "parentId";
+      }
+    }
+
+    if (location !== null && currentContainer!.children) {
+      const conflictingChild = currentContainer!.children.find(
+        (item) => item.data.location === location,
+      );
+
+      if (conflictingChild) {
+        await Item.patch(
+          session,
+          conflictingChild.id,
+          {
+            location: null,
+            [parentKey]: null,
+          },
+          child,
+        );
       }
     }
 

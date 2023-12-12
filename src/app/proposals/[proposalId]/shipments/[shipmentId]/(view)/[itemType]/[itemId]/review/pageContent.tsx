@@ -4,54 +4,38 @@ import { Container } from "@/components/containers";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import {
   selectActiveItem,
+  selectIsEdit,
   selectItems,
   setActiveItem,
-  setStep,
+  setIsReview,
 } from "@/features/shipment/shipmentSlice";
-import { getCurrentStepIndex, steps } from "@/mappings/pages";
 import { ItemFormPageContentProps } from "@/types/generic";
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  Box,
-  Divider,
-  Heading,
-  Skeleton,
-  VStack,
-} from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { Alert, AlertDescription, AlertIcon, Box, Skeleton, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const items = useSelector(selectItems);
+  const isEdit = useSelector(selectIsEdit);
   const activeItem = useSelector(selectActiveItem);
-  const activeStep = useMemo(
-    () => steps[getCurrentStepIndex(activeItem.data.type)].singular,
-    [activeItem],
-  );
 
   useEffect(() => {
-    if (items.length > 0) {
-      dispatch(setActiveItem({ item: items![0], isEdit: true }));
+    if (!isEdit && activeItem && items && items.length > 0) {
+      // If current active item does not exist
+      const newItem = items[0];
+      dispatch(setActiveItem({ item: newItem, isEdit: true }));
+      router.replace(`../../${newItem.data.type}/${newItem.id}/review`);
     }
-    dispatch(setStep(steps.length));
-  }, [dispatch, items]);
+    dispatch(setIsReview(true));
+  }, [dispatch, items, router, activeItem, isEdit]);
 
   return (
-    <VStack h='100%' w='65%' alignItems='start'>
-      <VStack spacing='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {activeStep}
-        </Heading>
-        <Heading>{activeItem.name}</Heading>
-        <Divider borderColor='gray.800' />
-      </VStack>
+    <VStack h='100%' w='100%'>
       <Box display='flex' flexDirection='row' width='100%' flex='1 0 auto'>
-        {activeItem.id === "new-sample" ? (
-          <Skeleton h='80%' w='100%' />
-        ) : (
+        {activeItem ? (
           <VStack flex='1 0 auto'>
             <DynamicFormView
               formType={activeItem.data.type}
@@ -59,8 +43,10 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
               prepopData={prepopData}
             />
           </VStack>
+        ) : (
+          <Skeleton h='80%' w='100%' />
         )}
-        <Container shipmentId={shipmentId} containerType={activeItem.data.type} />
+        <Container shipmentId={shipmentId} containerType={activeItem!.data.type} />
       </Box>
       <Alert status='info' variant='info'>
         <AlertIcon />

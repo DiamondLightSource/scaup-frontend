@@ -2,6 +2,7 @@ import { GridBox } from "@/components/containers/gridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
+import { Item } from "@/utils/client/item";
 import { gridBox, renderAndInjectForm, renderWithFormAndStore, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
@@ -106,7 +107,8 @@ describe("Grid Box", () => {
     });
 
     fireEvent.click(screen.getByText("2"));
-    fireEvent.click(screen.getByText(/sample-1/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("2-populated");
   });
@@ -187,8 +189,37 @@ describe("Grid Box", () => {
     });
 
     fireEvent.click(screen.getByText("2"));
-    fireEvent.click(screen.getByText(/sample-1/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("2-populated");
+  });
+
+  it("should replace existing item in grid box slot", async () => {
+    const patchSpy = jest.spyOn(Item, "patch");
+
+    server.use(
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ children: populatedGridBoxShipment.items }),
+        { once: true },
+      ),
+    );
+
+    renderAndInjectForm(<GridBox shipmentId='1' />, {
+      preloadedState: {
+        shipment: {
+          ...populatedGridBoxShipment,
+          isEdit: true,
+          unassigned: defaultShipment.unassigned,
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
+
+    await waitFor(() => expect(patchSpy).toHaveBeenCalledTimes(2));
   });
 });

@@ -24,7 +24,7 @@ export const GenericContainer = ({
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentContainer.id, sample);
+      setLocation(currentContainer!.id, sample);
     },
     [currentContainer, setLocation],
   );
@@ -66,7 +66,7 @@ export const GenericContainer = ({
         Contents
       </Heading>
       <List overflowY='scroll' h='80%'>
-        {(currentContainer.children ?? []).map((item) => (
+        {(currentContainer!.children ?? []).map((item) => (
           <ListItem
             key={item.id}
             p='5px'

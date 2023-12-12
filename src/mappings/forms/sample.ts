@@ -106,4 +106,9 @@ export const sampleForm = [
     label: "Vitrification Conditions",
     type: "textarea",
   },
+  {
+    id: "clipped",
+    label: "Clipped",
+    type: "checkbox",
+  },
 ] as DynamicFormEntry[];

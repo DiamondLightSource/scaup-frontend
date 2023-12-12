@@ -12,8 +12,8 @@ export const containerForm = [
     label: "Type",
     type: "dropdown",
     values: [
-      { label: "Falcon Tube", value: "falconTube" },
       { label: "Puck", value: "puck" },
+      { label: "Falcon Tube", value: "falconTube" },
       { label: "Other", value: "genericContainer" },
     ] as { label: string; value: BaseShipmentItem["type"] }[],
     watch: true,

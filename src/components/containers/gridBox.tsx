@@ -30,13 +30,13 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
   const [currentPosition, setCurrentPosition] = useState(0);
 
   const capacity =
-    formContext !== undefined ? formContext.watch("capacity", 4) : currentGridBox.data.capacity;
+    formContext !== undefined ? formContext.watch("capacity", 4) : currentGridBox!.data.capacity;
   const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
 
   const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
     const newSamples = Array(parsedCapacity).fill(null);
-    if (currentGridBox.children) {
-      for (const innerSample of currentGridBox.children) {
+    if (currentGridBox!.children) {
+      for (const innerSample of currentGridBox!.children) {
         newSamples[innerSample.data.location] = innerSample;
       }
     }
@@ -51,7 +51,7 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
 
   const handlePopulatePosition = useCallback(
     (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox.id, sample, currentPosition);
+      setLocation(currentGridBox!.id, sample, currentPosition);
     },
     [currentGridBox, currentPosition, setLocation],
   );

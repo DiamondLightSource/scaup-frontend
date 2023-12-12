@@ -1,13 +1,12 @@
 import { Puck } from "@/components/containers/puck";
 import { TreeData } from "@/components/visualisation/treeView";
-import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, puck, renderAndInjectForm } from "@/utils/test-utils";
+import { gridBox, puck, renderAndInjectForm, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-const defaultShipment = { shipment: structuredClone(initialState) };
+const defaultShipment = { shipment: structuredClone(testInitialState) };
 
 defaultShipment.shipment.unassigned[0].children![getCurrentStepIndex("gridBox")].children!.push(
   gridBox,
@@ -50,7 +49,8 @@ describe("Puck", () => {
     });
 
     fireEvent.click(screen.getByText("6"));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("6-populated");
   });
@@ -77,7 +77,8 @@ describe("Puck", () => {
     });
 
     fireEvent.click(screen.getByText("6"));
-    fireEvent.click(screen.getByText(/gridbox/i));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
 
     await screen.findByTestId("6-populated");
   });
@@ -86,7 +87,7 @@ describe("Puck", () => {
     renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           activeItem: populatedContainer,
           isEdit: true,
         },
@@ -111,7 +112,7 @@ describe("Puck", () => {
     renderAndInjectForm(<Puck shipmentId='1' />, {
       preloadedState: {
         shipment: {
-          ...initialState,
+          ...testInitialState,
           activeItem: populatedContainer,
           isEdit: true,
         },

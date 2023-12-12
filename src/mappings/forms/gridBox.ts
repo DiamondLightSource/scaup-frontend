@@ -30,12 +30,17 @@ export const gridBoxForm = [
   },
   {
     id: "requestedReturn",
-    label: "Return/discard grid",
+    label: "Return grid",
     type: "checkbox",
   },
   {
     id: "fibSession",
     label: "FIB session",
+    type: "checkbox",
+  },
+  {
+    id: "store",
+    label: "Keep gridbox at facility for future use",
     type: "checkbox",
   },
   {
