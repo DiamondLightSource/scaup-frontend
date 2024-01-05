@@ -27,6 +27,7 @@ const SubmissionOverview = async ({
   // TODO: add type
   const shipmentData = await getShipmentData(params.shipmentId);
   revalidateTag(`shipments-${params.proposalId}`);
+  revalidateTag(`shipment-${params.proposalId}`);
 
   return <SubmissionOverviewContent params={params} data={shipmentData} />;
 };
