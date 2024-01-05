@@ -41,7 +41,7 @@
     "next-router-mock": "^0.9.11",
     "prettier": "^3.1.1",
     "typescript": "5.3.3",
-    "undici": "^6.2.1"
+    "undici": "^5.28.2"
   },
   "packageManager": "yarn@4.0.2"
 }
