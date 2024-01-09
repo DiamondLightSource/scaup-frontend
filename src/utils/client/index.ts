@@ -1,7 +1,10 @@
 import { authOptions } from "@/mappings/authOptions";
+import { createStandaloneToast } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
+
+const { toast } = createStandaloneToast();
 
 /**
  * Perform authenticated fetch operation
@@ -87,4 +90,26 @@ export { authenticatedFetch };
 export const getPrepopData = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
   return res && res.status === 200 ? await res.json() : {};
+};
+
+/**
+ * Create a shipment request in an external shipping service and redirect user
+ *
+ * @param shipmentId Shipment to create a shipment request for
+ * @param session User session
+ */
+export const createShipmentRequest = async (shipmentId: string, session: Session | null) => {
+  const resp = await authenticatedFetch.client(`/shipments/${shipmentId}/request`, session, {
+    method: "POST",
+  });
+
+  if (resp && resp.status === 201) {
+    const data = await resp.json();
+
+    window.location.assign(
+      `${process.env.REACT_APP_SHIPPING_SERVICE_URL}/shipment-requests/${data.shipmentRequest}/incoming`,
+    );
+  } else {
+    toast({ title: "Unable to create shipment request. Please try again later", status: "error" });
+  }
 };

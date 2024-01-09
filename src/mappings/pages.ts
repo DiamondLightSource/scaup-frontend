@@ -17,7 +17,7 @@ export interface Step {
 }
 
 export const steps: Step[] = [
-  { title: "Samples", id: "sample", singular: "Sample", endpoint: "samples" },
+  { title: "Samples", id: ["sample", "grid"], singular: "Sample", endpoint: "samples" },
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
     title: "Containers",

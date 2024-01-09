@@ -8,10 +8,10 @@ import { containerForm } from "./container";
 
 export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
   sample: sampleForm,
+  grid: sampleForm,
   genericContainer: containerForm,
   puck: puckForm,
   falconTube: containerForm,
   dewar: dewarForm,
-  grid: [],
   gridBox: gridBoxForm,
 };
