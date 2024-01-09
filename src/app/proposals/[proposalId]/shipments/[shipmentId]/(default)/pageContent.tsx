@@ -1,19 +1,8 @@
 "use client";
 
-import {
-  Divider,
-  HStack,
-  Heading,
-  Icon,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { Table } from "@diamondlightsource/ui-components";
+import { Divider, HStack, Heading, Stat, StatLabel, StatNumber, VStack } from "@chakra-ui/react";
+import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
-import { MdArrowForwardIos } from "react-icons/md";
 
 export interface ShipmentHomeData {
   counts: Record<string, number>;
@@ -23,27 +12,6 @@ export interface ShipmentHomeData {
   dispatch: Record<string, any>;
   name: string;
 }
-
-interface LinkCardProps {
-  children: string;
-  title: string;
-  href: string;
-}
-
-const LinkCard = ({ children, title, href }: LinkCardProps) => (
-  <VStack w='100%' alignItems='start' as={NextLink} href={href} _hover={{ bg: "diamond.100" }}>
-    <HStack w='100%' gap='2em'>
-      <VStack alignItems='start' flex='1 0 0'>
-        <Text color='diamond.600' fontWeight='600'>
-          {title}
-        </Text>
-        <Text>{children}</Text>
-      </VStack>
-      <Icon color='diamond.600' as={MdArrowForwardIos} />
-    </HStack>
-    <Divider />
-  </VStack>
-);
 
 export interface ShipmentHomeContentProps {
   data: ShipmentHomeData; // TODO: type this with server's types
@@ -92,19 +60,20 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
         <VStack alignItems='start'>
           <Heading size='lg'>Actions</Heading>
           {data.dispatch.status !== "Booked" && (
-            <LinkCard title='Edit Shipment' href={`${params.shipmentId}/edit`}>
+            <TwoLineLink title='Edit Shipment' as={NextLink} href={`${params.shipmentId}/edit`}>
               Edit shipment contents, or add new items
-            </LinkCard>
+            </TwoLineLink>
           )}
-          <LinkCard title='Review Shipment' href={`${params.shipmentId}/review`}>
+          <TwoLineLink title='Review Shipment' as={NextLink} href={`${params.shipmentId}/review`}>
             Review shipment contents
-          </LinkCard>
-          <LinkCard
+          </TwoLineLink>
+          <TwoLineLink
             title={`${data.dispatch.status === "Booked" ? "Edit" : "Create"} Booking`}
+            as={NextLink}
             href={"review"}
           >
             Book pickup with courier
-          </LinkCard>
+          </TwoLineLink>
         </VStack>
       </HStack>
     </VStack>

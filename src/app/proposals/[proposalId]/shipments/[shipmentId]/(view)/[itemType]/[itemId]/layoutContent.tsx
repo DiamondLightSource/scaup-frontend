@@ -133,6 +133,7 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
 
       if (response && response.status === 200) {
         router.push("../../submitted");
+        return;
       } else {
         toast({ description: "Could not update items! Please try again later", status: "error" });
       }
