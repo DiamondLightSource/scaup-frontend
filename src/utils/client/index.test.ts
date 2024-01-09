@@ -41,7 +41,7 @@ describe("Shipment Request Creation", () => {
     expect(createShipmentRequest("1", mockSession));
     await waitFor(() =>
       expect(assignMock).toHaveBeenCalledWith(
-        "https://sample-shipping-staging.diamond.ac.uk/shipment-requests/20/incoming",
+        `${process.env.REACT_APP_SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
       ),
     );
   });
