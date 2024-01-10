@@ -2283,9 +2283,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.25.13":
-  version: 0.25.13
-  resolution: "@mswjs/interceptors@npm:0.25.13"
+"@mswjs/interceptors@npm:^0.25.14":
+  version: 0.25.14
+  resolution: "@mswjs/interceptors@npm:0.25.14"
   dependencies:
     "@open-draft/deferred-promise": "npm:^2.2.0"
     "@open-draft/logger": "npm:^0.3.0"
@@ -2293,7 +2293,7 @@ __metadata:
     is-node-process: "npm:^1.2.0"
     outvariant: "npm:^1.2.1"
     strict-event-emitter: "npm:^0.5.1"
-  checksum: 458990b881067798575d93dc9dda26819d9b568992cd5c2eaa96005b9abd078a4b7195d108aee3a30edcee9695d4ec3ab72b0cc15dc579b9bda1c8b9537b5987
+  checksum: 6554d795ab9c88bf56c195b3ce0ec381abbbb66380a65007481044d177c22a2822683befc31d6cf32c02700ed925ff377b58b215ad2e8eaa29d9ea911d4ecd59
   languageName: node
   linkType: hard
 
@@ -2852,12 +2852,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.10.6":
-  version: 20.10.6
-  resolution: "@types/node@npm:20.10.6"
+"@types/node@npm:20.10.8":
+  version: 20.10.8
+  resolution: "@types/node@npm:20.10.8"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 08471220d3cbbb6669835c4b78541edf5eface8f2c2e36c550cfa4ff73da73071c90e200a06359fac25d6564127597c23e178128058fb676824ec23d5178a017
+  checksum: 820efb084997bb62635883c820bc00c4bd01c71d66b8191fe8559256d6612f6665bbf682ed700bc55a99d48ff1e646d987c6f51afb3cffdb772f267727706277
   languageName: node
   linkType: hard
 
@@ -2904,14 +2904,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.46":
-  version: 18.2.46
-  resolution: "@types/react@npm:18.2.46"
+"@types/react@npm:18.2.47":
+  version: 18.2.47
+  resolution: "@types/react@npm:18.2.47"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10fb28a5b8504106512ce3b154c45d1ac045c31633786773a29f003b3079b434060368bb56f95ef6c39510835ceec4fb8fdc271d6ca2b9cdd979379cf53f126b
+  checksum: 0a98c2ef8303909f78c973ac9731cb671f3a0b96bc5213b538d1a50cbaae6e51b6befd64845a9cb95af8528767315d5bd99a85608eb716c020393c7d33a9b477
   languageName: node
   linkType: hard
 
@@ -5565,9 +5565,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^10.17.9":
-  version: 10.17.9
-  resolution: "framer-motion@npm:10.17.9"
+"framer-motion@npm:^10.17.12":
+  version: 10.17.12
+  resolution: "framer-motion@npm:10.17.12"
   dependencies:
     "@emotion/is-prop-valid": "npm:^0.8.2"
     tslib: "npm:^2.4.0"
@@ -5582,7 +5582,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 7ce3449885c49ea08cda429d82da45e688e321c49ac0443e56b595161e0a8b6d468efba7a13bf55194e7c0f030356383d9b38ca0e9ea48bcc113172b548c1876
+  checksum: 0239092137d599cb38fc1eb5521f66341bf41bde69c344c6155c08a5868d96ead3e943d549bf12b9030533116e8bb4c48b49066b36a06fadc7c735b95318548c
   languageName: node
   linkType: hard
 
@@ -7712,15 +7712,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:^2.0.12":
-  version: 2.0.12
-  resolution: "msw@npm:2.0.12"
+"msw@npm:^2.0.13":
+  version: 2.0.13
+  resolution: "msw@npm:2.0.13"
   dependencies:
     "@bundled-es-modules/cookie": "npm:^2.0.0"
     "@bundled-es-modules/js-levenshtein": "npm:^2.0.1"
     "@bundled-es-modules/statuses": "npm:^1.0.1"
     "@mswjs/cookies": "npm:^1.1.0"
-    "@mswjs/interceptors": "npm:^0.25.13"
+    "@mswjs/interceptors": "npm:^0.25.14"
     "@open-draft/until": "npm:^2.1.0"
     "@types/cookie": "npm:^0.4.1"
     "@types/js-levenshtein": "npm:^1.1.1"
@@ -7744,7 +7744,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 4b0f512c116f9a6e341c965495dc5036307951bbeef421f4eba9dec134287840c9b4c4479f747493208599ef49eba470330dbf21d7a9d9c4174dd4808945f409
+  checksum: e039d2595dcda71e568028ddeafec3db3817fe1ccca094a6644840b1e0d24e3b2b3695d263c0e729a553f0ac3dd514d9e24401824322d39b6f19b5048b7c9e13
   languageName: node
   linkType: hard
 
@@ -8575,12 +8575,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.49.2":
-  version: 7.49.2
-  resolution: "react-hook-form@npm:7.49.2"
+"react-hook-form@npm:^7.49.3":
+  version: 7.49.3
+  resolution: "react-hook-form@npm:7.49.3"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 7895d65b8458c42d46eb338803bb0fd1aab42fc69ecf80b47846eace9493a10cac5b05c9b744a5f9f1f7969a3e2703fc2118cdab97e49a7798a72d09f106383f
+  checksum: ccd35d73f26b56c2933312c5d445552aab8c20a02ab07360808f039c9daf37a046a0afa2c2c56fac0a16b1963ae3e4ebce37136d14388002d00d6c5483e3fdb7
   languageName: node
   linkType: hard
 
@@ -9087,22 +9087,22 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.2.0"
     "@testing-library/react": "npm:^14.1.2"
     "@types/jest": "npm:^29.5.11"
-    "@types/node": "npm:20.10.6"
-    "@types/react": "npm:18.2.46"
+    "@types/node": "npm:20.10.8"
+    "@types/react": "npm:18.2.47"
     "@types/react-dom": "npm:18.2.18"
     eslint: "npm:8.56.0"
     eslint-config-next: "npm:14.0.4"
-    framer-motion: "npm:^10.17.9"
+    framer-motion: "npm:^10.17.12"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
-    msw: "npm:^2.0.12"
+    msw: "npm:^2.0.13"
     next: "npm:14.0.4"
     next-auth: "npm:^4.24.5"
     next-router-mock: "npm:^0.9.11"
     prettier: "npm:^3.1.1"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    react-hook-form: "npm:^7.49.2"
+    react-hook-form: "npm:^7.49.3"
     react-icons: "npm:^4.12.0"
     react-redux: "npm:^9.0.4"
     typescript: "npm:5.3.3"

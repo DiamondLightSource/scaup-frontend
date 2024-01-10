@@ -1,10 +1,10 @@
 import { authOptions } from "@/mappings/authOptions";
-import { createStandaloneToast } from "@chakra-ui/react";
+//import { createStandaloneToast } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
-const { toast } = createStandaloneToast();
+//const { toast } = createStandaloneToast();
 
 /**
  * Perform authenticated fetch operation
@@ -24,7 +24,7 @@ const authenticatedFetch = async (
     throw new Error("Authentication Failure");
   }
 
-  const res = await fetch(process.env.REACT_APP_API_URL! + url, {
+  const res = await fetch(process.env.API_URL! + url, {
     ...init,
     headers: {
       authorization: `Bearer ${session.accessToken}`,
@@ -107,9 +107,9 @@ export const createShipmentRequest = async (shipmentId: string, session: Session
     const data = await resp.json();
 
     window.location.assign(
-      `${process.env.REACT_APP_SHIPPING_SERVICE_URL}/shipment-requests/${data.shipmentRequest}/incoming`,
+      `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/${data.shipmentRequest}/incoming`,
     );
   } else {
-    toast({ title: "Unable to create shipment request. Please try again later", status: "error" });
+    //toast({ title: "Unable to create shipment request. Please try again later", status: "error" });
   }
 };

@@ -9,7 +9,7 @@ jest.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathnam
 window.scrollTo = () => {};
 window.structuredClone = (x: any) => JSON.parse(JSON.stringify(x));
 
-process.env.REACT_APP_API_URL = "http://localhost/api";
+process.env.API_URL = "http://localhost/api";
 
 beforeEach(() => server.listen());
 afterEach(() => {

@@ -90,7 +90,7 @@ describe("Shipment Submission Overview", () => {
 
     fireEvent.click(screen.getByText(/edit booking/i));
     expect(assignMock).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_SHIPPING_SERVICE_URL}/shipment-requests/99/incoming`,
+      `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/99/incoming`,
     );
   });
 
@@ -110,7 +110,7 @@ describe("Shipment Submission Overview", () => {
     fireEvent.click(screen.getByText(/create booking/i));
     await waitFor(() =>
       expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.REACT_APP_SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
+        `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
       ),
     );
   });
