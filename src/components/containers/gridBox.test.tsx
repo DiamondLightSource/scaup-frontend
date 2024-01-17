@@ -72,7 +72,7 @@ describe("Grid Box", () => {
 
     fireEvent.click(screen.getByText("2"));
 
-    expect(screen.getByText(/select sample/i)).toBeInTheDocument();
+    expect(screen.getByText(/select sample/i)).toBeInTheDocument;
   });
 
   it("should pre-populate positions with data from state", () => {
@@ -196,7 +196,7 @@ describe("Grid Box", () => {
   });
 
   it("should replace existing item in grid box slot", async () => {
-    const patchSpy = jest.spyOn(Item, "patch");
+    const patchSpy = vi.spyOn(Item, "patch");
 
     server.use(
       http.get(

@@ -5,6 +5,7 @@ import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils"
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
+
 import ItemFormPageContent from "./pageContent";
 
 describe("Item Page", () => {
@@ -12,8 +13,8 @@ describe("Item Page", () => {
   it("should render form", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
 
-    expect(screen.getByText("Foil")).toBeInTheDocument();
-    expect(screen.getByText("Mesh")).toBeInTheDocument();
+    expect(screen.getByText("Foil")).toBeInTheDocument;
+    expect(screen.getByText("Mesh")).toBeInTheDocument;
   });
 
   /*it("should delete item and reset form to new item", async () => {
@@ -152,13 +153,13 @@ describe("Item Page", () => {
       },
     });
 
-    expect(screen.getByText(/registered container/i)).toBeInTheDocument();
+    expect(screen.getByText(/registered container/i)).toBeInTheDocument;
 
     fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {
       target: { value: "falconTube" },
     });
 
-    expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument;
   });
 
   it("should update active item if new item is added", async () => {

@@ -1,5 +1,10 @@
 import { ProposalOverviewContent } from "@/app/proposals/[proposalId]/pageContent";
 import { authenticatedFetch } from "@/utils/client";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Proposal - Sample Handling",
+};
 
 const getShipments = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`, {

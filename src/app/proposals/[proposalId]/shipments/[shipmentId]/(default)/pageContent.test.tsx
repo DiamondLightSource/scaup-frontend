@@ -6,7 +6,7 @@ const params = { proposalId: "cm00001", shipmentId: "1" };
 
 describe("Shipment Submission Overview", () => {
   let originalWindowLocation = window.location;
-  let assignMock = jest.fn();
+  let assignMock = vi.fn();
 
   beforeEach(() => {
     Object.defineProperty(window, "location", {

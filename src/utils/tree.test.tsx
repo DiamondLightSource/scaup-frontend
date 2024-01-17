@@ -24,10 +24,10 @@ const defaultData: TreeData[] = [
 
 describe("Recursively Find Item", () => {
   it("should find leaf item", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     recursiveFind(defaultData, "3", "gridBox", callback);
 
-    expect(callback).toBeCalledWith(
+    expect(callback).toHaveBeenCalledWith(
       expect.objectContaining({ id: "3" }),
       0,
       expect.arrayContaining([expect.objectContaining({ id: "3" })]),
@@ -35,10 +35,10 @@ describe("Recursively Find Item", () => {
   });
 
   it("should find branch item", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     recursiveFind(defaultData, "2", "puck", callback);
 
-    expect(callback).toBeCalledWith(
+    expect(callback).toHaveBeenCalledWith(
       expect.objectContaining({ id: "2" }),
       0,
       expect.arrayContaining([expect.objectContaining({ id: "2" })]),
@@ -46,10 +46,10 @@ describe("Recursively Find Item", () => {
   });
 
   it("should find root item", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     recursiveFind(defaultData, "1", "dewar", callback);
 
-    expect(callback).toBeCalledWith(
+    expect(callback).toHaveBeenCalledWith(
       expect.objectContaining({ id: "1" }),
       0,
       expect.arrayContaining([expect.objectContaining({ id: "1" })]),
@@ -57,7 +57,7 @@ describe("Recursively Find Item", () => {
   });
 
   it("should find item amongst siblings", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     recursiveFind(
       [...defaultData, { id: "4", name: "", data: { type: "dewar" } }],
       "4",
@@ -65,7 +65,7 @@ describe("Recursively Find Item", () => {
       callback,
     );
 
-    expect(callback).toBeCalledWith(
+    expect(callback).toHaveBeenCalledWith(
       expect.objectContaining({ id: "4" }),
       1,
       expect.arrayContaining([

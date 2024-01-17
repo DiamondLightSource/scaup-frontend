@@ -1,6 +1,7 @@
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
-import { mockSession } from "../../../jest.setup";
+
+import { mockSession } from "../../../vitest.setup";
 import { Item } from "./item";
 
 describe("Item Creation", () => {

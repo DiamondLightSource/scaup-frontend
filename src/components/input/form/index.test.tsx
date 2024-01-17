@@ -29,7 +29,7 @@ describe("Dynamic Form", () => {
   });
 
   it("should watch provided fields", () => {
-    const watchCallback = jest.fn();
+    const watchCallback = vi.fn();
     renderWithForm(<DynamicForm formType='puck' onWatchedUpdated={watchCallback} />);
 
     fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {

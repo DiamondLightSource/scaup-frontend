@@ -5,7 +5,8 @@ import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils"
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
-import { toastMock } from "../../../../../../../../../jest.setup";
+
+import { toastMock } from "../../../../../../../../../vitest.setup";
 import ItemPageLayoutContent from "./layoutContent";
 
 const defaultShipmentItems: TreeData[] = [

@@ -1,11 +1,11 @@
-import "@testing-library/jest-dom";
-
 import { server } from "@/mocks/server";
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
 
-const pathnameMock = jest.fn(() => "/");
-export const toastMock = jest.fn();
+const pathnameMock = vi.fn(() => "/");
+export const toastMock = vi.fn();
 
-jest.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
+vi.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
 window.scrollTo = () => {};
 window.structuredClone = (x: any) => JSON.parse(JSON.stringify(x));
 
@@ -14,6 +14,7 @@ process.env.API_URL = "http://localhost/api";
 beforeEach(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
+  cleanup();
 });
 afterAll(() => {
   server.close();
@@ -26,12 +27,12 @@ export const mockSession = {
   user: {},
 };
 
-jest.mock("next-auth/react", () => {
-  const originalModule = jest.requireActual("next-auth/react");
+vi.mock("next-auth/react", () => {
+  const originalModule = vi.importActual("next-auth/react");
   return {
     __esModule: true,
     ...originalModule,
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       data: mockSession,
       status: "authenticated",
     })),
@@ -41,10 +42,10 @@ jest.mock("next-auth/react", () => {
 // Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
 // We also need to mock the whole next-auth package, since it's used in
 // our various pages via the `export { getServerSideProps }` function.
-jest.mock("next-auth/next", () => ({
+vi.mock("next-auth/next", () => ({
   __esModule: true,
-  default: jest.fn(),
-  getServerSession: jest.fn(
+  default: vi.fn(),
+  getServerSession: vi.fn(
     () =>
       new Promise((resolve) => {
         resolve({
@@ -56,8 +57,11 @@ jest.mock("next-auth/next", () => ({
   ),
 }));
 
-jest.mock("@chakra-ui/react", () => ({
-  ...jest.requireActual("@chakra-ui/react"),
-  createStandaloneToast: () => ({ toast: toastMock }),
-  useToast: () => toastMock,
-}));
+vi.mock("@chakra-ui/react", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    createStandaloneToast: () => ({ toast: toastMock }),
+    useToast: () => toastMock,
+  };
+});

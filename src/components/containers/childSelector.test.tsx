@@ -54,7 +54,7 @@ describe("Child Selector", () => {
   });
 
   it("should fire event if item is selected", async () => {
-    const itemClickCallback = jest.fn();
+    const itemClickCallback = vi.fn();
 
     renderWithProviders(
       <ChildSelector
@@ -75,7 +75,7 @@ describe("Child Selector", () => {
   });
 
   it("should fire event if item is removed", async () => {
-    const itemRemoveCallback = jest.fn();
+    const itemRemoveCallback = vi.fn();
 
     renderWithProviders(
       <ChildSelector
@@ -107,7 +107,7 @@ describe("Child Selector", () => {
   });
 
   it("should not render unassigned samples if in read only mode", () => {
-    const itemClickCallback = jest.fn();
+    const itemClickCallback = vi.fn();
 
     renderWithProviders(
       <ChildSelector

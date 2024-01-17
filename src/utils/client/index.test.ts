@@ -2,11 +2,11 @@ import { server } from "@/mocks/server";
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { createShipmentRequest } from ".";
-import { mockSession } from "../../../jest.setup";
+import { mockSession } from "../../../vitest.setup";
 
 describe("Shipment Request Creation", () => {
   let originalWindowLocation = window.location;
-  let assignMock = jest.fn();
+  let assignMock = vi.fn();
 
   beforeEach(() => {
     Object.defineProperty(window, "location", {
