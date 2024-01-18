@@ -17,12 +17,12 @@ build-job:
 
 unit-test-job:
   stage: test
-  tags: 
+  tags:
     - argus
   before_script:
     - yarn install
   script:
-    - yarn run test --verbose
+    - yarn run test
   rules:
     - if: $CI_COMMIT_MESSAGE !~ /\[WIP\].*/
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/

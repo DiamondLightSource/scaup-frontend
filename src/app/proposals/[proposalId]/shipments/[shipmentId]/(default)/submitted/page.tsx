@@ -2,8 +2,13 @@ import { DynamicFormEntry } from "@/components/input/form/input";
 import { authenticatedFetch } from "@/utils/client";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
+import { Metadata } from "next";
 import { revalidateTag } from "next/cache";
 import SubmissionOverviewContent from "./pageContent";
+
+export const metadata: Metadata = {
+  title: "Shipment Submitted - Sample Handling",
+};
 
 const getShipmentData = async (shipmentId: string) => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);

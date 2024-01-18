@@ -1,7 +1,12 @@
 import { authenticatedFetch } from "@/utils/client";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
+import { Metadata } from "next";
 import ShipmentHomeContent from "./pageContent";
+
+export const metadata: Metadata = {
+  title: "Shipment - Sample Handling",
+};
 
 const getShipmentData = async (shipmentId: string) => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);

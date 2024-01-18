@@ -196,7 +196,7 @@ describe("Grid Box", () => {
   });
 
   it("should replace existing item in grid box slot", async () => {
-    const patchSpy = jest.spyOn(Item, "patch");
+    const patchSpy = vi.spyOn(Item, "patch");
 
     server.use(
       http.get(
