@@ -1,3 +1,4 @@
+import { toastMock } from "@/../vitest.setup";
 import { server } from "@/mocks/server";
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
@@ -33,7 +34,7 @@ describe("Shipment Request Creation", () => {
     );
 
     createShipmentRequest("1");
-    //await waitFor(() => expect(toastMock).toHaveBeenCalled());
+    await waitFor(() => expect(toastMock).toHaveBeenCalled());
   });
 
   it("should redirect user if request is successful", async () => {

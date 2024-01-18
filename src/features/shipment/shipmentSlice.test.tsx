@@ -16,7 +16,7 @@ import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils"
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-import { toastMock } from "../../../vitest.setup";
+import { toastMock } from "@/../vitest.setup";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
 const getUnassignedByType = (state: typeof initialState, type: string) =>
