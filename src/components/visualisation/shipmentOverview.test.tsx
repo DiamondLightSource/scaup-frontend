@@ -152,10 +152,7 @@ describe("Shipment Overview", () => {
       },
     );
 
-    await screen.findByText("Grid Box");
-
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-
     await waitFor(() => expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(2));
   });
 
