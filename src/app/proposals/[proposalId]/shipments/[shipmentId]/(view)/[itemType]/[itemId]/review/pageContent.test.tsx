@@ -1,4 +1,4 @@
-import { renderWithProviders, testInitialState } from "@/utils/test-utils";
+import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 
@@ -6,24 +6,19 @@ import { default as ReviewPageContent } from "./pageContent";
 
 describe("Review Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
-  /*it("should set store page to step length + 1 by default", () => {
-    const { store } = renderWithProviders(<ReviewPageContent shipmentId='1' prepopData={{}} />);
 
-    expect(store.getState().shipment.currentStep === steps.length + 1);
-  });*/
-
-  /*it("should display first item of shipment as active item by default", () => {
+  it("should display first item of shipment as active item by default", () => {
     renderWithProviders(<ReviewPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
           ...testInitialState,
-          items: [{ id: "dewar", name: "First Dewar", data: { type: "dewar" }, children: [puck] }],
+          items: [{ id: "99", name: "First Dewar", data: { type: "dewar" }, children: [puck] }],
         },
       },
     });
 
-    expect(screen.getByText(/first dewar/i)).toBeInTheDocument();
-  });*/
+    expect(mockRouter.pathname).toBe("/dewar/99/review");
+  });
 
   it("should display 'human' value of field if field is prepopulated with external data", () => {
     renderWithProviders(
