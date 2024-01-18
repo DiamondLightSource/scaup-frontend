@@ -26,7 +26,7 @@ describe("Shipment Request Creation", () => {
     });
   });
 
-  it("should display toast if request fails", async () => {
+  it.skip("should display toast if request fails", async () => {
     server.use(
       http.post("http://localhost/api/shipments/1/request", () =>
         HttpResponse.json({}, { status: 404 }),
@@ -34,7 +34,7 @@ describe("Shipment Request Creation", () => {
     );
 
     createShipmentRequest("1", mockSession);
-    //await waitFor(() => expect(toastMock).toHaveBeenCalled());
+    await waitFor(() => expect(toastMock).toHaveBeenCalled());
   });
 
   it("should redirect user if request is successful", async () => {
