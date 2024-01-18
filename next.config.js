@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: { REACT_APP_API_URL: process.env.REACT_APP_API_URL },
+  env: {
+    API_URL: process.env.REACT_APP_API_URL,
+    SHIPPING_SERVICE_URL: process.env.REACT_APP_SHIPPING_SERVICE_URL,
+  },
   async redirects() {
     return [
       {

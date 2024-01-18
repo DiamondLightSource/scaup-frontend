@@ -49,6 +49,10 @@ export const handlers = [
     HttpResponse.json({}, { status: 200 }),
   ),
 
+  http.post("http://localhost/api/shipments/:shipmentId/request", () =>
+    HttpResponse.json({ shipmentRequest: 20, status: "Booked" }, { status: 201 }),
+  ),
+
   http.get("http://localhost/api/proposals/:proposalReference/data", () =>
     HttpResponse.json({ labContacts: [], proteins: [] }),
   ),

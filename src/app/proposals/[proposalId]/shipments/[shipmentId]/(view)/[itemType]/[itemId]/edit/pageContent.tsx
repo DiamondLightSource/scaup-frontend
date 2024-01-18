@@ -50,6 +50,12 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
+      // Temporary measure, at least whilst all samples are in grids
+
+      if (info.type === "sample") {
+        info.type = "grid";
+      }
+
       const values: TreeData<BaseShipmentItem> = {
         ...activeItem,
         data: { type: activeItem.data.type, ...info },

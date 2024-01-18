@@ -180,7 +180,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         const { store } = renderWithProviders(<></>);
         store.dispatch(updateShipment({ session: mockSession, shipmentId: "1" }));
 
-        await waitFor(() => expect(toastMock).toBeCalled());
+        await waitFor(() => expect(toastMock).toHaveBeenCalled());
       });
 
       it("should display toast if unassigned item response is not valid", async () => {
@@ -196,7 +196,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
 
         await waitFor(() =>
-          expect(toastMock).toBeCalledWith({
+          expect(toastMock).toHaveBeenCalledWith({
             title: "An error ocurred",
             description: "Unable to retrieve unassigned item data",
           }),

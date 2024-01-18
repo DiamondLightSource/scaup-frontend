@@ -15,7 +15,7 @@ const getShipmentData = async (shipmentId: string) => {
 
   // TODO: fetch actual upstream data and type this properly
   const samples: any[] = [];
-  const dispatch = { status: "Unknown" };
+  const dispatch = { status: "Unknown", ...data.data };
 
   return { counts, samples, dispatch, name: data.name };
 };
