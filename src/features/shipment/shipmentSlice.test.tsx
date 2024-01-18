@@ -16,7 +16,7 @@ import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils"
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-import { mockSession, toastMock } from "../../../vitest.setup";
+import { toastMock } from "../../../vitest.setup";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
 const getUnassignedByType = (state: typeof initialState, type: string) =>
@@ -179,7 +179,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         );
 
         const { store } = renderWithProviders(<></>);
-        store.dispatch(updateShipment({ session: mockSession, shipmentId: "1" }));
+        store.dispatch(updateShipment({ shipmentId: "1" }));
 
         await waitFor(() => expect(toastMock).toHaveBeenCalled());
       });
@@ -194,7 +194,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         );
 
         const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+        store.dispatch(updateUnassigned({ shipmentId: "1" }));
 
         await waitFor(() =>
           expect(toastMock).toHaveBeenCalledWith({
@@ -214,7 +214,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         );
 
         const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+        store.dispatch(updateUnassigned({ shipmentId: "1" }));
 
         await waitFor(() =>
           expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(0),
@@ -223,7 +223,7 @@ describe("Shipment Unassigned Items Reducers", () => {
 
       it("should update store with new shipment when thunk called", async () => {
         const { store } = renderWithProviders(<></>);
-        store.dispatch(updateShipment({ session: mockSession, shipmentId: "1" }));
+        store.dispatch(updateShipment({ shipmentId: "1" }));
 
         await waitFor(() =>
           expect(store.getState().shipment.items).toMatchObject(defaultData.children),
@@ -246,7 +246,7 @@ describe("Shipment Unassigned Items Reducers", () => {
         );
 
         const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ session: mockSession, shipmentId: "1" }));
+        store.dispatch(updateUnassigned({ shipmentId: "1" }));
 
         await waitFor(() =>
           expect(getUnassignedByType(store.getState().shipment, "container")).toMatchObject([puck]),

@@ -20,14 +20,12 @@ import { AppDispatch } from "@/store";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { Box, Button, HStack, Spacer, useToast } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
 const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
-  const { data: session } = useSession();
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
@@ -62,7 +60,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       };
 
       const newItem = await Item.create(
-        session,
         shipmentId,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
@@ -72,21 +69,20 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       values.name = newItem.name;
 
       if (checkIsRoot(values)) {
-        await dispatch(updateShipment({ session, shipmentId }));
+        await dispatch(updateShipment({ shipmentId }));
       } else {
-        await dispatch(updateUnassigned({ session, shipmentId }));
+        await dispatch(updateUnassigned({ shipmentId }));
       }
 
       toast({ title: "Successfully created item!" });
       router.replace(`../${newItem.id}/edit`);
     } else {
       await Item.patch(
-        session,
         activeItem!.id,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       );
-      dispatch(updateShipment({ session, shipmentId }));
+      dispatch(updateShipment({ shipmentId }));
       toast({ title: "Successfully saved item!" });
     }
   });

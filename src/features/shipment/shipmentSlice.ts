@@ -7,19 +7,17 @@ import { authenticatedFetch } from "@/utils/client";
 import { recursiveFind, setTagInPlace } from "@/utils/tree";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { Session } from "next-auth";
 
 const { toast } = createStandaloneToast();
 
 interface ShipmentThunkParams {
-  session: Session | null;
   shipmentId: string;
 }
 
 export const updateShipment = createAsyncThunk(
   "shipment/updateShipment",
-  async ({ session, shipmentId }: ShipmentThunkParams, thunkAPI) => {
-    const response = await authenticatedFetch.client(`/shipments/${shipmentId}`, session);
+  async ({ shipmentId }: ShipmentThunkParams, thunkAPI) => {
+    const response = await authenticatedFetch.client(`/shipments/${shipmentId}`);
     if (response && response.status === 200) {
       return (await response.json()).children;
     } else {
@@ -31,11 +29,8 @@ export const updateShipment = createAsyncThunk(
 
 export const updateUnassigned = createAsyncThunk(
   "shipment/updateUnassigned",
-  async ({ session, shipmentId }: ShipmentThunkParams, thunkAPI) => {
-    const response = await authenticatedFetch.client(
-      `/shipments/${shipmentId}/unassigned`,
-      session,
-    );
+  async ({ shipmentId }: ShipmentThunkParams, thunkAPI) => {
+    const response = await authenticatedFetch.client(`/shipments/${shipmentId}/unassigned`);
     if (response) {
       if (response.status === 200) {
         return await response.json();

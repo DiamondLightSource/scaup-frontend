@@ -2,7 +2,6 @@ import { server } from "@/mocks/server";
 import { waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { createShipmentRequest } from ".";
-import { mockSession } from "../../../vitest.setup";
 
 describe("Shipment Request Creation", () => {
   let originalWindowLocation = window.location;
@@ -33,12 +32,12 @@ describe("Shipment Request Creation", () => {
       ),
     );
 
-    createShipmentRequest("1", mockSession);
+    createShipmentRequest("1");
     //await waitFor(() => expect(toastMock).toHaveBeenCalled());
   });
 
   it("should redirect user if request is successful", async () => {
-    expect(createShipmentRequest("1", mockSession));
+    expect(createShipmentRequest("1"));
     await waitFor(() =>
       expect(assignMock).toHaveBeenCalledWith(
         `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,

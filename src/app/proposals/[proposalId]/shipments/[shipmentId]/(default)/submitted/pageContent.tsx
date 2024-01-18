@@ -14,7 +14,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import NextLink from "next/link";
 
 const SubmissionOverviewContent = ({
@@ -24,8 +23,6 @@ const SubmissionOverviewContent = ({
   data: { counts: Record<string, number>; formModel: DynamicFormEntry[] };
   params: { shipmentId: string; proposalId: string };
 }) => {
-  const { data: session } = useSession();
-
   return (
     <VStack alignItems='start' mt='2em'>
       <VStack gap='0' alignItems='start' w='100%'>
@@ -59,7 +56,7 @@ const SubmissionOverviewContent = ({
             contents of the shipment any further.
           </AlertDescription>
         </Alert>
-        <Button onClick={() => createShipmentRequest(params.shipmentId, session)} bg='green.500'>
+        <Button onClick={() => createShipmentRequest(params.shipmentId)} bg='green.500'>
           Arrange shipping
         </Button>
       </VStack>

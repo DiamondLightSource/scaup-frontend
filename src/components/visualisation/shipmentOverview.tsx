@@ -11,7 +11,6 @@ import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/p
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
 import { Box, Divider, Heading, Skeleton } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -32,7 +31,6 @@ const ShipmentOverview = ({
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
-  const { data: session } = useSession();
 
   const unassignItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
@@ -41,27 +39,27 @@ const ShipmentOverview = ({
           ? { containerId: null, location: null }
           : { topLevelContainerId: null, parentId: null, location: null };
 
-      await Item.patch(session, item.id, body, endpoint);
+      await Item.patch(item.id, body, endpoint);
       await Promise.all([
-        dispatch(updateShipment({ session, shipmentId })),
-        dispatch(updateUnassigned({ session, shipmentId })),
+        dispatch(updateShipment({ shipmentId })),
+        dispatch(updateUnassigned({ shipmentId })),
       ]);
       dispatch(syncActiveItem());
     },
-    [dispatch, session, shipmentId],
+    [dispatch, shipmentId],
   );
 
   const deleteItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
-      await Item.delete(session, item.id, endpoint);
+      await Item.delete(item.id, endpoint);
       if (endpoint === "topLevelContainers") {
-        await dispatch(updateShipment({ session, shipmentId }));
+        await dispatch(updateShipment({ shipmentId }));
       } else {
-        await dispatch(updateUnassigned({ session, shipmentId }));
+        await dispatch(updateUnassigned({ shipmentId }));
       }
       dispatch(syncActiveItem());
     },
-    [session, shipmentId, dispatch],
+    [shipmentId, dispatch],
   );
 
   /** Remove item from assigned item list (or delete, if root item) */

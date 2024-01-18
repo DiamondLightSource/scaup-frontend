@@ -15,7 +15,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
@@ -35,12 +34,11 @@ const shipmentForm = [
 ] as DynamicFormEntry[];
 
 export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewProps) => {
-  const { data: session } = useSession();
   const router = useRouter();
   const formContext = useForm<ShipmentData>();
 
   const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
-    const newShipment = await Item.create(session, proposalId, { name: info.name }, "shipments");
+    const newShipment = await Item.create(proposalId, { name: info.name }, "shipments");
 
     router.push(`/proposals/${proposalId}/shipments/${newShipment.id}/edit`);
   });

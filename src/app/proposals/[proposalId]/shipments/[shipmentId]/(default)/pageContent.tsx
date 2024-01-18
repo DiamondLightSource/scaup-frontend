@@ -3,7 +3,6 @@
 import { createShipmentRequest } from "@/utils/client";
 import { Divider, HStack, Heading, Stat, StatLabel, StatNumber, VStack } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
-import { useSession } from "next-auth/react";
 import NextLink from "next/link";
 import { useCallback } from "react";
 
@@ -24,17 +23,15 @@ export interface ShipmentHomeContentProps {
 // TODO: make this more generic
 // TODO: update logic for booking status check
 const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
-  const { data: session } = useSession();
-
   const handleBookingClicked = useCallback(() => {
     if (data.dispatch.status === "Booked") {
       window.location.assign(
         `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/${data.dispatch.shipmentRequest}/incoming`,
       );
     } else {
-      createShipmentRequest(params.shipmentId, session);
+      createShipmentRequest(params.shipmentId);
     }
-  }, [params, session, data]);
+  }, [params, data]);
 
   return (
     <VStack alignItems='start' mt='2em'>
