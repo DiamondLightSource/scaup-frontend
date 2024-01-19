@@ -6,7 +6,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
 
-import { toastMock } from "../../../../../../../../../vitest.setup";
+import { toastMock } from "@/../vitest.setup";
 import ItemPageLayoutContent from "./layoutContent";
 
 const defaultShipmentItems: TreeData[] = [

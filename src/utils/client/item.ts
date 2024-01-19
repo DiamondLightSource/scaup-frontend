@@ -2,19 +2,17 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, Step } from "@/mappings/pages";
 import { authenticatedFetch } from "@/utils/client";
 import { createStandaloneToast } from "@chakra-ui/react";
-import { Session } from "next-auth";
 
 const { toast } = createStandaloneToast();
 
 export class Item {
   // TODO: type this properly
   static async patch(
-    session: Session | null,
     itemId: TreeData["id"],
     data: Omit<BaseShipmentItem, "type">,
     endpoint: Step["endpoint"],
   ) {
-    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, session, {
+    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
@@ -29,7 +27,6 @@ export class Item {
 
   // TODO: type this properly
   static async create(
-    session: Session | null,
     parentId: TreeData["id"],
     data: Record<string, any>,
     endpoint: Step["endpoint"],
@@ -39,7 +36,7 @@ export class Item {
         ? `/proposals/${parentId}/shipments`
         : `/shipments/${parentId}/${endpoint}`;
 
-    const response = await authenticatedFetch.client(requestUrl, session, {
+    const response = await authenticatedFetch.client(requestUrl, {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -52,8 +49,8 @@ export class Item {
     }
   }
 
-  static async delete(session: Session | null, itemId: TreeData["id"], endpoint: Step["endpoint"]) {
-    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, session, {
+  static async delete(itemId: TreeData["id"], endpoint: Step["endpoint"]) {
+    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, {
       method: "DELETE",
     });
 

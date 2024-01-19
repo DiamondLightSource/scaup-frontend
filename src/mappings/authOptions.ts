@@ -1,23 +1,17 @@
 import { NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-interface ExtendedJWT extends JWT {
+export interface ExtendedJWT extends JWT {
   accessToken: string;
 }
 
-interface ExtendedSession extends Session {
+export interface ExtendedSession extends Session {
   accessToken: string;
 }
 
 export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
   callbacks: {
-    async jwt({ token, account }): Promise<ExtendedJWT> {
-      if (account) {
-        token.accessToken = account.access_token;
-      }
-      return token as ExtendedJWT;
-    },
     async session({ session, token }): Promise<ExtendedSession> {
       const newSession: ExtendedSession = {
         ...session,

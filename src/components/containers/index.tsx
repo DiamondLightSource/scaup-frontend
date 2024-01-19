@@ -10,7 +10,6 @@ import {
 import { BaseShipmentItem, Step, separateDetails } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
-import { useSession } from "next-auth/react";
 import { UseFormReturn, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
@@ -44,7 +43,6 @@ export const useChildLocationManager = ({
   child = "containers",
   containerCreationPreset = {},
 }: ChildLocationManagerProps) => {
-  const { data: session } = useSession();
   const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
@@ -70,7 +68,6 @@ export const useChildLocationManager = ({
     // If container does not exist yet in database, we must create it
     if (!isEdit) {
       const newItem = await Item.create(
-        session,
         shipmentId,
         { ...containerCreationPreset, ...values },
         parent,
@@ -85,12 +82,7 @@ export const useChildLocationManager = ({
        *
        * TODO: have some clever way of checking whether or not changes actually happened
        */
-      Item.patch(
-        session,
-        currentContainer!.id,
-        { ...currentContainer!.data, type: values.type },
-        parent,
-      );
+      Item.patch(currentContainer!.id, { ...currentContainer!.data, type: values.type }, parent);
     }
 
     let parentKey = "topLevelContainerId";
@@ -110,7 +102,6 @@ export const useChildLocationManager = ({
 
       if (conflictingChild) {
         await Item.patch(
-          session,
           conflictingChild.id,
           {
             location: null,
@@ -122,7 +113,6 @@ export const useChildLocationManager = ({
     }
 
     await Item.patch(
-      session,
       childItem.id,
       {
         location,
@@ -132,8 +122,8 @@ export const useChildLocationManager = ({
     );
 
     await Promise.all([
-      dispatch(updateShipment({ session, shipmentId })),
-      dispatch(updateUnassigned({ session, shipmentId })),
+      dispatch(updateShipment({ shipmentId })),
+      dispatch(updateUnassigned({ shipmentId })),
     ]);
 
     dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));

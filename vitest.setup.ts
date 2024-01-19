@@ -7,36 +7,19 @@ export const toastMock = vi.fn();
 
 vi.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
 window.scrollTo = () => {};
-window.structuredClone = (x: any) => JSON.parse(JSON.stringify(x));
 
 process.env.API_URL = "http://localhost/api";
 
 beforeEach(() => server.listen());
+
 afterEach(() => {
   server.resetHandlers();
+  toastMock.mockClear();
   cleanup();
 });
+
 afterAll(() => {
   server.close();
-  toastMock.mockClear();
-});
-
-export const mockSession = {
-  expires: new Date(Date.now() + 2 * 86400).toISOString(),
-  data: { name: "admin", accessToken: "a" },
-  user: {},
-};
-
-vi.mock("next-auth/react", () => {
-  const originalModule = vi.importActual("next-auth/react");
-  return {
-    __esModule: true,
-    ...originalModule,
-    useSession: vi.fn(() => ({
-      data: mockSession,
-      status: "authenticated",
-    })),
-  };
 });
 
 // Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318

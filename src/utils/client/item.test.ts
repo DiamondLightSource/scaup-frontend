@@ -1,7 +1,6 @@
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 
-import { mockSession } from "../../../vitest.setup";
 import { Item } from "./item";
 
 describe("Item Creation", () => {
@@ -12,11 +11,11 @@ describe("Item Creation", () => {
       ),
     );
 
-    await expect(Item.create(mockSession, 1, {}, "samples")).rejects.toThrow();
+    await expect(Item.create(1, {}, "samples")).rejects.toThrow();
   });
 
   it("should return item creation response", async () => {
-    const itemResponse = await Item.create(mockSession, 1, {}, "samples");
+    const itemResponse = await Item.create(1, {}, "samples");
     expect(itemResponse).toEqual({ data: { type: "sample" }, id: 123 });
   });
 
@@ -29,14 +28,14 @@ describe("Item Creation", () => {
       ),
     );
 
-    const itemResponse = await Item.create(mockSession, 1, { name: "Test " }, "shipments");
+    const itemResponse = await Item.create(1, { name: "Test " }, "shipments");
     expect(itemResponse).toEqual({ name: "Test" });
   });
 });
 
 describe("Item Modification", () => {
   it("should return item modification response", async () => {
-    const itemResponse = await Item.patch(mockSession, 1, {}, "samples");
+    const itemResponse = await Item.patch(1, {}, "samples");
     expect(itemResponse).toEqual({ id: 123 });
   });
 
@@ -47,13 +46,13 @@ describe("Item Modification", () => {
       }),
     );
 
-    await expect(Item.patch(mockSession, 1, {}, "samples")).rejects.toThrow();
+    await expect(Item.patch(1, {}, "samples")).rejects.toThrow();
   });
 });
 
 describe("Item Deletion", () => {
   it("should return item deletion response", async () => {
-    const itemResponse = await Item.delete(mockSession, 1, "samples");
+    const itemResponse = await Item.delete(1, "samples");
   });
 
   it("should throw if request fails", async () => {
@@ -63,6 +62,6 @@ describe("Item Deletion", () => {
       }),
     );
 
-    await expect(Item.delete(mockSession, 1, "samples")).rejects.toThrow();
+    await expect(Item.delete(1, "samples")).rejects.toThrow();
   });
 });

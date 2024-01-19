@@ -36,7 +36,6 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
@@ -51,7 +50,6 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
   const router = useRouter();
-  const { data: session } = useSession();
 
   const isReview = useSelector(selectIsReview);
   const activeItem = useSelector(selectActiveItem);
@@ -127,7 +125,7 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
   /** Move to next shipment step */
   const handleContinue = useCallback(async () => {
     if (isReview) {
-      const response = await authenticatedFetch(`/shipments/${params.shipmentId}/push`, session, {
+      const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
         method: "POST",
       });
 
@@ -143,7 +141,7 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
     } else {
       router.push("review");
     }
-  }, [handleSetStep, activeStep, router, params, session, toast, isReview]);
+  }, [handleSetStep, activeStep, router, params, toast, isReview]);
 
   const cannotFinish = useMemo(
     () =>
