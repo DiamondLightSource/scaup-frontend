@@ -26,3 +26,9 @@ body,
   justify-content: start;
   align-items: start;
 }
+
+@media print {
+  .navbar-main {
+    display: none;
+  }
+}

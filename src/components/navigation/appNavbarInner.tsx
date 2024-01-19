@@ -10,7 +10,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
   const pathname = usePathname();
 
   return (
-    <>
+    <span className='navbar-main'>
       <Navbar logo='/diamondgs.png'>
         <User
           user={
@@ -25,6 +25,6 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
         />
       </Navbar>
       <Breadcrumbs path={pathname} />
-    </>
+    </span>
   );
 };
