@@ -82,7 +82,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           <TwoLineLink title='Review Shipment' as={NextLink} href={`${params.shipmentId}/review`}>
             Review shipment contents
           </TwoLineLink>
-          <TwoLineLink title='Print' onClick={handleBookingClicked}>
+          <TwoLineLink title='Print' as={NextLink} href={`${params.shipmentId}/print`}>
             View shippable contents in a printable format
           </TwoLineLink>
           <TwoLineLink
