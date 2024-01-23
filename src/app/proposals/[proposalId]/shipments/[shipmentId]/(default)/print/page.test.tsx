@@ -5,13 +5,13 @@ import { HttpResponse, http } from "msw";
 import ShipmentPrintableOverview from "./page";
 
 describe("Shipment Printable Overview Page", () => {
-  it("should flatten and render shipment contents", async () => {
+  it("should render shipment contents", async () => {
     renderWithProviders(
       await ShipmentPrintableOverview({ params: { shipmentId: "1", proposalId: "1" } }),
     );
 
-    expect(screen.getAllByText("Dewar")).toHaveLength(2);
-    expect(screen.getByText("Grid Box")).toBeInTheDocument();
+    expect(screen.getByText("Dewar")).toBeInTheDocument();
+    expect(screen.getByText("Grid Box 1")).toBeInTheDocument();
   });
 
   it("should detect unassigned items in shipment", async () => {

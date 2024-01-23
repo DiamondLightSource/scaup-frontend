@@ -1,38 +1,59 @@
-import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { renderWithProviders } from "@/utils/test-utils";
+import { gridBox, renderWithProviders } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import PrintableOverviewContent from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1" };
-const data = {
-  sample: [{ id: 1, name: "Protein", data: { type: "sample" } }],
-  gridBox: [{ id: 1, name: "Box 01", data: { type: "gridBox" } }],
-  dewar: [{ id: 1, name: "Dewar", data: { type: "dewar" } }],
-} as Record<string, TreeData<BaseShipmentItem>[]>;
+const defaultShipment = {
+  name: "Shipment",
+  id: 1,
+  data: { type: "shipment" as BaseShipmentItem["type"] },
+  children: [
+    {
+      id: "dewar",
+      name: "dewar",
+      data: { type: "dewar" },
+      children: [
+        {
+          id: "container",
+          name: "container",
+          data: { type: "puck" },
+          children: [gridBox],
+        },
+      ],
+    },
+  ],
+};
 
 describe("Shipment Printable Overview", () => {
   it("should render warning if shipment has unassigned items", () => {
     renderWithProviders(
-      <PrintableOverviewContent data={data} params={params} hasUnassigned={true} />,
+      <PrintableOverviewContent shipment={defaultShipment} params={params} hasUnassigned={true} />,
     );
 
     expect(screen.getByText(/this shipment contains unassigned items/i)).toBeInTheDocument();
   });
 
-  it("should render type groups", () => {
+  it("should position if item has position", () => {
     renderWithProviders(
-      <PrintableOverviewContent data={data} params={params} hasUnassigned={false} />,
+      <PrintableOverviewContent shipment={defaultShipment} params={params} hasUnassigned={false} />,
     );
 
-    expect(screen.getByText(/grid box/i)).toBeInTheDocument();
-    expect(screen.getByText(/sample/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/dewar/i)).toHaveLength(2);
+    expect(screen.getByText("In container, position 5")).toBeInTheDocument();
+  });
+
+  it("should render parent name if item has parent", () => {
+    renderWithProviders(
+      <PrintableOverviewContent shipment={defaultShipment} params={params} hasUnassigned={false} />,
+    );
+
+    expect(screen.getByText(/in container/i)).toBeInTheDocument();
+    expect(screen.getByText("In dewar")).toBeInTheDocument();
   });
 
   it("should render warning message in body if shipment has no items", () => {
     renderWithProviders(
-      <PrintableOverviewContent data={null} params={params} hasUnassigned={false} />,
+      <PrintableOverviewContent shipment={null} params={params} hasUnassigned={false} />,
     );
     expect(screen.getAllByText(/no assigned items/i)).toHaveLength(2);
   });

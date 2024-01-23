@@ -3,7 +3,6 @@
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { pascalToSpace } from "@/utils/generic";
 import {
   Alert,
   AlertDescription,
@@ -19,17 +18,60 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { MdLocalPrintshop } from "react-icons/md";
 
 export interface PrintableOverviewContentProps {
-  data: Record<string, TreeData<BaseShipmentItem>[]> | null;
+  shipment: TreeData<BaseShipmentItem> | null;
   params: { shipmentId: string; proposalId: string };
   hasUnassigned: boolean;
 }
 
+interface ItemCardDisplayProps {
+  item: TreeData<BaseShipmentItem>;
+  level?: number;
+  parent?: string | null;
+}
+
+const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProps) => {
+  const locationText = useMemo(() => {
+    if (!parent) {
+      return null;
+    }
+
+    let text = `In ${parent}`;
+
+    if (item.data.location) {
+      text += `, position ${item.data.location}`;
+    }
+    return text;
+  }, [parent, item]);
+
+  return (
+    <>
+      <Box w='100%' border='1px solid' borderColor='gray.400' mb='10px'>
+        <HStack w='100%' bg='gray.200' p='1em'>
+          <Heading size='md'>{item.name}</Heading>
+          <Spacer />
+          {locationText && <Text>{locationText}</Text>}
+        </HStack>
+        <Box p='1em'>
+          <DynamicFormView data={item.data} formType={item.data.type} />
+        </Box>
+      </Box>
+      <Box borderLeft='2px solid' w='100%' pl='10px' borderColor={`gray.${800 - level * 100}`}>
+        {item.children
+          ? item.children.map((child) => (
+              <ItemCardDisplay key={child.id} item={child} level={level + 1} parent={item.name} />
+            ))
+          : null}
+      </Box>
+    </>
+  );
+};
+
 const PrintableOverviewContent = ({
-  data,
+  shipment,
   params,
   hasUnassigned,
 }: PrintableOverviewContentProps) => {
@@ -58,25 +100,10 @@ const PrintableOverviewContent = ({
           </AlertDescription>
         </Alert>
       )}
-      {data !== null ? (
+      {shipment !== null ? (
         <VStack alignItems='start' w='100%'>
-          {Object.entries(data).map(([key, itemArray]) => (
-            <VStack key={key} w='100%' alignItems='start'>
-              <Heading mt='0.5em'>{pascalToSpace(key)}</Heading>
-              <Divider borderColor='grey.600' />
-              {itemArray.map((item, i) => (
-                <Box key={`${item.id}-${i}`} w='100%' border='1px solid' borderColor='gray.400'>
-                  <HStack w='100%' bg='gray.200' p='1em'>
-                    <Heading size='md'>{item.name}</Heading>
-                    <Spacer />
-                    <Text>In {item.data.parent}</Text>
-                  </HStack>
-                  <Box p='1em'>
-                    <DynamicFormView data={item.data} formType={item.data.type} />
-                  </Box>
-                </Box>
-              ))}
-            </VStack>
+          {shipment.children!.map((item) => (
+            <ItemCardDisplay key={item.id} item={item} />
           ))}
         </VStack>
       ) : (

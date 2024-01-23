@@ -28,7 +28,7 @@ body,
 }
 
 @media print {
-  .navbar-main {
+  .hide-on-print {
     display: none;
   }
 }

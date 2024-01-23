@@ -10,7 +10,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
   const pathname = usePathname();
 
   return (
-    <span className='navbar-main'>
+    <span className='hide-on-print'>
       <Navbar logo='/diamondgs.png'>
         <User
           user={

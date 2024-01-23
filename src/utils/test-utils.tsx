@@ -99,7 +99,7 @@ export const renderAndInjectForm = (
 export const gridBox: TreeData<BaseShipmentItem> = {
   id: 3,
   name: "gridBox",
-  data: { type: "gridBox" },
+  data: { type: "gridBox", location: 5 },
 };
 
 export const sample: TreeData<BaseShipmentItem> = {
