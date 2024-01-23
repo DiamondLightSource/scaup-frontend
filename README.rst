@@ -1,4 +1,4 @@
-|code_ci| |code_cov|
+|code_ci| |code_cov| |license|
 
 ============== ==============================================================
 Source code https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend
@@ -25,10 +25,16 @@ Testing
 - Run :code:`yarn test`
 
 .. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/badges/master/pipeline.svg
-:alt: Code CI
+    :target: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/-/pipelines
+    :alt: Code CI
 
 .. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/badges/master/coverage.svg
-:alt: Code Coverage
+    :target: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/-/pipelines
+    :alt: Code Coverage
+
+.. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://opensource.org/licenses/Apache-2.0
+    :alt: Apache License
 ..
 Anything below this line is used when viewing README.rst and will be replaced
 when included in index.rst
