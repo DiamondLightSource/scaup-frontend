@@ -48,7 +48,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
   }, [parent, item]);
 
   return (
-    <>
+    <Box w='100%'>
       <Box w='100%' border='1px solid' borderColor='gray.400' mb='10px'>
         <HStack w='100%' bg='gray.200' p='1em'>
           <Heading size='md'>{item.name}</Heading>
@@ -66,7 +66,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
             ))
           : null}
       </Box>
-    </>
+    </Box>
   );
 };
 
@@ -101,7 +101,7 @@ const PrintableOverviewContent = ({
         </Alert>
       )}
       {shipment !== null ? (
-        <VStack alignItems='start' w='100%'>
+        <VStack alignItems='start' w='100%' gap='2em'>
           {shipment.children!.map((item) => (
             <ItemCardDisplay key={item.id} item={item} />
           ))}

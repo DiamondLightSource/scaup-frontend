@@ -14,4 +14,5 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   falconTube: containerForm,
   dewar: dewarForm,
   gridBox: gridBoxForm,
+  shipment: [],
 };
