@@ -20,7 +20,6 @@ export const authOptions: NextAuthOptions = {
       return newSession;
     },
   },
-  secret: "secret",
   providers: [
     {
       id: "diamond",

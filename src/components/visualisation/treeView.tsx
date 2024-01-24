@@ -11,6 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useCallback } from "react";
+import "@/styles/tree.css";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -29,7 +30,6 @@ export interface TreeData<T = any> {
   isNotViewable?: boolean;
 }
 
-import "@/styles/tree.css";
 
 export interface TreeViewProps extends AccordionProps {
   data: TreeData[];

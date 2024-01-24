@@ -13,14 +13,17 @@ Configuration
 Configuration is done through environment variables:
 
 * :code:`NEXTAUTH_URL`: NextAuth instance URL. Usually the application's path, followed by :code:`/nextauth`
+* :code:`NEXTAUTH_SECRET`: Random string used for generating the encrypted NextAuth JWT. Do not use the secret in :code:`.example.env` in production
 * :code:`OAUTH_CLIENT_ID`: OIDC client ID
 * :code:`OAUTH_CLIENT_SECRET`: OIDC client secret
 * :code:`OAUTH_COOKIE_NAME`: Authentication token cookie name
 * :code:`OAUTH_DISCOVERY_ENDPOINT`: OIDC discovery endpoint
 * :code:`OAUTH_PROFILE_INFO_ENDPOINT`: Microauth's profile endpoint. May be removed in the future if our auth solution provides profile info as well.
 
-* :code:`REACT_APP_SHIPPING_SERVICE_URL`: Shipping Service URL
-* :code:`REACT_APP_API_URL`: Sample Handling API URL
+Some variables are inlined at compile time:
+
+* :code:`NEXT_PUBLIC_SHIPPING_SERVICE_URL`: Shipping Service URL
+* :code:`NEXT_PUBLIC_API_URL`: Sample Handling API URL
 
 ==========
 Building
@@ -31,7 +34,6 @@ Building the distribution files:
 .. code-block:: bash
 
     yarn install
-
     yarn build
 
 ============
