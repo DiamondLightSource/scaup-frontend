@@ -1,5 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import {
+  flattenTree,
   recursiveCountChildrenByType,
   recursiveCountTypeInstances,
   recursiveFind,
@@ -151,5 +152,30 @@ describe("Recursively Count Identical Types", () => {
     expect(count.dewar).toBe(1);
     expect(count.puck).toBe(2);
     expect(count.sample).toBe(3);
+  });
+});
+
+describe("Flatten Tree", () => {
+  it("should count item type instances", () => {
+    const flattened = flattenTree({
+      id: "dewar",
+      name: "Dewar",
+      data: { type: "dewar" },
+      children: [
+        {
+          id: "puck1",
+          name: "Puck 1",
+          data: { type: "puck" },
+          children: [
+            { id: "s1", name: "Sample", data: { type: "sample" } },
+            { id: "s2", name: "Sample", data: { type: "sample" } },
+            { id: "s3", name: "Sample", data: { type: "sample" } },
+          ],
+        },
+        { id: "puck2", name: "Puck 2", data: { type: "puck" } },
+      ],
+    });
+
+    expect(flattened).toHaveLength(6);
   });
 });

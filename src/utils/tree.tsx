@@ -104,3 +104,23 @@ export const setTagInPlace = (data: TreeData<BaseShipmentItem>[]) => {
     }
   }
 };
+
+/**
+ * Flatten tree items recursively. An additional "parent" parameter is added to the item's data.
+ *
+ * @param data Tree structure to flatten
+ * @returns Flat array of tree items
+ */
+export const flattenTree = (data: TreeData<BaseShipmentItem>, parent: string | null = null) => {
+  let flattenedTree: TreeData<BaseShipmentItem>[] = [
+    { ...data, data: { ...data.data, parent }, children: undefined },
+  ];
+
+  if (data.children) {
+    flattenedTree = flattenedTree.concat(
+      data.children.flatMap((item) => flattenTree(item, data.name)),
+    );
+  }
+
+  return flattenedTree;
+};

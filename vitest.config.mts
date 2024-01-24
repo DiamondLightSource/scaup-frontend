@@ -25,7 +25,10 @@ export default defineConfig({
         "src/app/nextauth",
         // Auth options, part of NextAuth's configuration
         "src/mappings/authOptions.ts",
+        // Styling
         "src/styles",
+        // Types
+        "src/types",
         // "Static" navigation objects, or objects otherwise imported from external libraries
         "src/components/navigation",
         "src/index.ts",

@@ -18,11 +18,10 @@ const getShipmentData = async (shipmentId: string) => {
     counts[pascalToSpace(key)] = value;
   }
 
-  // TODO: fetch actual upstream data and type this properly
+  // TODO: type this properly
   const samples: any[] = [];
-  const dispatch = { status: "Unknown", ...data.data };
 
-  return { counts, samples, dispatch, name: data.name };
+  return { counts, samples, dispatch: data.data, name: data.name };
 };
 
 const ShipmentHome = async ({ params }: { params: { shipmentId: string; proposalId: string } }) => {

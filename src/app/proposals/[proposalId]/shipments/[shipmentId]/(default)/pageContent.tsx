@@ -45,7 +45,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
       <HStack w='100%' mb='1em'>
         <Stat borderBottom='3px solid' borderColor='diamond.700'>
           <StatLabel>Status</StatLabel>
-          <StatNumber>{data.dispatch.status}</StatNumber>
+          <StatNumber>{data.dispatch.status || "Unknown"}</StatNumber>
         </Stat>
         {Object.entries(data.counts).map(([key, value]) => (
           <Stat borderBottom='3px solid' borderColor='diamond.700' key={key}>
@@ -81,6 +81,9 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           </TwoLineLink>
           <TwoLineLink title='Review Shipment' as={NextLink} href={`${params.shipmentId}/review`}>
             Review shipment contents
+          </TwoLineLink>
+          <TwoLineLink title='Print' as={NextLink} href={`${params.shipmentId}/print`}>
+            View shippable contents in a printable format
           </TwoLineLink>
           <TwoLineLink
             title={`${data.dispatch.status === "Booked" ? "Edit" : "Create"} Booking`}
