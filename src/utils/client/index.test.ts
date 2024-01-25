@@ -41,7 +41,7 @@ describe("Shipment Request Creation", () => {
     expect(createShipmentRequest("1"));
     await waitFor(() =>
       expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
+        `${process.env.NEXT_PUBLIC_SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
       ),
     );
   });

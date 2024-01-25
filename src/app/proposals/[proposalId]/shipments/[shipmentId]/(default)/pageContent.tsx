@@ -26,7 +26,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   const handleBookingClicked = useCallback(() => {
     if (data.dispatch.status === "Booked") {
       window.location.assign(
-        `${process.env.SHIPPING_SERVICE_URL}/shipment-requests/${data.dispatch.shipmentRequest}/incoming`,
+        `${process.env.NEXT_PUBLIC_SHIPPING_SERVICE_URL}/shipment-requests/${data.dispatch.shipmentRequest}/incoming`,
       );
     } else {
       createShipmentRequest(params.shipmentId);
