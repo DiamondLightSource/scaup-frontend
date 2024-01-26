@@ -26,9 +26,7 @@ describe("Shipment Request Creation", () => {
   it("should redirect user if request is successful", async () => {
     expect(createShipmentRequest("1"));
     await waitFor(() =>
-      expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_API_URL}/shipments/1/request`,
-      ),
+      expect(assignMock).toHaveBeenCalledWith(`${process.env.API_URL}/shipments/1/request`),
     );
   });
 });

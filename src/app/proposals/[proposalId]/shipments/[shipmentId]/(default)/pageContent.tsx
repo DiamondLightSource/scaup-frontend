@@ -35,9 +35,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   const toast = useToast();
   const handleBookingClicked = useCallback(async () => {
     if (data.dispatch.status === "Booked") {
-      window.location.assign(
-        `${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`,
-      );
+      window.location.assign(`${process.env.API_URL}/shipments/${params.shipmentId}/request`);
     } else {
       try {
         await createShipmentRequest(params.shipmentId);

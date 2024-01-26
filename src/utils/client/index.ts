@@ -30,7 +30,7 @@ const authenticatedFetch = async (
     headers.authorization = `Bearer ${session.accessToken}`;
   }
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL! + url, {
+  const res = await fetch(process.env.API_URL! + url, {
     ...init,
     headers,
   });
@@ -97,7 +97,7 @@ export const createShipmentRequest = async (shipmentId: string) => {
   });
 
   if (resp && resp.status === 201) {
-    window.location.assign(`${process.env.NEXT_PUBLIC_API_URL}/shipments/${shipmentId}/request`);
+    window.location.assign(`${process.env.API_URL}/shipments/${shipmentId}/request`);
   } else {
     throw Error("Unable to create shipment request");
   }

@@ -92,9 +92,7 @@ describe("Shipment Submission Overview", () => {
     );
 
     fireEvent.click(screen.getByText(/edit booking/i));
-    expect(assignMock).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_API_URL}/shipments/1/request`,
-    );
+    expect(assignMock).toHaveBeenCalledWith(`${process.env.API_URL}/shipments/1/request`);
   });
 
   it("should redirect user to shipping service if 'create booking' is clicked", async () => {
@@ -112,9 +110,7 @@ describe("Shipment Submission Overview", () => {
 
     fireEvent.click(screen.getByText(/create booking/i));
     await waitFor(() =>
-      expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_API_URL}/shipments/1/request`,
-      ),
+      expect(assignMock).toHaveBeenCalledWith(`${process.env.API_URL}/shipments/1/request`),
     );
   });
 

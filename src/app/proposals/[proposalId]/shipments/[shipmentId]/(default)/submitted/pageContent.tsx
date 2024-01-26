@@ -72,7 +72,7 @@ const SubmissionOverviewContent = ({
         {data.isBooked ? (
           <Button
             as={NextLink}
-            href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`}
+            href={`${process.env.API_URL}/shipments/${params.shipmentId}/request`}
             bg='green.500'
           >
             View shipping information
