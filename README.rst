@@ -22,7 +22,6 @@ Configuration is done through environment variables:
 
 Some variables are inlined at compile time:
 
-* :code:`NEXT_PUBLIC_SHIPPING_SERVICE_URL`: Shipping Service URL
 * :code:`NEXT_PUBLIC_API_URL`: Sample Handling API URL
 
 ==========

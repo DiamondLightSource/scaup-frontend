@@ -155,24 +155,26 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
       <GridItem flexBasis='fill' flexShrink='0' w='100%' area='stepper'>
         <Stepper colorScheme='green' h='60px' index={activeStep}>
           {steps.map((step, index) => (
-            <Step
-              aria-label={`${step.title} Step`}
-              key={index}
-              onClick={() => handleSetStep(index)}
-            >
-              <StepIndicator cursor={isReview ? "not-allowed" : "pointer"} bg='white'>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
-              </StepIndicator>
-              <Box flexShrink='0'>
-                <StepTitle>{step.title}</StepTitle>
-                <StepDescription>
-                  {typeCount[index].total} {step.title}
-                </StepDescription>
-              </Box>
+            <Step key={index}>
+              <HStack
+                aria-label={`${step.title} Step`}
+                onClick={() => handleSetStep(index)}
+                style={{ cursor: isReview ? "not-allowed" : "pointer" }}
+              >
+                <StepIndicator bg='white'>
+                  <StepStatus
+                    complete={<StepIcon />}
+                    incomplete={<StepNumber />}
+                    active={<StepNumber />}
+                  />
+                </StepIndicator>
+                <Box flexShrink='0'>
+                  <StepTitle>{step.title}</StepTitle>
+                  <StepDescription>
+                    {typeCount[index].total} {step.title}
+                  </StepDescription>
+                </Box>
+              </HStack>
               <StepSeparator />
             </Step>
           ))}

@@ -42,7 +42,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
     let text = `In ${parent}`;
 
     if (item.data.location) {
-      text += `, position ${item.data.location}`;
+      text += `, position ${item.data.location + 1}`;
     }
     return text;
   }, [parent, item]);
@@ -53,7 +53,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
         <HStack w='100%' bg='gray.200' p='1em'>
           <Heading size='md'>{item.name}</Heading>
           <Spacer />
-          {locationText && <Text>{locationText}</Text>}
+          {locationText && <Text fontWeight='600'>{locationText}</Text>}
         </HStack>
         <Box p='1em'>
           <DynamicFormView data={item.data} formType={item.data.type} />

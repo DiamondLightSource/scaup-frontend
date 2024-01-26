@@ -1,7 +1,16 @@
 "use client";
 
 import { createShipmentRequest } from "@/utils/client";
-import { Divider, HStack, Heading, Stat, StatLabel, StatNumber, VStack } from "@chakra-ui/react";
+import {
+  Divider,
+  HStack,
+  Heading,
+  Stat,
+  StatLabel,
+  StatNumber,
+  VStack,
+  useToast,
+} from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
 import { useCallback } from "react";
@@ -23,15 +32,20 @@ export interface ShipmentHomeContentProps {
 // TODO: make this more generic
 // TODO: update logic for booking status check
 const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
-  const handleBookingClicked = useCallback(() => {
+  const toast = useToast();
+  const handleBookingClicked = useCallback(async () => {
     if (data.dispatch.status === "Booked") {
       window.location.assign(
-        `${process.env.NEXT_PUBLIC_SHIPPING_SERVICE_URL}/shipment-requests/${data.dispatch.shipmentRequest}/incoming`,
+        `${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`,
       );
     } else {
-      createShipmentRequest(params.shipmentId);
+      try {
+        await createShipmentRequest(params.shipmentId);
+      } catch (e) {
+        toast({ title: (e as Error).message, status: "error" });
+      }
     }
-  }, [params, data]);
+  }, [params, data, toast]);
 
   return (
     <VStack alignItems='start' mt='2em'>
