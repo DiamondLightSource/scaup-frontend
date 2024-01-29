@@ -1,9 +1,9 @@
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 
+import { toastMock } from "@/../vitest.setup";
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
-import { toastMock } from "../../../../../../../../vitest.setup";
 import SubmissionOverviewContent from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1" };

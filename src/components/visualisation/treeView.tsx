@@ -1,3 +1,4 @@
+import "@/styles/tree.css";
 import {
   Accordion,
   AccordionButton,
@@ -10,8 +11,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import React, { useCallback } from "react";
-import "@/styles/tree.css";
+import { useCallback } from "react";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -29,7 +29,6 @@ export interface TreeData<T = any> {
   /** Should 'view' button be invisible */
   isNotViewable?: boolean;
 }
-
 
 export interface TreeViewProps extends AccordionProps {
   data: TreeData[];
@@ -60,7 +59,6 @@ export const TreeView = ({
     console.log(event.dataTransfer.getData("text"))
   }, []);
   */
-
   const handleRemove = useCallback(
     (item: TreeData) => {
       if (onRemove) {
@@ -85,66 +83,68 @@ export const TreeView = ({
       {data.map((item, index) => {
         const isSelected = item === selectedItem;
         return (
-          <React.Fragment key={index}>
-            <AccordionItem border='none'>
-              <HStack
-                w='100%'
-                h='36px'
-                className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
-                bg={isSelected ? "diamond.100" : "transparent"}
-              >
-                <h2
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    height: "100%",
-                    alignItems: "center",
-                  }}
+          <AccordionItem border='none' key={index}>
+            {({ isExpanded }) => (
+              <>
+                <HStack
+                  w='100%'
+                  h='36px'
+                  className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
+                  bg={isSelected ? "diamond.100" : "transparent"}
                 >
-                  <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
-                    {hasChildren(item) ? (
-                      <AccordionIcon />
-                    ) : (
-                      <Text px='15px' aria-hidden='true'>
-                        ⦁
-                      </Text>
-                    )}
-                  </AccordionButton>
-                  <HStack
-                    alignItems='center'
-                    w='100%'
-                    h='100%'
-                    onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
-                    aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
-                    aria-current={isSelected}
+                  <h2
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      height: "100%",
+                      alignItems: "center",
+                    }}
                   >
-                    {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                    <Text fontSize='md' fontWeight={isSelected ? "600" : "200"}>
-                      {item.name}
-                    </Text>
-                  </HStack>
-                </h2>
+                    <AccordionButton w='auto' p='8px' aria-label={`Expand ${item.name}`}>
+                      {hasChildren(item) ? (
+                        <AccordionIcon />
+                      ) : (
+                        <Text px='15px' aria-hidden='true'>
+                          ⦁
+                        </Text>
+                      )}
+                    </AccordionButton>
+                    <HStack
+                      alignItems='center'
+                      w='100%'
+                      h='100%'
+                      onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
+                      aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
+                      aria-current={isSelected}
+                    >
+                      {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
+                      <Text fontSize='md' fontWeight={isSelected ? "600" : "200"}>
+                        {item.name}
+                      </Text>
+                    </HStack>
+                  </h2>
 
-                {!(item.isUndeletable || readOnly || hasChildren(item)) && (
-                  <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
-                    Remove
-                  </Button>
+                  {!(item.isUndeletable || readOnly || hasChildren(item)) && (
+                    <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
+                      Remove
+                    </Button>
+                  )}
+                </HStack>
+                {isExpanded && hasChildren(item) && (
+                  <AccordionPanel py='0' pr='0'>
+                    <TreeView
+                      data={item.children!}
+                      onRemove={onRemove}
+                      onEdit={onEdit}
+                      readOnly={readOnly}
+                      selectedItem={selectedItem}
+                      {...props}
+                    />
+                  </AccordionPanel>
                 )}
-              </HStack>
-              {hasChildren(item) && (
-                <AccordionPanel py='0' pr='0'>
-                  <TreeView
-                    data={item.children!}
-                    onRemove={onRemove}
-                    onEdit={onEdit}
-                    readOnly={readOnly}
-                    selectedItem={selectedItem}
-                    {...props}
-                  />
-                </AccordionPanel>
-              )}
-            </AccordionItem>
-          </React.Fragment>
+              </>
+            )}
+          </AccordionItem>
         );
       })}
     </Accordion>
