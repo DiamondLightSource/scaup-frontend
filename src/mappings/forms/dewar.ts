@@ -9,4 +9,9 @@ export const dewarForm = [
       $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
     },
   },
+  {
+    id: "comments",
+    label: "Comments",
+    type: "textarea",
+  },
 ] as DynamicFormEntry[];

@@ -8,7 +8,7 @@ export const toastMock = vi.fn();
 vi.mock("next/navigation", () => ({ ...require("next-router-mock"), usePathname: pathnameMock }));
 window.scrollTo = () => {};
 
-process.env.NEXT_PUBLIC_API_URL = "http://localhost/api";
+process.env.API_URL = "http://localhost/api";
 
 beforeEach(() => server.listen());
 

@@ -1,5 +1,8 @@
+import { toastMock } from "@/../vitest.setup";
+import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { HttpResponse, http } from "msw";
 import ShipmentHomeContent from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1" };
@@ -89,9 +92,7 @@ describe("Shipment Submission Overview", () => {
     );
 
     fireEvent.click(screen.getByText(/edit booking/i));
-    expect(assignMock).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_SHIPPING_SERVICE_URL}/shipment-requests/99/incoming`,
-    );
+    expect(assignMock).toHaveBeenCalledWith(`${process.env.API_URL}/shipments/1/request`);
   });
 
   it("should redirect user to shipping service if 'create booking' is clicked", async () => {
@@ -109,9 +110,37 @@ describe("Shipment Submission Overview", () => {
 
     fireEvent.click(screen.getByText(/create booking/i));
     await waitFor(() =>
-      expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_SHIPPING_SERVICE_URL}/shipment-requests/20/incoming`,
+      expect(assignMock).toHaveBeenCalledWith(`${process.env.API_URL}/shipments/1/request`),
+    );
+  });
+
+  it("should display toast if shipment request creation fails", async () => {
+    server.use(
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/request",
+        () => HttpResponse.json({}, { status: 424 }),
+        { once: true },
       ),
+    );
+
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Created" },
+          name: "",
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByText(/create booking/i));
+    await waitFor(() =>
+      expect(toastMock).toHaveBeenCalledWith({
+        status: "error",
+        title: "Unable to create shipment request",
+      }),
     );
   });
 

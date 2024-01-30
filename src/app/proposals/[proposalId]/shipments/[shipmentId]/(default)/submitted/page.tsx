@@ -21,7 +21,7 @@ const getShipmentData = async (shipmentId: string) => {
     type: "text",
   }));
 
-  return { counts, formModel };
+  return { counts, formModel, isBooked: data && data.data.shipmentRequest };
 };
 
 const SubmissionOverview = async ({

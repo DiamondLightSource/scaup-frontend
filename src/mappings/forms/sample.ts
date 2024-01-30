@@ -49,6 +49,7 @@ export const sampleForm = [
       { label: "Au-flat", value: "Au-flat" },
       { label: "UltrAuFoil", value: "UltrAuFoil" },
       { label: "HexAuFoil", value: "HexAuFoil" },
+      { label: "No Foil", value: "No Foil" },
     ],
   },
   {
@@ -62,6 +63,7 @@ export const sampleForm = [
       { label: "Holey carbon + graphene", value: "Holey carbon + graphene" },
       { label: "Multi-hole", value: "Multi-hole" },
       { label: "Holey carbon - square", value: "Holey carbon - square" },
+      { label: "Gold foil on gold mesh", value: "Gold foil on gold mesh" },
     ],
   },
   {
