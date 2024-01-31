@@ -34,6 +34,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     [activeItem],
   );
   const router = useRouter();
+  const [isAddLoading, setAddLoading] = useState(false);
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
@@ -49,6 +50,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
       // Temporary measure, at least whilst all samples are in grids
+      setAddLoading(true);
 
       if (info.type === "sample") {
         info.type = "grid";
@@ -82,6 +84,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       );
+      setAddLoading(false);
       dispatch(updateShipment({ shipmentId }));
       toast({ title: "Successfully saved item!" });
     }
@@ -155,7 +158,9 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           <Button onClick={redirectToNew} isDisabled={!activeIsEdit}>
             Create New Item
           </Button>
-          <Button type='submit'>{activeIsEdit ? "Save" : "Add"}</Button>
+          <Button isLoading={isAddLoading} type='submit'>
+            {activeIsEdit ? "Save" : "Add"}
+          </Button>
         </HStack>
       </form>
     </FormProvider>

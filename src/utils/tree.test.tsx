@@ -82,7 +82,7 @@ describe("Recursively Find Item", () => {
 
     setTagInPlace(newData);
 
-    expect(newData[0].children![0].children![0].tag).toBe("5");
+    expect(newData[0].children![0].children![0].tag).toBe("4");
   });
 });
 

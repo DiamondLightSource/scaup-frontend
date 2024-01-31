@@ -42,7 +42,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
     let text = `In ${parent}`;
 
     if (item.data.location) {
-      text += `, position ${item.data.location + 1}`;
+      text += `, position ${item.data.location}`;
     }
     return text;
   }, [parent, item]);
@@ -78,7 +78,7 @@ const PrintableOverviewContent = ({
   const printPage = useCallback(() => window.print(), []);
 
   return (
-    <VStack alignItems='start' mt='2em'>
+    <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {params.proposalId}

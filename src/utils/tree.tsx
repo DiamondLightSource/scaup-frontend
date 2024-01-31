@@ -97,7 +97,7 @@ export const setTagInPlace = (data: TreeData<BaseShipmentItem>[]) => {
       item.data.location !== undefined &&
       item.data.location !== null
     ) {
-      item.tag = ((item.data.location as number) + 1).toString();
+      item.tag = (item.data.location as number).toString();
     }
     if (item.children !== undefined && item.children !== null) {
       setTagInPlace(item.children);

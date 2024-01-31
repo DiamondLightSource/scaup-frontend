@@ -113,3 +113,8 @@ export const puck: TreeData<BaseShipmentItem> = {
   name: "puck",
   data: { type: "puck", registeredContainer: "DLS-0001" },
 };
+
+export const prepopData = {
+  proteins: [{ name: "AAA", proteinId: 1 }],
+  dewars: [{ facilityCode: 123 }],
+};

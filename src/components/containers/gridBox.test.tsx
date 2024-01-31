@@ -80,7 +80,7 @@ describe("Grid Box", () => {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
-    fireEvent.click(screen.getByTestId("2-populated"));
+    fireEvent.click(screen.getByTestId("1-populated"));
   });
 
   it("should display message if no unassigned samples are available", () => {
@@ -88,7 +88,7 @@ describe("Grid Box", () => {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText("1"));
 
     expect(screen.getByText(/no unassigned samples available/i));
   });
@@ -106,11 +106,11 @@ describe("Grid Box", () => {
       preloadedState: { shipment: { ...defaultShipment, isEdit: true } },
     });
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByTestId("2-populated");
+    await screen.findByTestId("1-populated");
   });
 
   it("should remove sample from position when remove clicked", async () => {
@@ -126,12 +126,12 @@ describe("Grid Box", () => {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText("1"));
 
     const removeButton = await screen.findByRole("button", { name: "Remove" });
     fireEvent.click(removeButton);
 
-    await screen.findByTestId("2-empty");
+    await screen.findByTestId("1-empty");
   });
 
   it("should render four grid slots by default", () => {
@@ -188,11 +188,11 @@ describe("Grid Box", () => {
       },
     });
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByTestId("2-populated");
+    await screen.findByTestId("1-populated");
   });
 
   it("should replace existing item in grid box slot", async () => {
@@ -216,7 +216,7 @@ describe("Grid Box", () => {
       },
     });
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 

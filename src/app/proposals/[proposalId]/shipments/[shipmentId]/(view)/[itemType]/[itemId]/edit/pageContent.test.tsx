@@ -1,7 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
+import { prepopData, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
@@ -32,15 +32,18 @@ describe("Item Page", () => {
       ),
     );
 
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          items: [],
-          activeItem: newDewar,
+    const { store } = renderWithProviders(
+      <ItemFormPageContent shipmentId='1' prepopData={prepopData} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            items: [],
+            activeItem: newDewar,
+          },
         },
       },
-    });
+    );
 
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(0));
 
@@ -49,7 +52,7 @@ describe("Item Page", () => {
     await waitFor(() => expect(store.getState().shipment.items).toHaveLength(1));
   });
 
-  it("should add item to shipment items if in creation mode and item is a root item", async () => {
+  it("should display new children in parent item", async () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId/unassigned",
@@ -70,14 +73,17 @@ describe("Item Page", () => {
       ),
     );
 
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          items: [],
+    const { store } = renderWithProviders(
+      <ItemFormPageContent shipmentId='1' prepopData={prepopData} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            items: [],
+          },
         },
       },
-    });
+    );
 
     await waitFor(() =>
       expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(0),
@@ -108,16 +114,19 @@ describe("Item Page", () => {
       ),
     );
 
-    const { store } = renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          items: [{ id: "456", name: "", data: { type: "sample" } }],
-          activeItem: { id: "456", name: "", data: { type: "sample" } },
-          isEdit: true,
+    const { store } = renderWithProviders(
+      <ItemFormPageContent shipmentId='1' prepopData={prepopData} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            items: [{ id: "456", name: "", data: { type: "sample" } }],
+            activeItem: { id: "456", name: "", data: { type: "sample" } },
+            isEdit: true,
+          },
         },
       },
-    });
+    );
 
     fireEvent.change(screen.getByRole("combobox", { name: "Foil" }), {
       value: "Quantifoil copper",
@@ -158,7 +167,7 @@ describe("Item Page", () => {
       ),
     );
 
-    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />);
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
       target: { value: "New Name" },

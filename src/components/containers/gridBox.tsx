@@ -37,7 +37,8 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
     const newSamples = Array(parsedCapacity).fill(null);
     if (currentGridBox!.children) {
       for (const innerSample of currentGridBox!.children) {
-        newSamples[innerSample.data.location] = innerSample;
+        // Sample indexes start at 1; historical reasons
+        newSamples[innerSample.data.location - 1] = innerSample;
       }
     }
     return newSamples;

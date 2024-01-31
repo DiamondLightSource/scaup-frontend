@@ -8,6 +8,9 @@ export const dewarForm = [
     values: {
       $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
     },
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "comments",
