@@ -196,7 +196,7 @@ describe("Item Page", () => {
     await waitFor(() => expect(mockRouter.pathname).toBe("/new/edit"));
   });
 
-  it.only("should disable button whilst request to add item is being made", async () => {
+  it("should disable button whilst request to add item is being made", async () => {
     server.use(
       http.post(
         "http://localhost/api/shipments/:shipmentId/samples",
