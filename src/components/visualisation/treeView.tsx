@@ -23,7 +23,7 @@ export interface TreeData<T = any> {
   /** Node data */
   data: T;
   /** Node children */
-  children?: TreeData[];
+  children?: TreeData[] | null;
   /** Should 'remove' button be invisible */
   isUndeletable?: boolean;
   /** Should 'view' button be invisible */

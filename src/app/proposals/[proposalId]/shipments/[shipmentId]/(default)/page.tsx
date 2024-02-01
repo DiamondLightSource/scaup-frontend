@@ -1,3 +1,4 @@
+import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
 
 const getShipmentData = async (shipmentId: string) => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
-  const data = res && res.status === 200 ? await res.json() : [];
+  const data: components["schemas"]["ShipmentChildren"] =
+    res && res.status === 200 ? await res.json() : [];
 
   let counts: Record<string, number> = {};
 
@@ -18,14 +20,12 @@ const getShipmentData = async (shipmentId: string) => {
     counts[pascalToSpace(key)] = value;
   }
 
-  // TODO: type this properly
-  const samples: any[] = [];
+  const samples: components["schemas"]["GenericItem"][] = [];
 
   return { counts, samples, dispatch: data.data, name: data.name };
 };
 
 const ShipmentHome = async ({ params }: { params: { shipmentId: string; proposalId: string } }) => {
-  // TODO: add type
   const shipmentData = await getShipmentData(params.shipmentId);
 
   return <ShipmentHomeContent params={params} data={shipmentData} />;

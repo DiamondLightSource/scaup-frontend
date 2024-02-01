@@ -5,12 +5,9 @@ import mockRouter from "next-router-mock";
 import ShipmentLayoutContent from "./layoutContent";
 
 const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
-const defaultShipmentItems: TreeData = {
-  id: "",
-  name: "",
-  data: { type: "dewar" },
-  children: [{ id: "dewar-1", name: "dewar-1", data: { type: "dewar" } }],
-};
+const defaultShipmentItems: TreeData[] = [
+  { id: "dewar-1", name: "dewar-1", data: { type: "dewar" } },
+];
 
 const baseUnassigned = { samples: [], containers: [], gridBoxes: [] };
 
@@ -77,7 +74,7 @@ describe("Shipment Layout", () => {
         shipmentData={defaultShipmentItems}
         unassignedItems={{
           ...baseUnassigned,
-          gridBoxes: [{ data: { type: "gridBox" }, id: "gridBox", name: "Grid Box 01" }],
+          gridBoxes: [{ data: { type: "gridBox" }, id: 1, name: "Grid Box 01" }],
         }}
         params={{ ...defaultParams }}
       >

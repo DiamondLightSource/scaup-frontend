@@ -1,5 +1,6 @@
 "use client";
 
+import { components } from "@/types/schema";
 import { createShipmentRequest } from "@/utils/client";
 import {
   Divider,
@@ -17,15 +18,13 @@ import { useCallback } from "react";
 
 export interface ShipmentHomeData {
   counts: Record<string, number>;
-  // TODO: type this properly
-  samples: any[];
-  // TODO: type this properly
-  dispatch: Record<string, any>;
+  samples: components["schemas"]["GenericItem"][];
+  dispatch: Record<string, number | string>;
   name: string;
 }
 
 export interface ShipmentHomeContentProps {
-  data: ShipmentHomeData; // TODO: type this with server's types
+  data: ShipmentHomeData;
   params: { shipmentId: string; proposalId: string };
 }
 

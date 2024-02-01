@@ -1,6 +1,7 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { components } from "@/types/schema";
 import { Item } from "@/utils/client/item";
 import {
   Button,
@@ -21,8 +22,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 export interface ProposalOverviewProps {
   proposalId: string;
-  // TODO: use actual type
-  data: Record<string, any> | null;
+  data: components["schemas"]["Paged_MixedShipment_"]["items"] | null;
 }
 
 interface ShipmentData {
@@ -63,7 +63,7 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
       {data ? (
         <>
           <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
-            {data.map((shipment: any, i: number) => (
+            {data.map((shipment, i) => (
               <Link href={`${proposalId}/shipments/${shipment.id}`} key={i}>
                 <Stat
                   key={i}
