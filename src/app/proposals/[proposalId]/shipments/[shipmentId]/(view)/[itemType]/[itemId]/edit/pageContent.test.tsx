@@ -3,9 +3,10 @@ import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { prepopData, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
+import { HttpResponse, delay, http } from "msw";
 import mockRouter from "next-router-mock";
 
+import { toastMock } from "@/../vitest.setup";
 import ItemFormPageContent from "./pageContent";
 
 describe("Item Page", () => {
@@ -193,5 +194,26 @@ describe("Item Page", () => {
       }),
     );
     await waitFor(() => expect(mockRouter.pathname).toBe("/new/edit"));
+  });
+
+  it.only("should disable button whilst request to add item is being made", async () => {
+    server.use(
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/samples",
+        async () => {
+          await delay(200);
+          HttpResponse.json({ id: 456 }, { status: 201 });
+        },
+        { once: true },
+      ),
+    );
+
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />);
+
+    const addButton = screen.getByText(/add/i);
+
+    fireEvent.click(addButton);
+    await waitFor(() => expect(addButton).toHaveProperty("disabled", true));
+    await waitFor(() => expect(toastMock).toHaveBeenCalled());
   });
 });
