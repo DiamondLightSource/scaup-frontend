@@ -1,7 +1,7 @@
 import { authOptions } from "@/mappings/authOptions";
 import { Session } from "next-auth";
 import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 /**
  * Perform authenticated fetch operation
@@ -51,14 +51,7 @@ const authenticatedFetch = async (
  */
 authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
   const session = await getServerSession(authOptions);
-
-  try {
-    return await authenticatedFetch(url, init, session);
-  } catch (e) {
-    if (e instanceof Error && e.message === "Authentication Failure") {
-      redirect("/nextauth/signin");
-    }
-  }
+  return await authenticatedFetch(url, init, session);
 };
 
 /**
@@ -74,7 +67,7 @@ authenticatedFetch.client = async (url: RequestInfo, init?: RequestInit) => {
     return await authenticatedFetch(url, init);
   } catch (e) {
     if (e instanceof Error && e.message === "Authentication Failure") {
-      window.location.replace("/401");
+      signIn();
     }
   }
 };
