@@ -3,6 +3,7 @@ import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
+import mockRouter from "next-router-mock";
 import ShipmentHomeContent from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1" };
@@ -34,7 +35,9 @@ describe("Shipment Submission Overview", () => {
       <ShipmentHomeContent
         params={params}
         data={{
-          samples: [{ macromolecule: "Proteinase K", status: "Data Collected", name: "C01" }],
+          samples: [
+            { name: "C01", id: 1, location: 1, shipmentId: 1, proteinId: 1, containerId: 1 },
+          ],
           counts: {},
           dispatch: {},
           name: "",
@@ -42,7 +45,27 @@ describe("Shipment Submission Overview", () => {
       />,
     );
 
-    expect(screen.getByText(/data collected/i)).toBeInTheDocument();
+    expect(screen.getByText("C01")).toBeInTheDocument();
+  });
+
+  it("should direct user to sample page if sample clicked", async () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [
+            { name: "C01", id: 1, location: 1, shipmentId: 1, proteinId: 1, containerId: 1 },
+          ],
+          counts: {},
+          dispatch: {},
+          name: "",
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("C01"));
+
+    await waitFor(() => expect(mockRouter.pathname).toBe("/1/sample/1/edit"));
   });
 
   it("should render shipment status", () => {

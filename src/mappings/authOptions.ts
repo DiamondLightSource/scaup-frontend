@@ -20,6 +20,9 @@ export const authOptions: NextAuthOptions = {
       return newSession;
     },
   },
+  session: {
+    maxAge: 60 * 60 * 6,
+  },
   providers: [
     {
       id: "diamond",

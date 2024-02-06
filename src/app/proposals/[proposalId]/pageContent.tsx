@@ -22,7 +22,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 export interface ProposalOverviewProps {
   proposalId: string;
-  data: components["schemas"]["Paged_MixedShipment_"]["items"] | null;
+  data: components["schemas"]["MixedShipment"][] | null;
 }
 
 interface ShipmentData {

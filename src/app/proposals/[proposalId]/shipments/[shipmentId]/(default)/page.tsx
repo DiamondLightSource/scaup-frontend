@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 
 const getShipmentData = async (shipmentId: string) => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+  const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`);
   const data: components["schemas"]["ShipmentChildren"] =
     res && res.status === 200 ? await res.json() : [];
 
@@ -20,7 +21,10 @@ const getShipmentData = async (shipmentId: string) => {
     counts[pascalToSpace(key)] = value;
   }
 
-  const samples: components["schemas"]["GenericItem"][] = [];
+  let samples = [];
+  if (resSamples.status === 200) {
+    samples = (await resSamples.json()).items;
+  }
 
   return { counts, samples, dispatch: data.data, name: data.name };
 };

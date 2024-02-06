@@ -2,6 +2,8 @@ import { ProposalOverviewContent } from "@/app/proposals/[proposalId]/pageConten
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 
+const baseShipment = { id: 1, proposalReference: "cm00001", name: "", creationDate: "" };
+
 describe("Proposal Page Content", () => {
   it("should display message if there are no shipments in this proposal", () => {
     render(<ProposalOverviewContent proposalId='cm1234' data={null} />);
@@ -18,7 +20,12 @@ describe("Proposal Page Content", () => {
   });
 
   it("should display question mark if creation date is not present", () => {
-    render(<ProposalOverviewContent proposalId='cm1234' data={[{ shippingId: 1 }]} />);
+    render(
+      <ProposalOverviewContent
+        proposalId='cm1234'
+        data={[{ ...baseShipment, creationDate: null }]}
+      />,
+    );
 
     expect(screen.getByText("?")).toBeInTheDocument();
   });
@@ -27,7 +34,7 @@ describe("Proposal Page Content", () => {
     render(
       <ProposalOverviewContent
         proposalId='cm1234'
-        data={[{ shippingId: 1, creationStatus: "submitted" }]}
+        data={[{ ...baseShipment, creationStatus: "submitted" }]}
       />,
     );
 
@@ -38,7 +45,7 @@ describe("Proposal Page Content", () => {
     render(
       <ProposalOverviewContent
         proposalId='cm1234'
-        data={[{ shippingId: 1, creationStatus: "draft" }]}
+        data={[{ ...baseShipment, creationStatus: "draft" }]}
       />,
     );
 

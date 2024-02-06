@@ -14,11 +14,12 @@ import {
 } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
 export interface ShipmentHomeData {
   counts: Record<string, number>;
-  samples: components["schemas"]["GenericItem"][];
+  samples: components["schemas"]["SampleOut"][];
   dispatch: Record<string, number | string>;
   name: string;
 }
@@ -32,6 +33,8 @@ export interface ShipmentHomeContentProps {
 // TODO: update logic for booking status check
 const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   const toast = useToast();
+  const router = useRouter();
+
   const handleBookingClicked = useCallback(async () => {
     if (data.dispatch.status === "Booked") {
       window.location.assign(
@@ -45,6 +48,13 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
       }
     }
   }, [params, data, toast]);
+
+  const handleSampleClicked = useCallback(
+    (item: Record<string, any>) => {
+      router.push(`${params.shipmentId}/sample/${item.id}/edit`);
+    },
+    [router, params],
+  );
 
   return (
     <VStack alignItems='start'>
@@ -74,11 +84,11 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
             w='100%'
             headers={[
               { key: "name", label: "name" },
-              { key: "macromolecule", label: "macromolecule" },
               { key: "status", label: "status" },
               { key: "actions", label: "" },
             ]}
             data={data.samples}
+            onClick={handleSampleClicked}
           />
         </VStack>
 
