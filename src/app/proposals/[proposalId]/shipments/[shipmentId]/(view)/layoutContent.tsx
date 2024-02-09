@@ -29,7 +29,7 @@ const ShipmentsLayoutContent = ({
   const isReview = useSelector(selectIsReview);
 
   useEffect(() => {
-    if (shipmentData && shipmentData) {
+    if (shipmentData) {
       dispatch(setShipment(shipmentData));
     }
   }, [shipmentData, dispatch]);
