@@ -10,7 +10,7 @@ import {
 import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
-import { Box, Divider, Heading, Skeleton } from "@chakra-ui/react";
+import { Box, Divider, Heading, Skeleton, useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -31,6 +31,7 @@ const ShipmentOverview = ({
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
+  const toast = useToast();
 
   const unassignItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
@@ -52,6 +53,9 @@ const ShipmentOverview = ({
   const deleteItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
       await Item.delete(item.id, endpoint);
+
+      toast({ title: "Successfully removed item!" });
+
       if (endpoint === "topLevelContainers") {
         await dispatch(updateShipment({ shipmentId }));
       } else {
@@ -59,7 +63,7 @@ const ShipmentOverview = ({
       }
       dispatch(syncActiveItem());
     },
-    [shipmentId, dispatch],
+    [shipmentId, dispatch, toast],
   );
 
   /** Remove item from assigned item list (or delete, if root item) */

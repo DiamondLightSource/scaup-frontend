@@ -19,7 +19,8 @@ Configuration is done through environment variables:
 * :code:`OAUTH_COOKIE_NAME`: Authentication token cookie name
 * :code:`OAUTH_DISCOVERY_ENDPOINT`: OIDC discovery endpoint
 * :code:`OAUTH_PROFILE_INFO_ENDPOINT`: Microauth's profile endpoint. May be removed in the future if our auth solution provides profile info as well.
-* :code:`API_URL`: Sample Handling API URL
+* :code:`NEXT_PUBLIC_API_URL`: Sample Handling API URL
+* :code:`NEXT_PUBLIC_DEV_CONTACT`: Developer contact email
 
 ==========
 Building

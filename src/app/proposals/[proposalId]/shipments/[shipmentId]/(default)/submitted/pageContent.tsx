@@ -36,7 +36,7 @@ const SubmissionOverviewContent = ({
   }, [params, toast]);
 
   return (
-    <VStack alignItems='start' mt='2em'>
+    <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {params.proposalId}
@@ -72,7 +72,7 @@ const SubmissionOverviewContent = ({
         {data.isBooked ? (
           <Button
             as={NextLink}
-            href={`${process.env.API_URL}/shipments/${params.shipmentId}/request`}
+            href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`}
             bg='green.500'
           >
             View shipping information

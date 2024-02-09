@@ -60,6 +60,7 @@ export const useChildLocationManager = ({
     childItem: TreeData<BaseShipmentItem>,
     location: number | null = null,
   ) => {
+    const actualLocation = location !== null ? location + 1 : null;
     let actualContainerId = containerId;
 
     // There is no way of calling this callback if form context is undefined
@@ -95,16 +96,16 @@ export const useChildLocationManager = ({
       }
     }
 
-    if (location !== null && currentContainer!.children) {
+    if (actualLocation !== null && currentContainer!.children) {
       const conflictingChild = currentContainer!.children.find(
-        (item) => item.data.location === location,
+        (item) => item.data.location === actualLocation,
       );
 
       if (conflictingChild) {
         await Item.patch(
           conflictingChild.id,
           {
-            location: null,
+            actualLocation: null,
             [parentKey]: null,
           },
           child,
@@ -115,7 +116,7 @@ export const useChildLocationManager = ({
     await Item.patch(
       childItem.id,
       {
-        location,
+        location: actualLocation,
         [parentKey]: actualContainerId,
       },
       child,

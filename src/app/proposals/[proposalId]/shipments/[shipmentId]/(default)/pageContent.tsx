@@ -35,7 +35,9 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   const toast = useToast();
   const handleBookingClicked = useCallback(async () => {
     if (data.dispatch.status === "Booked") {
-      window.location.assign(`${process.env.API_URL}/shipments/${params.shipmentId}/request`);
+      window.location.assign(
+        `${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`,
+      );
     } else {
       try {
         await createShipmentRequest(params.shipmentId);
@@ -46,7 +48,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   }, [params, data, toast]);
 
   return (
-    <VStack alignItems='start' mt='2em'>
+    <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           Shipment

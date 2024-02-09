@@ -44,7 +44,7 @@ export const ProposalOverviewContent = ({ proposalId, data }: ProposalOverviewPr
   });
 
   return (
-    <VStack alignItems='start' mt='1.5em'>
+    <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
           {proposalId}

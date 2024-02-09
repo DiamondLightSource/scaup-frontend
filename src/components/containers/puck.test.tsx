@@ -48,11 +48,11 @@ describe("Puck", () => {
       preloadedState: defaultShipment,
     });
 
-    fireEvent.click(screen.getByText("6"));
+    fireEvent.click(screen.getByText("5"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByTestId("6-populated");
+    await screen.findByTestId("5-populated");
   });
 
   it("should render 16 puck slots", () => {
@@ -76,11 +76,11 @@ describe("Puck", () => {
       preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
     });
 
-    fireEvent.click(screen.getByText("6"));
+    fireEvent.click(screen.getByText("5"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByTestId("6-populated");
+    await screen.findByTestId("5-populated");
   });
 
   it("should populate slots with data from state", () => {
@@ -94,7 +94,7 @@ describe("Puck", () => {
       },
     });
 
-    screen.getByTestId("6-populated");
+    screen.getByTestId("5-populated");
   });
 
   it("should remove item when remove is clicked", async () => {
@@ -119,7 +119,7 @@ describe("Puck", () => {
       },
     });
 
-    fireEvent.click(screen.getByTestId("6-populated"));
+    fireEvent.click(screen.getByTestId("5-populated"));
     fireEvent.click(screen.getByRole("button", { name: "Remove" }));
 
     await screen.findByTestId("6-empty");

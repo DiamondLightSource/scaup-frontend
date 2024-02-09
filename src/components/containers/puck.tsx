@@ -20,7 +20,7 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
     const newItems = Array(16).fill(null);
     if (currentGridBox!.children) {
       for (const innerSample of currentGridBox!.children) {
-        newItems[innerSample.data.location] = innerSample;
+        newItems[innerSample.data.location - 1] = innerSample;
       }
     }
     return newItems;

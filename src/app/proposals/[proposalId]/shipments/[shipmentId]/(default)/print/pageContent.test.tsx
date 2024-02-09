@@ -39,7 +39,7 @@ describe("Shipment Printable Overview", () => {
       <PrintableOverviewContent shipment={defaultShipment} params={params} hasUnassigned={false} />,
     );
 
-    expect(screen.getByText("In container, position 6")).toBeInTheDocument();
+    expect(screen.getByText("In container, position 5")).toBeInTheDocument();
   });
 
   it("should render parent name if item has parent", () => {

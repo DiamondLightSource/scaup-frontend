@@ -21,6 +21,9 @@ export const sampleForm = [
     label: "Macromolecule",
     type: "dropdown",
     values: { $ref: { parent: "#/proteins", map: { value: "proteinId", label: "name" } } },
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "buffer",
