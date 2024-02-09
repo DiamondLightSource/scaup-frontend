@@ -1,8 +1,10 @@
-import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { components } from "./schema";
 
-export interface UnassignedItemResponse {
-  samples: TreeData<BaseShipmentItem>[];
-  containers: TreeData<BaseShipmentItem>[];
-  gridBoxes: TreeData<BaseShipmentItem>[];
-}
+type schemas = components["schemas"];
+
+export type UnassignedItemResponse = schemas["UnassignedItems"];
+
+export type CreationResponse =
+  | schemas["ContainerOut"]
+  | schemas["SampleOut"]
+  | schemas["TopLevelContainerOut"];

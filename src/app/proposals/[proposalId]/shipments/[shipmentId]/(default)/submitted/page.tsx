@@ -21,7 +21,7 @@ const getShipmentData = async (shipmentId: string) => {
     type: "text",
   }));
 
-  return { counts, formModel, isBooked: data && data.data.shipmentRequest };
+  return { counts, formModel, isBooked: !!(data && data.data.shipmentRequest) };
 };
 
 const SubmissionOverview = async ({
@@ -29,7 +29,6 @@ const SubmissionOverview = async ({
 }: {
   params: { shipmentId: string; proposalId: string };
 }) => {
-  // TODO: add type
   const shipmentData = await getShipmentData(params.shipmentId);
   revalidateTag(`shipments-${params.proposalId}`);
   revalidateTag(`shipment-${params.proposalId}`);

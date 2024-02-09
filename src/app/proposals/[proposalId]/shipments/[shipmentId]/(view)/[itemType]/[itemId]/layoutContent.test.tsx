@@ -25,7 +25,7 @@ const params = {
   shipmentId: "1",
 };
 
-describe("Item Page Layout", () => {
+describe("Item Page Layout Content", () => {
   it("should set item in path as active item if it exists", () => {
     const { store } = renderWithProviders(
       <ItemPageLayoutContent params={params}>

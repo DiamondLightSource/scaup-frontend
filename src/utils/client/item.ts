@@ -1,12 +1,12 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, Step } from "@/mappings/pages";
+import { CreationResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
 import { createStandaloneToast } from "@chakra-ui/react";
 
 const { toast } = createStandaloneToast();
 
 export class Item {
-  // TODO: type this properly
   static async patch(
     itemId: TreeData["id"],
     data: Omit<BaseShipmentItem, "type">,
@@ -18,14 +18,13 @@ export class Item {
     });
 
     if (response && response.status === 200) {
-      return await response.json();
+      return (await response.json()) as CreationResponse;
     } else {
       toast({ title: "Failed to modify item", status: "error" });
       throw new Error("Failed to modify item");
     }
   }
 
-  // TODO: type this properly
   static async create(
     parentId: TreeData["id"],
     data: Record<string, any>,
@@ -42,7 +41,7 @@ export class Item {
     });
 
     if (response && response.status === 201) {
-      return await response.json();
+      return (await response.json()) as CreationResponse;
     } else {
       toast({ title: "Failed to create item", status: "error" });
       throw new Error("Failed to create item");

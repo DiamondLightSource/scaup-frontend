@@ -1,6 +1,6 @@
-import { TreeData } from "@/components/visualisation/treeView";
-import { BasePage, BaseShipmentItem } from "@/mappings/pages";
+import { BasePage } from "@/mappings/pages";
 import { ShipmentParams } from "@/types/generic";
+import { components } from "@/types/schema";
 import { UnassignedItemResponse } from "@/types/server";
 import { getShipmentData } from "@/utils/client/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
@@ -11,10 +11,9 @@ export interface ShipmentsLayoutProps {
 }
 
 const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
-  // TODO: add type
-  const shipmentData = (await getShipmentData(
-    params.shipmentId,
-  )) as TreeData<BaseShipmentItem> | null;
+  const shipmentData = (await getShipmentData(params.shipmentId)) as
+    | components["schemas"]["ShipmentChildren"]
+    | null;
   const unassignedItems = (await getShipmentData(
     params.shipmentId,
     "/unassigned",
@@ -22,7 +21,7 @@ const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
 
   return (
     <ShipmentsLayoutContent
-      shipmentData={shipmentData}
+      shipmentData={shipmentData?.children ?? null}
       unassignedItems={unassignedItems}
       params={params}
     >

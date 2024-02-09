@@ -34,6 +34,8 @@ export default defineConfig({
         "src/index.ts",
         // Interfaces, contains no runtime code
         "src/utils/interfaces.tsx",
+        // Store and middleware files
+        "src/*.tsx",
       ],
     },
   },

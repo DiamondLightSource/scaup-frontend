@@ -73,8 +73,6 @@ export const useChildLocationManager = ({
         { ...containerCreationPreset, ...values },
         parent,
       );
-
-      // TODO: type return of above properly
       actualContainerId = newItem.id as number;
     } else {
       /*

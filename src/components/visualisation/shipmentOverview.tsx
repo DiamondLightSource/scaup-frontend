@@ -81,7 +81,6 @@ const ShipmentOverview = ({
   const handleDelete = useCallback(
     async (item: TreeData<BaseShipmentItem>) => {
       const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
-      // TODO: type item object
       if (item.data.containerId || item.data.parentId || item.data.topLevelContainerId) {
         unassignItem(item, endpoint);
       } else {

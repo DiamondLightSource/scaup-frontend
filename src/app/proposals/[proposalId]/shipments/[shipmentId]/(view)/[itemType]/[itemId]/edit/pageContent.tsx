@@ -68,7 +68,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       );
 
       values.id = newItem.id;
-      values.name = newItem.name;
+      values.name = newItem.name ?? "";
 
       if (checkIsRoot(values)) {
         await dispatch(updateShipment({ shipmentId }));

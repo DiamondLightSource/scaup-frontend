@@ -5,15 +5,7 @@ export interface BasePage {
 }
 
 export interface BaseShipmentItem {
-  type:
-    | "sample"
-    | "grid"
-    | "gridBox"
-    | "puck"
-    | "falconTube"
-    | "dewar"
-    | "genericContainer"
-    | "shipment";
+  type: string;
   [x: string]: any;
 }
 

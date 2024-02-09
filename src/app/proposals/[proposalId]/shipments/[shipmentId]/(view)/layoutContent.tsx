@@ -14,8 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
   params: ShipmentParams;
-  shipmentData: TreeData<BaseShipmentItem> | null;
-  // TODO: use type from server
+  shipmentData: TreeData<BaseShipmentItem>[] | null;
   unassignedItems: UnassignedItemResponse | null;
 }
 
@@ -30,8 +29,8 @@ const ShipmentsLayoutContent = ({
   const isReview = useSelector(selectIsReview);
 
   useEffect(() => {
-    if (shipmentData && shipmentData.children) {
-      dispatch(setShipment(shipmentData.children));
+    if (shipmentData) {
+      dispatch(setShipment(shipmentData));
     }
   }, [shipmentData, dispatch]);
 
