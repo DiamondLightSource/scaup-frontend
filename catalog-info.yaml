@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sample-handling-frontend
+  title: Sample Handling Frontend
+  description: A web application for declaring the contents of sample shipments
+spec:
+  type: website
+  lifecycle: experimental
+  system: sample-handling
+  owner: group:lims
+  dependsOn:
+    - component:web-ui-components
+  consumesApis:
+    - sample-handling-api
