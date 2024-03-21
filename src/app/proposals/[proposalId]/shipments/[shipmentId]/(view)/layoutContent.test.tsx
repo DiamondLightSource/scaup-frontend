@@ -1,5 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { renderWithProviders } from "@/utils/test-utils";
+import { initialState } from "@/features/shipment/shipmentSlice";
+import { getCurrentStepIndex } from "@/mappings/pages";
+import { renderWithProviders, sample, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import ShipmentLayoutContent from "./layoutContent";
@@ -10,6 +12,10 @@ const defaultShipmentItems: TreeData[] = [
 ];
 
 const baseUnassigned = { samples: [], containers: [], gridBoxes: [] };
+
+const defaultUnassigned = structuredClone(initialState.unassigned);
+
+defaultUnassigned[0].children![getCurrentStepIndex("sample")].children!.push(sample);
 
 describe("Shipment Layout", () => {
   it("should render proposal name as heading", () => {
@@ -66,6 +72,23 @@ describe("Shipment Layout", () => {
     );
 
     await waitFor(() => expect(screen.queryByText(/dewar-1/i)).not.toBeInTheDocument());
+  });
+
+  it("should clear unassigned items if passed prop is null", () => {
+    const { store } = renderWithProviders(
+      <ShipmentLayoutContent
+        shipmentData={defaultShipmentItems}
+        unassignedItems={null}
+        params={{ ...defaultParams }}
+      >
+        <></>
+      </ShipmentLayoutContent>,
+      { preloadedState: { shipment: { ...testInitialState } } },
+    );
+
+    expect(
+      store.getState().shipment.unassigned[0].children![getCurrentStepIndex("sample")].children,
+    ).toEqual([]);
   });
 
   it("should render unassigned items provided by prop", () => {
