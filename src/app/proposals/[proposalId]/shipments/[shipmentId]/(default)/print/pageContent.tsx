@@ -3,7 +3,20 @@
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { Box, Button, HStack, Heading, Spacer, Text, VStack } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Button,
+  HStack,
+  Heading,
+  Spacer,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useMemo } from "react";
 import { MdLocalPrintshop } from "react-icons/md";
 
@@ -46,25 +59,30 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
   }, [parent, item]);
 
   return (
-    <Box w='100%'>
-      <Box w='100%' border='1px solid' borderColor='gray.400' mb='10px'>
-        <HStack w='100%' bg='gray.200' p='1em'>
-          <Heading size='md'>{item.name}</Heading>
-          <Spacer />
-          {locationText && <Text fontWeight='600'>{locationText}</Text>}
-        </HStack>
-        <Box p='1em'>
-          <DynamicFormView data={item.data} formType={item.data.type} />
-        </Box>
-      </Box>
-      <Box borderLeft='2px solid' w='100%' pl='10px' borderColor={`gray.${800 - level * 100}`}>
-        {item.children
-          ? item.children.map((child) => (
-              <ItemCardDisplay key={child.id} item={child} level={level + 1} parent={item.name} />
-            ))
-          : null}
-      </Box>
-    </Box>
+    <Accordion w='100%' allowMultiple defaultIndex={[0, 1, 2, 3, 4]}>
+      <AccordionItem>
+        <h2>
+          <AccordionButton bg='gray.200'>
+            <HStack w='100%'>
+              <Heading size='md'>{item.name}</Heading>
+              <Spacer />
+              {locationText && <Text fontWeight='600'>{locationText}</Text>}
+            </HStack>
+            <AccordionIcon />
+          </AccordionButton>
+        </h2>
+        <AccordionPanel pr='0' pb='0'>
+          <Box pb='1em'>
+            <DynamicFormView data={item.data} formType={item.data.type} />
+          </Box>
+          {item.children
+            ? item.children.map((child) => (
+                <ItemCardDisplay key={child.id} item={child} level={level + 1} parent={item.name} />
+              ))
+            : null}
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
   );
 };
 
