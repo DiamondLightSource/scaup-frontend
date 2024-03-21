@@ -5,7 +5,9 @@ import { HStack, Link, Tag, Text } from "@chakra-ui/react";
 import { Breadcrumbs, Navbar, User } from "@diamondlightsource/ui-components";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import NextLink from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 // TODO: Move this to component library
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
@@ -40,6 +42,16 @@ const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta"
 
 export const AppNavbarInner = ({ session }: { session: null | Session }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [pathname]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [searchParams]);
 
   return (
     <span className='hide-on-print' style={{ marginBottom: "0.8em" }}>
@@ -56,7 +68,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
           }
         />
       </Navbar>
-      <Breadcrumbs path={pathname} />
+      <Breadcrumbs as={NextLink} path={pathname} />
       <PhaseBanner deployType={process.env.NODE_ENV === "production" ? "production" : "dev"} />
     </span>
   );

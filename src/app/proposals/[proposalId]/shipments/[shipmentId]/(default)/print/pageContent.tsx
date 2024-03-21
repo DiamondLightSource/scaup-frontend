@@ -3,28 +3,12 @@
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  Box,
-  Button,
-  Divider,
-  HStack,
-  Heading,
-  Link,
-  Spacer,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import NextLink from "next/link";
-import { useCallback, useMemo } from "react";
+import { Box, Button, HStack, Heading, Spacer, Text, VStack } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { MdLocalPrintshop } from "react-icons/md";
 
 export interface PrintableOverviewContentProps {
-  shipment: TreeData<BaseShipmentItem> | null;
-  params: { shipmentId: string; proposalId: string };
-  hasUnassigned: boolean;
+  shipment: TreeData<BaseShipmentItem>;
 }
 
 interface ItemCardDisplayProps {
@@ -32,6 +16,20 @@ interface ItemCardDisplayProps {
   level?: number;
   parent?: string | null;
 }
+
+export const PrintButton = () => (
+  <Button
+    leftIcon={<MdLocalPrintshop />}
+    size='sm'
+    onClick={() => {
+      if (typeof window !== undefined) {
+        window.print();
+      }
+    }}
+  >
+    Print this page
+  </Button>
+);
 
 const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProps) => {
   const locationText = useMemo(() => {
@@ -70,56 +68,12 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
   );
 };
 
-const PrintableOverviewContent = ({
-  shipment,
-  params,
-  hasUnassigned,
-}: PrintableOverviewContentProps) => {
-  const printPage = useCallback(() => window.print(), []);
-
-  return (
-    <VStack alignItems='start'>
-      <VStack gap='0' alignItems='start' w='100%'>
-        <Heading size='md' color='gray.600'>
-          {params.proposalId}
-        </Heading>
-        <HStack w='100%'>
-          <Heading>Shipment Items</Heading>
-          <Spacer />
-          <Button leftIcon={<MdLocalPrintshop />} size='sm' onClick={printPage}>
-            Print this page
-          </Button>
-        </HStack>
-        <Divider borderColor='gray.800' />
-      </VStack>
-      {hasUnassigned && (
-        <Alert status='info' variant='info'>
-          <AlertIcon />
-          <AlertDescription>
-            This shipment contains unassigned items, which are not included in this listing.
-          </AlertDescription>
-        </Alert>
-      )}
-      {shipment !== null ? (
-        <VStack alignItems='start' w='100%' gap='2em'>
-          {shipment.children!.map((item) => (
-            <ItemCardDisplay key={item.id} item={item} />
-          ))}
-        </VStack>
-      ) : (
-        <VStack mt='2em' alignItems='start'>
-          <Heading size='lg'>No assigned items</Heading>
-          <Text>
-            This shipment contains <b>no assigned items</b>. You must{" "}
-            <Link as={NextLink} href='edit'>
-              add at least one item
-            </Link>{" "}
-            to this shipment to get a list of contents.
-          </Text>
-        </VStack>
-      )}
-    </VStack>
-  );
-};
+const PrintableOverviewContent = ({ shipment }: PrintableOverviewContentProps) => (
+  <VStack alignItems='start' w='100%' gap='2em'>
+    {shipment.children!.map((item) => (
+      <ItemCardDisplay key={item.id} item={item} />
+    ))}
+  </VStack>
+);
 
 export default PrintableOverviewContent;
