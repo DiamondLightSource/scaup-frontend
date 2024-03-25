@@ -29,7 +29,7 @@ export interface DynamicFormEntry {
   hint?: string;
 }
 
-const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicFormEntry) => {
+const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: DynamicFormEntry) => {
   const {
     register,
     formState: { errors },
@@ -74,9 +74,13 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values }: DynamicF
       );
     case "checkbox":
       return (
-        <Checkbox id={id} {...register(id, validation)}>
-          {label}
-        </Checkbox>
+        <>
+          <Checkbox id={id} {...register(id, validation)}>
+            {label}
+          </Checkbox>
+
+          <FormHelperText mt='0'>{hint}</FormHelperText>
+        </>
       );
   }
 };
@@ -118,7 +122,7 @@ export const DynamicFormInput = ({
         </>
       )}
       <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
-      {<InnerDynamicFormInput {...{ id, label, type, validation, values }} />}
+      {<InnerDynamicFormInput {...{ id, label, type, validation, values, hint }} />}
     </FormControl>
   );
 };

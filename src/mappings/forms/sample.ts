@@ -48,6 +48,7 @@ export const sampleForm = [
       { label: "Quantifoil copper", value: "Quantifoil copper" },
       { label: "Quantifoil gold", value: "Quantifoil gold" },
       { label: "Quantifoil nickel", value: "Quantifoil nickel" },
+      { label: "Chameleon quantifoil active", value: "Chameleon quantifoil active" },
       { label: "C-flat", value: "C-flat" },
       { label: "Au-flat", value: "Au-flat" },
       { label: "UltrAuFoil", value: "UltrAuFoil" },

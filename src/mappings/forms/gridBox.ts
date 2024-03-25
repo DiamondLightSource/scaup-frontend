@@ -30,17 +30,19 @@ export const gridBoxForm = [
   },
   {
     id: "fibSession",
-    label: "FIB session",
+    label: "FIB followed by cryo session",
     type: "checkbox",
   },
   {
     id: "store",
     label: "Keep gridbox at facility for future use",
+    hint: "Please inform lab contact",
     type: "checkbox",
   },
   {
     id: "comments",
     label: "Comments",
+    hint: "General comments, such as 'gridbox requires special tools to open'",
     type: "textarea",
   },
 ] as DynamicFormEntry[];
