@@ -9,6 +9,12 @@ import mockRouter from "next-router-mock";
 import { toastMock } from "@/../vitest.setup";
 import ItemFormPageContent from "./pageContent";
 
+const newPuck: TreeData<BaseShipmentItem> = {
+  id: "new-puck",
+  name: "puck-123",
+  data: { type: "puck" },
+};
+
 describe("Item Page", () => {
   // Must come first, https://github.com/mswjs/msw/issues/43
   it("should render form", () => {
@@ -16,6 +22,41 @@ describe("Item Page", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
+  });
+
+  it("should display name of active item if editing", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          isEdit: true,
+          activeItem: newPuck,
+        },
+      },
+    });
+
+    await screen.findByDisplayValue("puck-123");
+  });
+
+  it("should reset name to empty if creating new item", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          isEdit: true,
+          activeItem: newPuck,
+        },
+      },
+    });
+
+    await screen.findByDisplayValue("puck-123");
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /create new item/i,
+      }),
+    );
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("value", "");
   });
 
   it("should add item to shipment items if in creation mode and item is a root item", async () => {

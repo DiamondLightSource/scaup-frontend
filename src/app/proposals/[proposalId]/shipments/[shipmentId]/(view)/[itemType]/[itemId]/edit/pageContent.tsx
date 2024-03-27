@@ -43,7 +43,15 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   useEffect(() => {
     dispatch(setIsReview(false));
     if (activeItem) {
-      formContext.reset(activeItem.data, { keepValues: false, keepDefaultValues: false });
+      // If we set name to null, then it will get cleared once the form is reset
+      let baseData: Record<string, any> = { type: activeItem.data.type, name: null };
+
+      // Only existing items should draw in more data than just the type
+      if (activeIsEdit) {
+        baseData = { name: activeItem.name, ...activeItem.data };
+      }
+
+      formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
     }
   }, [formContext, activeItem, activeIsEdit, dispatch]);
 
