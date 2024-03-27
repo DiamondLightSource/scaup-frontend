@@ -1,6 +1,7 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";
 import { Button, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -23,7 +24,11 @@ export const ShipmentCreationForm = ({ proposalId }: ProposalOverviewProps) => {
   const formContext = useForm<ShipmentData>();
 
   const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
-    const newShipment = await Item.create(proposalId, { name: info.name }, "shipments");
+    const newShipment = (await Item.create(
+      proposalId,
+      { name: info.name },
+      "shipments",
+    )) as CreationResponse;
 
     router.push(`/proposals/${proposalId}/shipments/${newShipment.id}/edit`);
   });

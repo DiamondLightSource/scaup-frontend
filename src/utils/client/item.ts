@@ -29,7 +29,7 @@ export class Item {
     parentId: TreeData["id"],
     data: Record<string, any>,
     endpoint: Step["endpoint"],
-  ) {
+  ): Promise<CreationResponse | CreationResponse[]> {
     const requestUrl =
       endpoint === "shipments"
         ? `/proposals/${parentId}/shipments`
@@ -41,7 +41,8 @@ export class Item {
     });
 
     if (response && response.status === 201) {
-      return (await response.json()) as CreationResponse;
+      const newItem = await response.json();
+      return newItem.items ? newItem.items : newItem;
     } else {
       toast({ title: "Failed to create item", status: "error" });
       throw new Error("Failed to create item");

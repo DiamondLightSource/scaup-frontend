@@ -17,6 +17,16 @@ export const sampleForm = [
     type: "text",
   },
   {
+    id: "copies",
+    label: "Copies",
+    type: "text",
+    values: "1",
+    validation: {
+      min: 1,
+      pattern: { value: /[0-9]+/, message: "Must be a valid number" },
+    },
+  },
+  {
     id: "proteinId",
     label: "Macromolecule",
     type: "dropdown",
