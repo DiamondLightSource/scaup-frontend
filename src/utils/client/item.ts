@@ -6,6 +6,17 @@ import { createStandaloneToast } from "@chakra-ui/react";
 
 const { toast } = createStandaloneToast();
 
+const displayError = async (action: string, response: Response | undefined) => {
+  let details = "Internal server error";
+  try {
+    if (response) {
+      const respBody = await response.json();
+      details = respBody.detail;
+    }
+  } catch {}
+  toast({ title: `Failed to ${action} item`, description: details, status: "error" });
+};
+
 export class Item {
   static async patch(
     itemId: TreeData["id"],
@@ -20,7 +31,7 @@ export class Item {
     if (response && response.status === 200) {
       return (await response.json()) as CreationResponse;
     } else {
-      toast({ title: "Failed to modify item", status: "error" });
+      displayError("modify", response);
       throw new Error("Failed to modify item");
     }
   }
@@ -44,8 +55,8 @@ export class Item {
       const newItem = await response.json();
       return newItem.items ? newItem.items : newItem;
     } else {
-      toast({ title: "Failed to create item", status: "error" });
-      throw new Error("Failed to create item");
+      displayError("create", response);
+      throw new Error(`Failed to create item`);
     }
   }
 
@@ -57,7 +68,7 @@ export class Item {
     if (response && response.status === 204) {
       return { status: "OK" };
     } else {
-      toast({ title: "Failed to delete item", status: "error" });
+      displayError("delete", response);
       throw new Error("Failed to delete item");
     }
   }
