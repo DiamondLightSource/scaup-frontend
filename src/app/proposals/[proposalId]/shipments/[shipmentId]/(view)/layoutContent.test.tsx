@@ -83,7 +83,7 @@ describe("Shipment Layout", () => {
       >
         <></>
       </ShipmentLayoutContent>,
-      { preloadedState: { shipment: { ...testInitialState } } },
+      { preloadedState: { shipment: { ...testInitialState, unassigned: defaultUnassigned } } },
     );
 
     expect(
