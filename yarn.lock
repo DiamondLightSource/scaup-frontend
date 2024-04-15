@@ -6485,13 +6485,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-router-mock@npm:^0.9.11":
-  version: 0.9.11
-  resolution: "next-router-mock@npm:0.9.11"
+"next-router-mock@npm:^0.9.13":
+  version: 0.9.13
+  resolution: "next-router-mock@npm:0.9.13"
   peerDependencies:
     next: ">=10.0.0"
     react: ">=17.0.0"
-  checksum: 045dad660c51969727d2d6c44d8f6d7b0d5dc15a775b69830545f6ac1c5e09e127d02eb0e85f959b6507c33cf38758103b0e1d4ea1c5bc5c3d96025f91df8196
+  checksum: 582858b4521b987ff7299d97b81b526ba5debdb93b7ada83a595927ca1138082e902ff8dbb7c6cb9db79d65b1a7aa4d86fbbbf24ea73a033d317d964ca3ea95b
   languageName: node
   linkType: hard
 
@@ -7693,7 +7693,7 @@ __metadata:
     msw: "npm:^2.1.4"
     next: "npm:14.1.0"
     next-auth: "npm:^4.24.5"
-    next-router-mock: "npm:^0.9.11"
+    next-router-mock: "npm:^0.9.13"
     prettier: "npm:^3.2.4"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"

@@ -3,25 +3,24 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/shipments/{shipmentId}": {
     /**
-     * Get Shipment 
+     * Get Shipment
      * @description Get shipment data
      */
     get: operations["get_shipment_shipments__shipmentId__get"];
   };
   "/shipments/{shipmentId}/unassigned": {
     /**
-     * Get Unassigned 
+     * Get Unassigned
      * @description Get unassigned items in shipment
      */
     get: operations["get_unassigned_shipments__shipmentId__unassigned_get"];
   };
   "/shipments/{shipmentId}/push": {
     /**
-     * Push Shipment 
+     * Push Shipment
      * @description Push shipment to ISPyB. Unassigned items (such as a container with no parent top level
      * container) are ignored.
      */
@@ -29,90 +28,90 @@ export interface paths {
   };
   "/shipments/{shipmentId}/topLevelContainers": {
     /**
-     * Create Top Level Container 
+     * Create Top Level Container
      * @description Create new container in shipment
      */
     post: operations["create_top_level_container_shipments__shipmentId__topLevelContainers_post"];
   };
   "/shipments/{shipmentId}/containers": {
     /**
-     * Create Container 
+     * Create Container
      * @description Create new container in shipment
      */
     post: operations["create_container_shipments__shipmentId__containers_post"];
   };
   "/shipments/{shipmentId}/samples": {
     /**
-     * Create Sample 
+     * Create Sample
      * @description Create new sample in shipment
      */
     post: operations["create_sample_shipments__shipmentId__samples_post"];
   };
   "/shipments/{shipmentId}/request": {
     /**
-     * Get Shipment Request 
+     * Get Shipment Request
      * @description Get shipment reqeust
      */
     get: operations["get_shipment_request_shipments__shipmentId__request_get"];
     /**
-     * Create Shipment Request 
+     * Create Shipment Request
      * @description Create new shipment request
      */
     post: operations["create_shipment_request_shipments__shipmentId__request_post"];
   };
   "/proposals/{proposalReference}/shipments": {
     /**
-     * Get Shipments 
+     * Get Shipments
      * @description Get shipments in proposal
      */
     get: operations["get_shipments_proposals__proposalReference__shipments_get"];
     /**
-     * Create Shipment 
+     * Create Shipment
      * @description Create new shipment in proposal
      */
     post: operations["create_shipment_proposals__proposalReference__shipments_post"];
   };
   "/proposals/{proposalReference}/data": {
     /**
-     * Get Shipment Data 
+     * Get Shipment Data
      * @description Get lab data for the proposal (lab contacts, proteins...)
-     * 
+     *
      * We can skip auth on this one since it is calling Expeye, and auth is done there
      */
     get: operations["get_shipment_data_proposals__proposalReference__data_get"];
   };
   "/samples/{sampleId}": {
     /**
-     * Delete Sample 
+     * Delete Sample
      * @description Create new sample in shipment
      */
     delete: operations["delete_sample_samples__sampleId__delete"];
     /**
-     * Edit Sample 
+     * Edit Sample
      * @description Edit existing sample
      */
     patch: operations["edit_sample_samples__sampleId__patch"];
   };
   "/containers/{containerId}": {
     /**
-     * Delete Container 
+     * Delete Container
      * @description Delete container in shipment
      */
     delete: operations["delete_container_containers__containerId__delete"];
     /**
-     * Edit Container 
+     * Edit Container
      * @description Edit existing container
      */
     patch: operations["edit_container_containers__containerId__patch"];
   };
   "/topLevelContainers/{topLevelContainerId}": {
     /**
-     * Delete Container 
+     * Delete Container
      * @description Create new container in shipment
      */
     delete: operations["delete_container_topLevelContainers__topLevelContainerId__delete"];
     /**
-     * Edit Container 
+     * Edit Container
      * @description Edit existing container
      */
     patch: operations["edit_container_topLevelContainers__topLevelContainerId__patch"];
@@ -136,21 +135,21 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Requestedreturn 
+       * Requestedreturn
        * @default false
        */
       requestedReturn?: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
       /** Comments */
       comments?: string | null;
       /**
-       * Type 
+       * Type
        * @enum {string}
        */
       type: "puck" | "falconTube" | "gridBox" | "genericContainer";
@@ -168,14 +167,14 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Requestedreturn 
+       * Requestedreturn
        * @default false
        */
       requestedReturn?: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
@@ -192,7 +191,7 @@ export interface components {
       name: string;
       data: components["schemas"]["GenericItemData"];
       /** Children */
-      children?: (components["schemas"]["GenericItem"])[] | null;
+      children?: components["schemas"]["GenericItem"][] | null;
     };
     /** GenericItemData */
     GenericItemData: {
@@ -203,7 +202,7 @@ export interface components {
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: (components["schemas"]["ValidationError"])[];
+      detail?: components["schemas"]["ValidationError"][];
     };
     /** MixedShipment */
     MixedShipment: {
@@ -222,8 +221,8 @@ export interface components {
       /** Shipmentrequest */
       shipmentRequest?: number | null;
       /**
-       * Creationstatus 
-       * @default draft 
+       * Creationstatus
+       * @default draft
        * @enum {string}
        */
       creationStatus?: "draft" | "submitted";
@@ -241,14 +240,14 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Requestedreturn 
+       * Requestedreturn
        * @default false
        */
       requestedReturn?: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
@@ -266,7 +265,7 @@ export interface components {
       /** Details */
       details?: Record<string, never> | null;
       /**
-       * Name 
+       * Name
        * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
        */
       name?: string | null;
@@ -288,7 +287,7 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
@@ -302,7 +301,7 @@ export interface components {
     /** Paged[MixedShipment] */
     Paged_MixedShipment_: {
       /** Items */
-      items: (components["schemas"]["MixedShipment"])[];
+      items: components["schemas"]["MixedShipment"][];
       /** Total */
       total: number;
       /** Page */
@@ -319,7 +318,7 @@ export interface components {
       /** Details */
       details?: Record<string, never> | null;
       /**
-       * Name 
+       * Name
        * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
        */
       name?: string | null;
@@ -350,7 +349,7 @@ export interface components {
       /** Name */
       name: string;
       /** Children */
-      children: (components["schemas"]["GenericItem"])[];
+      children: components["schemas"]["GenericItem"][];
       /** Data */
       data: Record<string, never>;
     };
@@ -391,12 +390,12 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
       /**
-       * Type 
+       * Type
        * @constant
        */
       type: dewar;
@@ -416,7 +415,7 @@ export interface components {
       /** Location */
       location?: number | null;
       /**
-       * Name 
+       * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
@@ -426,11 +425,11 @@ export interface components {
     /** UnassignedItems */
     UnassignedItems: {
       /** Samples */
-      samples: (components["schemas"]["GenericItem"])[];
+      samples: components["schemas"]["GenericItem"][];
       /** Gridboxes */
-      gridBoxes: (components["schemas"]["GenericItem"])[];
+      gridBoxes: components["schemas"]["GenericItem"][];
       /** Containers */
-      containers: (components["schemas"]["GenericItem"])[];
+      containers: components["schemas"]["GenericItem"][];
     };
     /** ValidationError */
     ValidationError: {
@@ -452,10 +451,9 @@ export interface components {
 export type external = Record<string, never>;
 
 export interface operations {
-
   get_shipment_shipments__shipmentId__get: {
     /**
-     * Get Shipment 
+     * Get Shipment
      * @description Get shipment data
      */
     parameters: {
@@ -480,7 +478,7 @@ export interface operations {
   };
   get_unassigned_shipments__shipmentId__unassigned_get: {
     /**
-     * Get Unassigned 
+     * Get Unassigned
      * @description Get unassigned items in shipment
      */
     parameters: {
@@ -505,7 +503,7 @@ export interface operations {
   };
   push_shipment_shipments__shipmentId__push_post: {
     /**
-     * Push Shipment 
+     * Push Shipment
      * @description Push shipment to ISPyB. Unassigned items (such as a container with no parent top level
      * container) are ignored.
      */
@@ -531,7 +529,7 @@ export interface operations {
   };
   create_top_level_container_shipments__shipmentId__topLevelContainers_post: {
     /**
-     * Create Top Level Container 
+     * Create Top Level Container
      * @description Create new container in shipment
      */
     parameters: {
@@ -561,7 +559,7 @@ export interface operations {
   };
   create_container_shipments__shipmentId__containers_post: {
     /**
-     * Create Container 
+     * Create Container
      * @description Create new container in shipment
      */
     parameters: {
@@ -591,7 +589,7 @@ export interface operations {
   };
   create_sample_shipments__shipmentId__samples_post: {
     /**
-     * Create Sample 
+     * Create Sample
      * @description Create new sample in shipment
      */
     parameters: {
@@ -621,7 +619,7 @@ export interface operations {
   };
   get_shipment_request_shipments__shipmentId__request_get: {
     /**
-     * Get Shipment Request 
+     * Get Shipment Request
      * @description Get shipment reqeust
      */
     parameters: {
@@ -642,7 +640,7 @@ export interface operations {
   };
   create_shipment_request_shipments__shipmentId__request_post: {
     /**
-     * Create Shipment Request 
+     * Create Shipment Request
      * @description Create new shipment request
      */
     parameters: {
@@ -667,12 +665,12 @@ export interface operations {
   };
   get_shipments_proposals__proposalReference__shipments_get: {
     /**
-     * Get Shipments 
+     * Get Shipments
      * @description Get shipments in proposal
      */
     parameters: {
-        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-        /** @description Number of results to show */
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
       query?: {
         page?: number;
         limit?: number;
@@ -698,7 +696,7 @@ export interface operations {
   };
   create_shipment_proposals__proposalReference__shipments_post: {
     /**
-     * Create Shipment 
+     * Create Shipment
      * @description Create new shipment in proposal
      */
     parameters: {
@@ -728,9 +726,9 @@ export interface operations {
   };
   get_shipment_data_proposals__proposalReference__data_get: {
     /**
-     * Get Shipment Data 
+     * Get Shipment Data
      * @description Get lab data for the proposal (lab contacts, proteins...)
-     * 
+     *
      * We can skip auth on this one since it is calling Expeye, and auth is done there
      */
     parameters: {
@@ -755,7 +753,7 @@ export interface operations {
   };
   delete_sample_samples__sampleId__delete: {
     /**
-     * Delete Sample 
+     * Delete Sample
      * @description Create new sample in shipment
      */
     parameters: {
@@ -776,7 +774,7 @@ export interface operations {
   };
   edit_sample_samples__sampleId__patch: {
     /**
-     * Edit Sample 
+     * Edit Sample
      * @description Edit existing sample
      */
     parameters: {
@@ -806,7 +804,7 @@ export interface operations {
   };
   delete_container_containers__containerId__delete: {
     /**
-     * Delete Container 
+     * Delete Container
      * @description Delete container in shipment
      */
     parameters: {
@@ -827,7 +825,7 @@ export interface operations {
   };
   edit_container_containers__containerId__patch: {
     /**
-     * Edit Container 
+     * Edit Container
      * @description Edit existing container
      */
     parameters: {
@@ -857,7 +855,7 @@ export interface operations {
   };
   delete_container_topLevelContainers__topLevelContainerId__delete: {
     /**
-     * Delete Container 
+     * Delete Container
      * @description Create new container in shipment
      */
     parameters: {
@@ -878,7 +876,7 @@ export interface operations {
   };
   edit_container_topLevelContainers__topLevelContainerId__patch: {
     /**
-     * Edit Container 
+     * Edit Container
      * @description Edit existing container
      */
     parameters: {
