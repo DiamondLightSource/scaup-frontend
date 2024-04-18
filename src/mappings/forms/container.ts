@@ -5,6 +5,7 @@ export const containerForm = [
   {
     id: "name",
     label: "Name",
+    hint: "Container name should match label",
     type: "text",
   },
   {
