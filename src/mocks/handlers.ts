@@ -69,6 +69,16 @@ export const handlers = [
     HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
   ),
 
+  // Samples
+
+  http.get("http://localhost/api/shipments/:shipmentId/samples", () =>
+    HttpResponse.json({
+      items: [{ parent: "Container", id: 1, name: "Sample" }],
+      total: 1,
+      limit: 20,
+    }),
+  ),
+
   // Proposal metadata
 
   http.get("http://localhost/api/proposals/:proposalReference/data", () =>

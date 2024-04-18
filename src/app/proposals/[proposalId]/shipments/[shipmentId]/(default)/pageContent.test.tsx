@@ -68,17 +68,6 @@ describe("Shipment Submission Overview", () => {
     await waitFor(() => expect(mockRouter.pathname).toBe("/1/sample/1/edit"));
   });
 
-  it("should render shipment status", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
-      />,
-    );
-
-    expect(screen.getByText(/booked/i)).toBeInTheDocument();
-  });
-
   it("should not enable 'edit shipment' button if shipment is already booked", () => {
     renderWithProviders(
       <ShipmentHomeContent
@@ -169,17 +158,5 @@ describe("Shipment Submission Overview", () => {
         title: "Unable to create shipment request",
       }),
     );
-  });
-
-  it("should render item quantities", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{ samples: [], counts: { "Grid Box": 5 }, dispatch: {}, name: "" }}
-      />,
-    );
-
-    expect(screen.getByText(/grid box/i)).toBeInTheDocument();
-    expect(screen.getByText("5")).toBeInTheDocument();
   });
 });

@@ -16,7 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 const SubmissionOverviewContent = ({
   data,
@@ -26,12 +26,16 @@ const SubmissionOverviewContent = ({
   params: { shipmentId: string; proposalId: string };
 }) => {
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onShipmentCreateClicked = useCallback(async () => {
     try {
+      setIsLoading(true);
       await createShipmentRequest(params.shipmentId);
     } catch (e) {
       toast({ title: (e as Error).message, status: "error" });
+    } finally {
+      setIsLoading(false);
     }
   }, [params, toast]);
 
@@ -78,7 +82,7 @@ const SubmissionOverviewContent = ({
             View shipping information
           </Button>
         ) : (
-          <Button onClick={onShipmentCreateClicked} bg='green.500'>
+          <Button onClick={onShipmentCreateClicked} bg='green.500' isLoading={isLoading}>
             Arrange shipping
           </Button>
         )}
