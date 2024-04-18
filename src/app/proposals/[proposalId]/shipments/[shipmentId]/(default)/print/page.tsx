@@ -1,8 +1,21 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { getShipmentData } from "@/utils/client/shipment";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Divider,
+  HStack,
+  Heading,
+  Link,
+  Spacer,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Metadata } from "next";
-import SubmissionOverviewContent from "./pageContent";
+import NextLink from "next/link";
+import SubmissionOverviewContent, { PrintButton } from "./pageContent";
 
 export const metadata: Metadata = {
   title: "Shipment Overview - Sample Handling",
@@ -22,11 +35,41 @@ const SubmissionOverview = async ({
   }
 
   return (
-    <SubmissionOverviewContent
-      params={params}
-      shipment={rawShipmentData}
-      hasUnassigned={hasUnassigned}
-    />
+    <VStack alignItems='start'>
+      <VStack gap='0' alignItems='start' w='100%'>
+        <Heading size='md' color='gray.600'>
+          {params.proposalId}
+        </Heading>
+        <HStack w='100%'>
+          <Heading>Shipment Items</Heading>
+          <Spacer />
+          <PrintButton />
+        </HStack>
+        <Divider borderColor='gray.800' />
+      </VStack>
+      {hasUnassigned && (
+        <Alert status='info' variant='info'>
+          <AlertIcon />
+          <AlertDescription>
+            This shipment contains unassigned items, which are not included in this listing.
+          </AlertDescription>
+        </Alert>
+      )}
+      {rawShipmentData !== null ? (
+        <SubmissionOverviewContent shipment={rawShipmentData} />
+      ) : (
+        <VStack mt='2em' alignItems='start'>
+          <Heading size='lg'>No assigned items</Heading>
+          <Text>
+            This shipment contains <b>no assigned items</b>. You must{" "}
+            <Link as={NextLink} href='edit'>
+              add at least one item
+            </Link>{" "}
+            to this shipment to get a list of contents.
+          </Text>
+        </VStack>
+      )}
+    </VStack>
   );
 };
 

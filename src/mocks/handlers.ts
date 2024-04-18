@@ -43,6 +43,18 @@ export const defaultData = {
 };
 
 export const handlers = [
+  // Shipments
+  http.post("http://localhost/api/proposals/:proposalId/shipments", ({ params }) =>
+    HttpResponse.json(
+      { id: 123, data: { name: "Test" }, proposalReference: params.proposalId },
+      { status: 201 },
+    ),
+  ),
+
+  http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>
+    HttpResponse.json({ items: [defaultData] }),
+  ),
+
   http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(defaultData)),
 
   http.post("http://localhost/api/shipments/:shipmentId/push", () =>
@@ -53,25 +65,22 @@ export const handlers = [
     HttpResponse.json({ shipmentRequest: 20, status: "Booked" }, { status: 201 }),
   ),
 
+  http.get("http://localhost/api/shipments/:shipmentId/unassigned", () =>
+    HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
+  ),
+
+  // Proposal metadata
+
   http.get("http://localhost/api/proposals/:proposalReference/data", () =>
     HttpResponse.json({ labContacts: [], proteins: [] }),
   ),
 
-  http.get("http://localhost/api/shipments/:shipmentId/unassigned", () =>
-    HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
-  ),
+  // Item CRUD
 
   http.post("http://localhost/api/shipments/:shipmentId/:itemType", ({ params }) => {
     const itemType = pluralToSingular[params.itemType as string];
     return HttpResponse.json({ id: 123, data: { type: itemType } }, { status: 201 });
   }),
-
-  http.post("http://localhost/api/proposals/:proposalId/shipments", ({ params }) =>
-    HttpResponse.json(
-      { id: 123, data: { name: "Test" }, proposalReference: params.proposalId },
-      { status: 201 },
-    ),
-  ),
 
   http.patch("http://localhost/api/:itemType/:itemId", () => HttpResponse.json({ id: 123 })),
 
