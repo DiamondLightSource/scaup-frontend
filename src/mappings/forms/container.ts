@@ -1,4 +1,5 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { nameValidation } from "@/utils/generic";
 import { BaseShipmentItem } from "../pages";
 
 export const containerForm = [
@@ -7,6 +8,9 @@ export const containerForm = [
     label: "Name",
     hint: "Container name should match label/barcode",
     type: "text",
+    validation: {
+      ...nameValidation,
+    },
   },
   {
     id: "type",

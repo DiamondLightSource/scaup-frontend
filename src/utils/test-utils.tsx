@@ -46,7 +46,7 @@ export const renderWithForm = (ui: React.ReactElement, renderOptions?: RenderOpt
     const formContext = useForm();
     return (
       <FormProvider {...formContext}>
-        <form>{children}</form>
+        <form data-testid='test-form'>{children}</form>
       </FormProvider>
     );
   };
