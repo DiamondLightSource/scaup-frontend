@@ -35,6 +35,8 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
     formState: { errors },
   } = useFormContext();
 
+  const textDefault = typeof values === "string" ? values : undefined;
+
   switch (type) {
     case "text":
       return (
@@ -42,6 +44,7 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
           id={id}
           isInvalid={!!errors[id]}
           variant='hi-contrast'
+          defaultValue={textDefault}
           {...register(id, validation)}
         ></Input>
       );
@@ -51,6 +54,7 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
           id={id}
           isInvalid={!!errors[id]}
           variant='hi-contrast'
+          defaultValue={textDefault}
           {...register(id, validation)}
         />
       );

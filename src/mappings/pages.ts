@@ -62,7 +62,7 @@ const rootKeyMap: Record<Step["endpoint"], string[]> = {
     "capacity",
     "registeredContainer",
   ],
-  samples: [...commonRootKeys, "proteinId"],
+  samples: [...commonRootKeys, "proteinId", "copies"],
   topLevelContainers: [...commonRootKeys, "code", "barCode", "status", "labContact"],
   shipments: [...commonRootKeys, "proposalReference"],
 };

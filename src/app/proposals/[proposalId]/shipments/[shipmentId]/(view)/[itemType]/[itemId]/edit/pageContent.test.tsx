@@ -175,7 +175,22 @@ describe("Item Page", () => {
     });
 
     fireEvent.click(screen.getByText(/add/i));
-    await waitFor(() => expect(mockRouter.pathname).toBe("/456/edit"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/grid/456/edit"));
+  });
+
+  it("should use first returned item if creating multiple items", async () => {
+    server.use(
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/samples",
+        () => HttpResponse.json({ items: [{ id: 578 }, { id: 456 }] }, { status: 201 }),
+        { once: true },
+      ),
+    );
+
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />);
+
+    fireEvent.click(screen.getByText(/add/i));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/grid/578/edit"));
   });
 
   it("should go to new item page if 'new item' clicked", async () => {

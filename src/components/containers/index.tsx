@@ -73,7 +73,7 @@ export const useChildLocationManager = ({
         { ...containerCreationPreset, ...values },
         parent,
       );
-      actualContainerId = newItem.id as number;
+      actualContainerId = (Array.isArray(newItem) ? newItem[0].id : newItem.id) as number;
     } else {
       /*
        * If user has modified the parent container, and hasn't saved before assigning a position

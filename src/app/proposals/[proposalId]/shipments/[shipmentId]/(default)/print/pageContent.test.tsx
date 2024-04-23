@@ -1,7 +1,7 @@
 import { BaseShipmentItem } from "@/mappings/pages";
 import { gridBox, renderWithProviders } from "@/utils/test-utils";
-import { screen } from "@testing-library/react";
-import PrintableOverviewContent from "./pageContent";
+import { fireEvent, screen } from "@testing-library/react";
+import PrintableOverviewContent, { PrintButton } from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1" };
 const defaultShipment = {
@@ -37,5 +37,15 @@ describe("Shipment Printable Overview", () => {
 
     expect(screen.getByText(/in container/i)).toBeInTheDocument();
     expect(screen.getByText("In dewar")).toBeInTheDocument();
+  });
+});
+
+describe("Print Button", () => {
+  it("should print if print button clicked", () => {
+    const printSpy = vi.spyOn(window, "print");
+    renderWithProviders(<PrintButton />);
+
+    fireEvent.click(screen.getByText(/print this page/i));
+    expect(printSpy).toBeCalled();
   });
 });

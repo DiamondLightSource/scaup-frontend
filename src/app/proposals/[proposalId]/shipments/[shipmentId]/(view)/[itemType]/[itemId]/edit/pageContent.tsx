@@ -61,11 +61,15 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      const newItem = await Item.create(
+      let newItem = await Item.create(
         shipmentId,
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       );
+
+      if (Array.isArray(newItem)) {
+        newItem = newItem[0];
+      }
 
       values.id = newItem.id;
       values.name = newItem.name ?? "";
@@ -77,7 +81,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       }
 
       toast({ title: "Successfully created item!" });
-      router.replace(`../${newItem.id}/edit`);
+      router.replace(`../../${info.type}/${newItem.id}/edit`);
     } else {
       await Item.patch(
         activeItem!.id,
