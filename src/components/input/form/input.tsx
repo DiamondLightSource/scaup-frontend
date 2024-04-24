@@ -1,3 +1,4 @@
+"use client";
 import "@/styles/form.css";
 import { JsonRef } from "@/utils/generic";
 import {
@@ -19,15 +20,23 @@ export interface DynamicFormEntry {
   /** Field ID */
   id: string;
   /** Field type */
-  type: "text" | "dropdown" | "checkbox" | "textarea" | "separator";
+  type: "text" | "dropdown" | "checkbox" | "textarea" | "separator" | "indicatorDropdown";
   /** Validation options */
   validation?: RegisterOptions;
-  values?: string | { label: string; value: string }[] | JsonRef;
+  values?: string | { label: string; value: string; extra?: string }[] | JsonRef;
   /** Fire event when this field changes */
   watch?: boolean;
   /** Text to be displayed underneath label, commonly used for further clarification */
   hint?: string;
 }
+
+const indicatorMap: Record<string, string> = {
+  GREEN: "🟢",
+  YELLOW: "🟡",
+  RED: "🔴",
+};
+
+export const getIndicatorSymbol = (v?: string) => v && (indicatorMap[v] ?? `(${v})`);
 
 const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: DynamicFormEntry) => {
   const {
@@ -72,6 +81,24 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
             values.map((v, i) => (
               <option key={i} value={v.value}>
                 {v.label}
+              </option>
+            ))}
+        </Select>
+      );
+    case "indicatorDropdown":
+      return (
+        <Select
+          id={id}
+          isDisabled={!values}
+          isInvalid={!!errors[id]}
+          variant='hi-contrast'
+          {...register(id, validation)}
+        >
+          {values &&
+            Array.isArray(values) &&
+            values.map((v, i) => (
+              <option key={i} value={v.value}>
+                {v.label} {getIndicatorSymbol(v.extra)}
               </option>
             ))}
         </Select>

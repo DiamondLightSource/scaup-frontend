@@ -98,4 +98,27 @@ describe("Dynamic Form View", () => {
     expect(screen.getByText(/a random id/i)).toBeInTheDocument();
     expect(screen.getByText(/label/i)).toBeInTheDocument();
   });
+
+  it("should render additional indicator icon if original field was indicatorDropdown", () => {
+    renderWithForm(
+      <DynamicFormView
+        formType={[
+          {
+            label: "Label",
+            id: "itemId",
+            type: "indicatorDropdown",
+            values: {
+              $ref: { parent: "#/a", map: { value: "value", label: "label", extra: "indicator" } },
+            },
+          },
+        ]}
+        data={{ itemId: "1" }}
+        prepopData={{
+          a: [{ value: "1", label: "label", indicator: "RED" }],
+        }}
+      />,
+    );
+
+    expect(screen.getByText(/label 🔴/i)).toBeInTheDocument();
+  });
 });

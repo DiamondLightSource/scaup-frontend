@@ -33,8 +33,13 @@ export const sampleForm = [
   {
     id: "proteinId",
     label: "Macromolecule",
-    type: "dropdown",
-    values: { $ref: { parent: "#/proteins", map: { value: "proteinId", label: "name" } } },
+    type: "indicatorDropdown",
+    values: {
+      $ref: {
+        parent: "#/proteins",
+        map: { value: "proteinId", label: "name", extra: "safetyLevel" },
+      },
+    },
     validation: {
       required: "Required",
     },

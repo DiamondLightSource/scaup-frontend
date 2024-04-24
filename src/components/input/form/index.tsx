@@ -1,3 +1,4 @@
+"use client";
 import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
 import { formMapping } from "@/mappings/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
