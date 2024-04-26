@@ -36,7 +36,7 @@ const indicatorMap: Record<string, string> = {
   RED: "🔴",
 };
 
-export const getIndicatorSymbol = (v?: string) => v && (indicatorMap[v] ?? `(${v})`);
+export const getIndicatorSymbol = (v?: string) => (v ? indicatorMap[v] ?? `(${v})` : "");
 
 const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: DynamicFormEntry) => {
   const {

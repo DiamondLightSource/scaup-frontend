@@ -72,6 +72,10 @@ describe("Indicator Provider", () => {
     expect(getIndicatorSymbol("RED")).toBe("🔴");
   });
 
+  it("should empty string if undefined passed", () => {
+    expect(getIndicatorSymbol(undefined)).toBe("");
+  });
+
   it("should return original value if not in map", () => {
     expect(getIndicatorSymbol("NOT RED")).toBe("(NOT RED)");
   });

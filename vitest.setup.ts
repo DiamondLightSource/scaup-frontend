@@ -11,6 +11,7 @@ vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
 }));
 window.scrollTo = () => {};
+window.print = () => {};
 
 process.env.NEXT_PUBLIC_API_URL = "http://localhost/api";
 process.env.SERVER_API_URL = "http://localhost/api";
