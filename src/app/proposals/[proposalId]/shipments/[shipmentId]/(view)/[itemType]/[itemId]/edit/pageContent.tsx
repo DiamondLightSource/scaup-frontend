@@ -6,6 +6,7 @@ import {
   selectActiveItem,
   selectIsEdit,
   setIsReview,
+  setNewActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
@@ -139,8 +140,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   }, []);
 
   const redirectToNew = useCallback(() => {
+    if (activeItem) {
+      dispatch(setNewActiveItem({ type: activeItem.data.type, title: activeItem.data.type }));
+    }
     router.replace("../new/edit");
-  }, [router]);
+  }, [router, activeItem, dispatch]);
 
   // This does not get rendered if there is no active item, so it's safe to assume it's not null
 
