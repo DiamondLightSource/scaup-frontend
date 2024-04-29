@@ -2,6 +2,7 @@
 import "@/styles/form.css";
 import { JsonRef } from "@/utils/generic";
 import {
+  Box,
   Checkbox,
   FormControl,
   FormErrorMessage,
@@ -105,13 +106,15 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
       );
     case "checkbox":
       return (
-        <>
-          <Checkbox id={id} {...register(id, validation)}>
+        <Box my='0.5em'>
+          <Checkbox size='lg' id={id} {...register(id, validation)}>
             {label}
           </Checkbox>
 
-          <FormHelperText mt='0'>{hint}</FormHelperText>
-        </>
+          <FormHelperText ml='34px' mt='0'>
+            {hint}
+          </FormHelperText>
+        </Box>
       );
   }
 };
