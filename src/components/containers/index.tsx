@@ -10,6 +10,7 @@ import {
 import { BaseShipmentItem, Step, separateDetails } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
+import { useRouter } from "next/navigation";
 import { UseFormReturn, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
@@ -47,6 +48,7 @@ export const useChildLocationManager = ({
   const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
   const formContext = useFormContext();
+  const router = useRouter();
 
   /**
    * Assign child to parent container server-side and update client representation
@@ -126,6 +128,10 @@ export const useChildLocationManager = ({
     ]);
 
     dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
+
+    if (!isEdit) {
+      router.replace(`../${actualContainerId}/edit`);
+    }
   };
 
   return setLocation;
