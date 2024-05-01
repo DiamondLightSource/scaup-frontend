@@ -1,15 +1,12 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { SessionParams } from "@/types/generic";
 import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";
 import { Button, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
-
-export interface ProposalOverviewProps {
-  proposalId: string;
-}
 
 interface ShipmentData {
   name: string;
@@ -19,18 +16,16 @@ const shipmentForm = [
   { id: "name", label: "Name", type: "text", validation: { required: "Required" } },
 ] as DynamicFormEntry[];
 
-export const ShipmentCreationForm = ({ proposalId }: ProposalOverviewProps) => {
+export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams) => {
   const router = useRouter();
   const formContext = useForm<ShipmentData>();
 
   const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
-    const newShipment = (await Item.create(
-      proposalId,
-      { name: info.name },
-      "shipments",
-    )) as CreationResponse;
+    const newShipment = (await Item.createShipment(proposalId, visitNumber, {
+      name: info.name,
+    })) as CreationResponse;
 
-    router.push(`/proposals/${proposalId}/shipments/${newShipment.id}/edit`);
+    router.push(`${visitNumber}/shipments/${newShipment.id}/edit`);
   });
 
   return (

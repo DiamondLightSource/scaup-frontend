@@ -5,8 +5,12 @@ export interface ItemFormPageContentProps {
   prepopData: Record<string, any>;
 }
 
-export interface ShipmentParams {
+export interface SessionParams {
   proposalId: string;
+  visitNumber: string;
+}
+
+export interface ShipmentParams extends SessionParams {
   shipmentId: string;
 }
 

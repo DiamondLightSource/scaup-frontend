@@ -1,5 +1,6 @@
 "use client";
 
+import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { createShipmentRequest } from "@/utils/client";
 import { HStack, Heading, VStack, useToast } from "@chakra-ui/react";
@@ -17,7 +18,7 @@ export interface ShipmentHomeData {
 
 export interface ShipmentHomeContentProps {
   data: ShipmentHomeData;
-  params: { shipmentId: string; proposalId: string };
+  params: ShipmentParams;
 }
 
 // TODO: make this more generic

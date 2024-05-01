@@ -19,16 +19,16 @@ describe("Item Creation", () => {
     expect(itemResponse).toEqual({ data: { type: "sample" }, id: 123 });
   });
 
-  it("should use different URL for creating shipments", async () => {
+  it("should create shipments", async () => {
     server.use(
       http.post(
-        "http://localhost/api/proposals/1/shipments",
+        "http://localhost/api/proposals/cm1/sessions/1/shipments",
         () => HttpResponse.json({ name: "Test" }, { status: 201 }),
         { once: true },
       ),
     );
 
-    const itemResponse = await Item.create(1, { name: "Test " }, "shipments");
+    const itemResponse = await Item.createShipment("cm1", "1", { name: "Test " });
     expect(itemResponse).toEqual({ name: "Test" });
   });
 });

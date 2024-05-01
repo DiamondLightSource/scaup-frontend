@@ -1,4 +1,5 @@
-import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/pageContent";
+import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/sessions/[visitNumber]/pageContent";
+import { SessionParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import {
@@ -20,8 +21,10 @@ export const metadata: Metadata = {
   title: "Proposal - Sample Handling",
 };
 
-const getShipments = async (proposalId: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
+const getShipments = async (proposalId: string, visitNumber: string) => {
+  const res = await authenticatedFetch.server(
+    `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
+  );
 
   if (res && res.status === 200) {
     const shipments = await res.json();
@@ -31,8 +34,8 @@ const getShipments = async (proposalId: string) => {
   return null;
 };
 
-const ProposalOverview = async ({ params }: { params: { proposalId: string } }) => {
-  const data = (await getShipments(params.proposalId)) as
+const ProposalOverview = async ({ params }: { params: SessionParams }) => {
+  const data = (await getShipments(params.proposalId, params.visitNumber)) as
     | components["schemas"]["MixedShipment"][]
     | null;
 
@@ -64,7 +67,7 @@ const ProposalOverview = async ({ params }: { params: { proposalId: string } }) 
             <>
               <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
                 {data.map((shipment, i) => (
-                  <Link href={`${params.proposalId}/shipments/${shipment.id}`} key={i}>
+                  <Link href={`${params.visitNumber}/shipments/${shipment.id}`} key={i}>
                     <Stat
                       key={i}
                       _hover={{
@@ -113,7 +116,7 @@ const ProposalOverview = async ({ params }: { params: { proposalId: string } }) 
               This proposal has no shipments assigned to it yet. You can:
             </Text>
           )}
-          <ShipmentCreationForm proposalId={params.proposalId} />
+          <ShipmentCreationForm proposalId={params.proposalId} visitNumber={params.visitNumber} />
         </>
       )}
     </VStack>
