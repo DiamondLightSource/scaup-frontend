@@ -54,8 +54,8 @@ const SubmissionOverview = async ({
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
         <Text fontSize='18px' my='1em'>
-          Your shipment was <b>successfully submitted!</b> You may now arrange for your samples to
-          be shipped to Diamond, or{" "}
+          Your sample information was <b>successfully submitted!</b> You may now arrange for your
+          samples to be shipped to Diamond, or{" "}
           <Link
             textDecoration='underline'
             color='diamond.600'

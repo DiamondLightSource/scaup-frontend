@@ -1,3 +1,4 @@
+import { BaseShipmentItem } from "@/mappings/pages";
 import "@/styles/tree.css";
 import { pascalToSpace } from "@/utils/generic";
 import {
@@ -39,6 +40,14 @@ export interface TreeViewProps extends AccordionProps {
   readOnly?: boolean;
   selectedItem?: TreeData;
 }
+
+const typeColours: Record<BaseShipmentItem["type"], string> = {
+  dewar: "green",
+  gridBox: "yellow",
+  puck: "orange",
+  falconTube: "orange",
+  sample: "blue",
+};
 
 const hasChildren = (item: TreeData) => !!(item.children && item.children.length > 0);
 
@@ -124,7 +133,7 @@ export const TreeView = ({
                         {item.name}
                       </Text>
                       {item.data.type && (
-                        <Tag colorScheme='green' size='sm'>
+                        <Tag colorScheme={typeColours[item.data.type]} size='sm'>
                           {pascalToSpace(item.data.type)}
                         </Tag>
                       )}
