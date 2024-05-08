@@ -12,6 +12,7 @@ v0.1.0 (22/04/2024)
 - Filter for invalid names
 - Item types are now displayed next to item in tree
 - Sample macromolecules now have their safety level displayed next to their names
+- Shipments are now session specific
 
 **Fixed**
 

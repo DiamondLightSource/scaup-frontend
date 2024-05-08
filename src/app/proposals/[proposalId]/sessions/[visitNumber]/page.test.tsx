@@ -17,7 +17,7 @@ describe("Proposal Page Content", () => {
 
     render(await ProposalOverview(baseParams));
 
-    expect(screen.getByText("Proposal Unavailable")).toBeInTheDocument();
+    expect(screen.getByText("Session Unavailable")).toBeInTheDocument();
   });
 
   it("should display message if there are no shipments in this proposal", async () => {
@@ -31,14 +31,14 @@ describe("Proposal Page Content", () => {
     render(await ProposalOverview(baseParams));
 
     expect(
-      screen.getByText("This proposal has no shipments assigned to it yet. You can:"),
+      screen.getByText("This session has no shipments assigned to it yet. You can:"),
     ).toBeInTheDocument();
   });
 
   it("should display proposal reference in page title", async () => {
     render(await ProposalOverview(baseParams));
 
-    expect(screen.getByText("cm1234")).toBeInTheDocument();
+    expect(screen.getByText("cm1234-1")).toBeInTheDocument();
   });
 
   it("should display question mark if creation date is not present", async () => {
