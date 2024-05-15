@@ -3,10 +3,12 @@ import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { Item } from "@/utils/client/item";
+import { nameValidation } from "@/utils/generic";
 import { gridBox, renderAndInjectForm, renderWithFormAndStore, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { Controller, useFormContext } from "react-hook-form";
+import { DynamicFormInput } from "../input/form/input";
 
 const defaultShipment = {
   ...initialState,
@@ -80,7 +82,7 @@ describe("Grid Box", () => {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
-    fireEvent.click(screen.getByTestId("1-populated"));
+    expect(screen.getByTestId("1-populated")).toBeInTheDocument();
   });
 
   it("should display message if no unassigned samples are available", () => {
@@ -164,6 +166,42 @@ describe("Grid Box", () => {
     await waitFor(() => expect(screen.getAllByRole("button")).toHaveLength(5));
   });
 
+  it("should not allow automatic creation on slot assignment if name is invalid", async () => {
+    const FormParent = () => {
+      const formContext = useFormContext<BaseShipmentItem>();
+      return (
+        <>
+          <DynamicFormInput
+            id='name'
+            label='name'
+            type='text'
+            values='test test'
+            validation={nameValidation}
+          />
+          <GridBox shipmentId='1' formContext={formContext} />
+        </>
+      );
+    };
+
+    renderWithFormAndStore(<FormParent />, {
+      preloadedState: {
+        shipment: { ...populatedGridBoxShipment, unassigned: defaultShipment.unassigned },
+      },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("test test")).toBeInTheDocument();
+    });
+
+    screen.debug();
+
+    fireEvent.click(screen.getByText("1"));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText(/apply/i));
+
+    await screen.findByText(/name must only contain alphanumeric characters and underscores/i);
+  });
+
   it("should create grid box if not yet in database before populating slot", async () => {
     const newPopulatedGridBoxItems = structuredClone(populatedGridBoxShipment.items);
 
@@ -220,6 +258,6 @@ describe("Grid Box", () => {
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await waitFor(() => expect(patchSpy).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(patchSpy).toHaveBeenCalledTimes(3));
   });
 });
