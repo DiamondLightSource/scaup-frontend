@@ -70,33 +70,41 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         data: { type: activeItem.data.type, ...info },
       };
 
-      let newItem = await Item.create(
-        shipmentId,
-        separateDetails(info, activeStep.endpoint),
-        activeStep.endpoint,
-      );
+      try {
+        let newItem = await Item.create(
+          shipmentId,
+          separateDetails(info, activeStep.endpoint),
+          activeStep.endpoint,
+        );
 
-      if (Array.isArray(newItem)) {
-        newItem = newItem[0];
+        if (Array.isArray(newItem)) {
+          newItem = newItem[0];
+        }
+
+        values.id = newItem.id;
+        values.name = newItem.name ?? "";
+
+        if (checkIsRoot(values)) {
+          await dispatch(updateShipment({ shipmentId }));
+        } else {
+          await dispatch(updateUnassigned({ shipmentId }));
+        }
+
+        toast({ title: "Successfully created item!" });
+        router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
+      } catch {
+        setAddLoading(false);
       }
-
-      values.id = newItem.id;
-      values.name = newItem.name ?? "";
-
-      if (checkIsRoot(values)) {
-        await dispatch(updateShipment({ shipmentId }));
-      } else {
-        await dispatch(updateUnassigned({ shipmentId }));
-      }
-
-      toast({ title: "Successfully created item!" });
-      router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
     } else {
-      await Item.patch(
-        activeItem!.id,
-        separateDetails(info, activeStep.endpoint),
-        activeStep.endpoint,
-      );
+      try {
+        await Item.patch(
+          activeItem!.id,
+          separateDetails(info, activeStep.endpoint),
+          activeStep.endpoint,
+        );
+      } catch {
+        setAddLoading(false);
+      }
       await dispatch(updateShipment({ shipmentId }));
       await dispatch(updateUnassigned({ shipmentId }));
       toast({ title: "Successfully saved item!" });
