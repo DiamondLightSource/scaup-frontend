@@ -36,7 +36,6 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -131,7 +130,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
       });
 
       if (response && response.status === 200) {
-        router.push("../../submitted");
+        router.push("../../pre-session");
         return;
       } else {
         toast({ description: "Could not update items! Please try again later", status: "error" });
@@ -217,8 +216,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
           <Spacer />
           {isReview && (
             <Button
-              as={Link}
-              href='edit'
+              onClick={() => router.back()}
               isDisabled={isBooked}
               pointerEvents={isBooked ? "none" : undefined}
             >
@@ -226,7 +224,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
             </Button>
           )}
           <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
-            {activeStep < steps.length - 1 && !isReview ? "Continue" : "Finish"}
+            {isReview ? "Continue to Pre-Session Info" : "Continue"}
           </Button>
         </HStack>
       </GridItem>

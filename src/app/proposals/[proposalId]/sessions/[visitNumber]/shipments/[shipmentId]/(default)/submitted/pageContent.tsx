@@ -1,14 +1,11 @@
 "use client";
 
+import { ShipmentParams } from "@/types/generic";
 import { createShipmentRequest } from "@/utils/client";
 import { Button, useToast } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 
-const ArrangeShipmentButton = ({
-  params,
-}: {
-  params: { shipmentId: string; proposalId: string };
-}) => {
+const ArrangeShipmentButton = ({ params }: { params: ShipmentParams }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 

@@ -1,6 +1,7 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
 import { dewarForm } from "@/mappings/forms/dewar";
 import { gridBoxForm } from "@/mappings/forms/gridBox";
+import { preSessionForm } from "@/mappings/forms/preSession";
 import { puckForm } from "@/mappings/forms/puck";
 import { sampleForm } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
@@ -14,5 +15,6 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   falconTube: containerForm,
   dewar: dewarForm,
   gridBox: gridBoxForm,
+  preSession: preSessionForm,
   shipment: [],
 };

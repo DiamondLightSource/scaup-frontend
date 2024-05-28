@@ -1,3 +1,4 @@
+import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import { getShipmentData } from "@/utils/client/shipment";
@@ -42,11 +43,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
   return { counts, samples, dispatch: data.data, name: data.name };
 };
 
-const ShipmentHome = async ({
-  params,
-}: {
-  params: { shipmentId: string; proposalId: string; visitNumber: string };
-}) => {
+const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
 
   return (

@@ -107,7 +107,7 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const editButton = screen.getByRole("link", {
+    const editButton = screen.getByRole("button", {
       name: /edit/i,
     });
 
@@ -138,7 +138,7 @@ describe("Item Page Layout Content", () => {
     );
 
     const finishButton = screen.getByRole("button", {
-      name: /finish/i,
+      name: /continue/i,
     });
 
     fireEvent.click(finishButton);
@@ -146,7 +146,7 @@ describe("Item Page Layout Content", () => {
     expect(mockRouter.pathname).toBe("/review");
   });
 
-  it("should redirect user to successful submission page after submitting", async () => {
+  it("should redirect user to pre-session page after submitting", async () => {
     renderWithProviders(
       <ItemPageLayoutContent params={params}>
         <></>
@@ -163,13 +163,13 @@ describe("Item Page Layout Content", () => {
 
     const finishButton = await waitFor(() =>
       screen.findByRole("button", {
-        name: /finish/i,
+        name: /continue to pre-session info/i,
       }),
     );
 
     fireEvent.click(finishButton);
 
-    await waitFor(() => expect(mockRouter.pathname).toBe("/submitted"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/pre-session"));
   });
 
   it("should not redirect if shipment submission fails", async () => {
@@ -199,28 +199,14 @@ describe("Item Page Layout Content", () => {
 
     const finishButton = await waitFor(() =>
       screen.findByRole("button", {
-        name: /finish/i,
+        name: /continue to pre-session info/i,
       }),
     );
 
     fireEvent.click(finishButton);
 
     await waitFor(() => expect(toastMock).toHaveBeenCalled());
-    expect(mockRouter.pathname).not.toBe("/submitted");
-  });
-
-  it("should display 'finish' button in overview on last step", async () => {
-    renderWithProviders(
-      <ItemPageLayoutContent params={{ ...params, itemType: "dewar" }}>
-        <></>
-      </ItemPageLayoutContent>,
-    );
-
-    const finishButton = await screen.findByRole("button", {
-      name: /finish/i,
-    });
-
-    expect(finishButton).toBeInTheDocument();
+    expect(mockRouter.pathname).not.toBe("/pre-session");
   });
 
   it("should navigate to corresponding step when step is clicked", () => {
@@ -289,7 +275,7 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const editButton = screen.getByRole("link", {
+    const editButton = screen.getByRole("button", {
       name: /edit/i,
     });
 
