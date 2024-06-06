@@ -1,5 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { ShipmentParams } from "@/types/generic";
 import { getPrepopData } from "@/utils/client";
 import { getShipmentData } from "@/utils/client/shipment";
 import {
@@ -22,11 +23,7 @@ export const metadata: Metadata = {
   title: "Shipment Overview - Sample Handling",
 };
 
-const SubmissionOverview = async ({
-  params,
-}: {
-  params: { shipmentId: string; proposalId: string };
-}) => {
+const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
   const rawShipmentData = (await getShipmentData(params.shipmentId)) as TreeData<BaseShipmentItem>;
   const unassignedData = await getShipmentData(params.shipmentId, "/unassigned");
   const prepopData = await getPrepopData(params.proposalId);

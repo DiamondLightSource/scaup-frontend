@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
   const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`);
+  const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
 
   if (data === null) {
     return data;
@@ -40,7 +41,12 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
     samples = (await resSamples.json()).items;
   }
 
-  return { counts, samples, dispatch: data.data, name: data.name };
+  let preSessionInfo: Record<string, any> | null = null;
+  if (resPreSession.status === 200) {
+    preSessionInfo = await resPreSession.json();
+  }
+
+  return { counts, samples, dispatch: data.data, name: data.name, preSessionInfo };
 };
 
 const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {

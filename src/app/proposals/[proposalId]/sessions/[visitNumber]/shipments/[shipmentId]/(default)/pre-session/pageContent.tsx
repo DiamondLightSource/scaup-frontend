@@ -1,6 +1,8 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
-import { Box, Button, HStack, Spacer, VStack } from "@chakra-ui/react";
+import { ShipmentParams } from "@/types/generic";
+import { authenticatedFetch } from "@/utils/client";
+import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { Metadata } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,11 +12,34 @@ export const metadata: Metadata = {
   title: "Pre-Session Information - Sample Handling",
 };
 
-const PreSessionContent = () => {
+const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
   const formContext = useForm();
+  const toast = useToast();
   const router = useRouter();
+
   const onSubmit = formContext.handleSubmit(async (info) => {
-    router.push("submitted");
+    const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
+      method: "POST",
+    });
+
+    const preSessionResponse = await authenticatedFetch.client(
+      `/shipments/${params.shipmentId}/preSession`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ details: info }),
+      },
+    );
+
+    if (
+      preSessionResponse &&
+      response &&
+      response.status === 200 &&
+      preSessionResponse.status === 201
+    ) {
+      router.push("submitted");
+    } else {
+      toast({ description: "Could not update items! Please try again later", status: "error" });
+    }
   });
 
   return (

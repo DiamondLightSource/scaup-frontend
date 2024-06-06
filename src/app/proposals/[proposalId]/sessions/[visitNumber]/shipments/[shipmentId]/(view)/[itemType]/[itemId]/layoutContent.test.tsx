@@ -1,12 +1,9 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { server } from "@/mocks/server";
 import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
 
-import { toastMock } from "@/../vitest.setup";
 import ItemPageLayoutContent from "./layoutContent";
 
 const defaultShipmentItems: TreeData[] = [
@@ -170,43 +167,6 @@ describe("Item Page Layout Content", () => {
     fireEvent.click(finishButton);
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/pre-session"));
-  });
-
-  it("should not redirect if shipment submission fails", async () => {
-    server.use(
-      http.post(
-        "http://localhost/api/shipments/:shipmentId/push",
-        () => HttpResponse.json({}, { status: 404 }),
-        { once: true },
-      ),
-    );
-
-    mockRouter.setCurrentUrl("/");
-
-    renderWithProviders(
-      <ItemPageLayoutContent params={params}>
-        <></>
-      </ItemPageLayoutContent>,
-      {
-        preloadedState: {
-          shipment: {
-            ...testInitialState,
-            isReview: true,
-          },
-        },
-      },
-    );
-
-    const finishButton = await waitFor(() =>
-      screen.findByRole("button", {
-        name: /continue to pre-session info/i,
-      }),
-    );
-
-    fireEvent.click(finishButton);
-
-    await waitFor(() => expect(toastMock).toHaveBeenCalled());
-    expect(mockRouter.pathname).not.toBe("/pre-session");
   });
 
   it("should navigate to corresponding step when step is clicked", () => {

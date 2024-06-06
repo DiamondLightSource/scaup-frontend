@@ -80,7 +80,7 @@ const DynamicFormViewField = ({ children, label }: DynamicFormViewFieldProps) =>
   return (
     <VStack alignItems='start' gap='0' w='100%'>
       <HStack py='9px'>
-        <Text w='170px' fontWeight='800'>
+        <Text w='240px' fontWeight='800'>
           {label}
         </Text>
         <Text>{children}</Text>

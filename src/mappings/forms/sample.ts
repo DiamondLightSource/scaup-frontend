@@ -132,10 +132,4 @@ export const sampleForm = [
     label: "Vitrification Conditions",
     type: "textarea",
   },
-  {
-    id: "clipped",
-    label: "Grid Clipped",
-    type: "checkbox",
-    hint: "Whether your grid was clipped or not",
-  },
 ] as DynamicFormEntry[];

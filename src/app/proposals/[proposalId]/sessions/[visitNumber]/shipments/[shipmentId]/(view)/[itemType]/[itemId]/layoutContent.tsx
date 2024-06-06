@@ -12,7 +12,6 @@ import {
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { ItemParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
@@ -34,7 +33,6 @@ import {
   Stepper,
   Text,
   VStack,
-  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
@@ -48,7 +46,6 @@ export interface ItemLayoutContentProps {
 
 const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const toast = useToast();
   const router = useRouter();
 
   const isReview = useSelector(selectIsReview);
@@ -125,23 +122,15 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   /** Move to next shipment step */
   const handleContinue = useCallback(async () => {
     if (isReview) {
-      const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
-        method: "POST",
-      });
-
-      if (response && response.status === 200) {
-        router.push("../../pre-session");
-        return;
-      } else {
-        toast({ description: "Could not update items! Please try again later", status: "error" });
-      }
+      router.push("../../pre-session");
+      return;
     }
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else {
       router.push("review");
     }
-  }, [handleSetStep, activeStep, router, params, toast, isReview]);
+  }, [handleSetStep, activeStep, router, isReview]);
 
   const cannotFinish = useMemo(
     () =>

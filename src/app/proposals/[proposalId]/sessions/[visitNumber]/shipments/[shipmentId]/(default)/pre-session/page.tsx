@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Shipment - Sample Handling",
 };
 
-const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
+const PreSession = async ({ params }: { params: ShipmentParams }) => {
   return (
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
@@ -16,10 +16,10 @@ const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
         </Heading>
         <Heading>Pre-Session Information</Heading>
         <Divider borderColor='gray.800' />
-        <PreSessionContent />
+        <PreSessionContent params={params} />
       </VStack>
     </VStack>
   );
 };
 
-export default ShipmentHome;
+export default PreSession;

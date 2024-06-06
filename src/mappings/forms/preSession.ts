@@ -7,7 +7,13 @@ export const preSessionForm = [
     type: "separator",
   },
   {
-    id: "grids",
+    id: "clipped",
+    label: "Grid Clipped",
+    type: "checkbox",
+    hint: "Whether your grids were clipped or not",
+  },
+  {
+    id: "gridCrossGrating",
     label: "Do you need a cross-grating/quantifoil grid for alignments?",
     type: "dropdown",
     values: [
@@ -77,8 +83,46 @@ export const preSessionForm = [
     type: "separator",
   },
   {
-    id: "Any other information relevant to your session",
-    label: "Preferred Tilt Scheme",
+    id: "useTomoEpu",
+    label: "Use Tomo or EPU?",
+    type: "dropdown",
+    values: [
+      {
+        label: "Tomo",
+        value: "Tomo",
+      },
+      {
+        label: "EPU",
+        value: "EPU",
+      },
+    ],
+  },
+  {
+    id: "experimentType",
+    label: "Experiment Type",
+    type: "dropdown",
+    values: [
+      {
+        label: "3D-ED",
+        value: "3D-ED",
+      },
+      {
+        label: "Tomography",
+        value: "Tomography",
+      },
+      {
+        label: "Lamellaetomography",
+        value: "Lamellaetomography",
+      },
+      {
+        label: "Single Particle Analysis",
+        value: "Single Particle Analysis",
+      },
+    ],
+  },
+  {
+    id: "comments",
+    label: "Any other information relevant to your session?",
     type: "textarea",
   },
 ] as DynamicFormEntry[];
