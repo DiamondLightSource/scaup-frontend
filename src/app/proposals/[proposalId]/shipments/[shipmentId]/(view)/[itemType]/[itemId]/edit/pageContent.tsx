@@ -57,9 +57,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
-      // Temporary measure, at least whilst all samples are in grids
+      // TODO: find better way of setting the loading state to false
       setAddLoading(true);
 
+      // Temporary measure, at least whilst all samples are in grids
       if (info.type === "sample") {
         info.type = "grid";
       }
@@ -96,10 +97,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       );
-      setAddLoading(false);
       dispatch(updateShipment({ shipmentId }));
       toast({ title: "Successfully saved item!" });
     }
+    setAddLoading(false);
   });
 
   /*
