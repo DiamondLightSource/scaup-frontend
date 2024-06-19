@@ -44,6 +44,7 @@ export const sampleForm = [
     id: "concentration",
     label: "Concentration",
     type: "text",
+    hint: "Include unit of measurement",
   },
   {
     id: "grid-separator",

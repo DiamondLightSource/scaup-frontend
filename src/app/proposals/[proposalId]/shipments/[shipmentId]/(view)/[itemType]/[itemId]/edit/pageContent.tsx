@@ -97,7 +97,8 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         separateDetails(info, activeStep.endpoint),
         activeStep.endpoint,
       );
-      dispatch(updateShipment({ shipmentId }));
+      await dispatch(updateShipment({ shipmentId }));
+      await dispatch(updateUnassigned({ shipmentId }));
       toast({ title: "Successfully saved item!" });
     }
     setAddLoading(false);

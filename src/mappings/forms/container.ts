@@ -5,7 +5,7 @@ export const containerForm = [
   {
     id: "name",
     label: "Name",
-    hint: "Container name should match label",
+    hint: "Container name should match label/barcode",
     type: "text",
   },
   {
