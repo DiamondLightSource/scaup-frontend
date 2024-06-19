@@ -36,7 +36,15 @@ describe("Shipment Submission Overview", () => {
         params={params}
         data={{
           samples: [
-            { name: "C01", id: 1, location: 1, shipmentId: 1, proteinId: 1, containerId: 1 },
+            {
+              name: "C01",
+              id: 1,
+              location: 1,
+              shipmentId: 1,
+              proteinId: 1,
+              containerId: 1,
+              type: "sample",
+            },
           ],
           counts: {},
           dispatch: {},
@@ -54,7 +62,15 @@ describe("Shipment Submission Overview", () => {
         params={params}
         data={{
           samples: [
-            { name: "C01", id: 1, location: 1, shipmentId: 1, proteinId: 1, containerId: 1 },
+            {
+              name: "C01",
+              id: 1,
+              location: 1,
+              shipmentId: 1,
+              proteinId: 1,
+              containerId: 1,
+              type: "sample",
+            },
           ],
           counts: {},
           dispatch: {},
@@ -65,7 +81,7 @@ describe("Shipment Submission Overview", () => {
 
     fireEvent.click(screen.getByText("C01"));
 
-    await waitFor(() => expect(mockRouter.pathname).toBe("/1/sample/1/edit"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/1/sample/1/review"));
   });
 
   it("should not enable 'edit shipment' button if shipment is already booked", () => {

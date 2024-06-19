@@ -42,7 +42,8 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
 
   const handleSampleClicked = useCallback(
     (item: Record<string, any>) => {
-      router.push(`${params.shipmentId}/sample/${item.id}/edit`);
+      // TODO: this should be more generic if this is not going to be eBIC only (the "grid" bit)
+      router.push(`${params.shipmentId}/${item.type}/${item.id}/review`);
     },
     [router, params],
   );

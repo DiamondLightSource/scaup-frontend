@@ -42,6 +42,11 @@ export interface paths {
   };
   "/shipments/{shipmentId}/samples": {
     /**
+     * Get Samples
+     * @description Create new sample in shipment
+     */
+    get: operations["get_samples_shipments__shipmentId__samples_get"];
+    /**
      * Create Sample
      * @description Create new sample in shipment
      */
@@ -309,6 +314,17 @@ export interface components {
       /** Limit */
       limit: number;
     };
+    /** Paged[SampleOut] */
+    Paged_SampleOut_: {
+      /** Items */
+      items: components["schemas"]["SampleOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
     /** SampleIn */
     SampleIn: {
       /** Containerid */
@@ -326,21 +342,35 @@ export interface components {
       proteinId: number;
       /** Type */
       type?: string | null;
+      /**
+       * Copies
+       * @default 1
+       */
+      copies?: number;
     };
     /** SampleOut */
     SampleOut: {
+      /** Containerid */
+      containerId?: number | null;
+      /** Location */
+      location?: number | null;
+      /** Details */
+      details?: Record<string, never> | null;
+      /**
+       * Name
+       * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
+       */
+      name?: string | null;
       /** Id */
       id: number;
       /** Shipmentid */
       shipmentId: number;
       /** Proteinid */
       proteinId: number;
-      /** Name */
-      name: string;
-      /** Location */
-      location: number | null;
-      /** Containerid */
-      containerId: number | null;
+      /** Parent */
+      parent?: string | null;
+      /** Type */
+      type: string;
     };
     /** ShipmentChildren */
     ShipmentChildren: {
@@ -587,6 +617,37 @@ export interface operations {
       };
     };
   };
+  get_samples_shipments__shipmentId__samples_get: {
+    /**
+     * Get Samples
+     * @description Create new sample in shipment
+     */
+    parameters: {
+      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+      /** @description Number of results to show */
+      query?: {
+        page?: number;
+        limit?: number;
+      };
+      path: {
+        shipmentId: number;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Paged_SampleOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   create_sample_shipments__shipmentId__samples_post: {
     /**
      * Create Sample
@@ -606,7 +667,7 @@ export interface operations {
       /** @description Successful Response */
       201: {
         content: {
-          "application/json": components["schemas"]["SampleOut"];
+          "application/json": components["schemas"]["Paged_SampleOut_"];
         };
       };
       /** @description Validation Error */

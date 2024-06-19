@@ -21,9 +21,7 @@ export const metadata: Metadata = {
 };
 
 const getShipments = async (proposalId: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`, {
-    next: { tags: [`shipments-${proposalId}`] },
-  });
+  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
 
   if (res && res.status === 200) {
     const shipments = await res.json();
