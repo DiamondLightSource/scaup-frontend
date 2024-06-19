@@ -1,5 +1,6 @@
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
+import { getShipmentData } from "@/utils/client/shipment";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
@@ -19,11 +20,9 @@ export const metadata: Metadata = {
   title: "Shipment - Sample Handling",
 };
 
-const getShipmentData = async (shipmentId: string) => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+const getShipmentAndSampleData = async (shipmentId: string) => {
+  const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
   const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`);
-  const data: components["schemas"]["ShipmentChildren"] =
-    res && res.status === 200 ? await res.json() : null;
 
   if (data === null) {
     return data;
@@ -44,7 +43,7 @@ const getShipmentData = async (shipmentId: string) => {
 };
 
 const ShipmentHome = async ({ params }: { params: { shipmentId: string; proposalId: string } }) => {
-  const shipmentData = await getShipmentData(params.shipmentId);
+  const shipmentData = await getShipmentAndSampleData(params.shipmentId);
 
   return (
     <VStack alignItems='start'>

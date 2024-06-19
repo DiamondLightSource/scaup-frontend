@@ -42,11 +42,12 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemLayoutContentProps {
+  isBooked?: boolean;
   children: React.ReactNode;
   params: ItemParams;
 }
 
-const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
+const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useToast();
   const router = useRouter();
@@ -215,7 +216,7 @@ const ItemLayoutContent = ({ children, params }: ItemLayoutContentProps) => {
           )}
           <Spacer />
           {isReview && (
-            <Button as={Link} href='edit'>
+            <Button as={Link} href='edit' isDisabled={isBooked}>
               Edit
             </Button>
           )}

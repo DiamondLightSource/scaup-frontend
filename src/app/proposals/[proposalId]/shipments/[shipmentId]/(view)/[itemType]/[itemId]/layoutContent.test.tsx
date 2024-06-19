@@ -272,4 +272,26 @@ describe("Item Page Layout Content", () => {
 
     expect(stepHeading[0]).toHaveAttribute("data-status", "active");
   });
+
+  it("should disable edit button if shipment is booked", () => {
+    renderWithProviders(
+      <ItemPageLayoutContent params={params} isBooked={true}>
+        <></>
+      </ItemPageLayoutContent>,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            isReview: true,
+          },
+        },
+      },
+    );
+
+    const editButton = screen.getByRole("link", {
+      name: /edit/i,
+    });
+
+    expect(editButton).toHaveAttribute("disabled");
+  });
 });
