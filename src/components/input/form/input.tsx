@@ -125,7 +125,9 @@ export const DynamicFormInput = ({
           <FormHelperText mt='0'>{hint}</FormHelperText>
         </>
       )}
-      <FormErrorMessage>{errors[id] ? (errors[id]!.message as string) : null}</FormErrorMessage>
+      <FormErrorMessage data-testid='error-message'>
+        {errors[id] ? (errors[id]!.message as string) : null}
+      </FormErrorMessage>
       {<InnerDynamicFormInput {...{ id, label, type, validation, values, hint }} />}
     </FormControl>
   );

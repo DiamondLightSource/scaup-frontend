@@ -212,7 +212,7 @@ describe("Item Page", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
-      target: { value: "New Name" },
+      target: { value: "New_Name" },
     });
 
     fireEvent.click(screen.getByText(/add/i));
@@ -271,5 +271,23 @@ describe("Item Page", () => {
     fireEvent.click(addButton);
     await waitFor(() => expect(addButton).toHaveProperty("disabled", true));
     await waitFor(() => expect(toastMock).toHaveBeenCalled());
+  });
+});
+
+describe("Input Validation", () => {
+  it("should not allow names that contain invalid characters", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />);
+
+    fireEvent.change(screen.getByRole("textbox", { name: /name/i }), {
+      target: { value: "test 123" },
+    });
+
+    const addButton = screen.getByText(/add/i);
+
+    fireEvent.click(addButton);
+    await screen.findByTestId("error-message");
+    expect(
+      screen.getByText("Name must only contain alphanumeric characters and underscores"),
+    ).toBeInTheDocument();
   });
 });

@@ -1,5 +1,6 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { nameValidation } from "@/utils/generic";
 
 export interface PositionedItem extends BaseShipmentItem {
   location: number | null;
@@ -15,6 +16,9 @@ export const sampleForm = [
     id: "name",
     label: "Name",
     type: "text",
+    validation: {
+      ...nameValidation,
+    },
   },
   {
     id: "copies",

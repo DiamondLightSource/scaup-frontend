@@ -1,4 +1,5 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
+import { nameValidation } from "@/utils/generic";
 
 export const gridBoxForm = [
   {
@@ -7,6 +8,7 @@ export const gridBoxForm = [
     type: "text",
     hint: "Ensure name matches name on grid box",
     validation: {
+      ...nameValidation,
       required: "Required",
     },
   },
