@@ -31,7 +31,7 @@ const authenticatedFetch = async (
     headers.authorization = `Bearer ${session.accessToken}`;
   }
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL! + url, {
+  const res = await fetch(url, {
     ...init,
     headers,
   });
@@ -53,7 +53,7 @@ const authenticatedFetch = async (
 authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
   const session = await getServerSession(authOptions);
   try {
-    return await authenticatedFetch(url, init, session);
+    return await authenticatedFetch(process.env.SERVER_API_URL! + url, init, session);
   } catch (e) {
     redirect(`${process.env.NEXTAUTH_URL}/signin`);
   }
@@ -69,7 +69,7 @@ authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
  */
 authenticatedFetch.client = async (url: RequestInfo, init?: RequestInit) => {
   try {
-    return await authenticatedFetch(url, init);
+    return await authenticatedFetch(process.env.NEXT_PUBLIC_API_URL! + url, init);
   } catch (e) {
     if (e instanceof Error && e.message === "Authentication Failure") {
       signIn("diamond");
