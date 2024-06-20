@@ -1,4 +1,5 @@
 import "@/styles/tree.css";
+import { pascalToSpace } from "@/utils/generic";
 import {
   Accordion,
   AccordionButton,
@@ -81,7 +82,8 @@ export const TreeView = ({
   return (
     <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2, 3]}>
       {data.map((item, index) => {
-        const isSelected = item === selectedItem;
+        const isSelected =
+          item.id === selectedItem?.id && item.data.type === selectedItem?.data.type;
         return (
           <AccordionItem border='none' key={index}>
             {({ isExpanded }) => (
@@ -90,7 +92,7 @@ export const TreeView = ({
                   w='100%'
                   h='36px'
                   className={item.isNotViewable ? "unclickable-row" : "clickable-row"}
-                  bg={isSelected ? "diamond.100" : "transparent"}
+                  bg={isSelected ? "diamond.75" : "transparent"}
                 >
                   <h2
                     style={{
@@ -121,6 +123,11 @@ export const TreeView = ({
                       <Text fontSize='md' fontWeight={isSelected ? "600" : "200"}>
                         {item.name}
                       </Text>
+                      {item.data.type && (
+                        <Tag colorScheme='green' size='sm'>
+                          {pascalToSpace(item.data.type)}
+                        </Tag>
+                      )}
                     </HStack>
                   </h2>
 

@@ -90,4 +90,10 @@ describe("Tree View", () => {
 
     expect(screen.getByLabelText("View Test 2")).toHaveAttribute("aria-current", "true");
   });
+
+  it("should display item type if available", () => {
+    render(<TreeView data={[{ id: "1", name: "Test", data: { type: "someType" } }]} />);
+
+    expect(screen.getByText("Some Type")).toBeInTheDocument();
+  });
 });
