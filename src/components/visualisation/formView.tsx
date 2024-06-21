@@ -1,5 +1,5 @@
 import { formMapping } from "@/components/input/form";
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry, getIndicatorSymbol } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { parseJsonReferences } from "@/utils/generic";
 import { Divider, HStack, Text, VStack } from "@chakra-ui/react";
@@ -33,7 +33,7 @@ export const DynamicFormView = ({ formType, data, prepopData }: DynamicFormViewP
         if (typeof actualValue === "boolean") {
           actualValue = actualValue ? "Yes" : "No";
         } else if (
-          field.type === "dropdown" &&
+          (field.type === "dropdown" || field.type === "indicatorDropdown") &&
           field.values &&
           !Array.isArray(field.values) &&
           prepopData
@@ -52,6 +52,9 @@ export const DynamicFormView = ({ formType, data, prepopData }: DynamicFormViewP
             const option = options.find((option) => option.value === value);
             if (option) {
               actualValue = option.label;
+              if (field.type === "indicatorDropdown") {
+                actualValue += ` ${getIndicatorSymbol(option.extra)}`;
+              }
             }
           }
         }

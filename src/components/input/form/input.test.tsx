@@ -1,4 +1,4 @@
-import { DynamicFormInput } from "@/components/input/form/input";
+import { DynamicFormInput, getIndicatorSymbol } from "@/components/input/form/input";
 import { renderWithForm } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 
@@ -53,7 +53,30 @@ describe("Dynamic Form Field", () => {
     expect(screen.getByText(/separator/i)).toBeInTheDocument();
   });
 
-  it("should render error message if value does not pass validation", () => {
-    // TODO: wait for validation fields on form schema
+  it("should render indicator icon if provided", () => {
+    renderWithForm(
+      <DynamicFormInput
+        id='1'
+        label='Separator'
+        type='indicatorDropdown'
+        values={[{ label: "1", value: "1", extra: "RED" }]}
+      />,
+    );
+
+    expect(screen.getByText(/🔴/i)).toBeInTheDocument();
+  });
+});
+
+describe("Indicator Provider", () => {
+  it("should return symbol if exists in map", () => {
+    expect(getIndicatorSymbol("RED")).toBe("🔴");
+  });
+
+  it("should empty string if undefined passed", () => {
+    expect(getIndicatorSymbol(undefined)).toBe("");
+  });
+
+  it("should return original value if not in map", () => {
+    expect(getIndicatorSymbol("NOT RED")).toBe("(NOT RED)");
   });
 });
