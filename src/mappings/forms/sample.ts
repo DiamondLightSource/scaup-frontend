@@ -134,7 +134,8 @@ export const sampleForm = [
   },
   {
     id: "clipped",
-    label: "Clipped",
+    label: "Grid Clipped",
     type: "checkbox",
+    hint: "Whether your grid was clipped or not",
   },
 ] as DynamicFormEntry[];

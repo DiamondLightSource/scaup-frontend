@@ -32,7 +32,7 @@ export const gridBoxForm = [
   },
   {
     id: "fibSession",
-    label: "FIB followed by cryo session",
+    label: "FIB followed by TEM",
     type: "checkbox",
   },
   {

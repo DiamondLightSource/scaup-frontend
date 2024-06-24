@@ -1,5 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { getPrepopData } from "@/utils/client";
 import { getShipmentData } from "@/utils/client/shipment";
 import {
   Alert,
@@ -28,6 +29,7 @@ const SubmissionOverview = async ({
 }) => {
   const rawShipmentData = (await getShipmentData(params.shipmentId)) as TreeData<BaseShipmentItem>;
   const unassignedData = await getShipmentData(params.shipmentId, "/unassigned");
+  const prepopData = await getPrepopData(params.proposalId);
   let hasUnassigned = false;
 
   if (unassignedData) {
@@ -56,7 +58,7 @@ const SubmissionOverview = async ({
         </Alert>
       )}
       {rawShipmentData !== null ? (
-        <SubmissionOverviewContent shipment={rawShipmentData} />
+        <SubmissionOverviewContent shipment={rawShipmentData} prepopData={prepopData} />
       ) : (
         <VStack mt='2em' alignItems='start'>
           <Heading size='lg'>No assigned items</Heading>

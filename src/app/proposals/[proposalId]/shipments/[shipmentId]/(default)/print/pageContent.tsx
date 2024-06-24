@@ -17,11 +17,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { MdLocalPrintshop } from "react-icons/md";
 
 export interface PrintableOverviewContentProps {
   shipment: TreeData<BaseShipmentItem>;
+  prepopData: Record<string, any>;
 }
 
 interface ItemCardDisplayProps {
@@ -29,6 +30,8 @@ interface ItemCardDisplayProps {
   level?: number;
   parent?: string | null;
 }
+
+const PrepopContext = createContext<Record<string, any>>({});
 
 export const PrintButton = () => (
   <Button
@@ -45,6 +48,7 @@ export const PrintButton = () => (
 );
 
 const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProps) => {
+  const prepopData = useContext(PrepopContext);
   const locationText = useMemo(() => {
     if (!parent) {
       return null;
@@ -73,7 +77,7 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
         </h2>
         <AccordionPanel pr='0' pb='0'>
           <Box pb='1em'>
-            <DynamicFormView data={item.data} formType={item.data.type} />
+            <DynamicFormView data={item.data} formType={item.data.type} prepopData={prepopData} />
           </Box>
           {item.children
             ? item.children.map((child) => (
@@ -86,12 +90,14 @@ const ItemCardDisplay = ({ item, level = 1, parent = null }: ItemCardDisplayProp
   );
 };
 
-const PrintableOverviewContent = ({ shipment }: PrintableOverviewContentProps) => (
-  <VStack alignItems='start' w='100%' gap='2em'>
-    {shipment.children!.map((item) => (
-      <ItemCardDisplay key={item.id} item={item} />
-    ))}
-  </VStack>
+const PrintableOverviewContent = ({ shipment, prepopData }: PrintableOverviewContentProps) => (
+  <PrepopContext.Provider value={prepopData}>
+    <VStack alignItems='start' w='100%' gap='2em'>
+      {shipment.children!.map((item) => (
+        <ItemCardDisplay key={item.id} item={item} />
+      ))}
+    </VStack>
+  </PrepopContext.Provider>
 );
 
 export default PrintableOverviewContent;

@@ -6,6 +6,27 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
   alertAnatomy.keys,
 );
 
+import { checkboxAnatomy } from "@chakra-ui/anatomy";
+
+const {
+  definePartsStyle: defineCheckBoxPartsStyle,
+  defineMultiStyleConfig: defineCheckboxMultiStyleConfig,
+} = createMultiStyleConfigHelpers(checkboxAnatomy.keys);
+
+const baseCheckboxStyle = defineCheckBoxPartsStyle({
+  label: {
+    fontWeight: "600",
+  },
+  control: {
+    padding: 3,
+    borderRadius: 0,
+    borderColor: "black",
+    borderWidth: "1px",
+  },
+});
+
+const checkboxTheme = defineCheckboxMultiStyleConfig({ baseStyle: baseCheckboxStyle });
+
 const baseInfo = definePartsStyle({
   description: { fontWeight: "600", color: "grey.800" },
   container: {
@@ -27,5 +48,5 @@ const alertTheme = defineMultiStyleConfig({ variants: { info: baseInfo } });
 
 export const customTheme = extendTheme({
   ...theme,
-  components: { ...theme.components, Alert: alertTheme, Link: linkStyle },
+  components: { ...theme.components, Alert: alertTheme, Link: linkStyle, Checkbox: checkboxTheme },
 });

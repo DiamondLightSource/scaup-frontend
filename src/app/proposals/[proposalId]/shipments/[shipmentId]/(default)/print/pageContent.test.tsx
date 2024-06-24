@@ -17,7 +17,7 @@ const defaultShipment = {
         {
           id: "container",
           name: "container",
-          data: { type: "puck" },
+          data: { type: "puck", registeredContainer: 1 },
           children: [gridBox],
         },
       ],
@@ -27,16 +27,27 @@ const defaultShipment = {
 
 describe("Shipment Printable Overview", () => {
   it("should position if item has position", () => {
-    renderWithProviders(<PrintableOverviewContent shipment={defaultShipment} />);
+    renderWithProviders(<PrintableOverviewContent shipment={defaultShipment} prepopData={{}} />);
 
     expect(screen.getByText("In container, position 5")).toBeInTheDocument();
   });
 
   it("should render parent name if item has parent", () => {
-    renderWithProviders(<PrintableOverviewContent shipment={defaultShipment} />);
+    renderWithProviders(<PrintableOverviewContent shipment={defaultShipment} prepopData={{}} />);
 
     expect(screen.getByText(/in container/i)).toBeInTheDocument();
     expect(screen.getByText("In dewar")).toBeInTheDocument();
+  });
+
+  it("should display 'human' value of field if field is prepopulated with external data", () => {
+    renderWithProviders(
+      <PrintableOverviewContent
+        shipment={defaultShipment}
+        prepopData={{ containers: [{ containerRegistryId: 1, barcode: "barcode value" }] }}
+      />,
+    );
+
+    expect(screen.getByText("barcode value")).toBeInTheDocument();
   });
 });
 

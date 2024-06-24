@@ -179,6 +179,7 @@ export const shipmentSlice = createSlice({
       let actualId = state.activeItem ? state.activeItem.id : 0;
       let actualType = state.activeItem ? state.activeItem.data.type : "sample";
       let activeItemExists = false;
+      let haystack = [...current(state.unassigned)];
 
       if (action.payload) {
         if (action.payload.id) {
@@ -191,17 +192,14 @@ export const shipmentSlice = createSlice({
       }
 
       if (state.items !== null) {
-        recursiveFind(
-          // Merge unassigned and assigned items, since our item could be in both
-          [...current(state.items), ...current(state.unassigned)],
-          actualId,
-          actualType,
-          (item) => {
-            state.activeItem = item;
-            activeItemExists = true;
-          },
-        );
+        // Merge unassigned and assigned items, since our item could be in both
+        haystack = haystack.concat(current(state.items));
       }
+
+      recursiveFind(haystack, actualId, actualType, (item) => {
+        state.activeItem = item;
+        activeItemExists = true;
+      });
 
       state.isEdit = activeItemExists;
 

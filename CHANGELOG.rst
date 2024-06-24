@@ -19,6 +19,7 @@ v0.1.0 (22/04/2024)
 - Edit button is no longer available if shipment has been booked
 - Samples table now redirects to correct sample
 - Selected item in URL is now highlighted correctly on page load
+- "Create new item" now works as expected if autosaving item
 
 +++++++++
 v0.0.1 (27/03/2024)
