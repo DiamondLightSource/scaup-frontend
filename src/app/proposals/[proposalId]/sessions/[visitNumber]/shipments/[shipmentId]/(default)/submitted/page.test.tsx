@@ -6,7 +6,7 @@ import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 import SubmissionOverview from "./page";
 
-const params = { proposalId: "cm00001", shipmentId: "1" };
+const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 vi.mock("next/cache", async (importOriginal) => {
   const actual = await importOriginal<any>();

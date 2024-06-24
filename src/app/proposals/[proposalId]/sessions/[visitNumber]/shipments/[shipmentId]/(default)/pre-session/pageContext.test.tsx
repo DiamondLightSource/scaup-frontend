@@ -51,7 +51,7 @@ describe("Item Page Layout", () => {
 
   it("should not redirect if pre-session info submission fails", async () => {
     server.use(
-      http.post(
+      http.put(
         "http://localhost/api/shipments/:shipmentId/preSession",
         () => HttpResponse.json({}, { status: 404 }),
         { once: true },

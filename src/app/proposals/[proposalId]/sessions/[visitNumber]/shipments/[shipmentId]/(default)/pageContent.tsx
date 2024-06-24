@@ -120,6 +120,9 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
         >
           Book pickup with courier
         </TwoLineLink>
+        <TwoLineLink title='Request Return' href={`${params.shipmentId}/returns`}>
+          Ask for dewars to be returned to your facility
+        </TwoLineLink>
       </VStack>
     </HStack>
   );

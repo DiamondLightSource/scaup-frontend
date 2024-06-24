@@ -59,7 +59,7 @@ export const handlers = [
     HttpResponse.json({}, { status: 200 }),
   ),
 
-  http.post("http://localhost/api/shipments/:shipmentId/preSession", () =>
+  http.put("http://localhost/api/shipments/:shipmentId/preSession", () =>
     HttpResponse.json({}, { status: 201 }),
   ),
 
@@ -73,6 +73,16 @@ export const handlers = [
 
   http.get("http://localhost/api/shipments/:shipmentId/unassigned", () =>
     HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
+  ),
+
+  // Top Level Containers
+
+  http.get("http://localhost/api/shipments/:shipmentId/topLevelContainers", () =>
+    HttpResponse.json({
+      items: [{ externalId: 1, status: "Booked", id: 1, name: "Dewar-001" }],
+      total: 1,
+      limit: 20,
+    }),
   ),
 
   // Samples

@@ -51,7 +51,7 @@ const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
           </Box>
           <HStack h='3.5em' px='1em' bg='gray.200'>
             <Spacer />
-            <Button as={NextLink} href='-1' type='submit'>
+            <Button as={NextLink} href='-1'>
               Back
             </Button>
             <Button bg='green.500' type='submit'>

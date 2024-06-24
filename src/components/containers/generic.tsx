@@ -23,15 +23,15 @@ export const GenericContainer = ({
   const setLocation = useChildLocationManager({ shipmentId, parent, child });
 
   const handlePopulatePosition = useCallback(
-    (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentContainer!.id, sample);
+    async (sample: TreeData<BaseShipmentItem>) => {
+      await setLocation(currentContainer!.id, sample);
     },
     [currentContainer, setLocation],
   );
 
   const handleRemoveSample = useCallback(
-    (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(null, sample);
+    async (sample: TreeData<BaseShipmentItem>) => {
+      await setLocation(null, sample);
     },
     [setLocation],
   );

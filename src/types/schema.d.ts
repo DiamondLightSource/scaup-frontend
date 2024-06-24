@@ -434,6 +434,7 @@ export interface components {
     };
     /** TopLevelContainerOut */
     TopLevelContainerOut: {
+      externalId: number | null;
       /** Toplevelcontainerid */
       topLevelContainerId?: number | null;
       /** Status */
