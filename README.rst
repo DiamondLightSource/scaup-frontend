@@ -21,6 +21,8 @@ Configuration is done through environment variables:
 * :code:`OAUTH_PROFILE_INFO_ENDPOINT`: Microauth's profile endpoint. May be removed in the future if our auth solution provides profile info as well.
 * :code:`NEXT_PUBLIC_API_URL`: Sample Handling API URL
 * :code:`NEXT_PUBLIC_DEV_CONTACT`: Developer contact email
+* :code:`PATO_URL`: URL of the PATo instance you want to target for redirects
+* :code:`SYNCHWEB_URL`: URL of the SynchWeb instance you want to target for redirects
 
 ==========
 Building
