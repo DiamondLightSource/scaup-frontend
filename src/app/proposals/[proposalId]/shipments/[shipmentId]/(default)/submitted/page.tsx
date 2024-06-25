@@ -15,7 +15,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import { revalidateTag } from "next/cache";
 import NextLink from "next/link";
 import ArrangeShipmentButton from "./pageContent";
 
@@ -43,8 +42,6 @@ const SubmissionOverview = async ({
   params: { shipmentId: string; proposalId: string };
 }) => {
   const shipmentData = await getShipmentData(params.shipmentId);
-  revalidateTag(`shipments-${params.proposalId}`);
-  revalidateTag(`shipment-${params.proposalId}`);
 
   return (
     <VStack alignItems='start'>
@@ -62,7 +59,6 @@ const SubmissionOverview = async ({
           <Link
             textDecoration='underline'
             color='diamond.600'
-            as={NextLink}
             href={`/proposals/${params.proposalId}/`}
           >
             return to the shipment list.

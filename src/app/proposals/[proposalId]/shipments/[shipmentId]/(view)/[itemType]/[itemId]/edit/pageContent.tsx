@@ -90,7 +90,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       }
 
       toast({ title: "Successfully created item!" });
-      router.replace(`../../${info.type}/${newItem.id}/edit`);
+      router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
     } else {
       await Item.patch(
         activeItem!.id,

@@ -5,7 +5,6 @@ import { HStack, Link, Tag, Text } from "@chakra-ui/react";
 import { Breadcrumbs, Navbar, User } from "@diamondlightsource/ui-components";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
-import NextLink from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -53,6 +52,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
     setIsLoading(false);
   }, [searchParams]);
 
+  // As for not using NextLink in breadcrumbs, https://github.com/vercel/next.js/discussions/54075
   return (
     <span className='hide-on-print' style={{ marginBottom: "0.8em" }}>
       <Navbar logo='/diamondgs.png'>
@@ -68,7 +68,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
           }
         />
       </Navbar>
-      <Breadcrumbs as={NextLink} path={pathname} />
+      <Breadcrumbs path={pathname} />
       <PhaseBanner deployType={process.env.NODE_ENV === "production" ? "production" : "dev"} />
     </span>
   );
