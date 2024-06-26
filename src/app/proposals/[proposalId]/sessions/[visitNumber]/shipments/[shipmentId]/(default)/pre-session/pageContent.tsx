@@ -4,8 +4,8 @@ import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { Metadata } from "next";
-import NextLink from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export const metadata: Metadata = {
@@ -16,8 +16,10 @@ const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
   const formContext = useForm();
   const toast = useToast();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = formContext.handleSubmit(async (info) => {
+    setIsLoading(true);
     const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
       method: "POST",
     });
@@ -29,6 +31,7 @@ const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
         body: JSON.stringify({ details: info }),
       },
     );
+    setIsLoading(false);
 
     if (
       preSessionResponse &&
@@ -51,10 +54,8 @@ const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
           </Box>
           <HStack h='3.5em' px='1em' bg='gray.200'>
             <Spacer />
-            <Button as={NextLink} href='-1'>
-              Back
-            </Button>
-            <Button bg='green.500' type='submit'>
+            <Button onClick={() => router.back()}>Back</Button>
+            <Button bg='green.500' type='submit' isLoading={isLoading}>
               Finish
             </Button>
           </HStack>

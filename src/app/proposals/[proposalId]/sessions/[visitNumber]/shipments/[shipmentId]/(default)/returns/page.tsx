@@ -1,9 +1,8 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
-import { Button, Divider, HStack, Heading, Link, Tag, Text, VStack } from "@chakra-ui/react";
+import { Divider, HStack, Heading, Link, Tag, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
-import NextLink from "next/link";
 
 export const metadata: Metadata = {
   title: "Shipment - Request Returns",
@@ -52,8 +51,7 @@ const ReturnRequests = async ({ params }: { params: ShipmentParams }) => {
                 <Heading flex='1 0 0' size='md'>
                   {tlc.name ?? "Unnamed Dewar"}
                 </Heading>
-                <Tag>{tlc.status ?? "Unknown"}</Tag>
-
+                <Tag colorScheme={tlc.status ? "green" : "gray"}>{tlc.status ?? "Unknown"}</Tag>
                 <Link href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
                   Request Return
                 </Link>
@@ -63,9 +61,6 @@ const ReturnRequests = async ({ params }: { params: ShipmentParams }) => {
             <Heading variant='notFound'>No dewars found for this shipment</Heading>
           )}
         </VStack>
-        <Button as={NextLink} href='-1'>
-          Back
-        </Button>
       </VStack>
     </VStack>
   );
