@@ -1,17 +1,16 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
 import { topLevelContainerForm } from "@/mappings/forms/topLevelContainer";
+import { nameValidation } from "@/utils/generic";
 
-export const dewarForm = [
-  ...topLevelContainerForm,
+export const walkInForm = [
   {
-    id: "code",
-    label: "Dewar Code",
-    type: "dropdown",
-    values: {
-      $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
-    },
+    id: "name",
+    label: "Name",
+    type: "text",
     validation: {
+      ...nameValidation,
       required: "Required",
     },
   },
+  ...topLevelContainerForm,
 ] as DynamicFormEntry[];

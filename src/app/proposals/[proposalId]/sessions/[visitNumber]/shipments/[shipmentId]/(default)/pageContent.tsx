@@ -68,7 +68,9 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           data={data.samples}
           onClick={handleSampleClicked}
         />
-        <Heading size='lg'>Pre-Session Information</Heading>
+        <Heading mt='1em' size='lg'>
+          Pre-Session Information
+        </Heading>
         <Divider borderColor='gray.800' />
         {data.preSessionInfo ? (
           <DynamicFormView

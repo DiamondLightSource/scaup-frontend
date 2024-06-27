@@ -3,7 +3,6 @@ import { gridBox, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import PrintableOverviewContent, { PrintButton } from "./pageContent";
 
-const params = { proposalId: "cm00001", shipmentId: "1" };
 const defaultShipment = {
   name: "Shipment",
   id: 1,

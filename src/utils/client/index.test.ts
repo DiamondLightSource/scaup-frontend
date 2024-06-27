@@ -1,5 +1,6 @@
-import { waitFor } from "@testing-library/react";
-import { createShipmentRequest } from ".";
+import { server } from "@/mocks/server";
+import { createShipmentRequest } from "@/utils/client";
+import { HttpResponse, http } from "msw";
 
 describe("Shipment Request Creation", () => {
   let originalWindowLocation = window.location;
@@ -24,11 +25,23 @@ describe("Shipment Request Creation", () => {
   });
 
   it("should redirect user if request is successful", async () => {
-    expect(createShipmentRequest("1"));
-    await waitFor(() =>
-      expect(assignMock).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_API_URL}/shipments/1/request`,
+    await createShipmentRequest("1");
+    expect(assignMock).toHaveBeenCalledWith(
+      `${process.env.NEXT_PUBLIC_API_URL}/shipments/1/request`,
+    );
+  });
+
+  it("should display error details if available", async () => {
+    server.use(
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/request",
+        () => HttpResponse.json({ detail: "Error Detail" }, { status: 424 }),
+        { once: true },
       ),
     );
+
+    expect(async () => {
+      await createShipmentRequest("1");
+    }).rejects.toThrowError("Error Detail");
   });
 });

@@ -13,9 +13,9 @@ const getPreSessionData = async (shipmentId: string) => {
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
 
   if (resPreSession.status === 200) {
-    return await resPreSession.json();
+    return (await resPreSession.json()).details;
   } else {
-    return { details: {} };
+    return null;
   }
 };
 
@@ -32,7 +32,7 @@ const PreSession = async ({ params }: { params: ShipmentParams }) => {
         <PrintButton />
       </HStack>
       <Divider borderColor='gray.800' />
-      <PreSessionContent data={preSessionData.details} />;
+      <PreSessionContent data={preSessionData} />;
     </VStack>
   );
 };

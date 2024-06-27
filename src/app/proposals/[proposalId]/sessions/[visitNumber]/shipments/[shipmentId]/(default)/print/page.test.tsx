@@ -4,10 +4,12 @@ import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentPrintableOverview from "./page";
 
+const params = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
+
 describe("Shipment Printable Overview Page", () => {
   it("should render shipment contents", async () => {
     renderWithProviders(
-      await ShipmentPrintableOverview({ params: { shipmentId: "1", proposalId: "1" } }),
+      await ShipmentPrintableOverview({ params }),
     );
 
     expect(screen.getByText("Dewar")).toBeInTheDocument();
@@ -24,7 +26,7 @@ describe("Shipment Printable Overview Page", () => {
     );
 
     renderWithProviders(
-      await ShipmentPrintableOverview({ params: { shipmentId: "1", proposalId: "1" } }),
+      await ShipmentPrintableOverview({ params }),
     );
 
     expect(screen.getByText(/this shipment contains unassigned items/i)).toBeInTheDocument();
@@ -40,7 +42,7 @@ describe("Shipment Printable Overview Page", () => {
     );
 
     renderWithProviders(
-      await ShipmentPrintableOverview({ params: { shipmentId: "1", proposalId: "1" } }),
+      await ShipmentPrintableOverview({ params }),
     );
 
     expect(screen.getAllByText(/no assigned items/i)).toHaveLength(2);
