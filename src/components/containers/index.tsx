@@ -62,6 +62,13 @@ export const useChildLocationManager = ({
     childItem: TreeData<BaseShipmentItem>,
     location: number | null = null,
   ) => {
+    const checkForm = formContext.handleSubmit(() => {});
+    await checkForm();
+
+    if (formContext.formState.errors && Object.keys(formContext.formState.errors).length > 0) {
+      return;
+    }
+
     const actualLocation = location !== null ? location + 1 : null;
     let actualContainerId = containerId;
 
@@ -128,7 +135,6 @@ export const useChildLocationManager = ({
     ]);
 
     dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
-
     if (!isEdit) {
       router.replace(`../${actualContainerId}/edit`, { scroll: false });
     }

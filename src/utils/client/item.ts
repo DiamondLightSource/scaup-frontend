@@ -11,7 +11,9 @@ const displayError = async (action: string, response: Response | undefined) => {
   try {
     if (response) {
       const respBody = await response.json();
-      details = respBody.detail;
+      if (typeof respBody.detail === "string") {
+        details = respBody.detail;
+      }
     }
   } catch {}
   toast({ title: `Failed to ${action} item`, description: details, status: "error" });
