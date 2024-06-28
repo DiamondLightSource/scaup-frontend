@@ -1,5 +1,6 @@
 import { DynamicFormEntry } from "@/components/input/form/input";
 import { DynamicFormView } from "@/components/visualisation/formView";
+import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
@@ -36,11 +37,7 @@ const getShipmentData = async (shipmentId: string) => {
   return { counts, formModel, isBooked: !!(data && data.data.shipmentRequest) };
 };
 
-const SubmissionOverview = async ({
-  params,
-}: {
-  params: { shipmentId: string; proposalId: string };
-}) => {
+const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
   const shipmentData = await getShipmentData(params.shipmentId);
 
   return (
@@ -59,7 +56,7 @@ const SubmissionOverview = async ({
           <Link
             textDecoration='underline'
             color='diamond.600'
-            href={`/proposals/${params.proposalId}/`}
+            href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}`}
           >
             return to the shipment list.
           </Link>

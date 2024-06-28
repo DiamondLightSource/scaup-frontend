@@ -4,18 +4,20 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/proposals/:proposalId/shipments",
-        destination: "/proposals/:proposalId",
+        source: "/proposals/:proposalId/sessions/:visitNumber/shipments",
+        destination: "/proposals/:proposalId/sessions/:visitNumber",
         permanent: true,
       },
       {
-        source: "/proposals/:proposalId/shipments/:shipmentId/edit",
-        destination: "/proposals/:proposalId/shipments/:shipmentId/sample/new/edit",
+        source: "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/edit",
+        destination:
+          "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/sample/new/edit",
         permanent: true,
       },
       {
-        source: "/proposals/:proposalId/shipments/:shipmentId/review",
-        destination: "/proposals/:proposalId/shipments/:shipmentId/sample/new/review",
+        source: "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/review",
+        destination:
+          "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/sample/new/review",
         permanent: true,
       },
     ];

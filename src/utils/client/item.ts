@@ -17,6 +17,20 @@ const displayError = async (action: string, response: Response | undefined) => {
   toast({ title: `Failed to ${action} item`, description: details, status: "error" });
 };
 
+const genericCreateItem = async (requestUrl: string, data: Record<string, any>) => {
+  const response = await authenticatedFetch.client(requestUrl, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (response && response.status === 201) {
+    const newItem = await response.json();
+    return newItem.items ? newItem.items : newItem;
+  } else {
+    displayError("create", response);
+    throw new Error(`Failed to create item`);
+  }
+};
 export class Item {
   static async patch(
     itemId: TreeData["id"],
@@ -36,28 +50,16 @@ export class Item {
     }
   }
 
+  static async createShipment(proposalId: string, visitNumber: string, data: Record<string, any>) {
+    return genericCreateItem(`/proposals/${proposalId}/sessions/${visitNumber}/shipments`, data);
+  }
+
   static async create(
     parentId: TreeData["id"],
     data: Record<string, any>,
     endpoint: Step["endpoint"],
   ): Promise<CreationResponse | CreationResponse[]> {
-    const requestUrl =
-      endpoint === "shipments"
-        ? `/proposals/${parentId}/shipments`
-        : `/shipments/${parentId}/${endpoint}`;
-
-    const response = await authenticatedFetch.client(requestUrl, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-
-    if (response && response.status === 201) {
-      const newItem = await response.json();
-      return newItem.items ? newItem.items : newItem;
-    } else {
-      displayError("create", response);
-      throw new Error(`Failed to create item`);
-    }
+    return genericCreateItem(`/shipments/${parentId}/${endpoint}`, data);
   }
 
   static async delete(itemId: TreeData["id"], endpoint: Step["endpoint"]) {

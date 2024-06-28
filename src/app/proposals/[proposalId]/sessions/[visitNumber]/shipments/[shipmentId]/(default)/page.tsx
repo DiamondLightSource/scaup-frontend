@@ -42,7 +42,11 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
   return { counts, samples, dispatch: data.data, name: data.name };
 };
 
-const ShipmentHome = async ({ params }: { params: { shipmentId: string; proposalId: string } }) => {
+const ShipmentHome = async ({
+  params,
+}: {
+  params: { shipmentId: string; proposalId: string; visitNumber: string };
+}) => {
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
 
   return (

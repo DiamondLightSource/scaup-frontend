@@ -44,15 +44,13 @@ export const defaultData = {
 
 export const handlers = [
   // Shipments
-  http.post("http://localhost/api/proposals/:proposalId/shipments", ({ params }) =>
-    HttpResponse.json(
-      { id: 123, data: { name: "Test" }, proposalReference: params.proposalId },
-      { status: 201 },
-    ),
+  http.post("http://localhost/api/proposals/:proposalId/sessions/:visitNumber/shipments", () =>
+    HttpResponse.json({ id: 123, data: { name: "Test" } }, { status: 201 }),
   ),
 
-  http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>
-    HttpResponse.json({ items: [defaultData] }),
+  http.get(
+    "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
+    () => HttpResponse.json({ items: [defaultData] }),
   ),
 
   http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(defaultData)),

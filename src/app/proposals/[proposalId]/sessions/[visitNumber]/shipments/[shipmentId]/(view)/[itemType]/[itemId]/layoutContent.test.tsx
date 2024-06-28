@@ -23,6 +23,7 @@ const params = {
   itemId: "9",
   proposalId: "cm00001",
   shipmentId: "1",
+  visitNumber: "1",
 };
 
 describe("Item Page Layout Content", () => {

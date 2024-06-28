@@ -1,4 +1,5 @@
-import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/pageContent";
+import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/sessions/[visitNumber]/pageContent";
+import { SessionParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import {
@@ -17,11 +18,13 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Proposal - Sample Handling",
+  title: "Session - Sample Handling",
 };
 
-const getShipments = async (proposalId: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalId}/shipments`);
+const getShipments = async (proposalId: string, visitNumber: string) => {
+  const res = await authenticatedFetch.server(
+    `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
+  );
 
   if (res && res.status === 200) {
     const shipments = await res.json();
@@ -31,8 +34,8 @@ const getShipments = async (proposalId: string) => {
   return null;
 };
 
-const ProposalOverview = async ({ params }: { params: { proposalId: string } }) => {
-  const data = (await getShipments(params.proposalId)) as
+const SessionOverview = async ({ params }: { params: SessionParams }) => {
+  const data = (await getShipments(params.proposalId, params.visitNumber)) as
     | components["schemas"]["MixedShipment"][]
     | null;
 
@@ -40,21 +43,21 @@ const ProposalOverview = async ({ params }: { params: { proposalId: string } }) 
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
-          {params.proposalId}
+          {params.proposalId}-{params.visitNumber}
         </Heading>
-        <Heading>Proposal</Heading>
+        <Heading>Session Shipments</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       {data === null ? (
         <VStack w='100%' mt='3em'>
-          <Heading variant='notFound'>Proposal Unavailable</Heading>
-          <Text>This proposal does not exist or you do not have permission to view it.</Text>
+          <Heading variant='notFound'>Session Unavailable</Heading>
+          <Text>This session does not exist or you do not have permission to view it.</Text>
         </VStack>
       ) : (
         <>
           <VStack alignItems='start' w='100%'>
             <Text fontSize='18px' mt='2'>
-              View existing shipments for this proposal, or add new shipments.
+              View existing shipments for this session, or add new shipments.
             </Text>{" "}
             <Heading mt='3' size='lg' color='grey.700'>
               Select Existing Shipment
@@ -64,7 +67,7 @@ const ProposalOverview = async ({ params }: { params: { proposalId: string } }) 
             <>
               <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
                 {data.map((shipment, i) => (
-                  <Link href={`${params.proposalId}/shipments/${shipment.id}`} key={i}>
+                  <Link href={`${params.visitNumber}/shipments/${shipment.id}`} key={i}>
                     <Stat
                       key={i}
                       _hover={{
@@ -109,15 +112,13 @@ const ProposalOverview = async ({ params }: { params: { proposalId: string } }) 
               </Heading>
             </>
           ) : (
-            <Text fontWeight='600'>
-              This proposal has no shipments assigned to it yet. You can:
-            </Text>
+            <Text fontWeight='600'>This session has no shipments assigned to it yet. You can:</Text>
           )}
-          <ShipmentCreationForm proposalId={params.proposalId} />
+          <ShipmentCreationForm proposalId={params.proposalId} visitNumber={params.visitNumber} />
         </>
       )}
     </VStack>
   );
 };
 
-export default ProposalOverview;
+export default SessionOverview;

@@ -6,7 +6,7 @@ import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
 import ShipmentHomeContent from "./pageContent";
 
-const params = { proposalId: "cm00001", shipmentId: "1" };
+const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Shipment Submission Overview", () => {
   let originalWindowLocation = window.location;
