@@ -80,9 +80,21 @@ authenticatedFetch.client = async (url: RequestInfo, init?: RequestInit) => {
 
 export { authenticatedFetch };
 
+interface PrepopDataModel {
+  labContacts: Record<string, any>;
+  proteins: Record<string, any>;
+  containers: Record<string, any>;
+  dewars: Record<string, any>;
+}
+
 export const getPrepopData = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
-  return res && res.status === 200 ? await res.json() : {};
+  if (res && res.status === 200) {
+    const data = (await res.json()) as PrepopDataModel;
+    data.containers.unshift({ containerRegistryId: "", barcode: "None", comments: null });
+    return data;
+  }
+  return {};
 };
 
 /**

@@ -1,6 +1,7 @@
 "use client";
 import { Container } from "@/components/containers";
-import { DynamicForm } from "@/components/input/form";
+import { DynamicForm, formMapping } from "@/components/input/form";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
@@ -39,6 +40,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
+  const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
+
+  useEffect(() => {
+    setRenderedForm(formMapping[formType]);
+  }, [formType]);
 
   useEffect(() => {
     dispatch(setIsReview(false));
@@ -143,7 +149,18 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   }, [activeItem]);
 
   const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
-    setFormType(formValues.type);
+    if ("type" in formValues) {
+      setFormType(formValues.type);
+    }
+
+    if ("registeredContainer" in formValues) {
+      setRenderedForm((oldForm) => {
+        const newForm = structuredClone(oldForm);
+        newForm[newForm.findIndex((field) => field.id === "name")].isDisabled =
+          formValues.registeredContainer !== "";
+        return newForm;
+      });
+    }
   }, []);
 
   const redirectToNew = useCallback(() => {
@@ -168,7 +185,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           <Box flex='1 0 auto'>
             <DynamicForm
               onWatchedUpdated={handleWatchedUpdated}
-              formType={formType}
+              formType={renderedForm}
               defaultValues={activeItem!.data}
               prepopData={prepopData}
             />

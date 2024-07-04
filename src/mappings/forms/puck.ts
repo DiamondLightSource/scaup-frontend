@@ -10,5 +10,6 @@ export const puckForm = [
     values: {
       $ref: { parent: "#/containers", map: { value: "containerRegistryId", label: "barcode" } },
     },
+    watch: true,
   },
 ] as DynamicFormEntry[];

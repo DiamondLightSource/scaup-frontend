@@ -193,8 +193,6 @@ describe("Grid Box", () => {
       expect(screen.getByDisplayValue("test test")).toBeInTheDocument();
     });
 
-    screen.debug();
-
     fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
