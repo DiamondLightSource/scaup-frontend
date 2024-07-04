@@ -216,7 +216,12 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
           )}
           <Spacer />
           {isReview && (
-            <Button as={Link} href='edit' isDisabled={isBooked}>
+            <Button
+              as={Link}
+              href='edit'
+              isDisabled={isBooked}
+              pointerEvents={isBooked ? "none" : undefined}
+            >
               Edit
             </Button>
           )}

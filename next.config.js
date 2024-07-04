@@ -9,6 +9,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/proposals/:proposalId",
+        destination: "/proposals/:proposalId/sessions",
+        permanent: true,
+      },
+      {
         source: "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/edit",
         destination:
           "/proposals/:proposalId/sessions/:visitNumber/shipments/:shipmentId/sample/new/edit",
