@@ -200,7 +200,7 @@ describe("Item Page", () => {
     expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument();
   });
 
-  it("should disable name if registered container is selected", async () => {
+  it("should disable name if registered container is selected", () => {
     renderWithProviders(
       <ItemFormPageContent
         shipmentId='1'
@@ -223,7 +223,7 @@ describe("Item Page", () => {
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
   });
 
-  it("should update watched items with active items", async () => {
+  it("should update watched items with active items", () => {
     renderWithProviders(
       <ItemFormPageContent
         shipmentId='1'
@@ -243,7 +243,7 @@ describe("Item Page", () => {
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
   });
 
-  it("should reenable name if no registered container is selected", async () => {
+  it("should reenable name if no registered container is selected", () => {
     renderWithProviders(
       <ItemFormPageContent
         shipmentId='1'
