@@ -46,6 +46,21 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     setRenderedForm(formMapping[formType]);
   }, [formType]);
 
+  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
+    if ("type" in formValues) {
+      setFormType(formValues.type);
+    }
+
+    if ("registeredContainer" in formValues) {
+      setRenderedForm((oldForm) => {
+        const newForm = structuredClone(oldForm);
+        newForm[newForm.findIndex((field) => field.id === "name")].isDisabled =
+          formValues.registeredContainer !== "";
+        return newForm;
+      });
+    }
+  }, []);
+
   useEffect(() => {
     dispatch(setIsReview(false));
     if (activeItem) {
@@ -58,6 +73,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       }
 
       formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
+      handleWatchedUpdated(baseData);
     }
   }, [formContext, activeItem, activeIsEdit, dispatch]);
 
@@ -147,21 +163,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       setFormType(activeItem.data.type);
     }
   }, [activeItem]);
-
-  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
-    if ("type" in formValues) {
-      setFormType(formValues.type);
-    }
-
-    if ("registeredContainer" in formValues) {
-      setRenderedForm((oldForm) => {
-        const newForm = structuredClone(oldForm);
-        newForm[newForm.findIndex((field) => field.id === "name")].isDisabled =
-          formValues.registeredContainer !== "";
-        return newForm;
-      });
-    }
-  }, []);
 
   const redirectToNew = useCallback(() => {
     router.replace("../new/edit");

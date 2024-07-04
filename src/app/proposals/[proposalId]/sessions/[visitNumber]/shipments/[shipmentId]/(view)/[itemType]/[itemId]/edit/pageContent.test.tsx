@@ -204,7 +204,7 @@ describe("Item Page", () => {
     renderWithProviders(
       <ItemFormPageContent
         shipmentId='1'
-        prepopData={{ containers: [{ barcode: "DLS-01", containerRegistryId: 1, comments: "" }] }}
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
       />,
       {
         preloadedState: {
@@ -217,8 +217,28 @@ describe("Item Page", () => {
     );
 
     fireEvent.change(screen.getByRole("combobox", { name: "Registered Container" }), {
-      target: { value: "1" },
+      target: { value: "DLS-01" },
     });
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
+  });
+
+  it("should update watched items with active items", async () => {
+    renderWithProviders(
+      <ItemFormPageContent
+        shipmentId='1'
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
+      />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            isEdit: true,
+            activeItem: { ...puck, data: { ...puck.data, registeredContainer: "DLS-01" } },
+          },
+        },
+      },
+    );
 
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
   });
@@ -227,7 +247,7 @@ describe("Item Page", () => {
     renderWithProviders(
       <ItemFormPageContent
         shipmentId='1'
-        prepopData={{ containers: [{ barcode: "DLS-01", containerRegistryId: 1, comments: "" }] }}
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
       />,
       {
         preloadedState: {
@@ -244,7 +264,7 @@ describe("Item Page", () => {
     });
 
     fireEvent.change(registeredContainerCombobox, {
-      target: { value: "1" },
+      target: { value: "DLS-01" },
     });
 
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");

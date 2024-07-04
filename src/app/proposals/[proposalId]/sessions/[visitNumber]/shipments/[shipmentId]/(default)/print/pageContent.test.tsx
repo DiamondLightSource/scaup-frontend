@@ -16,7 +16,7 @@ const defaultShipment = {
         {
           id: "container",
           name: "container",
-          data: { type: "puck", registeredContainer: 1 },
+          data: { type: "puck", registeredContainer: "DLS-01" },
           children: [gridBox],
         },
       ],
@@ -42,7 +42,7 @@ describe("Shipment Printable Overview", () => {
     renderWithProviders(
       <PrintableOverviewContent
         shipment={defaultShipment}
-        prepopData={{ containers: [{ containerRegistryId: 1, barcode: "barcode value" }] }}
+        prepopData={{ containers: [{ actualBarcode: "DLS-01", barcode: "barcode value" }] }}
       />,
     );
 
