@@ -6,6 +6,7 @@ import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";
 import { Button, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 interface ShipmentData {
@@ -18,14 +19,21 @@ const shipmentForm = [
 
 export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const formContext = useForm<ShipmentData>();
 
   const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
-    const newShipment = (await Item.createShipment(proposalId, visitNumber, {
-      name: info.name,
-    })) as CreationResponse;
+    try {
+      setIsLoading(true);
+      const newShipment = (await Item.createShipment(proposalId, visitNumber, {
+        name: info.name,
+      })) as CreationResponse;
 
-    router.push(`${visitNumber}/shipments/${newShipment.id}/edit`);
+      router.push(`${visitNumber}/shipments/${newShipment.id}/edit`);
+    } catch (e) {
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
@@ -43,7 +51,7 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
           Create New Shipment
         </Heading>
         <DynamicForm formType={shipmentForm} />
-        <Button w='150px' mt='1em' type='submit' bg='green.500'>
+        <Button w='150px' mt='1em' type='submit' bg='green.500' isLoading={isLoading}>
           Create
         </Button>
       </form>

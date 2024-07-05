@@ -1,5 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { ShipmentParams } from "@/types/generic";
 import { getPrepopData } from "@/utils/client";
 import { getShipmentData } from "@/utils/client/shipment";
 import {
@@ -17,23 +18,20 @@ import {
 import { Metadata } from "next";
 import NextLink from "next/link";
 import SubmissionOverviewContent, { PrintButton } from "./pageContent";
+import { allItemsEmptyInDict } from "@/utils/generic";
 
 export const metadata: Metadata = {
   title: "Shipment Overview - Sample Handling",
 };
 
-const SubmissionOverview = async ({
-  params,
-}: {
-  params: { shipmentId: string; proposalId: string };
-}) => {
+const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
   const rawShipmentData = (await getShipmentData(params.shipmentId)) as TreeData<BaseShipmentItem>;
   const unassignedData = await getShipmentData(params.shipmentId, "/unassigned");
   const prepopData = await getPrepopData(params.proposalId);
   let hasUnassigned = false;
 
   if (unassignedData) {
-    hasUnassigned = Object.values(unassignedData).some((array) => array.length > 0);
+    hasUnassigned = allItemsEmptyInDict(unassignedData);
   }
 
   return (

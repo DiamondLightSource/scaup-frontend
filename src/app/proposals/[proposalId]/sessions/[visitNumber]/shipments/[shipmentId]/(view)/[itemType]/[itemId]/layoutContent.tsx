@@ -12,7 +12,6 @@ import {
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { ItemParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Box,
@@ -34,9 +33,7 @@ import {
   Stepper,
   Text,
   VStack,
-  useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,7 +46,6 @@ export interface ItemLayoutContentProps {
 
 const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const toast = useToast();
   const router = useRouter();
 
   const isReview = useSelector(selectIsReview);
@@ -126,23 +122,15 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   /** Move to next shipment step */
   const handleContinue = useCallback(async () => {
     if (isReview) {
-      const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
-        method: "POST",
-      });
-
-      if (response && response.status === 200) {
-        router.push("../../submitted");
-        return;
-      } else {
-        toast({ description: "Could not update items! Please try again later", status: "error" });
-      }
+      router.push("../../pre-session");
+      return;
     }
     if (activeStep + 1 < steps.length) {
       handleSetStep(activeStep + 1);
     } else {
       router.push("review");
     }
-  }, [handleSetStep, activeStep, router, params, toast, isReview]);
+  }, [handleSetStep, activeStep, router, isReview]);
 
   const cannotFinish = useMemo(
     () =>
@@ -217,8 +205,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
           <Spacer />
           {isReview && (
             <Button
-              as={Link}
-              href='edit'
+              onClick={() => router.back()}
               isDisabled={isBooked}
               pointerEvents={isBooked ? "none" : undefined}
             >
@@ -226,7 +213,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
             </Button>
           )}
           <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
-            {activeStep < steps.length - 1 && !isReview ? "Continue" : "Finish"}
+            {isReview ? "Continue to Pre-Session Info" : "Continue"}
           </Button>
         </HStack>
       </GridItem>

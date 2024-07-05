@@ -51,15 +51,15 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
   });
 
   const handlePopulatePosition = useCallback(
-    (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(currentGridBox!.id, sample, currentPosition);
+    async (sample: TreeData<BaseShipmentItem>) => {
+      await setLocation(currentGridBox!.id, sample, currentPosition);
     },
     [currentGridBox, currentPosition, setLocation],
   );
 
   const handleRemoveSample = useCallback(
-    (sample: TreeData<BaseShipmentItem>) => {
-      setLocation(null, sample, null);
+    async (sample: TreeData<BaseShipmentItem>) => {
+      await setLocation(null, sample, null);
     },
     [setLocation],
   );

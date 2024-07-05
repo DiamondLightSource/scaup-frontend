@@ -4,7 +4,7 @@ import { renderWithProviders } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
-const params = { proposalId: "cm00001", shipmentId: "1" };
+const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Shipment Submission Overview", () => {
   it("should render item quantities", async () => {
@@ -25,7 +25,7 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getByText(/booked/i)).toBeInTheDocument();
   });
 
-  it("should message if request returns non-200 code", async () => {
+  it("should display message if request returns non-200 code", async () => {
     server.use(
       http.get("http://localhost/api/shipments/:shipmentId", () =>
         HttpResponse.json({}, { status: 404 }),

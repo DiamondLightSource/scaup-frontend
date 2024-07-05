@@ -59,12 +59,30 @@ export const handlers = [
     HttpResponse.json({}, { status: 200 }),
   ),
 
+  http.put("http://localhost/api/shipments/:shipmentId/preSession", () =>
+    HttpResponse.json({}, { status: 201 }),
+  ),
+
+  http.get("http://localhost/api/shipments/:shipmentId/preSession", () =>
+    HttpResponse.json({ details: { pixelSize: 1 } }, { status: 200 }),
+  ),
+
   http.post("http://localhost/api/shipments/:shipmentId/request", () =>
     HttpResponse.json({ shipmentRequest: 20, status: "Booked" }, { status: 201 }),
   ),
 
   http.get("http://localhost/api/shipments/:shipmentId/unassigned", () =>
     HttpResponse.json({ samples: [], containers: [], gridBoxes: [] }),
+  ),
+
+  // Top Level Containers
+
+  http.get("http://localhost/api/shipments/:shipmentId/topLevelContainers", () =>
+    HttpResponse.json({
+      items: [{ externalId: 1, status: "Booked", id: 1, name: "Dewar-001" }],
+      total: 1,
+      limit: 20,
+    }),
   ),
 
   // Samples

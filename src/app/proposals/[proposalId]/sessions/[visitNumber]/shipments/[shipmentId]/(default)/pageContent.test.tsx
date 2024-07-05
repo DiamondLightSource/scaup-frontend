@@ -49,6 +49,8 @@ describe("Shipment Submission Overview", () => {
           counts: {},
           dispatch: {},
           name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -75,6 +77,8 @@ describe("Shipment Submission Overview", () => {
           counts: {},
           dispatch: {},
           name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -88,7 +92,14 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
       />,
     );
 
@@ -99,7 +110,14 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
-        data={{ samples: [], counts: {}, dispatch: { status: "Booked" }, name: "" }}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
       />,
     );
 
@@ -115,6 +133,8 @@ describe("Shipment Submission Overview", () => {
           counts: {},
           dispatch: { status: "Booked", shipmentRequest: 99 },
           name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -134,6 +154,8 @@ describe("Shipment Submission Overview", () => {
           counts: {},
           dispatch: { status: "Created" },
           name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -163,6 +185,8 @@ describe("Shipment Submission Overview", () => {
           counts: {},
           dispatch: { status: "Created" },
           name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -174,5 +198,41 @@ describe("Shipment Submission Overview", () => {
         title: "Unable to create shipment request",
       }),
     );
+  });
+
+  it("should display pre-session data if available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: false,
+        }}
+      />,
+    );
+
+    expect(screen.getByText("Pixel Size")).toBeInTheDocument();
+  });
+
+  it("should display pre-session data if available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: true,
+        }}
+      />,
+    );
+
+    expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
   });
 });

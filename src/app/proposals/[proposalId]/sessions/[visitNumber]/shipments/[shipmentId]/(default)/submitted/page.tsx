@@ -44,7 +44,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
-          {params.proposalId}
+          {params.proposalId}-{params.visitNumber}
         </Heading>
         <Heading>Shipment Overview</Heading>
         <Divider borderColor='gray.800' />

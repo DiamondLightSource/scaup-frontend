@@ -32,9 +32,9 @@ export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Currently selected item for container position */
   selectedItem?: TreeData<PositionedItem> | null;
   /** Callback for item selection event */
-  onSelect?: (child: TreeData<BaseShipmentItem>) => void;
+  onSelect?: (child: TreeData<BaseShipmentItem>) => Promise<void>;
   /** Callback for item removal revent */
-  onRemove?: (child: TreeData<PositionedItem>) => void;
+  onRemove?: (child: TreeData<PositionedItem>) => Promise<void>;
   /** Type of container's children */
   childrenType: BaseShipmentItem["type"];
   /** Disable editing controls */
@@ -55,6 +55,7 @@ export const ChildSelector = ({
     return { data: steps[index], index };
   }, [childrenType]);
   const [radioIndex, setRadioIndex] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
     return unassigned[0].children![childrenTypeData.index].children!.length
@@ -62,16 +63,20 @@ export const ChildSelector = ({
       : null;
   }, [unassigned, childrenTypeData]);
 
-  const handleItemSelected = useCallback(() => {
+  const handleItemSelected = useCallback(async () => {
     if (onSelect && radioIndex !== null && unassignedItems) {
-      onSelect(unassignedItems[Number(radioIndex)]);
+      setIsLoading(true);
+      await onSelect(unassignedItems[Number(radioIndex)]);
+      setIsLoading(false);
     }
     props.onClose();
   }, [onSelect, props, radioIndex, unassignedItems]);
 
-  const handleRemoveClicked = useCallback(() => {
+  const handleRemoveClicked = useCallback(async () => {
     if (onRemove && selectedItem) {
-      onRemove(selectedItem);
+      setIsLoading(true);
+      await onRemove(selectedItem);
+      setIsLoading(false);
     }
     props.onClose();
   }, [onRemove, selectedItem, props]);
@@ -166,7 +171,12 @@ export const ChildSelector = ({
           <Button onClick={props.onClose} bg='diamond.100' color='diamond.300'>
             Cancel
           </Button>
-          <Button isDisabled={radioIndex === null} ml='0.5em' onClick={handleItemSelected}>
+          <Button
+            isDisabled={radioIndex === null}
+            ml='0.5em'
+            onClick={handleItemSelected}
+            isLoading={isLoading}
+          >
             Apply
           </Button>
         </ModalFooter>

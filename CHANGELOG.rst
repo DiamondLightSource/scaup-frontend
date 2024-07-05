@@ -3,6 +3,18 @@ Changelog
 ==========
 
 +++++++++
+v0.2.0 (06/06/2024)
++++++++++
+
+**Added**
+
+- Imaging conditions form
+
+**Removed**
+
+- Sample step no longer asks if grids are clipped
+
++++++++++
 v0.1.0 (22/04/2024)
 +++++++++
 
