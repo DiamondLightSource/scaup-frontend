@@ -5,15 +5,21 @@ import { authenticatedFetch } from "@/utils/client";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export const metadata: Metadata = {
   title: "Pre-Session Information - Sample Handling",
 };
 
-const PreSessionContent = ({ params }: { params: ShipmentParams }) => {
-  const formContext = useForm();
+const PreSessionContent = ({
+  params,
+  prepopData,
+}: {
+  params: ShipmentParams;
+  prepopData: Record<string, any> | null;
+}) => {
+  const formContext = useForm({ values: prepopData ?? {} });
   const toast = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);

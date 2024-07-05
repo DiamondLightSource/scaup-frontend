@@ -2,7 +2,7 @@ import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import { getShipmentData } from "@/utils/client/shipment";
-import { pascalToSpace } from "@/utils/generic";
+import { allItemsEmptyInDict, pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
   Divider,
@@ -25,6 +25,9 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
   const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`);
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
+  const unassignedData = await getShipmentData(shipmentId, "/unassigned");
+
+  const hasUnassigned = allItemsEmptyInDict(unassignedData);
 
   if (data === null) {
     return data;
@@ -46,7 +49,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
     preSessionInfo = await resPreSession.json();
   }
 
-  return { counts, samples, dispatch: data.data, name: data.name, preSessionInfo };
+  return { counts, samples, dispatch: data.data, name: data.name, preSessionInfo, hasUnassigned };
 };
 
 const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
