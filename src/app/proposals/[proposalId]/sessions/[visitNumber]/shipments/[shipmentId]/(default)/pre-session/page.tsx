@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const getPreSessionData = async (shipmentId: string) => {
   const res = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
-  return !res || res.status !== 200 ? (await res.json()).details : null;
+  return res && res.status === 200 ? (await res.json()).details : null;
 };
 
 const PreSession = async ({ params }: { params: ShipmentParams }) => {
