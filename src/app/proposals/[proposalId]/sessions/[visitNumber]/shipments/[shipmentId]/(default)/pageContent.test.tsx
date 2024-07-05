@@ -50,6 +50,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: {},
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -77,6 +78,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: {},
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -96,6 +98,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Booked" },
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -113,6 +116,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Booked" },
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -130,6 +134,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Booked", shipmentRequest: 99 },
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -150,6 +155,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Created" },
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -180,6 +186,7 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Created" },
           name: "",
           preSessionInfo: null,
+          hasUnassigned: false,
         }}
       />,
     );
@@ -203,10 +210,29 @@ describe("Shipment Submission Overview", () => {
           dispatch: { status: "Booked" },
           name: "",
           preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: false,
         }}
       />,
     );
 
     expect(screen.getByText("Pixel Size")).toBeInTheDocument();
+  });
+
+  it("should display pre-session data if available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: true,
+        }}
+      />,
+    );
+
+    expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
   });
 });

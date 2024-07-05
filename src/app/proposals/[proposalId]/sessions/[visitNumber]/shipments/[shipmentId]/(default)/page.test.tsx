@@ -25,7 +25,7 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getByText(/booked/i)).toBeInTheDocument();
   });
 
-  it("should message if request returns non-200 code", async () => {
+  it("should display message if request returns non-200 code", async () => {
     server.use(
       http.get("http://localhost/api/shipments/:shipmentId", () =>
         HttpResponse.json({}, { status: 404 }),

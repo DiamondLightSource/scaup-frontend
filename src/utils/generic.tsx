@@ -96,3 +96,12 @@ export const nameValidation = {
     message: "Name must only contain alphanumeric characters and underscores",
   },
 };
+
+/**
+ * Check if all keys in a dictionary have empty arrays in them
+ *
+ * @param data Original data
+ * @returns Whether at least one key has a non-empty array as its value
+ */
+export const allItemsEmptyInDict = (data: Record<string, any[]> | null) =>
+  data !== null && Object.values(data).some((v) => v.length > 0);
