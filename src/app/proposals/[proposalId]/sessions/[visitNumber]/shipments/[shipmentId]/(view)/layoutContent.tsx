@@ -2,7 +2,12 @@
 
 import ShipmentOverview from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
-import { selectIsReview, setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
+import {
+  defaultUnassigned,
+  selectIsReview,
+  setShipment,
+  setUnassigned,
+} from "@/features/shipment/shipmentSlice";
 import { BasePage, BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { ShipmentParams } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
@@ -29,7 +34,7 @@ const ShipmentsLayoutContent = ({
   const isReview = useSelector(selectIsReview);
 
   useEffect(() => {
-    if (shipmentData && shipmentData) {
+    if (shipmentData) {
       dispatch(setShipment(shipmentData));
     }
   }, [shipmentData, dispatch]);
@@ -38,6 +43,10 @@ const ShipmentsLayoutContent = ({
     if (unassignedItems) {
       for (const [key, value] of Object.entries(unassignedItems)) {
         dispatch(setUnassigned({ items: value, type: pluralToSingular[key] }));
+      }
+    } else {
+      for (const item of defaultUnassigned[0].children) {
+        dispatch(setUnassigned({ items: item.children, type: item.id }));
       }
     }
   }, [unassignedItems, dispatch]);

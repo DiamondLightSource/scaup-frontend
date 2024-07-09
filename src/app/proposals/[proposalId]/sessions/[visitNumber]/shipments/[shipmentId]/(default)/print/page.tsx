@@ -18,6 +18,7 @@ import {
 import { Metadata } from "next";
 import NextLink from "next/link";
 import SubmissionOverviewContent, { PrintButton } from "./pageContent";
+import { allItemsEmptyInDict } from "@/utils/generic";
 
 export const metadata: Metadata = {
   title: "Shipment Overview - Sample Handling",
@@ -30,7 +31,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
   let hasUnassigned = false;
 
   if (unassignedData) {
-    hasUnassigned = Object.values(unassignedData).some((array) => array.length > 0);
+    hasUnassigned = allItemsEmptyInDict(unassignedData);
   }
 
   return (

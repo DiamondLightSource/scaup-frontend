@@ -16,6 +16,7 @@ export interface ShipmentHomeData {
   dispatch: Record<string, number | string>;
   name: string;
   preSessionInfo: Record<string, any> | null;
+  hasUnassigned: boolean;
 }
 
 export interface ShipmentHomeContentProps {
@@ -99,7 +100,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           title='Edit Pre-Session Information'
           as={NextLink}
           href={`${params.shipmentId}/pre-session`}
-          isDisabled={data.dispatch.status === "Booked"}
+          isDisabled={data.dispatch.status === "Booked" || data.hasUnassigned}
         >
           Edit imaging conditions, grid/data acquisition parameters
         </TwoLineLink>
