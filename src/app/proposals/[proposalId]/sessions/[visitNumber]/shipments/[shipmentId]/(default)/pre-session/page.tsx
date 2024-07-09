@@ -26,7 +26,7 @@ const PreSession = async ({ params }: { params: ShipmentParams }) => {
         <PreSessionContent params={params} prepopData={preSessionInfo} />
       </VStack>
     </VStack>
-  </VStack>
-);
+  );
+};
 
 export default PreSession;
