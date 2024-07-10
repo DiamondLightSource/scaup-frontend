@@ -5,126 +5,322 @@
 
 export interface paths {
   "/shipments/{shipmentId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Shipment
      * @description Get shipment data
      */
     get: operations["get_shipment_shipments__shipmentId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/unassigned": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Unassigned
      * @description Get unassigned items in shipment
      */
     get: operations["get_unassigned_shipments__shipmentId__unassigned_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/push": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Push Shipment
      * @description Push shipment to ISPyB. Unassigned items (such as a container with no parent top level
-     * container) are ignored.
+     *     container) are ignored.
      */
     post: operations["push_shipment_shipments__shipmentId__push_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/topLevelContainers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Top Level Containers
+     * @description Get top level containers in shipment
+     */
+    get: operations["get_top_level_containers_shipments__shipmentId__topLevelContainers_get"];
+    put?: never;
     /**
      * Create Top Level Container
      * @description Create new container in shipment
      */
     post: operations["create_top_level_container_shipments__shipmentId__topLevelContainers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Create Container
      * @description Create new container in shipment
      */
     post: operations["create_container_shipments__shipmentId__containers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/samples": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Samples
-     * @description Create new sample in shipment
+     * @description Get samples in shipment
      */
     get: operations["get_samples_shipments__shipmentId__samples_get"];
+    put?: never;
     /**
      * Create Sample
      * @description Create new sample in shipment
      */
     post: operations["create_sample_shipments__shipmentId__samples_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/shipments/{shipmentId}/request": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Shipment Request
-     * @description Get shipment reqeust
+     * @description Get shipment request
      */
     get: operations["get_shipment_request_shipments__shipmentId__request_get"];
+    put?: never;
     /**
      * Create Shipment Request
      * @description Create new shipment request
      */
     post: operations["create_shipment_request_shipments__shipmentId__request_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
-  "/proposals/{proposalReference}/shipments": {
+  "/shipments/{shipmentId}/preSession": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Pre Session
+     * @description Create new pre session information
+     */
+    get: operations["get_pre_session_shipments__shipmentId__preSession_get"];
+    /**
+     * Create Pre Session
+     * @description Upsert new pre session information
+     */
+    put: operations["create_pre_session_shipments__shipmentId__preSession_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/shipments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Shipments
-     * @description Get shipments in proposal
+     * @description Get shipments in session
      */
-    get: operations["get_shipments_proposals__proposalReference__shipments_get"];
+    get: operations["get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get"];
+    put?: never;
     /**
      * Create Shipment
-     * @description Create new shipment in proposal
+     * @description Create new shipment in session
      */
-    post: operations["create_shipment_proposals__proposalReference__shipments_post"];
+    post: operations["create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/samples": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Samples
+     * @description Get samples in session
+     */
+    get: operations["get_samples_proposals__proposalReference__sessions__visitNumber__samples_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/proposals/{proposalReference}/data": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
      * Get Shipment Data
      * @description Get lab data for the proposal (lab contacts, proteins...)
      *
-     * We can skip auth on this one since it is calling Expeye, and auth is done there
+     *     We can skip auth on this one since it is calling Expeye, and auth is done there
      */
     get: operations["get_shipment_data_proposals__proposalReference__data_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/samples/{sampleId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Delete Sample
      * @description Create new sample in shipment
      */
     delete: operations["delete_sample_samples__sampleId__delete"];
+    options?: never;
+    head?: never;
     /**
      * Edit Sample
      * @description Edit existing sample
      */
     patch: operations["edit_sample_samples__sampleId__patch"];
+    trace?: never;
   };
   "/containers/{containerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Delete Container
      * @description Delete container in shipment
      */
     delete: operations["delete_container_containers__containerId__delete"];
+    options?: never;
+    head?: never;
     /**
      * Edit Container
      * @description Edit existing container
      */
     patch: operations["edit_container_containers__containerId__patch"];
+    trace?: never;
   };
   "/topLevelContainers/{topLevelContainerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
     /**
      * Delete Container
      * @description Create new container in shipment
      */
     delete: operations["delete_container_topLevelContainers__topLevelContainerId__delete"];
+    options?: never;
+    head?: never;
     /**
      * Edit Container
      * @description Edit existing container
      */
     patch: operations["edit_container_topLevelContainers__topLevelContainerId__patch"];
+    trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     /** ContainerIn */
@@ -143,7 +339,7 @@ export interface components {
        * Requestedreturn
        * @default false
        */
-      requestedReturn?: boolean | null;
+      requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
@@ -175,7 +371,7 @@ export interface components {
        * Requestedreturn
        * @default false
        */
-      requestedReturn?: boolean | null;
+      requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
@@ -202,7 +398,7 @@ export interface components {
     GenericItemData: {
       /** Type */
       type: string;
-      [key: string]: unknown | undefined;
+      [key: string]: unknown;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -213,8 +409,12 @@ export interface components {
     MixedShipment: {
       /** Id */
       id: number;
-      /** Proposalreference */
-      proposalReference: string;
+      /** Proposalcode */
+      proposalCode: string;
+      /** Proposalnumber */
+      proposalNumber: number;
+      /** Visitnumber */
+      visitNumber: number;
       /** Name */
       name: string;
       /** Comments */
@@ -230,7 +430,7 @@ export interface components {
        * @default draft
        * @enum {string}
        */
-      creationStatus?: "draft" | "submitted";
+      creationStatus: "draft" | "submitted";
     };
     /** OptionalContainer */
     OptionalContainer: {
@@ -248,7 +448,7 @@ export interface components {
        * Requestedreturn
        * @default false
        */
-      requestedReturn?: boolean | null;
+      requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: number | null;
       /**
@@ -269,6 +469,8 @@ export interface components {
       location?: number | null;
       /** Details */
       details?: Record<string, never> | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
@@ -291,13 +493,15 @@ export interface components {
       details?: Record<string, never> | null;
       /** Location */
       location?: number | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
       /** Type */
-      type?: dewar | null;
+      type?: "dewar" | null;
       /** Code */
       code?: string | null;
       /** Barcode */
@@ -325,6 +529,27 @@ export interface components {
       /** Limit */
       limit: number;
     };
+    /** Paged[TopLevelContainerOut] */
+    Paged_TopLevelContainerOut_: {
+      /** Items */
+      items: components["schemas"]["TopLevelContainerOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** PreSessionIn */
+    PreSessionIn: {
+      /** Details */
+      details?: Record<string, never> | null;
+    };
+    /** PreSessionOut */
+    PreSessionOut: {
+      /** Details */
+      details?: Record<string, never> | null;
+    };
     /** SampleIn */
     SampleIn: {
       /** Containerid */
@@ -333,6 +558,8 @@ export interface components {
       location?: number | null;
       /** Details */
       details?: Record<string, never> | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
@@ -346,7 +573,7 @@ export interface components {
        * Copies
        * @default 1
        */
-      copies?: number;
+      copies: number;
     };
     /** SampleOut */
     SampleOut: {
@@ -356,6 +583,8 @@ export interface components {
       location?: number | null;
       /** Details */
       details?: Record<string, never> | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
@@ -394,8 +623,12 @@ export interface components {
     ShipmentOut: {
       /** Id */
       id: number;
-      /** Proposalreference */
-      proposalReference: string;
+      /** Proposalcode */
+      proposalCode: string;
+      /** Proposalnumber */
+      proposalNumber: number;
+      /** Visitnumber */
+      visitNumber: number;
       /** Name */
       name: string;
       /** Comments */
@@ -419,6 +652,8 @@ export interface components {
       details?: Record<string, never> | null;
       /** Location */
       location?: number | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
@@ -428,13 +663,12 @@ export interface components {
        * Type
        * @constant
        */
-      type: dewar;
+      type: "dewar";
       /** Code */
       code: string;
     };
     /** TopLevelContainerOut */
     TopLevelContainerOut: {
-      externalId: number | null;
       /** Toplevelcontainerid */
       topLevelContainerId?: number | null;
       /** Status */
@@ -445,6 +679,8 @@ export interface components {
       details?: Record<string, never> | null;
       /** Location */
       location?: number | null;
+      /** Comments */
+      comments?: string | null;
       /**
        * Name
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
@@ -452,6 +688,8 @@ export interface components {
       name?: string | null;
       /** Id */
       id: number;
+      /** Externalid */
+      externalId?: number | null;
     };
     /** UnassignedItems */
     UnassignedItems: {
@@ -478,29 +716,33 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
-export type external = Record<string, never>;
-
+export type $defs = Record<string, never>;
 export interface operations {
   get_shipment_shipments__shipmentId__get: {
-    /**
-     * Get Shipment
-     * @description Get shipment data
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["ShipmentChildren"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -508,24 +750,30 @@ export interface operations {
     };
   };
   get_unassigned_shipments__shipmentId__unassigned_get: {
-    /**
-     * Get Unassigned
-     * @description Get unassigned items in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["UnassignedItems"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -533,25 +781,66 @@ export interface operations {
     };
   };
   push_shipment_shipments__shipmentId__push_post: {
-    /**
-     * Push Shipment
-     * @description Push shipment to ISPyB. Unassigned items (such as a container with no parent top level
-     * container) are ignored.
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_top_level_containers_shipments__shipmentId__topLevelContainers_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_TopLevelContainerOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -559,14 +848,13 @@ export interface operations {
     };
   };
   create_top_level_container_shipments__shipmentId__topLevelContainers_post: {
-    /**
-     * Create Top Level Container
-     * @description Create new container in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -576,12 +864,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["TopLevelContainerOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -589,14 +883,13 @@ export interface operations {
     };
   };
   create_container_shipments__shipmentId__containers_post: {
-    /**
-     * Create Container
-     * @description Create new container in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -606,12 +899,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["ContainerOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -619,30 +918,35 @@ export interface operations {
     };
   };
   get_samples_shipments__shipmentId__samples_get: {
-    /**
-     * Get Samples
-     * @description Create new sample in shipment
-     */
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
       query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
+        /** @description Number of results to show */
         limit?: number;
       };
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Paged_SampleOut_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -650,14 +954,13 @@ export interface operations {
     };
   };
   create_sample_shipments__shipmentId__samples_post: {
-    /**
-     * Create Sample
-     * @description Create new sample in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -667,12 +970,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Paged_SampleOut_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -680,20 +989,28 @@ export interface operations {
     };
   };
   get_shipment_request_shipments__shipmentId__request_get: {
-    /**
-     * Get Shipment Request
-     * @description Get shipment reqeust
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      307: never;
+      307: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -701,70 +1018,148 @@ export interface operations {
     };
   };
   create_shipment_request_shipments__shipmentId__request_post: {
-    /**
-     * Create Shipment Request
-     * @description Create new shipment request
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         shipmentId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["ShipmentOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  get_shipments_proposals__proposalReference__shipments_get: {
-    /**
-     * Get Shipments
-     * @description Get shipments in proposal
-     */
+  get_pre_session_shipments__shipmentId__preSession_get: {
     parameters: {
-      /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-      /** @description Number of results to show */
-      query?: {
-        page?: number;
-        limit?: number;
-      };
+      query?: never;
+      header?: never;
       path: {
-        proposalReference: string;
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreSessionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_pre_session_shipments__shipmentId__preSession_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreSessionIn"];
       };
     };
     responses: {
       /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreSessionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["Paged_MixedShipment_"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
   };
-  create_shipment_proposals__proposalReference__shipments_post: {
-    /**
-     * Create Shipment
-     * @description Create new shipment in proposal
-     */
+  create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post: {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         proposalReference: string;
+        visitNumber: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -774,12 +1169,55 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["ShipmentOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_samples_proposals__proposalReference__sessions__visitNumber__samples_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_SampleOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -787,26 +1225,30 @@ export interface operations {
     };
   };
   get_shipment_data_proposals__proposalReference__data_get: {
-    /**
-     * Get Shipment Data
-     * @description Get lab data for the proposal (lab contacts, proteins...)
-     *
-     * We can skip auth on this one since it is calling Expeye, and auth is done there
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         proposalReference: string;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
-          "application/json": Record<string, never>;
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -814,20 +1256,28 @@ export interface operations {
     };
   };
   delete_sample_samples__sampleId__delete: {
-    /**
-     * Delete Sample
-     * @description Create new sample in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         sampleId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      204: never;
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -835,14 +1285,13 @@ export interface operations {
     };
   };
   edit_sample_samples__sampleId__patch: {
-    /**
-     * Edit Sample
-     * @description Edit existing sample
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         sampleId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -852,12 +1301,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["SampleOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -865,20 +1320,28 @@ export interface operations {
     };
   };
   delete_container_containers__containerId__delete: {
-    /**
-     * Delete Container
-     * @description Delete container in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         containerId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      204: never;
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -886,14 +1349,13 @@ export interface operations {
     };
   };
   edit_container_containers__containerId__patch: {
-    /**
-     * Edit Container
-     * @description Edit existing container
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         containerId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -903,12 +1365,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["ContainerOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -916,20 +1384,28 @@ export interface operations {
     };
   };
   delete_container_topLevelContainers__topLevelContainerId__delete: {
-    /**
-     * Delete Container
-     * @description Create new container in shipment
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         topLevelContainerId: number;
       };
+      cookie?: never;
     };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
-      204: never;
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
@@ -937,14 +1413,13 @@ export interface operations {
     };
   };
   edit_container_topLevelContainers__topLevelContainerId__patch: {
-    /**
-     * Edit Container
-     * @description Edit existing container
-     */
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         topLevelContainerId: number;
       };
+      cookie?: never;
     };
     requestBody: {
       content: {
@@ -954,12 +1429,18 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["TopLevelContainerOut"];
         };
       };
       /** @description Validation Error */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
