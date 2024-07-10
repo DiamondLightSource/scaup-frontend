@@ -13,11 +13,11 @@ import {
   Text,
   Divider,
   CheckboxGroup,
+  HStack,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { authenticatedFetch } from "@/utils/client";
-import { Table } from "@diamondlightsource/ui-components";
 
 interface SessionData {
   session: string;
@@ -39,7 +39,11 @@ const sessionForm = [
   },
 ] as DynamicFormEntry[];
 
-const SessionList = () => {
+const SessionList = ({
+  onSubmit,
+}: {
+  onSubmit: (samples: components["schemas"]["SampleOut"][]) => void;
+}) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const formContextSession = useForm<SessionData>();
@@ -56,9 +60,11 @@ const SessionList = () => {
 
     const [, code, number, visitNumber] = sessionRegexMatches;
 
+    setIsLoading(true);
     const res = await authenticatedFetch.client(
       `/proposals/${code}${number}/sessions/${visitNumber}/samples`,
     );
+    setIsLoading(false);
 
     if (res && res.status === 200) {
       const samples = await res.json();
@@ -69,20 +75,15 @@ const SessionList = () => {
   });
 
   const handleContinue = useCallback(() => {
-    console.log(samples!.filter((_, i) => checkedItems.includes(i.toString())));
-  }, [samples, checkedItems]);
+    onSubmit(samples!.filter((_, i) => checkedItems.includes(i.toString())));
+  }, [samples, checkedItems, onSubmit]);
 
   return (
     <VStack alignItems='start' w='100%'>
       <FormProvider {...formContextSession}>
         <form
           onSubmit={onSubmitSession}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "20em",
-            flex: "1 0 auto",
-          }}
+          style={{width: "100%"}}
         >
           <DynamicForm formType={sessionForm} />
           <Button w='150px' mt='1em' type='submit' isLoading={isLoading}>
@@ -90,11 +91,11 @@ const SessionList = () => {
           </Button>
         </form>
       </FormProvider>
-      <Heading mt='1em' color={samples ? undefined : "diamond.200"}>
+      <Heading size="lg" mt='1em' color={samples ? undefined : "diamond.200"}>
         Select Samples
       </Heading>
       {samples && (
-        <VStack divider={<Divider borderColor='diamond.600' />} w='66%'>
+        <VStack divider={<Divider borderColor='diamond.600' />} w='100%'>
           <CheckboxGroup
             onChange={(values: string[]) => {
               setCheckedItems(values);
@@ -113,19 +114,73 @@ const SessionList = () => {
           </CheckboxGroup>
         </VStack>
       )}
-      <Button onClick={handleContinue} bg='green.500' isDisabled={false}>
+      <Button
+        mt='1em'
+        onClick={handleContinue}
+        bg='green.500'
+        isDisabled={!samples || checkedItems.length < 1}
+        isLoading={isLoading}
+      >
         Continue
       </Button>
     </VStack>
   );
 };
 
-const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
-  const handleContinue = useCallback(() => {}, []);
+const SessionLocationForms = ({
+  selectedSamples, onReset
+}: {
+  selectedSamples: components["schemas"]["SampleOut"][];
+  onReset: () => void
+}) => {
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const formContext = useForm<SessionData>();
+
+  const renderedForm = useMemo(
+    () =>
+      selectedSamples.reduce<DynamicFormEntry[]>((forms, sample) => {
+        return forms.concat([
+          { id: `separator-${sample.id}`, label: sample.name ?? "Unknown Name", type: "separator" },
+          { id: `location-${sample.id}`, label: "Location", type: "text" },
+        ]);
+      }, []),
+    [selectedSamples],
+  );
+
+  const onSubmit = useCallback(async (info) => {}, []);
 
   return (
-    <VStack w='100%' h='100%'>
-      <SessionList />
+    <VStack mt="1em" alignItems='start' w='100%'>
+      <Heading size="lg">Facility Locations</Heading>
+      <FormProvider {...formContext}>
+        <form
+          onSubmit={onSubmit}
+          style={{width: "100%"}}
+        >
+          <DynamicForm formType={renderedForm} />
+          <HStack><Button mt='1em' onClick={() => onReset()}>Back</Button>
+          <Button mt='1em' type='submit' bg='green.500' isLoading={isLoading}>
+            Finish
+          </Button></HStack>
+        </form>
+      </FormProvider>
+    </VStack>
+  );
+};
+
+const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
+  const [selectedSamples, setSelectedSamples] = useState<
+    components["schemas"]["SampleOut"][] | null
+  >(null);
+
+  return (
+    <VStack w={{base: "100%", md: '33%'}} h='100%'>
+      {selectedSamples ? (
+        <SessionLocationForms selectedSamples={selectedSamples} onReset={() => setSelectedSamples(null)}/>
+      ) : (
+        <SessionList onSubmit={setSelectedSamples} />
+      )}
     </VStack>
   );
 };
