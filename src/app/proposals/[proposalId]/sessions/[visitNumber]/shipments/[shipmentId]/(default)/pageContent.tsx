@@ -4,7 +4,7 @@ import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { createShipmentRequest } from "@/utils/client";
-import { Divider, HStack, Heading, VStack, useToast } from "@chakra-ui/react";
+import { Divider, HStack, Heading, VStack, useToast, Button, Spacer } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -55,7 +55,13 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
   return (
     <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
       <VStack alignItems='start' flex='1 0 0'>
-        <Heading size='lg'>Samples</Heading>
+        <HStack w='100%'>
+          <Heading size='lg'>Samples</Heading>
+          <Spacer />
+          <Button as={NextLink} href={`${params.shipmentId}/import-samples`} size='sm'>
+            Import from Shipment
+          </Button>
+        </HStack>
         <Divider borderColor='gray.800' />
         <Table
           w='100%'
