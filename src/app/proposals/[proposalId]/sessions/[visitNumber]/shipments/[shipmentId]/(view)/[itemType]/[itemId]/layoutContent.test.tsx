@@ -203,7 +203,7 @@ describe("Item Page Layout Content", () => {
     expect(screen.getByLabelText("Samples Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Grid Boxes Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Containers Step")).toBeInTheDocument();
-    expect(screen.getByLabelText("Dewars Step")).toBeInTheDocument();
+    expect(screen.getByLabelText("Packages Step")).toBeInTheDocument();
   });
 
   it("should match current step to current path", () => {
@@ -214,7 +214,7 @@ describe("Item Page Layout Content", () => {
     );
 
     const stepHeading = screen.getAllByRole("heading", {
-      name: /dewars/i,
+      name: /packages/i,
     });
 
     expect(stepHeading[0]).toHaveAttribute("data-status", "active");

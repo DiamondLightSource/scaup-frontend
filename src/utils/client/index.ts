@@ -98,6 +98,16 @@ export const createShipmentRequest = async (shipmentId: string) => {
   if (resp && resp.status === 201) {
     window.location.assign(`${process.env.NEXT_PUBLIC_API_URL}/shipments/${shipmentId}/request`);
   } else {
-    throw Error("Unable to create shipment request");
+    let message = "Unable to create shipment request";
+    try {
+      const jsonRep = resp ? await resp.json() : {};
+      if (jsonRep.detail) {
+        message = jsonRep.detail;
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+
+    throw Error(message);
   }
 };

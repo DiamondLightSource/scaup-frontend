@@ -219,6 +219,25 @@ describe("Item Page", () => {
     await waitFor(() => expect(mockRouter.pathname).toBe("/grid/456/edit"));
   });
 
+  it("should update path if item type changes", async () => {
+    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={prepopData} />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          activeItem: puck,
+          isEdit: true,
+        },
+      },
+    });
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {
+      target: { value: "falconTube" },
+    });
+
+    fireEvent.click(screen.getByText(/save/i));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/falconTube/9/edit"));
+  });
+
   it("should use first returned item if creating multiple items", async () => {
     server.use(
       http.post(

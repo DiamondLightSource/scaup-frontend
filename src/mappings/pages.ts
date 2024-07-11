@@ -25,7 +25,12 @@ export const steps: Step[] = [
     singular: "Container",
     endpoint: "containers",
   },
-  { title: "Dewars", id: "dewar", singular: "Dewar", endpoint: "topLevelContainers" },
+  {
+    title: "Packages",
+    id: ["dewar", "walk-in"],
+    singular: "Package",
+    endpoint: "topLevelContainers",
+  },
 ];
 
 export const pluralToSingular: Record<string, string> = {
