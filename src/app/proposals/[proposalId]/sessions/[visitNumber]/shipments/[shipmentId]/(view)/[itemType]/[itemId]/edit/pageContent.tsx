@@ -1,6 +1,7 @@
 "use client";
 import { Container } from "@/components/containers";
-import { DynamicForm } from "@/components/input/form";
+import { DynamicForm, formMapping } from "@/components/input/form";
+import { DynamicFormEntry } from "@/components/input/form/input";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
@@ -39,6 +40,28 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
+  const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
+
+  useEffect(() => {
+    setRenderedForm(formMapping[formType]);
+  }, [formType]);
+
+  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
+    if ("type" in formValues) {
+      setFormType(formValues.type);
+    }
+
+    if ("registeredContainer" in formValues) {
+      setRenderedForm((oldForm) => {
+        const newForm = structuredClone(oldForm);
+        const nameIndex = newForm.findIndex((field) => field.id === "name");
+        if (nameIndex !== -1) {
+          newForm[nameIndex].isDisabled = formValues.registeredContainer !== "";
+        }
+        return newForm;
+      });
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(setIsReview(false));
@@ -52,6 +75,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       }
 
       formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
+      handleWatchedUpdated(baseData);
     }
   }, [formContext, activeItem, activeIsEdit, dispatch]);
 
@@ -143,10 +167,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     }
   }, [activeItem]);
 
-  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
-    setFormType(formValues.type);
-  }, []);
-
   const redirectToNew = useCallback(() => {
     router.replace("../new/edit");
   }, [router]);
@@ -169,7 +189,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           <Box flex='1 0 auto'>
             <DynamicForm
               onWatchedUpdated={handleWatchedUpdated}
-              formType={formType}
+              formType={renderedForm}
               defaultValues={activeItem!.data}
               prepopData={prepopData}
             />

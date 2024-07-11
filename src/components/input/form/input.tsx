@@ -29,6 +29,8 @@ export interface DynamicFormEntry {
   watch?: boolean;
   /** Text to be displayed underneath label, commonly used for further clarification */
   hint?: string;
+  /** Disable input */
+  isDisabled?: boolean;
 }
 
 const indicatorMap: Record<string, string> = {
@@ -39,7 +41,15 @@ const indicatorMap: Record<string, string> = {
 
 export const getIndicatorSymbol = (v?: string) => (v ? indicatorMap[v] ?? `(${v})` : "");
 
-const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: DynamicFormEntry) => {
+const InnerDynamicFormInput = ({
+  id,
+  label,
+  type,
+  isDisabled,
+  validation,
+  values,
+  hint,
+}: DynamicFormEntry) => {
   const {
     register,
     formState: { errors },
@@ -55,7 +65,8 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
           isInvalid={!!errors[id]}
           variant='hi-contrast'
           defaultValue={textDefault}
-          {...register(id, validation)}
+          isDisabled={isDisabled}
+          {...register(id, { ...validation, disabled: isDisabled })}
         ></Input>
       );
     case "textarea":
@@ -65,17 +76,18 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
           isInvalid={!!errors[id]}
           variant='hi-contrast'
           defaultValue={textDefault}
-          {...register(id, validation)}
+          isDisabled={isDisabled}
+          {...register(id, { ...validation, disabled: isDisabled })}
         />
       );
     case "dropdown":
       return (
         <Select
           id={id}
-          isDisabled={!values}
+          isDisabled={!values || isDisabled}
           isInvalid={!!errors[id]}
           variant='hi-contrast'
-          {...register(id, validation)}
+          {...register(id, { ...validation, disabled: isDisabled })}
         >
           {values &&
             Array.isArray(values) &&
@@ -90,10 +102,10 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
       return (
         <Select
           id={id}
-          isDisabled={!values}
+          isDisabled={!values || isDisabled}
           isInvalid={!!errors[id]}
           variant='hi-contrast'
-          {...register(id, validation)}
+          {...register(id, { ...validation, disabled: isDisabled })}
         >
           {values &&
             Array.isArray(values) &&
@@ -107,7 +119,7 @@ const InnerDynamicFormInput = ({ id, label, type, validation, values, hint }: Dy
     case "checkbox":
       return (
         <Box my='0.5em'>
-          <Checkbox size='lg' id={id} {...register(id, validation)}>
+          <Checkbox size='lg' id={id} {...register(id, { ...validation, disabled: isDisabled })}>
             {label}
           </Checkbox>
 
@@ -125,6 +137,7 @@ export const DynamicFormInput = ({
   type,
   validation,
   values,
+  isDisabled,
   hint,
 }: DynamicFormEntry) => {
   const {
@@ -158,7 +171,7 @@ export const DynamicFormInput = ({
       <FormErrorMessage data-testid='error-message'>
         {errors[id] ? (errors[id]!.message as string) : null}
       </FormErrorMessage>
-      {<InnerDynamicFormInput {...{ id, label, type, validation, values, hint }} />}
+      {<InnerDynamicFormInput {...{ id, label, type, validation, values, hint, isDisabled }} />}
     </FormControl>
   );
 };

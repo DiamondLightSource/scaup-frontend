@@ -98,7 +98,7 @@ export const handlers = [
   // Proposal metadata
 
   http.get("http://localhost/api/proposals/:proposalReference/data", () =>
-    HttpResponse.json({ labContacts: [], proteins: [] }),
+    HttpResponse.json({ labContacts: [], proteins: [], containers: [] }),
   ),
 
   // Item CRUD

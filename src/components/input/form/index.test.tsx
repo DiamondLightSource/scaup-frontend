@@ -51,7 +51,6 @@ describe("Dynamic Form", () => {
   });
 
   it("should not render anything if passed invalid form type", () => {
-    // @ts-expect-error
     renderWithForm(<DynamicForm formType='doesnotexist' />);
   });
 });

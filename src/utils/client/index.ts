@@ -80,9 +80,26 @@ authenticatedFetch.client = async (url: RequestInfo, init?: RequestInit) => {
 
 export { authenticatedFetch };
 
+interface PrepopDataModel {
+  labContacts: Record<string, any>;
+  proteins: Record<string, any>;
+  containers: Record<string, any>;
+  dewars: Record<string, any>;
+}
+
 export const getPrepopData = async (proposalId: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
-  return res && res.status === 200 ? await res.json() : {};
+  if (res && res.status === 200) {
+    const data = (await res.json()) as PrepopDataModel;
+    // As much as it pains me to do so, we must do this as to not add eBIC-specific logic to the form submit handling functions
+    data.containers = data.containers.map((field: Record<string, any>) => ({
+      ...field,
+      actualBarcode: field.barcode,
+    }));
+    data.containers.unshift({ actualBarcode: "", barcode: "None", comments: null });
+    return data;
+  }
+  return {};
 };
 
 /**

@@ -181,7 +181,7 @@ describe("Item Page", () => {
     );
   });
 
-  it("should update form if container type changes", async () => {
+  it("should update form if container type changes", () => {
     renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
       preloadedState: {
         shipment: {
@@ -198,6 +198,82 @@ describe("Item Page", () => {
     });
 
     expect(screen.queryByText(/registered container/i)).not.toBeInTheDocument();
+  });
+
+  it("should disable name if registered container is selected", () => {
+    renderWithProviders(
+      <ItemFormPageContent
+        shipmentId='1'
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
+      />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            activeItem: puck,
+          },
+        },
+      },
+    );
+
+    fireEvent.change(screen.getByRole("combobox", { name: "Registered Container" }), {
+      target: { value: "DLS-01" },
+    });
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
+  });
+
+  it("should update watched items with active items", () => {
+    renderWithProviders(
+      <ItemFormPageContent
+        shipmentId='1'
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
+      />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            isEdit: true,
+            activeItem: { ...puck, data: { ...puck.data, registeredContainer: "DLS-01" } },
+          },
+        },
+      },
+    );
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
+  });
+
+  it("should reenable name if no registered container is selected", () => {
+    renderWithProviders(
+      <ItemFormPageContent
+        shipmentId='1'
+        prepopData={{ containers: [{ barcode: "DLS-01", actualBarcode: "DLS-01", comments: "" }] }}
+      />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            activeItem: puck,
+          },
+        },
+      },
+    );
+
+    const registeredContainerCombobox = screen.getByRole("combobox", {
+      name: "Registered Container",
+    });
+
+    fireEvent.change(registeredContainerCombobox, {
+      target: { value: "DLS-01" },
+    });
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveAttribute("disabled");
+
+    fireEvent.change(registeredContainerCombobox, {
+      target: { value: "" },
+    });
+
+    expect(screen.getByRole("textbox", { name: "Name" })).not.toHaveAttribute("disabled");
   });
 
   it("should update active item if new item is added", async () => {
