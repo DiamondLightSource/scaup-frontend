@@ -54,8 +54,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
     if ("registeredContainer" in formValues) {
       setRenderedForm((oldForm) => {
         const newForm = structuredClone(oldForm);
-        newForm[newForm.findIndex((field) => field.id === "name")].isDisabled =
-          formValues.registeredContainer !== "";
+        const nameIndex = newForm.findIndex((field) => field.id === "name");
+        if (nameIndex !== -1) {
+          newForm[nameIndex].isDisabled = formValues.registeredContainer !== "";
+        }
         return newForm;
       });
     }
