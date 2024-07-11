@@ -13,7 +13,9 @@ const PreSessionPrintContent = ({ data }: { data: Record<string, any> | null }) 
       {data ? (
         <DynamicFormView formType='preSession' data={data} prepopData={data} />
       ) : (
-        <Heading w="100%" py="1em" variant='notFound'>No pre-session information available</Heading>
+        <Heading w='100%' py='1em' variant='notFound'>
+          No pre-session information available
+        </Heading>
       )}
     </VStack>
   );

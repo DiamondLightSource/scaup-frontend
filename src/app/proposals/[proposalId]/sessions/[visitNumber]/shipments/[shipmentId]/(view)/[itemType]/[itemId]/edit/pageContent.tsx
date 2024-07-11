@@ -102,12 +102,13 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           separateDetails(info, activeStep.endpoint),
           activeStep.endpoint,
         );
+        await dispatch(updateShipment({ shipmentId }));
+        await dispatch(updateUnassigned({ shipmentId }));
+        toast({ title: "Successfully saved item!" });
+        router.replace(`../../${info.type}/${activeItem!.id}/edit`, { scroll: false });
       } catch {
         setAddLoading(false);
       }
-      await dispatch(updateShipment({ shipmentId }));
-      await dispatch(updateUnassigned({ shipmentId }));
-      toast({ title: "Successfully saved item!" });
     }
     setAddLoading(false);
   });
