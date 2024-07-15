@@ -51,8 +51,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
         <Text fontSize='18px' my='1em'>
-          Your sample information was <b>successfully submitted!</b> You may now arrange for your
-          samples to be shipped to Diamond, or{" "}
+          Your sample information was <b>successfully submitted!</b> You may { Object.keys(shipmentData.counts).length > 0 && "now arrange for your samples to be shipped to Diamond, or"}
           <Link
             textDecoration='underline'
             color='diamond.600'
@@ -61,7 +60,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
             return to the shipment list.
           </Link>
         </Text>
-        <VStack w='40%' border='1px solid' borderColor='diamond.300' p='1em'>
+        {Object.keys(shipmentData.counts).length > 0 && <><VStack w='40%' border='1px solid' borderColor='diamond.300' p='1em'>
           <Heading alignSelf='start'>Contents</Heading>
           <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
         </VStack>
@@ -83,7 +82,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
           </Button>
         ) : (
           <ArrangeShipmentButton params={params} />
-        )}
+        )}</>}
       </VStack>
     </VStack>
   );
