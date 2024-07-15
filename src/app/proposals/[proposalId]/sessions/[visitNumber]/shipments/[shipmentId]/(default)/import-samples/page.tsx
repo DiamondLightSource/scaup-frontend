@@ -7,7 +7,13 @@ export const metadata: Metadata = {
   title: "Import Existing Samples - Sample Handling",
 };
 
-const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
+const SubmissionOverview = async ({
+  params,
+  searchParams,
+}: {
+  params: ShipmentParams;
+  searchParams: { new: string };
+}) => {
   return (
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
@@ -23,7 +29,7 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
           is already being stored at eBIC.
         </Text>
       </VStack>
-      <ImportSamplesPageContent params={params} />
+      <ImportSamplesPageContent params={params} isNew={searchParams.new === "true"} />
     </VStack>
   );
 };

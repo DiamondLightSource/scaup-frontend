@@ -15,4 +15,16 @@ describe("Proposal Page Content", () => {
     fireEvent.click(screen.getByRole("button", { name: "Create" }));
     await waitFor(() => expect(mockRouter.pathname).toBe("/1/shipments/123/edit"));
   });
+
+  it("should redirect to sample import page if checkbox is selected", async () => {
+    render(<ShipmentCreationForm proposalId='cm1234' visitNumber='1' />);
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+      target: { value: "New Name" },
+    });
+
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/1/shipments/123/import-samples"));
+  });
 });
