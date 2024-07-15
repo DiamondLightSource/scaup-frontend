@@ -15,9 +15,11 @@ import {
   CheckboxGroup,
   HStack,
 } from "@chakra-ui/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { authenticatedFetch } from "@/utils/client";
+import { Item } from "@/utils/client/item";
+import { useRouter } from "next/navigation";
 
 interface SessionData {
   session: string;
@@ -39,15 +41,20 @@ const sessionForm = [
   },
 ] as DynamicFormEntry[];
 
-const SessionList = ({
-  onSubmit,
+const ImportSamplesPageContent = ({
+  params,
+  isNew,
 }: {
-  onSubmit: (samples: components["schemas"]["SampleOut"][]) => void;
+  params: ShipmentParams;
+  isNew: boolean;
 }) => {
   const toast = useToast();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const formContextSession = useForm<SessionData>();
-  const [samples, setSamples] = useState<components["schemas"]["SampleOut"][] | null | undefined>();
+  const [containers, setContainers] = useState<
+    components["schemas"]["ContainerOut"][] | null | undefined
+  >();
 
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
@@ -62,39 +69,42 @@ const SessionList = ({
 
     setIsLoading(true);
     const res = await authenticatedFetch.client(
-      `/proposals/${code}${number}/sessions/${visitNumber}/samples`,
+      `/proposals/${code}${number}/sessions/${visitNumber}/containers?isInternal=true`,
     );
     setIsLoading(false);
 
     if (res && res.status === 200) {
-      const samples = await res.json();
-      setSamples(samples.items);
+      const containers = await res.json();
+      setContainers(containers.items);
     } else {
-      setSamples(null);
+      setContainers(null);
     }
   });
 
-  const handleContinue = useCallback(() => {
-    onSubmit(samples!.filter((_, i) => checkedItems.includes(i.toString())));
-  }, [samples, checkedItems, onSubmit]);
+  const handleFinish = useCallback(async () => {
+    await Promise.all(
+      containers!.map((container) =>
+        Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
+      ),
+    );
+
+    router.push(isNew ? "pre-session" : "./");
+  }, [containers, params]);
 
   return (
     <VStack alignItems='start' w='100%'>
       <FormProvider {...formContextSession}>
-        <form
-          onSubmit={onSubmitSession}
-          style={{width: "100%"}}
-        >
+        <form onSubmit={onSubmitSession} style={{ width: "100%" }}>
           <DynamicForm formType={sessionForm} />
           <Button w='150px' mt='1em' type='submit' isLoading={isLoading}>
             Select
           </Button>
         </form>
       </FormProvider>
-      <Heading size="lg" mt='1em' color={samples ? undefined : "diamond.200"}>
-        Select Samples
+      <Heading size='lg' mt='1em' color={containers !== undefined ? undefined : "diamond.200"}>
+        Select Containers
       </Heading>
-      {samples && (
+      {containers && containers.length > 0 ? (
         <VStack divider={<Divider borderColor='diamond.600' />} w='100%'>
           <CheckboxGroup
             onChange={(values: string[]) => {
@@ -102,85 +112,33 @@ const SessionList = ({
             }}
           >
             <VStack w='100%' divider={<Divider />}>
-              {samples.map((sample, i) => (
+              {containers.map((container, i) => (
                 <Checkbox w='100%' value={i.toString()} key={i}>
                   <Heading flex='1 0 0' size='md'>
-                    {sample.name}
+                    {container.name}
                   </Heading>
-                  <Text>{sample.comments}</Text>
+                  <Text>{container.comments}</Text>
                 </Checkbox>
               ))}
             </VStack>
           </CheckboxGroup>
         </VStack>
+      ) : (
+        containers !== undefined && (
+          <Heading variant='notFound' size='md'>
+            No containers available for transfer in this session.
+          </Heading>
+        )
       )}
       <Button
         mt='1em'
-        onClick={handleContinue}
+        onClick={handleFinish}
         bg='green.500'
-        isDisabled={!samples || checkedItems.length < 1}
+        isDisabled={!containers || checkedItems.length < 1}
         isLoading={isLoading}
       >
-        Continue
+        {isNew ? "Continue" : "Finish"}
       </Button>
-    </VStack>
-  );
-};
-
-const SessionLocationForms = ({
-  selectedSamples, onReset
-}: {
-  selectedSamples: components["schemas"]["SampleOut"][];
-  onReset: () => void
-}) => {
-  const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const formContext = useForm<SessionData>();
-
-  const renderedForm = useMemo(
-    () =>
-      selectedSamples.reduce<DynamicFormEntry[]>((forms, sample) => {
-        return forms.concat([
-          { id: `separator-${sample.id}`, label: sample.name ?? "Unknown Name", type: "separator" },
-          { id: `location-${sample.id}`, label: "Location", type: "text" },
-        ]);
-      }, []),
-    [selectedSamples],
-  );
-
-  const onSubmit = useCallback(async (info) => {}, []);
-
-  return (
-    <VStack mt="1em" alignItems='start' w='100%'>
-      <Heading size="lg">Facility Locations</Heading>
-      <FormProvider {...formContext}>
-        <form
-          onSubmit={onSubmit}
-          style={{width: "100%"}}
-        >
-          <DynamicForm formType={renderedForm} />
-          <HStack><Button mt='1em' onClick={() => onReset()}>Back</Button>
-          <Button mt='1em' type='submit' bg='green.500' isLoading={isLoading}>
-            Finish
-          </Button></HStack>
-        </form>
-      </FormProvider>
-    </VStack>
-  );
-};
-
-const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
-  const [selectedSamples, setSelectedSamples] = useState<
-    components["schemas"]["SampleOut"][] | null
-  >(null);
-
-  return (
-    <VStack w={{base: "100%", md: '33%'}} h='100%'>
-      {selectedSamples ? (
-        <SessionLocationForms selectedSamples={selectedSamples} onReset={() => setSelectedSamples(null)}/>
-      ) : (
-        <SessionList onSubmit={setSelectedSamples} />
-      )}
     </VStack>
   );
 };
