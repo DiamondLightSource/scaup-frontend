@@ -124,6 +124,24 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getByText(/edit booking/i)).toBeInTheDocument();
   });
 
+  it("should not enable 'print pre-session' button if no pre-session data is available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
+      />,
+    );
+
+    expect(screen.getAllByRole("group")[4]).toHaveAttribute("aria-disabled", "true");
+  });
+
   it("should redirect user to shipping service if 'edit booking' is clicked", () => {
     renderWithProviders(
       <ShipmentHomeContent

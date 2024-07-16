@@ -103,12 +103,12 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           Edit shipment contents, or add new items
         </TwoLineLink>
         <TwoLineLink
-          title='Edit Pre-Session Information'
+          title={`${data.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
           as={NextLink}
           href={`${params.shipmentId}/pre-session`}
           isDisabled={data.dispatch.status === "Booked" || data.hasUnassigned}
         >
-          Edit imaging conditions, grid/data acquisition parameters
+          Set imaging conditions, grid/data acquisition parameters
         </TwoLineLink>
         <TwoLineLink title='Review Shipment' as={NextLink} href={`${params.shipmentId}/review`}>
           Review shipment contents
@@ -120,6 +120,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           title='Print Pre-Session Information'
           as={NextLink}
           href={`${params.shipmentId}/print/pre-session`}
+          isDisabled={!data.preSessionInfo}
         >
           View pre-session information in a printable format
         </TwoLineLink>

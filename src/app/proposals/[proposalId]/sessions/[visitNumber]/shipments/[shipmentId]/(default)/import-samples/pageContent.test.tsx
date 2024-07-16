@@ -1,4 +1,3 @@
-import { toastMock } from "@/../vitest.setup";
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
@@ -9,6 +8,27 @@ import ImportSamplesPageContent from "./pageContent";
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Import Samples Page Content", () => {
+  let originalWindowLocation = window.location;
+  let assignMock = vi.fn();
+
+  beforeEach(() => {
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      enumerable: true,
+      value: { assign: assignMock },
+    });
+  });
+
+  afterEach(() => {
+    assignMock.mockClear();
+
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      enumerable: true,
+      value: originalWindowLocation,
+    });
+  });
+
   it("should render containers", async () => {
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
@@ -75,6 +95,7 @@ describe("Import Samples Page Content", () => {
   });
 
   it("should redirect to shipments page if shipment is not new", async () => {
+    const assignSpy = vi.spyOn(window.location, "assign");
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
@@ -86,8 +107,7 @@ describe("Import Samples Page Content", () => {
     fireEvent.click(checkbox);
     fireEvent.click(screen.getByRole("button", { name: "Finish" }));
 
-    // This, in reality, would be router.push navigating to the parent of the current route
-    await waitFor(() => expect(mockRouter.pathname).toBe("/"));
+    await waitFor(() => expect(assignMock).toBeCalledWith("./"));
   });
 
   it("should redirect to pre-session page if shipment is new", async () => {
@@ -102,7 +122,6 @@ describe("Import Samples Page Content", () => {
     fireEvent.click(checkbox);
     fireEvent.click(screen.getByRole("button", { name: "Continue" }));
 
-    // This, in reality, would be router.push navigating to the parent of the current route
-    await waitFor(() => expect(mockRouter.pathname).toBe("/pre-session"));
+    await waitFor(() => expect(assignMock).toBeCalledWith("pre-session"));
   });
 });

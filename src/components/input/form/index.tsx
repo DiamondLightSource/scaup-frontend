@@ -27,7 +27,9 @@ export const DynamicForm = ({
 }: DynamicFormProps) => {
   const { getValues } = useFormContext();
   const activeForm = useMemo(() => {
-    const form = structuredClone(Array.isArray(formType) ? formType : formMapping[formType] ?? []);
+    const form = structuredClone(
+      Array.isArray(formType) ? formType : (formMapping[formType] ?? []),
+    );
 
     for (const field of form) {
       if (field.values && !Array.isArray(field.values)) {

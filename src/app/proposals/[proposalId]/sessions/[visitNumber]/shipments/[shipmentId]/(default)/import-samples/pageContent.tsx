@@ -60,7 +60,7 @@ const ImportSamplesPageContent = ({
 
   const onSubmitSession = formContextSession.handleSubmit(async (info) => {
     const sessionRegexMatches = info.session.match(/^([a-zA-Z]{1,2})([0-9]+)-([0-9]+)$/);
-    if (sessionRegexMatches === null || sessionRegexMatches.length != 4) {
+    if (sessionRegexMatches === null || sessionRegexMatches.length !== 4) {
       toast({ title: "Session reference is invalid" });
       return;
     }
@@ -82,14 +82,17 @@ const ImportSamplesPageContent = ({
   });
 
   const handleFinish = useCallback(async () => {
-    await Promise.all(
-      containers!.map((container) =>
-        Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
-      ),
-    );
+    if (containers) {
+      await Promise.all(
+        containers!.map((container) =>
+          Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
+        ),
+      );
 
-    router.push(isNew ? "pre-session" : "./");
-  }, [containers, params]);
+      // TODO: replace this with server actions?
+      window.location.assign(isNew ? "pre-session" : "./");
+    }
+  }, [containers, params, isNew]);
 
   return (
     <VStack alignItems='start' w='100%'>
