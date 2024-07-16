@@ -3,6 +3,26 @@ Changelog
 ==========
 
 +++++++++
+v0.3.0 (09/06/2024)
++++++++++
+
+**Added**
+
+- Users can now be redirected to SynchWeb to perform shipment requests
+- Top level containers now accept "walk-in" type
+- Name field is disabled if barcode is present for containers
+
+**Changed**
+
+- Paths that precede a session (`/proposals/{x}/sessions` for example) now redirect to PATo
+- Shipments now belong to specific sessions, rather than proposals
+
+**Fixed**
+
+- Prevent crash on invalid name for samples
+- Shipments list on session page is now updated correctly
+
++++++++++
 v0.2.0 (06/06/2024)
 +++++++++
 
