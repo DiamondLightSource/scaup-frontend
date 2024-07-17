@@ -13,13 +13,11 @@ import {
   Text,
   Divider,
   CheckboxGroup,
-  HStack,
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { authenticatedFetch } from "@/utils/client";
 import { Item } from "@/utils/client/item";
-import { useRouter } from "next/navigation";
 
 interface SessionData {
   session: string;
@@ -29,13 +27,13 @@ const sessionForm = [
   {
     id: "session",
     label: "Session",
-    hint: "Session to use, e.g.: cm1234-5",
+    hint: "Session number to use",
     type: "text",
     validation: {
       required: "Required",
       pattern: {
-        value: /^[a-zA-Z]{1,2}[0-9]+-[0-9]+$/,
-        message: "Session reference is invalid",
+        value: /^[0-9]+$/,
+        message: "Session number is invalid",
       },
     },
   },
@@ -49,7 +47,6 @@ const ImportSamplesPageContent = ({
   isNew: boolean;
 }) => {
   const toast = useToast();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const formContextSession = useForm<SessionData>();
   const [containers, setContainers] = useState<
@@ -59,17 +56,9 @@ const ImportSamplesPageContent = ({
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   const onSubmitSession = formContextSession.handleSubmit(async (info) => {
-    const sessionRegexMatches = info.session.match(/^([a-zA-Z]{1,2})([0-9]+)-([0-9]+)$/);
-    if (sessionRegexMatches === null || sessionRegexMatches.length !== 4) {
-      toast({ title: "Session reference is invalid" });
-      return;
-    }
-
-    const [, code, number, visitNumber] = sessionRegexMatches;
-
     setIsLoading(true);
     const res = await authenticatedFetch.client(
-      `/proposals/${code}${number}/sessions/${visitNumber}/containers?isInternal=true`,
+      `/proposals/${params.proposalId}/sessions/${info.session}/containers?isInternal=true`,
     );
     setIsLoading(false);
 
@@ -83,16 +72,20 @@ const ImportSamplesPageContent = ({
 
   const handleFinish = useCallback(async () => {
     if (containers) {
-      await Promise.all(
-        containers!.map((container) =>
-          Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
-        ),
-      );
+      try {
+        await Promise.all(
+          containers!.map((container) =>
+            Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
+          ),
+        );
 
-      // TODO: replace this with server actions?
-      window.location.assign(isNew ? "pre-session" : "./");
+        // TODO: replace this with server actions?
+        window.location.assign(isNew ? "pre-session" : "./");
+      } catch {
+        toast({ title: "Could not update items, please try again later", status: "error" });
+      }
     }
-  }, [containers, params, isNew]);
+  }, [containers, params, isNew, toast]);
 
   return (
     <VStack alignItems='start' w='100%'>

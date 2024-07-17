@@ -127,6 +127,7 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
         <TwoLineLink
           title={`${data.dispatch.status === "Booked" ? "Edit" : "Create"} Booking`}
           onClick={handleBookingClicked}
+          isDisabled={data.hasUnassigned}
         >
           Book pickup with courier
         </TwoLineLink>

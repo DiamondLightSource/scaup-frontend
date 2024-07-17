@@ -32,7 +32,7 @@ describe("Import Samples Page Content", () => {
   it("should render containers", async () => {
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     await screen.findByText("Container");
@@ -44,13 +44,13 @@ describe("Import Samples Page Content", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "invalidname" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
-    await screen.findByText("Session reference is invalid");
+    await screen.findByText("Session number is invalid");
   });
 
   it("should enable continue button if samples are selected", async () => {
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     const checkbox = await screen.findByRole("checkbox");
@@ -71,7 +71,7 @@ describe("Import Samples Page Content", () => {
 
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     await screen.findByText("No containers available for transfer in this session.");
@@ -88,7 +88,7 @@ describe("Import Samples Page Content", () => {
 
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     await screen.findByText("No containers available for transfer in this session.");
@@ -99,7 +99,7 @@ describe("Import Samples Page Content", () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     const checkbox = await screen.findByRole("checkbox");
@@ -114,7 +114,7 @@ describe("Import Samples Page Content", () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
 
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm00001-1" } });
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
     const checkbox = await screen.findByRole("checkbox");
