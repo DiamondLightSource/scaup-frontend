@@ -1,21 +1,13 @@
-import { NextAuthOptions, Session } from "next-auth";
-import { JWT } from "next-auth/jwt";
-
-export interface ExtendedJWT extends JWT {
-  accessToken: string;
-}
-
-export interface ExtendedSession extends Session {
-  accessToken: string;
-}
+import { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
   callbacks: {
-    async session({ session, token }): Promise<ExtendedSession> {
-      const newSession: ExtendedSession = {
+    async session({ session, token }) {
+      const newSession = {
         ...session,
-        accessToken: (token as ExtendedJWT).accessToken,
+        accessToken: token.accessToken,
+        permissions: token.permissions
       };
       return newSession;
     },
@@ -41,6 +33,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.sub,
           email: profile.sub,
+          permissions: user.permissions,
           name: user.givenName,
           accessToken: tokens.access_token,
         };

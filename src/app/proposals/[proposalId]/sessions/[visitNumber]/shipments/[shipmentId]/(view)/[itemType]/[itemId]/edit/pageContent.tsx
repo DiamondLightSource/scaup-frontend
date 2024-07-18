@@ -78,7 +78,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
       formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
       handleWatchedUpdated(baseData);
     }
-  }, [formContext, activeItem, activeIsEdit, dispatch]);
+  }, [formContext, activeItem, activeIsEdit, dispatch, handleWatchedUpdated]);
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {

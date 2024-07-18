@@ -33,6 +33,28 @@ export const steps: Step[] = [
   },
 ];
 
+export const internalEbicSteps: Step[] = [
+  { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
+  {
+    title: "Pucks",
+    id: ["puck"],
+    singular: "Puck",
+    endpoint: "containers",
+  },
+  {
+    title: "Canes",
+    id: ["cane"],
+    singular: "Cane",
+    endpoint: "containers",
+  },
+  {
+    title: "Dewars",
+    id: ["dewar"],
+    singular: "Dewar",
+    endpoint: "topLevelContainers",
+  },
+];
+
 export const pluralToSingular: Record<string, string> = {
   gridBoxes: "gridBox",
   samples: "sample",

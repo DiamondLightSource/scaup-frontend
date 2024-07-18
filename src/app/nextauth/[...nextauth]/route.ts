@@ -1,13 +1,14 @@
-import { ExtendedJWT, authOptions } from "@/mappings/authOptions";
+import { authOptions } from "@/mappings/authOptions";
 import NextAuth from "next-auth";
 import { cookies } from "next/headers";
 
 const handler = NextAuth({
   ...authOptions,
   callbacks: {
-    async jwt({ token, account }): Promise<ExtendedJWT> {
+    async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
+        token.permissions = user.permissions;
         cookies().set({
           name: `__Host-${process.env.OAUTH_COOKIE_NAME}`,
           value: token.accessToken as string,
@@ -16,7 +17,7 @@ const handler = NextAuth({
           sameSite: "lax",
         });
       }
-      return token as ExtendedJWT;
+      return token;
     },
   },
 });

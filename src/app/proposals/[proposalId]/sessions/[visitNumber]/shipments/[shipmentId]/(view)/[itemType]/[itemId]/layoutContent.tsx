@@ -1,4 +1,5 @@
 "use client";
+import { ItemStepper, TypeCount } from "@/components/navigation/ItemStepper";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
@@ -14,7 +15,6 @@ import { AppDispatch } from "@/store";
 import { ItemParams } from "@/types/generic";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
-  Box,
   Button,
   Divider,
   GridItem,
@@ -22,20 +22,11 @@ import {
   Heading,
   Skeleton,
   Spacer,
-  Step,
-  StepDescription,
-  StepIcon,
-  StepIndicator,
-  StepNumber,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemLayoutContentProps {
@@ -50,16 +41,16 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
   const isReview = useSelector(selectIsReview);
   const activeItem = useSelector(selectActiveItem);
-  const shipment = useSelector(selectItems);
-  const unassigned = useSelector(selectUnassigned);
-
-  const stepDescription = useMemo(() => steps[getCurrentStepIndex(params.itemType)], [params]);
-
   const activeIsEdit = useSelector(selectIsEdit);
 
+  const stepDescription = useMemo(() => steps[getCurrentStepIndex(params.itemType)], [params]);
   const activeStep = useMemo(() => getCurrentStepIndex(params.itemType), [params]);
 
+  const [currentStep, setCurrentStep] = useState(0);
+  const [hasUnassigned, setHasUnassigned] = useState(true);
+
   useEffect(() => {
+    setCurrentStep(getCurrentStepIndex(params.itemType));
     if (params.itemId !== "new") {
       dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
     } else {
@@ -67,42 +58,6 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
     }
   }, [params, dispatch]);
 
-  const typeCount = useMemo(() => {
-    const count: { total: number; unassigned: number }[] = Array.from(
-      { length: steps.length },
-      () => ({
-        total: 0,
-        unassigned: 0,
-      }),
-    );
-    const unassignedItems: TreeData[] = unassigned[0].children!;
-
-    if (shipment) {
-      count[count.length - 1].total = shipment.length;
-
-      for (let i = 1; i < steps.length; i++) {
-        /*
-         * Count assigned/unassigned items separetely, as there is no benefit of creating a
-         * new object containing both
-         */
-        count[i - 1].total = recursiveCountChildrenByType(shipment, steps[i].id);
-        count[i - 1].unassigned = recursiveCountChildrenByType(unassignedItems, steps[i].id);
-        count[i - 1].total += count[i - 1].unassigned;
-      }
-    }
-
-    // Count orphaned unassigned items directly, since they have no parent
-    for (const i in unassignedItems) {
-      if (unassignedItems[i].children !== undefined) {
-        const unassignedCount = unassignedItems[i].children!.length;
-        count[i].total += unassignedCount;
-        count[i].unassigned += unassignedCount;
-      }
-    }
-    return count;
-  }, [shipment, unassigned]);
-
-  /** Set empty active item with selected type */
   const handleSetStep = useCallback(
     (step: number) => {
       if (step >= steps.length || isReview) {
@@ -116,7 +71,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
       router.push(`../../${newType}/new/edit`);
     },
-    [router, isReview],
+    [isReview, router],
   );
 
   /** Move to next shipment step */
@@ -134,40 +89,18 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
   const cannotFinish = useMemo(
     () =>
-      activeStep >= steps.length - 1 &&
-      (typeCount.some((count) => count.unassigned > 0) || shipment === null),
-    [activeStep, typeCount, shipment],
+      activeStep >= steps.length - 1 && hasUnassigned,
+    [activeStep, hasUnassigned],
   );
+
+  const handleTypeCountChanged = useCallback((typeCount: TypeCount[]) => {
+    setHasUnassigned(typeCount.some((count) => count.unassigned > 0))
+  }, [])
 
   return (
     <>
       <GridItem flexBasis='fill' flexShrink='0' w='100%' area='stepper'>
-        <Stepper colorScheme='green' h='60px' index={activeStep}>
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <HStack
-                aria-label={`${step.title} Step`}
-                onClick={() => handleSetStep(index)}
-                style={{ cursor: isReview ? "not-allowed" : "pointer" }}
-              >
-                <StepIndicator bg='white'>
-                  <StepStatus
-                    complete={<StepIcon />}
-                    incomplete={<StepNumber />}
-                    active={<StepNumber />}
-                  />
-                </StepIndicator>
-                <Box flexShrink='0'>
-                  <StepTitle>{step.title}</StepTitle>
-                  <StepDescription>
-                    {typeCount[index].total} {step.title}
-                  </StepDescription>
-                </Box>
-              </HStack>
-              <StepSeparator />
-            </Step>
-          ))}
-        </Stepper>
+        <ItemStepper steps={steps} onStepChanged={handleSetStep} onTypeCountChanged={handleTypeCountChanged} currentStep={currentStep}/>
         <Divider mb='10px' />
       </GridItem>
 
