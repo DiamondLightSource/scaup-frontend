@@ -68,7 +68,7 @@ const populatedGridBoxShipment = {
 
 describe("Grid Box", () => {
   it("should show modal when grid is clicked", () => {
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: defaultShipment },
     });
 
@@ -78,7 +78,7 @@ describe("Grid Box", () => {
   });
 
   it("should pre-populate positions with data from state", () => {
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -86,7 +86,7 @@ describe("Grid Box", () => {
   });
 
   it("should display message if no unassigned samples are available", () => {
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -104,7 +104,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: { ...defaultShipment, isEdit: true } },
     });
 
@@ -124,7 +124,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -137,7 +137,7 @@ describe("Grid Box", () => {
   });
 
   it("should render four grid slots by default", () => {
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
@@ -153,7 +153,7 @@ describe("Grid Box", () => {
             name='capacity'
             render={({ field }) => <input data-testid='cap' {...field} value='3'></input>}
           ></Controller>
-          <GridBox shipmentId='1' formContext={formContext} />
+          <GridBox parentId='1' formContext={formContext} />
         </>
       );
     };
@@ -178,7 +178,7 @@ describe("Grid Box", () => {
             values='test test'
             validation={nameValidation}
           />
-          <GridBox shipmentId='1' formContext={formContext} />
+          <GridBox parentId='1' formContext={formContext} />
         </>
       );
     };
@@ -218,7 +218,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: {
         shipment: { ...defaultShipment, activeItem: { ...gridBox, id: "new-gridBox" } },
       },
@@ -242,7 +242,7 @@ describe("Grid Box", () => {
       ),
     );
 
-    renderAndInjectForm(<GridBox shipmentId='1' />, {
+    renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: {
         shipment: {
           ...populatedGridBoxShipment,

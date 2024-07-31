@@ -7,31 +7,45 @@ import {
   selectActiveItem,
   selectIsEdit,
   setIsReview,
+  setNewActiveItem,
+  syncActiveItem,
   updateShipment,
   updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
 import {
   BaseShipmentItem,
-  checkIsRoot,
   getCurrentStepIndex,
+  internalEbicSteps,
   separateDetails,
-  steps,
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { ItemFormPageContentProps } from "@/types/generic";
+import { InventoryItemParams } from "@/types/generic";
 import { Item } from "@/utils/client/item";
-import { Box, Button, HStack, Spacer, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  HStack,
+  Skeleton,
+  Spacer,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
-const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
+const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
-    () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
+    () =>
+      internalEbicSteps[
+        getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)
+      ],
     [activeItem],
   );
   const router = useRouter();
@@ -41,6 +55,34 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const formContext = useForm<BaseShipmentItem>();
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
+
+  useEffect(() => {
+    if (params.itemId !== "new") {
+      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
+    } else {
+      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
+    }
+  }, [params, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      updateShipment({ shipmentId: params.topLevelContainerId, parentType: "topLevelContainer" }),
+    );
+    dispatch(
+      updateUnassigned({
+        shipmentId: params.topLevelContainerId,
+        parentType: "topLevelContainer",
+      }),
+    );
+  }, [params, dispatch]);
+
+  useEffect(() => {
+    if (params.itemId !== "new") {
+      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
+    } else {
+      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
+    }
+  }, [params, dispatch]);
 
   useEffect(() => {
     setRenderedForm(formMapping[formType]);
@@ -53,6 +95,9 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
 
     if ("registeredContainer" in formValues) {
       setRenderedForm((oldForm) => {
+        if (!oldForm) {
+          return oldForm;
+        }
         const newForm = structuredClone(oldForm);
         const nameIndex = newForm.findIndex((field) => field.id === "name");
         if (nameIndex !== -1) {
@@ -97,9 +142,10 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
 
       try {
         let newItem = await Item.create(
-          shipmentId,
+          params.topLevelContainerId,
           separateDetails(info, activeStep.endpoint),
           activeStep.endpoint,
+          "topLevelContainer",
         );
 
         if (Array.isArray(newItem)) {
@@ -109,14 +155,8 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         values.id = newItem.id;
         values.name = newItem.name ?? "";
 
-        if (checkIsRoot(values)) {
-          await dispatch(updateShipment({ shipmentId }));
-        } else {
-          await dispatch(updateUnassigned({ shipmentId }));
-        }
-
         toast({ title: "Successfully created item!" });
-        router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
+        router.replace(`../${info.type}/${newItem.id}`, { scroll: false });
       } catch {
         setAddLoading(false);
       }
@@ -127,40 +167,27 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           separateDetails(info, activeStep.endpoint),
           activeStep.endpoint,
         );
-        await dispatch(updateShipment({ shipmentId }));
-        await dispatch(updateUnassigned({ shipmentId }));
+
+        await dispatch(
+          updateShipment({
+            shipmentId: params.topLevelContainerId,
+            parentType: "topLevelContainer",
+          }),
+        );
+        await dispatch(
+          updateUnassigned({
+            shipmentId: params.topLevelContainerId,
+            parentType: "topLevelContainer",
+          }),
+        );
         toast({ title: "Successfully saved item!" });
-        router.replace(`../../${info.type}/${activeItem!.id}/edit`, { scroll: false });
+        router.replace(`../${info.type}/${activeItem!.id}`, { scroll: false });
       } catch {
         setAddLoading(false);
       }
     }
     setAddLoading(false);
   });
-
-  /*
-   * Should we perform a cascade delete, and delete the entire chain of children for the current object?
-   * I'd rather have the user perform this "explicitly", hence, why they should use the overview on
-   * the right
-   */
-
-  /*const handleDelete = useCallback(async () => {
-    if (activeIsEdit) {
-      const response = await authenticatedFetch.client(
-        `/shipments/${shipmentId}/${activeStep.endpoint}/${activeItem.id}`,
-        session,
-        {
-          method: "DELETE",
-        },
-      );
-
-      if (response && response.status === 204) {
-        dispatch(updateShipment({ session, shipmentId }));
-        dispatch(updateUnassigned({ session, shipmentId }));
-        handleNewItem();
-      }
-    }
-  }, [handleNewItem, dispatch, activeIsEdit, activeItem, activeStep, session, shipmentId]);*/
 
   useEffect(() => {
     if (activeItem) {
@@ -169,45 +196,73 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   }, [activeItem]);
 
   const redirectToNew = useCallback(() => {
-    router.replace("../new/edit");
+    router.replace("new");
   }, [router]);
 
-  // This does not get rendered if there is no active item, so it's safe to assume it's not null
-
   return (
-    <FormProvider {...formContext}>
-      <form
-        onSubmit={onSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          flex: "1 0 auto",
-          gap: "1em",
-        }}
-      >
-        <HStack py='3' flex='1 0 auto' alignItems='start'>
-          <Box flex='1 0 auto'>
-            <DynamicForm
-              onWatchedUpdated={handleWatchedUpdated}
-              formType={renderedForm}
-              defaultValues={activeItem!.data}
-              prepopData={prepopData}
-            />
-          </Box>
-          <Container containerType={formType} parentId={shipmentId} formContext={formContext} />
-        </HStack>
-        <HStack h='3.5em' px='1em' bg='gray.200'>
-          <Spacer />
-          <Button onClick={redirectToNew} isDisabled={!activeIsEdit}>
-            Create New Item
-          </Button>
-          <Button isLoading={isAddLoading} type='submit'>
-            {activeIsEdit ? "Save" : "Add"}
-          </Button>
-        </HStack>
-      </form>
-    </FormProvider>
+    <>
+      {activeItem ? (
+        <VStack w='100%' h='100%' alignItems='start' gap='0'>
+          <Heading size='md' color='gray.600'>
+            {activeStep.singular}
+          </Heading>
+          <HStack w='100%'>
+            <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
+            <Spacer />
+          </HStack>
+          <Divider borderColor='gray.800' />
+          <FormProvider {...formContext}>
+            <form
+              onSubmit={onSubmit}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1em",
+                flex: "1 0 0",
+                width: "100%",
+              }}
+            >
+              <HStack py='3' flex='1 0 auto' alignItems='start'>
+                <Box flex='1 0 auto'>
+                  <DynamicForm
+                    onWatchedUpdated={handleWatchedUpdated}
+                    formType={renderedForm}
+                    defaultValues={activeItem?.data ?? undefined}
+                  />
+                </Box>
+                <Container
+                  containerType={formType}
+                  parentId={params.topLevelContainerId}
+                  formContext={formContext}
+                  parentType='topLevelContainer'
+                />
+              </HStack>
+              <HStack h='3.5em' px='1em' bg='gray.200'>
+                <Spacer />
+                <Button
+                  onClick={redirectToNew}
+                  isDisabled={
+                    !activeIsEdit ||
+                    ["dewar", "grid", "sample"].includes(activeItem?.data.type ?? "")
+                  }
+                >
+                  Create New Item
+                </Button>
+                <Button isLoading={isAddLoading} type='submit'>
+                  {activeIsEdit ? "Save" : "Add"}
+                </Button>
+              </HStack>
+            </form>
+          </FormProvider>
+        </VStack>
+      ) : (
+        <VStack alignItems='stretch' h='100%' w='100%'>
+          <Skeleton h='4em' />
+          <Skeleton flex='1 0 0' />
+          <Skeleton h='3.5em' />
+        </VStack>
+      )}
+    </>
   );
 };
 

@@ -1,8 +1,10 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, Step } from "@/mappings/pages";
+import { RootParentType } from "@/types/generic";
 import { CreationResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
 import { createStandaloneToast } from "@chakra-ui/react";
+import { parentTypeToEndpoint } from "@/utils/client/shipment";
 
 const { toast } = createStandaloneToast();
 
@@ -57,11 +59,16 @@ export class Item {
   }
 
   static async create(
-    parentId: TreeData["id"],
+    parentId: TreeData["id"] | null,
     data: Record<string, any>,
     endpoint: Step["endpoint"],
+    parentType: RootParentType = "shipment",
   ): Promise<CreationResponse | CreationResponse[]> {
-    return genericCreateItem(`/shipments/${parentId}/${endpoint}`, data);
+    const parentEndpoint = parentTypeToEndpoint[parentType];
+    return genericCreateItem(
+      `/${parentEndpoint}${parentType === "shipment" && parentId ? `/${parentId}` : ""}/${endpoint}`,
+      data,
+    );
   }
 
   static async delete(itemId: TreeData["id"], endpoint: Step["endpoint"]) {
@@ -76,4 +83,12 @@ export class Item {
       throw new Error("Failed to delete item");
     }
   }
+}
+
+export class InternalItem {
+  static async create(
+    parentId: TreeData["id"],
+    data: Record<string, any>,
+    endpoint: Step["endpoint"],
+  ) {}
 }

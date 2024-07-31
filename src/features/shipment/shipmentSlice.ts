@@ -2,24 +2,29 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { setInUnassignedClone } from "@/features/shipment/utils";
 import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";
+import { RootParentType } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
+import { parentTypeToEndpoint } from "@/utils/client/shipment";
 import { recursiveFind, setTagInPlace } from "@/utils/tree";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 const { toast } = createStandaloneToast();
 
-interface ShipmentThunkParams {
+export interface ShipmentThunkParams {
   shipmentId: string;
+  parentType?: RootParentType;
 }
 
 export const updateShipment = createAsyncThunk(
   "shipment/updateShipment",
-  async ({ shipmentId }: ShipmentThunkParams, thunkAPI) => {
-    const response = await authenticatedFetch.client(`/shipments/${shipmentId}`);
+  async ({ shipmentId, parentType = "shipment" }: ShipmentThunkParams, thunkAPI) => {
+    const parentEndpoint = parentTypeToEndpoint[parentType];
+    const response = await authenticatedFetch.client(`/${parentEndpoint}/${shipmentId}`);
     if (response && response.status === 200) {
-      return (await response.json()).children;
+      const shipment = await response.json();
+      return parentType === "shipment" ? shipment.children : [shipment];
     } else {
       toast({ title: "An error ocurred", description: "Unable to retrieve shipment data" });
       thunkAPI.rejectWithValue(null);
@@ -29,11 +34,17 @@ export const updateShipment = createAsyncThunk(
 
 export const updateUnassigned = createAsyncThunk(
   "shipment/updateUnassigned",
-  async ({ shipmentId }: ShipmentThunkParams, thunkAPI) => {
-    const response = await authenticatedFetch.client(`/shipments/${shipmentId}/unassigned`);
+  async ({ shipmentId, parentType = "shipment" }: ShipmentThunkParams, thunkAPI) => {
+    const parentEndpoint = parentTypeToEndpoint[parentType];
+    const endpointPrefix = `/${parentEndpoint}${parentType === "shipment" ? `/${shipmentId}` : ""}`;
+    const response = await authenticatedFetch.client(`${endpointPrefix}/unassigned`);
     if (response) {
       if (response.status === 200) {
-        return await response.json();
+        const unassigned = await response.json();
+        if (parentType === "topLevelContainer") {
+          return { gridBoxes: [], samples: [], containers: unassigned.items };
+        }
+        return unassigned;
       } else if (response.status === 404) {
         return { gridBoxes: [], samples: [], containers: [] };
       }

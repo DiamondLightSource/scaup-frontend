@@ -7,7 +7,7 @@ export const authOptions: NextAuthOptions = {
       const newSession = {
         ...session,
         accessToken: token.accessToken,
-        permissions: token.permissions
+        permissions: token.permissions,
       };
       return newSession;
     },

@@ -9,6 +9,7 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
+import { RootParentType } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { Box, Divider, Heading, Skeleton, useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
@@ -16,16 +17,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 export interface ShipmentOverviewInnerProps {
   onActiveChanged: (data: TreeData) => void;
-  proposal: string;
-  shipmentId: string;
+  title: string;
+  parentId: string;
   readOnly?: boolean;
+  parentType?: RootParentType;
 }
 
-const ShipmentOverview = ({
-  proposal,
-  shipmentId,
+export const ShipmentOverview = ({
+  title,
+  parentId,
   onActiveChanged,
   readOnly = false,
+  parentType = "shipment",
 }: ShipmentOverviewInnerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const unassigned = useSelector(selectUnassigned);
@@ -42,12 +45,12 @@ const ShipmentOverview = ({
 
       await Item.patch(item.id, body, endpoint);
       await Promise.all([
-        dispatch(updateShipment({ shipmentId })),
-        dispatch(updateUnassigned({ shipmentId })),
+        dispatch(updateShipment({ shipmentId: parentId, parentType })),
+        dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
       ]);
       dispatch(syncActiveItem());
     },
-    [dispatch, shipmentId],
+    [dispatch, parentId, parentType],
   );
 
   const deleteItem = useCallback(
@@ -57,13 +60,13 @@ const ShipmentOverview = ({
       toast({ title: "Successfully removed item!" });
 
       if (endpoint === "topLevelContainers") {
-        await dispatch(updateShipment({ shipmentId }));
+        await dispatch(updateShipment({ shipmentId: parentId, parentType }));
       } else {
-        await dispatch(updateUnassigned({ shipmentId }));
+        await dispatch(updateUnassigned({ shipmentId: parentId, parentType }));
       }
       dispatch(syncActiveItem());
     },
-    [shipmentId, dispatch, toast],
+    [parentId, dispatch, toast, parentType],
   );
 
   /** Remove item from assigned item list (or delete, if root item) */
@@ -93,7 +96,7 @@ const ShipmentOverview = ({
   return (
     <>
       <Heading size='md' color='gray.600'>
-        {proposal}
+        {title}
       </Heading>
       <Heading>Overview</Heading>
       <Divider borderColor='gray.800' />
@@ -125,5 +128,3 @@ const ShipmentOverview = ({
     </>
   );
 };
-
-export default ShipmentOverview;

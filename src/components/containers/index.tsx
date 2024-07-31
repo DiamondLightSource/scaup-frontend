@@ -14,12 +14,14 @@ import { useRouter } from "next/navigation";
 import { UseFormReturn, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
-import { Puck } from "./puck";
+import { Puck } from "@/components/containers/puck";
+import { RootParentType } from "@/types/generic";
 
 export interface BaseContainerProps {
   /** Shipment ID */
-  shipmentId: string;
+  parentId: string;
   formContext?: UseFormReturn<BaseShipmentItem>;
+  parentType?: RootParentType;
 }
 
 export interface ContainerProps extends BaseContainerProps {
@@ -28,21 +30,23 @@ export interface ContainerProps extends BaseContainerProps {
 }
 
 export interface ChildLocationManagerProps {
-  shipmentId: string;
+  parentId: string;
   parent?: Step["endpoint"];
   child?: Step["endpoint"];
   /** Container creation data preset, used when creating new containers automatically */
   containerCreationPreset?: Record<string, any>;
+  parentType?: RootParentType;
 }
 
 /**
  * Hook for managing a child's location in a parent container
  */
 export const useChildLocationManager = ({
-  shipmentId,
+  parentId,
   parent = "containers",
   child = "containers",
   containerCreationPreset = {},
+  parentType = "shipment",
 }: ChildLocationManagerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
@@ -78,9 +82,10 @@ export const useChildLocationManager = ({
     // If container does not exist yet in database, we must create it
     if (!isEdit) {
       const newItem = await Item.create(
-        shipmentId,
+        parentId,
         { ...containerCreationPreset, ...values },
         parent,
+        parentType,
       );
       actualContainerId = (Array.isArray(newItem) ? newItem[0].id : newItem.id) as number;
     } else {
@@ -130,8 +135,8 @@ export const useChildLocationManager = ({
     );
 
     await Promise.all([
-      dispatch(updateShipment({ shipmentId })),
-      dispatch(updateUnassigned({ shipmentId })),
+      dispatch(updateShipment({ shipmentId: parentId, parentType })),
+      dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
     ]);
 
     dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
@@ -143,10 +148,6 @@ export const useChildLocationManager = ({
   return setLocation;
 };
 
-/**
- * Grid box component. Should be used in conjunction with a field allowing the user to select
- * how many slots (capacity) the grid box should have, inside the parent form.
- */
 export const Container = ({ containerType, ...props }: ContainerProps) => {
   switch (containerType) {
     case "gridBox":

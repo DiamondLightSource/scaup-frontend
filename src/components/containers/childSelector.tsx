@@ -1,7 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
-import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { BaseChildSelectorProps } from "@/types/generic";
 import {
   Box,
   Button,
@@ -15,7 +15,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  ModalProps,
   Radio,
   RadioGroup,
   Spacer,
@@ -28,13 +27,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
-export interface ChildSelectorProps extends Omit<ModalProps, "children"> {
-  /** Currently selected item for container position */
-  selectedItem?: TreeData<PositionedItem> | null;
-  /** Callback for item selection event */
-  onSelect?: (child: TreeData<BaseShipmentItem>) => Promise<void>;
-  /** Callback for item removal revent */
-  onRemove?: (child: TreeData<PositionedItem>) => Promise<void>;
+export interface ChildSelectorProps extends BaseChildSelectorProps {
   /** Type of container's children */
   childrenType: BaseShipmentItem["type"];
   /** Disable editing controls */

@@ -47,12 +47,6 @@ export const internalEbicSteps: Step[] = [
     singular: "Cane",
     endpoint: "containers",
   },
-  {
-    title: "Dewars",
-    id: ["dewar"],
-    singular: "Dewar",
-    endpoint: "topLevelContainers",
-  },
 ];
 
 export const pluralToSingular: Record<string, string> = {
@@ -62,8 +56,11 @@ export const pluralToSingular: Record<string, string> = {
   dewars: "dewar",
 };
 
-export const getCurrentStepIndex = (itemType: BaseShipmentItem["type"]) => {
-  const currentIndex = steps.findIndex((step) => {
+export const getCurrentStepIndex = (
+  itemType: BaseShipmentItem["type"],
+  stepsToSearch: Step[] = steps,
+) => {
+  const currentIndex = stepsToSearch.findIndex((step) => {
     if (Array.isArray(step.id)) {
       return step.id.includes(itemType);
     } else {

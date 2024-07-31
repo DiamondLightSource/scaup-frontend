@@ -1,19 +1,15 @@
 "use client";
 import { ItemStepper, TypeCount } from "@/components/navigation/ItemStepper";
-import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
   selectIsReview,
-  selectItems,
-  selectUnassigned,
   setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { ItemParams } from "@/types/generic";
-import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Button,
   Divider,
@@ -88,19 +84,23 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   }, [handleSetStep, activeStep, router, isReview]);
 
   const cannotFinish = useMemo(
-    () =>
-      activeStep >= steps.length - 1 && hasUnassigned,
+    () => activeStep >= steps.length - 1 && hasUnassigned,
     [activeStep, hasUnassigned],
   );
 
   const handleTypeCountChanged = useCallback((typeCount: TypeCount[]) => {
-    setHasUnassigned(typeCount.some((count) => count.unassigned > 0))
-  }, [])
+    setHasUnassigned(typeCount.some((count) => count.unassigned > 0));
+  }, []);
 
   return (
     <>
       <GridItem flexBasis='fill' flexShrink='0' w='100%' area='stepper'>
-        <ItemStepper steps={steps} onStepChanged={handleSetStep} onTypeCountChanged={handleTypeCountChanged} currentStep={currentStep}/>
+        <ItemStepper
+          steps={steps}
+          onStepChanged={handleSetStep}
+          onTypeCountChanged={handleTypeCountChanged}
+          currentStep={currentStep}
+        />
         <Divider mb='10px' />
       </GridItem>
 

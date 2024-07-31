@@ -1,4 +1,4 @@
-import ShipmentOverview from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
@@ -21,12 +21,9 @@ defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck)
 
 describe("Shipment Overview", () => {
   it("should render tree", () => {
-    renderWithProviders(
-      <ShipmentOverview shipmentId='1' onActiveChanged={() => {}} proposal='' />,
-      {
-        preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
-      },
-    );
+    renderWithProviders(<ShipmentOverview parentId='1' onActiveChanged={() => {}} title='' />, {
+      preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
+    });
 
     const dewarAccordion = screen.getByText("dewar");
     expect(dewarAccordion).toBeInTheDocument();
@@ -56,12 +53,9 @@ describe("Shipment Overview", () => {
       ),
     );
 
-    renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
-      {
-        preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
-      },
-    );
+    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+      preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
+    });
 
     fireEvent.click(screen.getByText("dewar"));
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
@@ -74,14 +68,11 @@ describe("Shipment Overview", () => {
   });
 
   it("should remove root item completely when remove is clicked", async () => {
-    renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
-      {
-        preloadedState: {
-          shipment: { ...testInitialState, items: [{ ...defaultShipment[0], children: [] }] },
-        },
+    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+      preloadedState: {
+        shipment: { ...testInitialState, items: [{ ...defaultShipment[0], children: [] }] },
       },
-    );
+    });
 
     await screen.findByText("dewar");
 
@@ -92,7 +83,7 @@ describe("Shipment Overview", () => {
 
   it("should update active item if removed item is the active item", async () => {
     const { store } = renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      <ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />,
       {
         preloadedState: {
           shipment: {
@@ -111,7 +102,7 @@ describe("Shipment Overview", () => {
 
   it("should not render body if shipment data is null", async () => {
     const { store } = renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
+      <ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />,
       { preloadedState: { shipment: { ...testInitialState, items: null } } },
     );
 
@@ -143,14 +134,11 @@ describe("Shipment Overview", () => {
       ),
     );
 
-    renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
-      {
-        preloadedState: {
-          shipment: { ...testInitialState, unassigned: unassignedWithAssignedItem },
-        },
+    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+      preloadedState: {
+        shipment: { ...testInitialState, unassigned: unassignedWithAssignedItem },
       },
-    );
+    });
 
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
     await waitFor(() => expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(2));
@@ -168,14 +156,11 @@ describe("Shipment Overview", () => {
       ),
     );
 
-    renderWithProviders(
-      <ShipmentOverview shipmentId='1' proposal='' onActiveChanged={() => {}} />,
-      {
-        preloadedState: {
-          shipment: { ...testInitialState, unassigned: defaultUnassigned },
-        },
+    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+      preloadedState: {
+        shipment: { ...testInitialState, unassigned: defaultUnassigned },
       },
-    );
+    });
 
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
 

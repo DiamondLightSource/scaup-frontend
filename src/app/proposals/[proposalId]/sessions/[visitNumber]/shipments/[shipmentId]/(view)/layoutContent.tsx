@@ -1,6 +1,6 @@
 "use client";
 
-import ShipmentOverview from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   defaultUnassigned,
@@ -74,9 +74,9 @@ const ShipmentsLayoutContent = ({
       <VStack spacing='0' alignItems='start'>
         <ShipmentOverview
           readOnly={isReview}
-          shipmentId={params.shipmentId}
+          parentId={params.shipmentId}
           onActiveChanged={handleActiveChanged}
-          proposal={params.proposalId}
+          title={params.proposalId}
         />
       </VStack>
     </Grid>

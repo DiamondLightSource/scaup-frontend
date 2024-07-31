@@ -8,9 +8,9 @@ import { Box, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { BaseContainerProps, useChildLocationManager } from ".";
-import { GenericChildSlot } from "./child";
+import { GenericChildSlot } from "@/components/containers/child";
 
-export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
+export const Puck = ({ parentId, formContext }: BaseContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentGridBox = useSelector(selectActiveItem);
   const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
@@ -27,7 +27,7 @@ export const Puck = ({ shipmentId, formContext }: BaseContainerProps) => {
   }, [currentGridBox]);
 
   const setLocation = useChildLocationManager({
-    shipmentId,
+    parentId,
     containerCreationPreset: { capacity: 16, type: "puck" },
   });
 

@@ -44,7 +44,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderAndInjectForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck parentId='1' />, {
       preloadedState: defaultShipment,
     });
 
@@ -56,7 +56,7 @@ describe("Puck", () => {
   });
 
   it("should render 16 puck slots", () => {
-    renderAndInjectForm(<Puck shipmentId='1' />);
+    renderAndInjectForm(<Puck parentId='1' />);
 
     expect(screen.getAllByRole("button")).toHaveLength(16);
     screen.getByTestId("1-empty");
@@ -72,7 +72,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderAndInjectForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck parentId='1' />, {
       preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
     });
 
@@ -84,7 +84,7 @@ describe("Puck", () => {
   });
 
   it("should populate slots with data from state", () => {
-    renderAndInjectForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck parentId='1' />, {
       preloadedState: {
         shipment: {
           ...testInitialState,
@@ -109,7 +109,7 @@ describe("Puck", () => {
       ),
     );
 
-    renderAndInjectForm(<Puck shipmentId='1' />, {
+    renderAndInjectForm(<Puck parentId='1' />, {
       preloadedState: {
         shipment: {
           ...testInitialState,

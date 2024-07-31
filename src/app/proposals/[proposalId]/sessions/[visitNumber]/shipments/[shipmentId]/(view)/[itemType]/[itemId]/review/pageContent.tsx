@@ -46,7 +46,7 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
         ) : (
           <Skeleton h='80%' w='100%' />
         )}
-        <Container shipmentId={shipmentId} containerType={activeItem!.data.type} />
+        <Container parentId={shipmentId} containerType={activeItem!.data.type} />
       </Box>
       <Alert status='info' variant='info'>
         <AlertIcon />

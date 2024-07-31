@@ -63,7 +63,9 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
               Inventory
             </NavLink>
           </NavLinks>
-        ) : <></>}
+        ) : (
+          <></>
+        )}
         <User
           user={
             session && session.user

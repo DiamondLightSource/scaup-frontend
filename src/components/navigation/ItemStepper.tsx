@@ -1,6 +1,6 @@
 "use client";
 import { selectIsReview, selectItems, selectUnassigned } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, getCurrentStepIndex, Step } from "@/mappings/pages";
+import { Step } from "@/mappings/pages";
 import { recursiveCountChildrenByType } from "@/utils/tree";
 import {
   Stepper,
@@ -16,9 +16,8 @@ import {
   StepSeparator,
   StepperProps,
 } from "@chakra-ui/react";
-import { useRouter } from "next-router-mock";
-import { useCallback, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
 
 export interface TypeCount {
@@ -42,6 +41,7 @@ export const ItemStepper = ({
   onStepChanged,
   onTypeCountChanged,
   currentStep,
+  ...props
 }: ItemStepperProps) => {
   const isReview = useSelector(selectIsReview);
   const shipment = useSelector(selectItems);
@@ -88,10 +88,10 @@ export const ItemStepper = ({
     if (onTypeCountChanged) {
       onTypeCountChanged(typeCount);
     }
-  }, [typeCount, onTypeCountChanged])
+  }, [typeCount, onTypeCountChanged]);
 
   return (
-    <Stepper colorScheme='green' h='60px' index={activeStep}>
+    <Stepper colorScheme='green' h='60px' index={activeStep} {...props}>
       {steps.map((step, index) => (
         <ChakraStep key={index}>
           <HStack

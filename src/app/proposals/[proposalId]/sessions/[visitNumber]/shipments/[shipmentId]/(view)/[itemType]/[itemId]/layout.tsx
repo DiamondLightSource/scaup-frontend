@@ -10,10 +10,8 @@ export interface ShipmentsLayoutProps {
 }
 
 const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
-  const data = (await getShipmentData(
-    params.shipmentId,
-  )) as components["schemas"]["ShipmentChildren"];
-  const isBooked = data && data.data.status === "Booked";
+  const data = await getShipmentData(params.shipmentId);
+  const isBooked = data !== null && data.data.status === "Booked";
 
   return (
     <ShipmentsLayoutContent params={params} isBooked={isBooked}>
