@@ -94,11 +94,11 @@ export const SampleSelector = ({
         <ModalCloseButton />
         <ModalBody>
           {selectedItem && (
-            <Box>
+            <Box mb='30px'>
               <HStack w='100%'>
                 <Heading size='md'>Current Sample</Heading>
                 <Spacer />
-                <Button onClick={handleRemoveClicked} bg='red.500' size='sm'>
+                <Button onClick={handleRemoveClicked} bg='red.500' size='sm' isLoading={isLoading}>
                   Remove
                 </Button>
               </HStack>
@@ -117,13 +117,13 @@ export const SampleSelector = ({
                   <StatNumber>{selectedItem.name}</StatNumber>
                 </Stat>
               </HStack>
-              <Heading mt='30px' size='md'>
-                Select Sample from Existing Shipment
-              </Heading>
-              <Divider />
             </Box>
           )}
-          <Text fontWeight='600'>Proposal Reference</Text>
+          <Heading size='md'>Select Sample from Existing Shipment</Heading>
+          <Divider />
+          <Text mt='10px' fontWeight='600'>
+            Proposal Reference
+          </Text>
           <Input
             variant='hi-contrast'
             value={proposalReference}
@@ -134,7 +134,7 @@ export const SampleSelector = ({
           </Button>
           {samples !== undefined ? (
             samples !== null && samples.length > 0 ? (
-              <VStack w='100%'>
+              <VStack w='100%' alignItems='start'>
                 <RadioGroup w='100%' onChange={setRadioIndex}>
                   {samples.map((item, i) => (
                     <HStack
@@ -154,7 +154,6 @@ export const SampleSelector = ({
                 </RadioGroup>
                 <Button
                   isDisabled={radioIndex === null}
-                  ml='0.5em'
                   onClick={handleItemSelected}
                   isLoading={isLoading}
                 >
@@ -162,7 +161,7 @@ export const SampleSelector = ({
                 </Button>
               </VStack>
             ) : (
-              <Heading variant='notFound' size='md'>
+              <Heading variant='notFound' size='md' ml='0'>
                 No samples available for this session.
               </Heading>
             )
