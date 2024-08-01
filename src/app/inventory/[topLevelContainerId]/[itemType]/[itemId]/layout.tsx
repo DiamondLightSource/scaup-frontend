@@ -1,10 +1,11 @@
 import { authenticatedFetch } from "@/utils/client";
-import ItemLayoutContent, { InventoryItemLayoutProps } from "./layoutContent";
+import { ItemLayoutContent } from "./layoutContent";
 import React from "react";
 import { getShipmentData } from "@/utils/client/shipment";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
+import { InventoryItemLayoutProps } from "@/types/generic";
 
 const getUnassignedItems = async () => {
   const res = await authenticatedFetch.server("/internal-containers/unassigned", {

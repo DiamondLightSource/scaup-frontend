@@ -8,6 +8,11 @@ export interface ItemFormPageContentProps {
   prepopData: Record<string, any>;
 }
 
+export interface InventoryItemLayoutProps {
+  children: React.ReactElement;
+  params: InventoryItemParams;
+}
+
 export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Currently selected item for container position */
   selectedItem?: TreeData<PositionedItem> | null;

@@ -1,5 +1,5 @@
 "use client";
-import { InventoryItemParams } from "@/types/generic";
+import { InventoryItemLayoutProps, InventoryItemParams } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
 import { setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
@@ -12,19 +12,17 @@ import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
 
-export interface InventoryItemLayoutProps {
-  children: React.ReactElement;
-  params: InventoryItemParams;
+export interface InventoryItemLayoutContentProps extends InventoryItemLayoutProps {
   shipmentData: TreeData<BaseShipmentItem> | null;
   unassignedItems: components["schemas"]["Paged_GenericItem_"] | null;
 }
 
-const ItemLayout = ({
+export const ItemLayoutContent = ({
   children,
   shipmentData,
   unassignedItems,
   params,
-}: InventoryItemLayoutProps) => {
+}: InventoryItemLayoutContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
@@ -95,5 +93,3 @@ const ItemLayout = ({
     </VStack>
   );
 };
-
-export default ItemLayout;

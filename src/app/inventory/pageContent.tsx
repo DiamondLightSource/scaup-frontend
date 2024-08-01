@@ -46,7 +46,6 @@ export const TopLevelContainerCreationForm = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "20em",
           flex: "1 0 auto",
         }}
       >
