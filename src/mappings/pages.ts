@@ -21,7 +21,7 @@ export const steps: Step[] = [
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
     title: "Containers",
-    id: ["puck", "falconTube", "genericContainer"],
+    id: ["puck", "falconTube", "genericContainer", "cane"],
     singular: "Container",
     endpoint: "containers",
   },
