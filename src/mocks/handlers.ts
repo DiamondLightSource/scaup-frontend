@@ -85,6 +85,10 @@ export const handlers = [
     }),
   ),
 
+  http.post("http://localhost/api/internal-containers/topLevelContainers", () =>
+    HttpResponse.json({ name: "TLC Name", id: 1 }, { status: 201 }),
+  ),
+
   // Samples
 
   http.get("http://localhost/api/shipments/:shipmentId/samples", () =>
@@ -93,6 +97,10 @@ export const handlers = [
       total: 1,
       limit: 20,
     }),
+  ),
+
+  http.get("http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples", () =>
+    HttpResponse.json({ items: [{ id: 1, name: "sample-in-session", data: { type: "sample" } }] }),
   ),
 
   // Containers
@@ -105,6 +113,24 @@ export const handlers = [
         total: 1,
         limit: 20,
       }),
+  ),
+
+  http.post("http://localhost/api/internal-containers/containers", () =>
+    HttpResponse.json({ name: "Container", id: 1 }, { status: 201 }),
+  ),
+
+  // Inventory
+
+  http.get("http://localhost/api/internal-containers/unassigned", () =>
+    HttpResponse.json({
+      items: [{ name: "Container", id: 1 }],
+      total: 1,
+      limit: 20,
+    }),
+  ),
+
+  http.get("http://localhost/api/internal-containers/:topLevelContainerId", () =>
+    HttpResponse.json(defaultData),
   ),
 
   // Proposal metadata

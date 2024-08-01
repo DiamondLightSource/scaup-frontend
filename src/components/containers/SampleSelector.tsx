@@ -132,35 +132,41 @@ export const SampleSelector = ({
           <Button w='150px' mt='1em' type='submit' isLoading={isLoading} onClick={onSessionSelect}>
             Select
           </Button>
-          {samples && (
-            <VStack w='100%'>
-              <RadioGroup w='100%' onChange={setRadioIndex}>
-                {samples.map((item, i) => (
-                  <HStack
-                    w='100%'
-                    key={item.id}
-                    borderBottom='1px solid'
-                    borderColor='diamond.200'
-                    py='10px'
-                  >
-                    <Stat>
-                      <StatLabel>Sample</StatLabel>
-                      <StatNumber>{item.name}</StatNumber>
-                    </Stat>
-                    <Radio borderColor='black' value={i.toString()} size='lg' />
-                  </HStack>
-                ))}
-              </RadioGroup>
-              <Button
-                isDisabled={radioIndex === null}
-                ml='0.5em'
-                onClick={handleItemSelected}
-                isLoading={isLoading}
-              >
-                Apply
-              </Button>
-            </VStack>
-          )}
+          {samples !== undefined ? (
+            samples !== null && samples.length > 0 ? (
+              <VStack w='100%'>
+                <RadioGroup w='100%' onChange={setRadioIndex}>
+                  {samples.map((item, i) => (
+                    <HStack
+                      w='100%'
+                      key={item.id}
+                      borderBottom='1px solid'
+                      borderColor='diamond.200'
+                      py='10px'
+                    >
+                      <Stat>
+                        <StatLabel>Sample</StatLabel>
+                        <StatNumber>{item.name}</StatNumber>
+                      </Stat>
+                      <Radio borderColor='black' value={i.toString()} size='lg' />
+                    </HStack>
+                  ))}
+                </RadioGroup>
+                <Button
+                  isDisabled={radioIndex === null}
+                  ml='0.5em'
+                  onClick={handleItemSelected}
+                  isLoading={isLoading}
+                >
+                  Apply
+                </Button>
+              </VStack>
+            ) : (
+              <Heading variant='notFound' size='md'>
+                No samples available for this session.
+              </Heading>
+            )
+          ) : null}
         </ModalBody>
       </ModalContent>
     </Modal>

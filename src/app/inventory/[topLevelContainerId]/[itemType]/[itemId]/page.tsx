@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ItemFormPageContent from "./pageContent";
+import { ItemFormPageContent } from "./pageContent";
 import { InventoryItemParams } from "@/types/generic";
 
 export const metadata: Metadata = {

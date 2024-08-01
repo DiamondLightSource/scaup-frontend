@@ -1,7 +1,7 @@
 import InventoryPage from "@/app/inventory/page";
 import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
 describe("Proposal Page Content", () => {

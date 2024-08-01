@@ -37,7 +37,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
-const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
+export const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
@@ -55,26 +55,6 @@ const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
   const formContext = useForm<BaseShipmentItem>();
   const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
-
-  useEffect(() => {
-    if (params.itemId !== "new") {
-      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
-    } else {
-      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
-    }
-  }, [params, dispatch]);
-
-  useEffect(() => {
-    dispatch(
-      updateShipment({ shipmentId: params.topLevelContainerId, parentType: "topLevelContainer" }),
-    );
-    dispatch(
-      updateUnassigned({
-        shipmentId: params.topLevelContainerId,
-        parentType: "topLevelContainer",
-      }),
-    );
-  }, [params, dispatch]);
 
   useEffect(() => {
     if (params.itemId !== "new") {
@@ -127,7 +107,6 @@ const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
 
   const onSubmit = formContext.handleSubmit(async (info: Omit<BaseShipmentItem, "type">) => {
     if (!activeIsEdit && activeItem) {
-      // TODO: find better way of setting the loading state to false
       setAddLoading(true);
 
       // Temporary measure, at least whilst all samples are in grids
@@ -152,34 +131,37 @@ const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
           newItem = newItem[0];
         }
 
+        toast({ title: "Successfully created item!" });
+
         values.id = newItem.id;
         values.name = newItem.name ?? "";
 
-        toast({ title: "Successfully created item!" });
         router.replace(`../${info.type}/${newItem.id}`, { scroll: false });
       } catch {
         setAddLoading(false);
       }
     } else {
       try {
-        await Item.patch(
-          activeItem!.id,
-          separateDetails(info, activeStep.endpoint),
-          activeStep.endpoint,
-        );
+        await Promise.all([
+          Item.patch(
+            activeItem!.id,
+            separateDetails(info, activeStep.endpoint),
+            activeStep.endpoint,
+          ),
+          dispatch(
+            updateShipment({
+              shipmentId: params.topLevelContainerId,
+              parentType: "topLevelContainer",
+            }),
+          ),
+          await dispatch(
+            updateUnassigned({
+              shipmentId: params.topLevelContainerId,
+              parentType: "topLevelContainer",
+            }),
+          ),
+        ]);
 
-        await dispatch(
-          updateShipment({
-            shipmentId: params.topLevelContainerId,
-            parentType: "topLevelContainer",
-          }),
-        );
-        await dispatch(
-          updateUnassigned({
-            shipmentId: params.topLevelContainerId,
-            parentType: "topLevelContainer",
-          }),
-        );
         toast({ title: "Successfully saved item!" });
         router.replace(`../${info.type}/${activeItem!.id}`, { scroll: false });
       } catch {
@@ -265,5 +247,3 @@ const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
     </>
   );
 };
-
-export default ItemFormPageContent;

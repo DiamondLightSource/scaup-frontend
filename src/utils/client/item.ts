@@ -55,7 +55,10 @@ export class Item {
   }
 
   static async createShipment(proposalId: string, visitNumber: string, data: Record<string, any>) {
-    return genericCreateItem(`/proposals/${proposalId}/sessions/${visitNumber}/shipments`, data);
+    return await genericCreateItem(
+      `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
+      data,
+    );
   }
 
   static async create(
@@ -65,7 +68,7 @@ export class Item {
     parentType: RootParentType = "shipment",
   ): Promise<CreationResponse | CreationResponse[]> {
     const parentEndpoint = parentTypeToEndpoint[parentType];
-    return genericCreateItem(
+    return await genericCreateItem(
       `/${parentEndpoint}${parentType === "shipment" && parentId ? `/${parentId}` : ""}/${endpoint}`,
       data,
     );
