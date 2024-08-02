@@ -95,6 +95,18 @@ export const handlers = [
     }),
   ),
 
+  // Containers
+
+  http.get(
+    "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/containers",
+    () =>
+      HttpResponse.json({
+        items: [{ name: "Container", id: 1 }],
+        total: 1,
+        limit: 20,
+      }),
+  ),
+
   // Proposal metadata
 
   http.get("http://localhost/api/proposals/:proposalReference/data", () =>

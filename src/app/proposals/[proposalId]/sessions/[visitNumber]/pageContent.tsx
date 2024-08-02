@@ -11,10 +11,17 @@ import { FormProvider, useForm } from "react-hook-form";
 
 interface ShipmentData {
   name: string;
+  importSamples: boolean;
 }
 
 const shipmentForm = [
   { id: "name", label: "Name", type: "text", validation: { required: "Required" } },
+  {
+    id: "importSamples",
+    label: "Use Existing Samples",
+    hint: "Use samples from an existing shipment, which are already stored in the facility",
+    type: "checkbox",
+  },
 ] as DynamicFormEntry[];
 
 export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams) => {
@@ -29,7 +36,9 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
         name: info.name,
       })) as CreationResponse;
 
-      router.push(`${visitNumber}/shipments/${newShipment.id}/edit`);
+      router.push(
+        `${visitNumber}/shipments/${newShipment.id}/${info.importSamples ? "import-samples?new=true" : "edit"}`,
+      );
     } catch (e) {
     } finally {
       setIsLoading(false);

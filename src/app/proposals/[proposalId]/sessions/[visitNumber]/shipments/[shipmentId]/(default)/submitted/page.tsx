@@ -51,8 +51,9 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
         <Text fontSize='18px' my='1em'>
-          Your sample information was <b>successfully submitted!</b> You may now arrange for your
-          samples to be shipped to Diamond, or{" "}
+          Your sample information was <b>successfully submitted!</b> You may{" "}
+          {Object.keys(shipmentData.counts).length > 0 &&
+            "now arrange for your samples to be shipped to Diamond, or "}
           <Link
             textDecoration='underline'
             color='diamond.600'
@@ -61,28 +62,32 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
             return to the shipment list.
           </Link>
         </Text>
-        <VStack w='40%' border='1px solid' borderColor='diamond.300' p='1em'>
-          <Heading alignSelf='start'>Contents</Heading>
-          <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
-        </VStack>
-        <Alert status='info' variant='info'>
-          <AlertIcon />
-          <AlertDescription>
-            {shipmentData.isBooked
-              ? "The shipping process has already been started, contents may not be edited any further."
-              : "Once your shipment is booked with the courier service, you will not be able to edit the contents of the shipment any further."}
-          </AlertDescription>
-        </Alert>{" "}
-        {shipmentData.isBooked ? (
-          <Button
-            as={NextLink}
-            href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`}
-            bg='green.500'
-          >
-            View shipping information
-          </Button>
-        ) : (
-          <ArrangeShipmentButton params={params} />
+        {Object.keys(shipmentData.counts).length > 0 && (
+          <>
+            <VStack w='40%' border='1px solid' borderColor='diamond.300' p='1em'>
+              <Heading alignSelf='start'>Contents</Heading>
+              <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
+            </VStack>
+            <Alert status='info' variant='info'>
+              <AlertIcon />
+              <AlertDescription>
+                {shipmentData.isBooked
+                  ? "The shipping process has already been started, contents may not be edited any further."
+                  : "Once your shipment is booked with the courier service, you will not be able to edit the contents of the shipment any further."}
+              </AlertDescription>
+            </Alert>{" "}
+            {shipmentData.isBooked ? (
+              <Button
+                as={NextLink}
+                href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`}
+                bg='green.500'
+              >
+                View shipping information
+              </Button>
+            ) : (
+              <ArrangeShipmentButton params={params} />
+            )}
+          </>
         )}
       </VStack>
     </VStack>
