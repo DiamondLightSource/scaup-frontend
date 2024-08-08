@@ -2,7 +2,7 @@ import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { TopLevelContainerCreationForm } from "./pageContent";
 import mockRouter from "next-router-mock";
 
-describe("Proposal Page Content", () => {
+describe("Inventory Page Content", () => {
   it("should redirect to new top level container when created", async () => {
     render(<TopLevelContainerCreationForm />);
 

@@ -121,6 +121,14 @@ export const handlers = [
 
   // Inventory
 
+  http.get("http://localhost/api/internal-containers", () =>
+    HttpResponse.json({
+      items: [{ name: "Container", id: 1 }],
+      total: 1,
+      limit: 20,
+    }),
+  ),
+
   http.get("http://localhost/api/internal-containers/unassigned", () =>
     HttpResponse.json({
       items: [{ name: "Container", id: 1 }],

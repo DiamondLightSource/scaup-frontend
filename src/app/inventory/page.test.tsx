@@ -4,7 +4,7 @@ import { renderWithProviders } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-describe("Proposal Page Content", () => {
+describe("Inventory Page", () => {
   it("should display message if there are no internal containers", async () => {
     server.use(
       http.get(
@@ -33,5 +33,11 @@ describe("Proposal Page Content", () => {
     renderWithProviders(await InventoryPage());
 
     expect(screen.getByText("You do not have permission to view this page.")).toBeInTheDocument();
+  });
+
+  it("should display existing inventory items", async () => {
+    renderWithProviders(await InventoryPage());
+
+    expect(screen.getByText("Container")).toBeInTheDocument();
   });
 });

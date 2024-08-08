@@ -6,7 +6,7 @@ import Link from "next/link";
 import { TopLevelContainerCreationForm } from "./pageContent";
 
 export const metadata: Metadata = {
-  title: "Session - Sample Handling",
+  title: "Inventory - Sample Handling",
 };
 
 const getContainers = async () => {
@@ -19,8 +19,6 @@ const getContainers = async () => {
         return containers.items as components["schemas"]["TopLevelContainerOut"][];
       case 403:
         return null;
-      default:
-        return [];
     }
   }
 
