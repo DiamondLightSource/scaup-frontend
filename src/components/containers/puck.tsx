@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { BaseContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
 
-export const Puck = ({ parentId, formContext }: BaseContainerProps) => {
+export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentGridBox = useSelector(selectActiveItem);
   const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
@@ -28,6 +28,7 @@ export const Puck = ({ parentId, formContext }: BaseContainerProps) => {
 
   const setLocation = useChildLocationManager({
     parentId,
+    parentType,
     containerCreationPreset: { capacity: 16, type: "puck" },
   });
 
