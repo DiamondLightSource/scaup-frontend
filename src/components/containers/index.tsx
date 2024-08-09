@@ -1,5 +1,5 @@
 import { GenericContainer } from "@/components/containers/generic";
-import { GridBox } from "@/components/containers/gridBox";
+import { GridBox } from "@/components/containers/GridBox";
 import {
   selectActiveItem,
   selectIsEdit,
@@ -17,6 +17,7 @@ import { TreeData } from "../visualisation/treeView";
 import { Puck } from "@/components/containers/puck";
 import { Cane } from "@/components/containers/Cane";
 import { RootParentType } from "@/types/generic";
+import { useCallback } from "react";
 
 export interface BaseContainerProps {
   /** Shipment ID */
@@ -28,6 +29,7 @@ export interface BaseContainerProps {
 export interface ContainerProps extends BaseContainerProps {
   /** Container type */
   containerType: BaseShipmentItem["type"];
+  containerSubType?: string;
 }
 
 export interface ChildLocationManagerProps {
@@ -62,89 +64,107 @@ export const useChildLocationManager = ({
    * @param childItem Child item
    * @param location Location, or null if not applicable
    */
-  const setLocation = async (
-    containerId: TreeData["id"] | null,
-    childItem: TreeData<BaseShipmentItem>,
-    location: number | null = null,
-  ) => {
-    const checkForm = formContext.handleSubmit(() => {});
-    await checkForm();
+  const setLocation = useCallback(
+    async (
+      containerId: TreeData["id"] | null,
+      childItem: TreeData<BaseShipmentItem>,
+      location: number | null = null,
+    ) => {
+      const checkForm = formContext.handleSubmit(() => {});
+      await checkForm();
 
-    if (formContext.formState.errors && Object.keys(formContext.formState.errors).length > 0) {
-      return;
-    }
-
-    const actualLocation = location !== null ? location + 1 : null;
-    let actualContainerId = containerId;
-
-    // There is no way of calling this callback if form context is undefined
-    const values = separateDetails(formContext.getValues(), parent);
-
-    // If container does not exist yet in database, we must create it
-    if (!isEdit) {
-      const newItem = await Item.create(
-        parentId,
-        { ...containerCreationPreset, ...values },
-        parent,
-        parentType,
-      );
-      actualContainerId = (Array.isArray(newItem) ? newItem[0].id : newItem.id) as number;
-    } else {
-      /*
-       * If user has modified the parent container, and hasn't saved before assigning a position
-       * to a child, we must update the container server-side first (AKA autosave)
-       *
-       * TODO: have some clever way of checking whether or not changes actually happened
-       */
-      Item.patch(currentContainer!.id, { ...currentContainer!.data, type: values.type }, parent);
-    }
-
-    let parentKey = "topLevelContainerId";
-
-    if (parent === "containers") {
-      if (child === "samples") {
-        parentKey = "containerId";
-      } else {
-        parentKey = "parentId";
+      if (formContext.formState.errors && Object.keys(formContext.formState.errors).length > 0) {
+        return;
       }
-    }
 
-    if (actualLocation !== null && currentContainer!.children) {
-      const conflictingChild = currentContainer!.children.find(
-        (item) => item.data.location === actualLocation,
-      );
+      const actualLocation = location !== null ? location + 1 : null;
+      let actualContainerId = containerId;
 
-      if (conflictingChild) {
-        await Item.patch(
-          conflictingChild.id,
-          {
-            actualLocation: null,
-            [parentKey]: null,
-          },
-          child,
+      // There is no way of calling this callback if form context is undefined
+      const values = separateDetails(formContext.getValues(), parent);
+
+      // If container does not exist yet in database, we must create it
+      if (!isEdit) {
+        const newItem = await Item.create(
+          parentId,
+          { ...containerCreationPreset, ...values },
+          parent,
+          parentType,
+        );
+        actualContainerId = (Array.isArray(newItem) ? newItem[0].id : newItem.id) as number;
+      } else {
+        /*
+         * If user has modified the parent container, and hasn't saved before assigning a position
+         * to a child, we must update the container server-side first (AKA autosave)
+         *
+         * TODO: have some clever way of checking whether or not changes actually happened
+         */
+        Item.patch(
+          currentContainer!.id,
+          { ...currentContainer!.data, type: values.type, subType: values.subType },
+          parent,
         );
       }
-    }
 
-    await Item.patch(
-      childItem.id,
-      {
-        location: actualLocation,
-        [parentKey]: actualContainerId,
-      },
+      let parentKey = "topLevelContainerId";
+
+      if (parent === "containers") {
+        if (child === "samples") {
+          parentKey = "containerId";
+        } else {
+          parentKey = "parentId";
+        }
+      }
+
+      if (actualLocation !== null && currentContainer!.children) {
+        const conflictingChild = currentContainer!.children.find(
+          (item) => item.data.location === actualLocation,
+        );
+
+        if (conflictingChild) {
+          await Item.patch(
+            conflictingChild.id,
+            {
+              actualLocation: null,
+              [parentKey]: null,
+            },
+            child,
+          );
+        }
+      }
+
+      await Item.patch(
+        childItem.id,
+        {
+          location: actualLocation,
+          [parentKey]: actualContainerId,
+        },
+        child,
+      );
+
+      await Promise.all([
+        dispatch(updateShipment({ shipmentId: parentId, parentType })),
+        dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
+      ]);
+
+      dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
+      if (!isEdit) {
+        router.replace(`../${actualContainerId}/edit`, { scroll: false });
+      }
+    },
+    [
       child,
-    );
-
-    await Promise.all([
-      dispatch(updateShipment({ shipmentId: parentId, parentType })),
-      dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
-    ]);
-
-    dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
-    if (!isEdit) {
-      router.replace(`../${actualContainerId}/edit`, { scroll: false });
-    }
-  };
+      containerCreationPreset,
+      currentContainer,
+      dispatch,
+      formContext,
+      isEdit,
+      parent,
+      parentId,
+      parentType,
+      router,
+    ],
+  );
 
   return setLocation;
 };

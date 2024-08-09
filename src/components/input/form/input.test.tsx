@@ -68,7 +68,6 @@ describe("Dynamic Form Field", () => {
 
   it("should disable input if isDisabled is set", () => {
     renderWithForm(<DynamicFormInput type='text' id='1' label='Test' isDisabled={true} />);
-    screen.debug();
     expect(screen.getByRole("textbox")).toHaveAttribute("disabled");
   });
 });
