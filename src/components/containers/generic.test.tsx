@@ -6,7 +6,7 @@ import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-import { GenericContainer } from "./generic";
+import { GenericContainer } from "@/components/containers/generic";
 
 const defaultShipment = { shipment: structuredClone(initialState) };
 
@@ -44,7 +44,7 @@ describe("Generic Container", () => {
       ),
     );
 
-    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer parentId='1' />, {
       preloadedState: defaultShipment,
     });
 
@@ -63,7 +63,7 @@ describe("Generic Container", () => {
         { once: true },
       ),
     ),
-      renderAndInjectForm(<GenericContainer shipmentId='1' />, {
+      renderAndInjectForm(<GenericContainer parentId='1' />, {
         preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
       });
 
@@ -75,7 +75,7 @@ describe("Generic Container", () => {
   });
 
   it("should populate slots with data from state", () => {
-    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer parentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,
@@ -97,7 +97,7 @@ describe("Generic Container", () => {
     ].children!.push(falconTube);
 
     renderAndInjectForm(
-      <GenericContainer shipmentId='1' child='containers' parent='topLevelContainers' />,
+      <GenericContainer parentId='1' child='containers' parent='topLevelContainers' />,
       {
         preloadedState: unassignedContainers,
       },
@@ -121,7 +121,7 @@ describe("Generic Container", () => {
       ),
     );
 
-    renderAndInjectForm(<GenericContainer shipmentId='1' />, {
+    renderAndInjectForm(<GenericContainer parentId='1' />, {
       preloadedState: {
         shipment: {
           ...initialState,
@@ -136,7 +136,7 @@ describe("Generic Container", () => {
   });
 
   it("should not render remove/add buttons if form context is not present", async () => {
-    renderWithProviders(<GenericContainer shipmentId='1' />, {});
+    renderWithProviders(<GenericContainer parentId='1' />, {});
 
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/add/i)).not.toBeInTheDocument();

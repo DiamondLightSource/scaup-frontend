@@ -1,0 +1,148 @@
+"use client";
+import { Container } from "@/components/containers";
+import { DynamicForm, DynamicFormProps, formMapping } from "@/components/input/form";
+import { DynamicFormEntry } from "@/components/input/form/input";
+import { selectActiveItem, selectIsEdit, setIsReview } from "@/features/shipment/shipmentSlice";
+import { BaseShipmentItem } from "@/mappings/pages";
+import { AppDispatch } from "@/store";
+import { RootParentType } from "@/types/generic";
+import { Box, Button, HStack, Spacer } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+
+export interface ItemFormProps {
+  parentId: string;
+  prepopData?: DynamicFormProps["prepopData"];
+  parentType?: RootParentType;
+  onSubmit: (values: FieldValues) => Promise<void>;
+}
+
+export const ItemForm = ({
+  parentId,
+  prepopData,
+  onSubmit,
+  parentType = "topLevelContainer",
+}: ItemFormProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const activeItem = useSelector(selectActiveItem);
+  const router = useRouter();
+  const [isAddLoading, setAddLoading] = useState(false);
+
+  const activeIsEdit = useSelector(selectIsEdit);
+  const formContext = useForm<BaseShipmentItem>();
+  const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
+  const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
+
+  useEffect(() => {
+    setRenderedForm(formMapping[formType]);
+  }, [formType]);
+
+  const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
+    if ("type" in formValues) {
+      setFormType(formValues.type);
+    }
+
+    if ("registeredContainer" in formValues) {
+      setRenderedForm((oldForm) => {
+        const newForm = structuredClone(oldForm);
+        const nameIndex = newForm.findIndex((field) => field.id === "name");
+        if (nameIndex !== -1) {
+          newForm[nameIndex].isDisabled =
+            formValues.registeredContainer !== "" && formValues.registeredContainer !== null;
+        }
+        return newForm;
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(setIsReview(false));
+    if (activeItem) {
+      // If we set name to null, then it will get cleared once the form is reset
+      let baseData: Record<string, any> = { type: activeItem.data.type, name: null };
+
+      // Only existing items should draw in more data than just the type
+      if (activeIsEdit) {
+        baseData = { name: activeItem.name, ...activeItem.data };
+      }
+
+      formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
+      handleWatchedUpdated(baseData);
+    }
+  }, [formContext, activeItem, activeIsEdit, dispatch, handleWatchedUpdated]);
+
+  const onFormSubmit = formContext.handleSubmit(async (info: FieldValues) => {
+    setAddLoading(true);
+    try {
+      await onSubmit(info);
+    } finally {
+      setAddLoading(false);
+    }
+  });
+
+  useEffect(() => {
+    if (activeItem) {
+      setFormType(activeItem.data.type);
+    }
+  }, [activeItem]);
+
+  const redirectToNew = useCallback(() => {
+    if (parentType === "shipment") {
+      router.replace("../new/edit");
+    } else {
+      router.replace("new");
+    }
+  }, [router, parentType]);
+
+  // This does not get rendered if there is no active item, so it's safe to assume it's not null
+
+  return (
+    <FormProvider {...formContext}>
+      <form
+        onSubmit={onFormSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          flex: "1 0 auto",
+          gap: "1em",
+        }}
+      >
+        <HStack py='3' flex='1 0 auto' alignItems='start'>
+          <Box flex='1 0 auto'>
+            <DynamicForm
+              onWatchedUpdated={handleWatchedUpdated}
+              formType={renderedForm}
+              defaultValues={activeItem!.data}
+              prepopData={prepopData}
+            />
+          </Box>
+          <Container
+            containerType={formType}
+            parentId={parentId}
+            formContext={formContext}
+            parentType={parentType}
+          />
+        </HStack>
+        <HStack h='3.5em' px='1em' bg='gray.200'>
+          <Spacer />
+          <Button
+            onClick={redirectToNew}
+            isDisabled={
+              !activeIsEdit ||
+              (parentType === "topLevelContainer" &&
+                ["dewar", "grid", "sample"].includes(activeItem!.data.type))
+            }
+          >
+            Create New Item
+          </Button>
+          <Button isLoading={isAddLoading} type='submit'>
+            {activeIsEdit ? "Save" : "Add"}
+          </Button>
+        </HStack>
+      </form>
+    </FormProvider>
+  );
+};

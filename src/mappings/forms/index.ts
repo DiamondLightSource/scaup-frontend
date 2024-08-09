@@ -7,6 +7,7 @@ import { puckForm } from "@/mappings/forms/puck";
 import { sampleForm } from "@/mappings/forms/sample";
 import { walkInForm } from "@/mappings/forms/walkIn";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { caneForm } from "@/mappings/forms/cane";
 
 export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> = {
   sample: sampleForm,
@@ -18,5 +19,6 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   "walk-in": walkInForm,
   gridBox: gridBoxForm,
   preSession: preSessionForm,
+  cane: caneForm,
   shipment: [],
 };

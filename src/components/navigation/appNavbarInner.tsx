@@ -2,11 +2,12 @@
 
 "use client";
 import { HStack, Link, Tag, Text } from "@chakra-ui/react";
-import { Breadcrumbs, Navbar, User } from "@diamondlightsource/ui-components";
+import { Breadcrumbs, Navbar, NavLink, NavLinks, User } from "@diamondlightsource/ui-components";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import NextLink from "next/link";
 
 // TODO: Move this to component library
 const PhaseBanner = ({ deployType }: { deployType: "dev" | "production" | "beta" }) => {
@@ -56,6 +57,15 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
   return (
     <span className='hide-on-print' style={{ marginBottom: "0.8em" }}>
       <Navbar logo='/diamondgs.png'>
+        {session && session.permissions.includes("em_admin") ? (
+          <NavLinks>
+            <NavLink as={NextLink} href='/inventory'>
+              Inventory
+            </NavLink>
+          </NavLinks>
+        ) : (
+          <></>
+        )}
         <User
           user={
             session && session.user

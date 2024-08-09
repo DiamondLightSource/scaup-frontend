@@ -6,7 +6,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import ShipmentLayoutContent from "./layoutContent";
 
-const defaultParams = { proposalId: "cm0001", shipmentId: "new" };
+const defaultParams = { proposalId: "cm0001", shipmentId: "new", visitNumber: "1" };
 const defaultShipmentItems: TreeData[] = [
   { id: "dewar-1", name: "dewar-1", data: { type: "dewar" } },
 ];

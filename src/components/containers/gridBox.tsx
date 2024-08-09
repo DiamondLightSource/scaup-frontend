@@ -8,7 +8,8 @@ import { Box, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { BaseContainerProps, useChildLocationManager } from ".";
-import { GenericChildSlot } from "./child";
+import { GenericChildSlot } from "@/components/containers/child";
+import { SampleSelector } from "@/components/containers/SampleSelector";
 
 export interface GridItemProps {
   /** Whether or not this grid position has a sample in it */
@@ -23,7 +24,7 @@ export interface GridItemProps {
  * Grid box component. Should be used in conjunction with a field allowing the user to select
  * how many slots (capacity) the grid box should have, inside the parent form.
  */
-export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
+export const GridBox = ({ parentId, parentType = "shipment", formContext }: BaseContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentGridBox = useSelector(selectActiveItem);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
@@ -45,9 +46,10 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
   }, [currentGridBox, parsedCapacity]);
 
   const setLocation = useChildLocationManager({
-    shipmentId,
+    parentId,
     parent: "containers",
     child: "samples",
+    parentType,
   });
 
   const handlePopulatePosition = useCallback(
@@ -95,15 +97,25 @@ export const GridBox = ({ shipmentId, formContext }: BaseContainerProps) => {
           borderRadius='0'
         />
       ))}
-      <ChildSelector
-        childrenType='sample'
-        onSelect={handlePopulatePosition}
-        onRemove={handleRemoveSample}
-        selectedItem={currentSample}
-        isOpen={isOpen}
-        onClose={onClose}
-        readOnly={formContext === undefined}
-      />
+      {parentType === "shipment" ? (
+        <ChildSelector
+          childrenType='sample'
+          onSelect={handlePopulatePosition}
+          onRemove={handleRemoveSample}
+          selectedItem={currentSample}
+          isOpen={isOpen}
+          onClose={onClose}
+          readOnly={formContext === undefined}
+        />
+      ) : (
+        <SampleSelector
+          selectedItem={currentSample}
+          isOpen={isOpen}
+          onClose={onClose}
+          onSelect={handlePopulatePosition}
+          onRemove={handleRemoveSample}
+        />
+      )}
     </Box>
   );
 };

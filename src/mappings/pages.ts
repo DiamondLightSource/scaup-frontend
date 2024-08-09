@@ -21,7 +21,7 @@ export const steps: Step[] = [
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
     title: "Containers",
-    id: ["puck", "falconTube", "genericContainer"],
+    id: ["puck", "falconTube", "genericContainer", "cane"],
     singular: "Container",
     endpoint: "containers",
   },
@@ -33,6 +33,22 @@ export const steps: Step[] = [
   },
 ];
 
+export const internalEbicSteps: Step[] = [
+  { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
+  {
+    title: "Pucks",
+    id: ["puck"],
+    singular: "Puck",
+    endpoint: "containers",
+  },
+  {
+    title: "Canes",
+    id: ["cane"],
+    singular: "Cane",
+    endpoint: "containers",
+  },
+];
+
 export const pluralToSingular: Record<string, string> = {
   gridBoxes: "gridBox",
   samples: "sample",
@@ -40,8 +56,11 @@ export const pluralToSingular: Record<string, string> = {
   dewars: "dewar",
 };
 
-export const getCurrentStepIndex = (itemType: BaseShipmentItem["type"]) => {
-  const currentIndex = steps.findIndex((step) => {
+export const getCurrentStepIndex = (
+  itemType: BaseShipmentItem["type"],
+  stepsToSearch: Step[] = steps,
+) => {
+  const currentIndex = stepsToSearch.findIndex((step) => {
     if (Array.isArray(step.id)) {
       return step.id.includes(itemType);
     } else {

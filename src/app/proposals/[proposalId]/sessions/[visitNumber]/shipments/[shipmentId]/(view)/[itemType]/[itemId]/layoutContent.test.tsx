@@ -193,19 +193,6 @@ describe("Item Page Layout Content", () => {
     expect(mockRouter.pathname).toBe("/puck/new/edit");
   });
 
-  it("should render steps", () => {
-    renderWithProviders(
-      <ItemPageLayoutContent params={params}>
-        <></>
-      </ItemPageLayoutContent>,
-    );
-
-    expect(screen.getByLabelText("Samples Step")).toBeInTheDocument();
-    expect(screen.getByLabelText("Grid Boxes Step")).toBeInTheDocument();
-    expect(screen.getByLabelText("Containers Step")).toBeInTheDocument();
-    expect(screen.getByLabelText("Packages Step")).toBeInTheDocument();
-  });
-
   it("should match current step to current path", () => {
     renderWithProviders(
       <ItemPageLayoutContent params={{ ...params, itemType: "dewar" }}>

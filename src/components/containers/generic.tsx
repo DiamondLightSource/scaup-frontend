@@ -13,14 +13,14 @@ export interface GenericContainerProps extends BaseContainerProps {
 }
 
 export const GenericContainer = ({
-  shipmentId,
+  parentId,
   formContext,
   parent = "containers",
   child = "containers",
 }: GenericContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentContainer = useSelector(selectActiveItem);
-  const setLocation = useChildLocationManager({ shipmentId, parent, child });
+  const setLocation = useChildLocationManager({ parentId, parent, child });
 
   const handlePopulatePosition = useCallback(
     async (sample: TreeData<BaseShipmentItem>) => {

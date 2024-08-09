@@ -11,9 +11,7 @@ export interface ShipmentsLayoutProps {
 }
 
 const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
-  const shipmentData = (await getShipmentData(params.shipmentId)) as
-    | components["schemas"]["ShipmentChildren"]
-    | null;
+  const shipmentData = await getShipmentData(params.shipmentId);
   const unassignedItems = (await getShipmentData(
     params.shipmentId,
     "/unassigned",
@@ -21,7 +19,7 @@ const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
 
   return (
     <ShipmentsLayoutContent
-      shipmentData={shipmentData?.children ?? null}
+      shipmentData={shipmentData?.children}
       unassignedItems={unassignedItems}
       params={params}
     >
