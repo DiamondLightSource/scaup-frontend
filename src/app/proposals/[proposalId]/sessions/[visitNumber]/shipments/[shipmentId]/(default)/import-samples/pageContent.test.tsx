@@ -29,13 +29,13 @@ describe("Import Samples Page Content", () => {
     });
   });
 
-  it("should render containers", async () => {
+  it("should render samples", async () => {
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
-    await screen.findByText("Container");
+    await screen.findByText("sample-in-session");
   });
 
   it("should not allow invalid session references", async () => {
@@ -63,7 +63,7 @@ describe("Import Samples Page Content", () => {
   it("should display message if no samples are available", async () => {
     server.use(
       http.get(
-        "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/containers",
+        "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples",
         () => HttpResponse.json({ items: [] }),
         { once: true },
       ),
@@ -74,13 +74,13 @@ describe("Import Samples Page Content", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
-    await screen.findByText("No containers available for transfer in this session.");
+    await screen.findByText("No samples available for transfer in this session.");
   });
 
-  it("should display message if containers GET request fails", async () => {
+  it("should display message if samples GET request fails", async () => {
     server.use(
       http.get(
-        "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/containers",
+        "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples",
         () => HttpResponse.json({}, { status: 404 }),
         { once: true },
       ),
@@ -91,7 +91,7 @@ describe("Import Samples Page Content", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));
 
-    await screen.findByText("No containers available for transfer in this session.");
+    await screen.findByText("No samples available for transfer in this session.");
   });
 
   it("should redirect to shipments page if shipment is not new", async () => {

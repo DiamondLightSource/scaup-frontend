@@ -49,33 +49,31 @@ const ImportSamplesPageContent = ({
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const formContextSession = useForm<SessionData>();
-  const [containers, setContainers] = useState<
-    components["schemas"]["ContainerOut"][] | null | undefined
-  >();
+  const [samples, setSamples] = useState<components["schemas"]["SampleOut"][] | null | undefined>();
 
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   const onSubmitSession = formContextSession.handleSubmit(async (info) => {
     setIsLoading(true);
     const res = await authenticatedFetch.client(
-      `/proposals/${params.proposalId}/sessions/${info.session}/containers?isInternal=true`,
+      `/proposals/${params.proposalId}/sessions/${info.session}/samples?isInternal=true`,
     );
     setIsLoading(false);
 
     if (res && res.status === 200) {
-      const containers = await res.json();
-      setContainers(containers.items);
+      const samples = await res.json();
+      setSamples(samples.items);
     } else {
-      setContainers(null);
+      setSamples(null);
     }
   });
 
   const handleFinish = useCallback(async () => {
-    if (containers) {
+    if (samples) {
       try {
         await Promise.all(
-          containers!.map((container) =>
-            Item.patch(container.id, { shipmentId: params.shipmentId }, "containers"),
+          samples!.map((sample) =>
+            Item.patch(sample.id, { shipmentId: params.shipmentId }, "samples"),
           ),
         );
 
@@ -85,7 +83,7 @@ const ImportSamplesPageContent = ({
         toast({ title: "Could not update items, please try again later", status: "error" });
       }
     }
-  }, [containers, params, isNew, toast]);
+  }, [samples, params, isNew, toast]);
 
   return (
     <VStack alignItems='start' w='100%'>
@@ -97,10 +95,10 @@ const ImportSamplesPageContent = ({
           </Button>
         </form>
       </FormProvider>
-      <Heading size='lg' mt='1em' color={containers !== undefined ? undefined : "diamond.200"}>
-        Select Containers
+      <Heading size='lg' mt='1em' color={samples !== undefined ? undefined : "diamond.200"}>
+        Select Samples
       </Heading>
-      {containers && containers.length > 0 ? (
+      {samples && samples.length > 0 ? (
         <VStack divider={<Divider borderColor='diamond.600' />} w='100%'>
           <CheckboxGroup
             onChange={(values: string[]) => {
@@ -108,21 +106,21 @@ const ImportSamplesPageContent = ({
             }}
           >
             <VStack w='100%' divider={<Divider />}>
-              {containers.map((container, i) => (
+              {samples.map((sample, i) => (
                 <Checkbox w='100%' value={i.toString()} key={i}>
                   <Heading flex='1 0 0' size='md'>
-                    {container.name}
+                    {sample.name}
                   </Heading>
-                  <Text>{container.comments}</Text>
+                  <Text>{sample.comments}</Text>
                 </Checkbox>
               ))}
             </VStack>
           </CheckboxGroup>
         </VStack>
       ) : (
-        containers !== undefined && (
+        samples !== undefined && (
           <Heading variant='notFound' size='md'>
-            No containers available for transfer in this session.
+            No samples available for transfer in this session.
           </Heading>
         )
       )}
@@ -130,7 +128,7 @@ const ImportSamplesPageContent = ({
         mt='1em'
         onClick={handleFinish}
         bg='green.500'
-        isDisabled={!containers || checkedItems.length < 1}
+        isDisabled={!samples || checkedItems.length < 1}
         isLoading={isLoading}
       >
         {isNew ? "Continue" : "Finish"}
