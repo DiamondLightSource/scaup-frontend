@@ -116,14 +116,14 @@ export const handlers = [
   ),
 
   http.post("http://localhost/api/internal-containers/containers", () =>
-    HttpResponse.json({ name: "Container", id: 1 }, { status: 201 }),
+    HttpResponse.json({ name: "Container", id: 1, type: "puck" }, { status: 201 }),
   ),
 
   // Inventory
 
   http.get("http://localhost/api/internal-containers", () =>
     HttpResponse.json({
-      items: [{ name: "Container", id: 1 }],
+      items: [{ name: "Container", id: 1, type: "puck" }],
       total: 1,
       limit: 20,
     }),
@@ -131,7 +131,7 @@ export const handlers = [
 
   http.get("http://localhost/api/internal-containers/unassigned", () =>
     HttpResponse.json({
-      items: [{ name: "Container", id: 1 }],
+      items: [{ name: "Container", id: 1, data: { type: "puck" } }],
       total: 1,
       limit: 20,
     }),

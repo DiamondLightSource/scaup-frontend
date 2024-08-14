@@ -4,7 +4,7 @@ import { PositionedItem } from "@/mappings/forms/sample";
 import { getCurrentStepIndex } from "@/mappings/pages";
 import { renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { ChildSelector } from "./childSelector";
+import { ChildSelector } from "@/components/containers/ChildSelector";
 
 const defaultUnassigned = structuredClone(initialState.unassigned);
 

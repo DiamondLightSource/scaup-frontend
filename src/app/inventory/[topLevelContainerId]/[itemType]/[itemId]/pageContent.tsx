@@ -71,7 +71,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
         values.id = newItem.id;
         values.name = newItem.name ?? "";
 
-        router.replace(`../${info.type}/${newItem.id}`, { scroll: false });
+        router.replace(`../${newItem.type}/${newItem.id}`, { scroll: false });
       } else {
         await Promise.all([
           Item.patch(

@@ -1,7 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
-import { BaseChildSelectorProps } from "@/types/generic";
+import { ChildSelectorProps } from "@/types/generic";
 import {
   Box,
   Button,
@@ -26,13 +26,6 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-
-export interface ChildSelectorProps extends BaseChildSelectorProps {
-  /** Type of container's children */
-  childrenType: BaseShipmentItem["type"];
-  /** Disable editing controls */
-  readOnly?: boolean;
-}
 
 export const ChildSelector = ({
   selectedItem,
