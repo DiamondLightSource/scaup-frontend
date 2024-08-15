@@ -9,7 +9,7 @@ import { InventoryItemLayoutProps } from "@/types/generic";
 
 const getUnassignedItems = async () => {
   const res = await authenticatedFetch.server("/internal-containers/unassigned", {
-    cache: "no-store",
+    next: { tags: ["shipment"] },
   });
 
   return res && res.status === 200
