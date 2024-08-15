@@ -1,9 +1,15 @@
 import { server } from "@/mocks/server";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const pathnameMock = vi.fn(() => "/");
 export const toastMock = vi.fn();
+
+vi.mock("next/cache", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return { ...actual, revalidateTag: () => {}, revalidatePath: () => {} };
+});
 
 vi.mock("next/navigation", () => ({
   ...require("next-router-mock"),
