@@ -1,15 +1,22 @@
-import { Heading, Text } from "@chakra-ui/react";
+import { Button, Heading, Link, Text, VStack } from "@chakra-ui/react";
+import { Metadata } from "next/types";
 
-const Home = () => {
-  return (
-    <main>
-      <Heading>Sample Handling</Heading>
-      <Text>
-        This page has no content, and proposal navigation is meant to be done in PATo. To view
-        shipments for a proposal, visit it at /proposals/(proposal ID here)
-      </Text>
-    </main>
-  );
+export const metadata: Metadata = {
+  title: "Sample Handling",
 };
+
+const Home = () => (
+  <main>
+    <VStack mx='-7.3vw' px='10vw' py='4vh' bg='diamond.700' alignItems='start' color='diamond.50'>
+      <Heading>Sample Handling</Heading>
+      <Heading size='md' fontWeight='200'>
+        Sample information registration and shipping
+      </Heading>
+      <Link href={`${process.env.PATO_URL}/proposals`}>
+        <Button variant='onBlue'>List Proposals</Button>
+      </Link>
+    </VStack>
+  </main>
+);
 
 export default Home;
