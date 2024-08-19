@@ -31,11 +31,6 @@ export const gridBoxForm = [
     ],
   },
   {
-    id: "fibSession",
-    label: "FIB followed by Kryos at eBIC",
-    type: "checkbox",
-  },
-  {
     id: "store",
     label: "Keep gridbox at facility for future use",
     hint: "Please inform lab contact",
