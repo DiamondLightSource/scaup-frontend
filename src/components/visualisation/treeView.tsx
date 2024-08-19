@@ -47,6 +47,7 @@ const typeColours: Record<BaseShipmentItem["type"], string> = {
   puck: "orange",
   falconTube: "orange",
   sample: "blue",
+  cane: "purple"
 };
 
 const hasChildren = (item: TreeData) => !!(item.children && item.children.length > 0);

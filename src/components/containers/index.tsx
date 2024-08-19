@@ -15,6 +15,7 @@ import { UseFormReturn, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
 import { Puck } from "@/components/containers/puck";
+import { Cane } from "@/components/containers/Cane";
 import { RootParentType } from "@/types/generic";
 
 export interface BaseContainerProps {
@@ -157,6 +158,8 @@ export const Container = ({ containerType, ...props }: ContainerProps) => {
     case "falconTube":
     case "genericContainer":
       return <GenericContainer {...props} />;
+    case "cane":
+      return <Cane {...props} />;
     case "dewar":
     case "walk-in":
       return <GenericContainer parent='topLevelContainers' child='containers' {...props} />;
