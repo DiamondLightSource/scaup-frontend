@@ -1,7 +1,6 @@
 import { server } from "@/mocks/server";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { revalidatePath, revalidateTag } from "next/cache";
 
 const pathnameMock = vi.fn(() => "/");
 export const toastMock = vi.fn();
