@@ -31,7 +31,7 @@ export const ItemForm = ({
   const [isAddLoading, setAddLoading] = useState(false);
 
   const activeIsEdit = useSelector(selectIsEdit);
-  const formContext = useForm<BaseShipmentItem>();
+  const formContext = useForm<BaseShipmentItem>({ shouldUnregister: true });
   const [formType, setFormType] = useState("sample");
   const [formSubType, setFormSubType] = useState<string | undefined>(undefined);
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
@@ -73,19 +73,26 @@ export const ItemForm = ({
         baseData = { name: activeItem.name, ...activeItem.data };
       }
 
-      formContext.reset(baseData, { keepValues: false, keepDefaultValues: false });
+      formContext.reset(baseData);
       handleWatchedUpdated(baseData);
     }
   }, [formContext, activeItem, activeIsEdit, dispatch, handleWatchedUpdated]);
 
-  const onFormSubmit = formContext.handleSubmit(async (info: FieldValues) => {
-    setAddLoading(true);
-    try {
-      await onSubmit(info);
-    } finally {
-      setAddLoading(false);
-    }
-  });
+  const onFormSubmit = useCallback(
+    async (info: FieldValues) => {
+      setAddLoading(true);
+      try {
+        let patchedValues = info;
+        if (activeItem) {
+          patchedValues = { type: activeItem.data.type, ...info };
+        }
+        await onSubmit(patchedValues);
+      } finally {
+        setAddLoading(false);
+      }
+    },
+    [onSubmit],
+  );
 
   useEffect(() => {
     if (activeItem) {
@@ -107,7 +114,7 @@ export const ItemForm = ({
   return (
     <FormProvider {...formContext}>
       <form
-        onSubmit={onFormSubmit}
+        onSubmit={formContext.handleSubmit(onFormSubmit)}
         style={{
           display: "flex",
           flexDirection: "column",

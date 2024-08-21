@@ -55,12 +55,26 @@ describe("Puck", () => {
     await screen.findByTestId("5-populated");
   });
 
-  it("should render 16 puck slots", () => {
-    renderAndInjectForm(<Puck parentId='1' />);
+  it.each([
+    { count: 12, type: "1" },
+    { count: 12, type: "2" },
+  ])("should render $type subtype", ({ count, type }) => {
+    renderAndInjectForm(<Puck parentId='1' containerSubType={type} />);
+    expect(screen.getAllByRole("button")).toHaveLength(count);
+  });
 
-    expect(screen.getAllByRole("button")).toHaveLength(16);
-    screen.getByTestId("1-empty");
-    screen.getByTestId("16-empty");
+  it("should display message if there are more children than grid box positions", async () => {
+    const modifiedShipment = structuredClone(defaultShipment);
+    modifiedShipment.shipment.activeItem = {
+      ...populatedContainer,
+      children: [{ name: "grid-box", id: 1, data: { location: 20 } }],
+    };
+
+    renderAndInjectForm(<Puck parentId='1' />, {
+      preloadedState: modifiedShipment,
+    });
+
+    expect(screen.getByText(/remove children/i)).toBeInTheDocument();
   });
 
   it("should add item to container and update", async () => {

@@ -39,6 +39,7 @@ describe("Dynamic Form", () => {
     expect(watchCallback).toHaveBeenCalledWith({
       comments: "",
       name: "",
+      subType: "1",
       registeredContainer: "",
       type: "falconTube",
     });

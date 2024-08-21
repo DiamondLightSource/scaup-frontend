@@ -11,9 +11,9 @@ import { ContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
 import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 import Image from "next/image";
-import { GridBoxItem } from "@/types/generic";
+import { ContainerItem } from "@/types/generic";
 
-const GRID_BOX_TYPES: Record<string, GridBoxItem[]> = {
+const GRID_BOX_TYPES: Record<string, ContainerItem[]> = {
   "1": [
     { x: 55, y: 55 },
     { x: 201, y: 55 },
@@ -67,7 +67,7 @@ export const GridBox = ({
 
   const positions = useMemo(() => {
     const selectedType = GRID_BOX_TYPES[containerSubType ?? "1"] || GRID_BOX_TYPES["1"];
-    const newSamples: Required<GridBoxItem>[] = selectedType.map((v) => ({
+    const newSamples: Required<ContainerItem>[] = selectedType.map((v) => ({
       ...v,
       item: null,
     }));
