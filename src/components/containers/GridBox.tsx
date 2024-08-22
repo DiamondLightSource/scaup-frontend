@@ -91,6 +91,7 @@ export const GridBox = ({
     parent: "containers",
     child: "samples",
     parentType,
+    containerCreationPreset: {type: "gridBox"}
   });
 
   const handlePopulatePosition = useCallback(
