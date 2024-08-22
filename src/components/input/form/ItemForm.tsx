@@ -32,7 +32,8 @@ export const ItemForm = ({
 
   const activeIsEdit = useSelector(selectIsEdit);
   const formContext = useForm<BaseShipmentItem>();
-  const [formType, setFormType] = useState(activeItem ? activeItem.data.type : "sample");
+  const [formType, setFormType] = useState("sample");
+  const [formSubType, setFormSubType] = useState<string | undefined>(undefined);
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
 
   useEffect(() => {
@@ -42,6 +43,10 @@ export const ItemForm = ({
   const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
     if ("type" in formValues) {
       setFormType(formValues.type);
+    }
+
+    if ("subType" in formValues) {
+      setFormSubType(formValues.subType);
     }
 
     if ("registeredContainer" in formValues) {
@@ -85,6 +90,7 @@ export const ItemForm = ({
   useEffect(() => {
     if (activeItem) {
       setFormType(activeItem.data.type);
+      setFormSubType(activeItem.data.subType);
     }
   }, [activeItem]);
 
@@ -120,6 +126,7 @@ export const ItemForm = ({
             />
           </Box>
           <Container
+            containerSubType={formSubType}
             containerType={formType}
             parentId={parentId}
             formContext={formContext}
