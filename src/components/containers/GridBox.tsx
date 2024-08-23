@@ -1,4 +1,4 @@
-import { ChildSelector } from "@/components/containers/childSelector";
+import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { ContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
-import { SampleSelector } from "@/components/containers/SampleSelector";
+import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 import Image from "next/image";
 import { GridBoxItem } from "@/types/generic";
 
@@ -151,12 +151,13 @@ export const GridBox = ({
             readOnly={formContext === undefined}
           />
         ) : (
-          <SampleSelector
+          <CrossShipmentSelector
             selectedItem={currentSample}
             isOpen={isOpen}
             onClose={onClose}
             onSelect={handlePopulatePosition}
             onRemove={handleRemoveSample}
+            childrenType='sample'
           />
         )}
       </Box>

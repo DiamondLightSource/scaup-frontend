@@ -1,4 +1,4 @@
-import { ChildSelector } from "@/components/containers/childSelector";
+import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
@@ -9,6 +9,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { BaseContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
+import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 
 export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -86,15 +87,26 @@ export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) 
           top={`${calcCircumferencePos(i, 11, 105)}px`}
         />
       ))}
-      <ChildSelector
-        childrenType='gridBox'
-        onSelect={handlePopulatePosition}
-        onRemove={handleRemoveSample}
-        selectedItem={currentItem}
-        isOpen={isOpen}
-        onClose={onClose}
-        readOnly={formContext === undefined}
-      />
+      {parentType === "topLevelContainer" ? (
+        <CrossShipmentSelector
+          childrenType='gridBox'
+          onSelect={handlePopulatePosition}
+          onRemove={handleRemoveSample}
+          selectedItem={currentItem}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      ) : (
+        <ChildSelector
+          childrenType='gridBox'
+          onSelect={handlePopulatePosition}
+          onRemove={handleRemoveSample}
+          selectedItem={currentItem}
+          isOpen={isOpen}
+          onClose={onClose}
+          readOnly={formContext === undefined}
+        />
+      )}
     </Box>
   );
 };

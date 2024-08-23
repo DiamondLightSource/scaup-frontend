@@ -1,4 +1,4 @@
-import { Puck } from "@/components/containers/puck";
+import { Puck } from "@/components/containers/Puck";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
@@ -95,6 +95,13 @@ describe("Puck", () => {
     });
 
     screen.getByTestId("5-populated");
+  });
+
+  it("should render cross shipment child selector if parent type is 'topLevelContainer'", () => {
+    renderAndInjectForm(<Puck parentId='1' parentType='topLevelContainer' />);
+
+    fireEvent.click(screen.getByTestId("5-empty"));
+    screen.getByRole("button", { name: "Select" });
   });
 
   it("should remove item when remove is clicked", async () => {

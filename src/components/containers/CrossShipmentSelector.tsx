@@ -22,23 +22,45 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { authenticatedFetch } from "@/utils/client";
-import { useCallback, useState } from "react";
-import { components } from "@/types/schema";
-import { BaseChildSelectorProps } from "@/types/generic";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ChildSelectorProps } from "@/types/generic";
+import { getCurrentStepIndex, steps } from "@/mappings/pages";
+import { selectUnassigned } from "@/features/shipment/shipmentSlice";
+import { useSelector } from "react-redux";
 
 const proposalPattern = /^([A-z]{2}[0-9]+)-([0-9]+)$/;
 
-export const SampleSelector = ({
+export const CrossShipmentSelector = ({
   onSelect,
   onRemove,
   selectedItem,
+  childrenType,
   ...props
-}: BaseChildSelectorProps) => {
+}: Omit<ChildSelectorProps, "readOnly">) => {
   const toast = useToast();
+  const childrenTypeData = useMemo(() => {
+    const index = getCurrentStepIndex(childrenType);
+    return { data: steps[index], index };
+  }, [childrenType]);
   const [radioIndex, setRadioIndex] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [proposalReference, setProposalReference] = useState("");
-  const [samples, setSamples] = useState<components["schemas"]["SampleOut"][] | null | undefined>();
+  const [items, setItems] = useState<Record<string, any>[] | null | undefined>();
+  const unassigned = useSelector(selectUnassigned);
+
+  useEffect(() => {
+    // Get unassigned containers
+    let unassignedItems = unassigned[0].children![2].children;
+    if (
+      childrenTypeData.data.endpoint === "containers" &&
+      unassignedItems &&
+      unassignedItems.length > 0
+    ) {
+      unassignedItems = unassignedItems.filter((item) => item.data.type === childrenType);
+
+      setItems(unassignedItems);
+    }
+  }, [unassigned]);
 
   const onSessionSelect = useCallback(async () => {
     const proposalMatches = proposalPattern.exec(proposalReference);
@@ -49,33 +71,38 @@ export const SampleSelector = ({
 
     const [, proposal, session] = proposalMatches;
 
+    let endpoint = childrenTypeData.data.endpoint;
+    if (childrenTypeData.data.endpoint === "containers") {
+      endpoint += `?type=${childrenType}`;
+    }
     setIsLoading(true);
     const res = await authenticatedFetch.client(
-      `/proposals/${proposal}/sessions/${session}/samples`,
+      `/proposals/${proposal}/sessions/${session}/${endpoint}`,
     );
     setIsLoading(false);
 
     if (res && res.status === 200) {
-      const samplesJson = await res.json();
-      setSamples(samplesJson.items);
+      const itemsJson = await res.json();
+      setItems(itemsJson.items);
     } else {
-      setSamples(null);
+      setItems(null);
     }
-  }, [proposalReference, toast]);
+  }, [proposalReference, toast, childrenTypeData, childrenType]);
 
   const handleItemSelected = useCallback(async () => {
-    if (onSelect && radioIndex !== null && samples) {
+    if (onSelect && radioIndex !== null && items) {
       setIsLoading(true);
-      const selectedSample = samples[Number(radioIndex)];
+      const selectedItem = items[Number(radioIndex)];
       await onSelect({
-        data: { type: selectedSample.type },
-        name: selectedSample.name ?? "",
-        id: selectedSample.id,
+        data: { type: selectedItem.type },
+        name: selectedItem.name ?? "",
+        id: selectedItem.id,
       });
       setIsLoading(false);
     }
+    setItems(undefined);
     props.onClose();
-  }, [samples, radioIndex, onSelect, props]);
+  }, [items, radioIndex, onSelect, props]);
 
   const handleRemoveClicked = useCallback(async () => {
     if (onRemove && selectedItem) {
@@ -83,6 +110,7 @@ export const SampleSelector = ({
       await onRemove(selectedItem);
       setIsLoading(false);
     }
+    setItems(undefined);
     props.onClose();
   }, [onRemove, selectedItem, props]);
 
@@ -90,13 +118,13 @@ export const SampleSelector = ({
     <Modal size='2xl' {...props}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Select Sample</ModalHeader>
+        <ModalHeader>Select {childrenTypeData.data.singular}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {selectedItem && (
             <Box mb='30px'>
               <HStack w='100%'>
-                <Heading size='md'>Current Sample</Heading>
+                <Heading size='md'>Current {childrenTypeData.data.singular}</Heading>
                 <Spacer />
                 <Button onClick={handleRemoveClicked} bg='red.500' size='sm' isLoading={isLoading}>
                   Remove
@@ -113,17 +141,19 @@ export const SampleSelector = ({
                 bg='diamond.600'
               >
                 <Stat>
-                  <StatLabel>Sample</StatLabel>
+                  <StatLabel>{childrenTypeData.data.singular}</StatLabel>
                   <StatNumber>{selectedItem.name}</StatNumber>
                 </Stat>
               </HStack>
             </Box>
           )}
-          <Heading size='md'>Select Sample from Existing Shipment</Heading>
+          <Heading size='md'>Items</Heading>
           <Divider />
-          <Text mt='10px' fontWeight='600'>
-            Proposal Reference
+          <Text my='10px'>
+            Select {childrenTypeData.data.singular.toLocaleLowerCase()} from existing shipment, or
+            unassigned items
           </Text>
+          <Text fontWeight='600'>Proposal Reference</Text>
           <Input
             variant='hi-contrast'
             value={proposalReference}
@@ -132,11 +162,11 @@ export const SampleSelector = ({
           <Button w='150px' mt='1em' type='submit' isLoading={isLoading} onClick={onSessionSelect}>
             Select
           </Button>
-          {samples !== undefined ? (
-            samples !== null && samples.length > 0 ? (
+          {items !== undefined ? (
+            items !== null && items.length > 0 ? (
               <VStack w='100%' alignItems='start'>
                 <RadioGroup w='100%' onChange={setRadioIndex}>
-                  {samples.map((item, i) => (
+                  {items.map((item, i) => (
                     <HStack
                       w='100%'
                       key={item.id}
@@ -145,7 +175,7 @@ export const SampleSelector = ({
                       py='10px'
                     >
                       <Stat>
-                        <StatLabel>Sample</StatLabel>
+                        <StatLabel>{childrenTypeData.data.singular}</StatLabel>
                         <StatNumber>{item.name}</StatNumber>
                       </Stat>
                       <Radio borderColor='black' value={i.toString()} size='lg' />
@@ -161,8 +191,8 @@ export const SampleSelector = ({
                 </Button>
               </VStack>
             ) : (
-              <Heading variant='notFound' size='md' ml='0'>
-                No samples available for this session.
+              <Heading variant='notFound' mt='20px' size='md' ml='0'>
+                No {childrenTypeData.data.title.toLocaleLowerCase()} available for this session.
               </Heading>
             )
           ) : null}

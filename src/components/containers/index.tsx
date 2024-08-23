@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { UseFormReturn, useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
-import { Puck } from "@/components/containers/puck";
+import { Puck } from "@/components/containers/Puck";
 import { Cane } from "@/components/containers/Cane";
 import { RootParentType } from "@/types/generic";
 import { useCallback } from "react";
@@ -149,7 +149,11 @@ export const useChildLocationManager = ({
 
       dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
       if (!isEdit) {
-        router.replace(`../${actualContainerId}/edit`, { scroll: false });
+        if (parentType === "shipment") {
+          router.replace(`../${actualContainerId}/edit`, { scroll: false });
+        } else {
+          router.replace(`${actualContainerId}`, { scroll: false });
+        }
       }
     },
     [

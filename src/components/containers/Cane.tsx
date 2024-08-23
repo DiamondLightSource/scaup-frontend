@@ -1,5 +1,5 @@
 import { BaseContainerProps, useChildLocationManager } from "@/components/containers";
-import { ChildSelector } from "@/components/containers/childSelector";
+import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";

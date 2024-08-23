@@ -13,6 +13,13 @@ export interface InventoryItemLayoutProps {
   params: InventoryItemParams;
 }
 
+export interface ChildSelectorProps extends BaseChildSelectorProps {
+  /** Type of container's children */
+  childrenType: BaseShipmentItem["type"];
+  /** Disable editing controls */
+  readOnly?: boolean;
+}
+
 export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Currently selected item for container position */
   selectedItem?: TreeData<PositionedItem> | null;

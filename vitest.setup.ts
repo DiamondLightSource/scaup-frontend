@@ -5,6 +5,11 @@ import { cleanup } from "@testing-library/react";
 const pathnameMock = vi.fn(() => "/");
 export const toastMock = vi.fn();
 
+vi.mock("next/cache", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return { ...actual, revalidateTag: () => {}, revalidatePath: () => {} };
+});
+
 vi.mock("next/navigation", () => ({
   ...require("next-router-mock"),
   usePathname: pathnameMock,
