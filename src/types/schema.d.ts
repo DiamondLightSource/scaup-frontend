@@ -463,6 +463,7 @@ export interface components {
       comments?: string | null;
       /** Id */
       id: number;
+      type: string;
     };
     /** GenericItem */
     GenericItem: {

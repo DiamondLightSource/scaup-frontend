@@ -5,6 +5,7 @@ import { CreationResponse } from "@/types/server";
 import { authenticatedFetch } from "@/utils/client";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { parentTypeToEndpoint } from "@/utils/client/shipment";
+import { revalidateServerTag } from "../server/cache";
 
 const { toast } = createStandaloneToast();
 
@@ -29,6 +30,7 @@ const genericCreateItem = async (requestUrl: string, data: Record<string, any>) 
 
   if (response && response.status === 201) {
     const newItem = await response.json();
+    revalidateServerTag("shipment");
     return newItem.items ? newItem.items : newItem;
   } else {
     displayError("create", response);
@@ -47,6 +49,7 @@ export class Item {
     });
 
     if (response && response.status === 200) {
+      revalidateServerTag("shipment");
       return (await response.json()) as CreationResponse;
     } else {
       displayError("modify", response);
@@ -80,6 +83,7 @@ export class Item {
     });
 
     if (response && response.status === 204) {
+      revalidateServerTag("shipment");
       return { status: "OK" };
     } else {
       displayError("delete", response);

@@ -1,4 +1,4 @@
-import { GridBox } from "@/components/containers/gridBox";
+import { GridBox } from "@/components/containers/GridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { server } from "@/mocks/server";
@@ -68,9 +68,7 @@ const populatedGridBoxShipment = {
 
 describe("Grid Box", () => {
   it("should show modal when grid is clicked", () => {
-    renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: { shipment: defaultShipment },
-    });
+    renderAndInjectForm(<GridBox parentId='1' />);
 
     fireEvent.click(screen.getByText("2"));
 
@@ -86,9 +84,7 @@ describe("Grid Box", () => {
   });
 
   it("should display message if no unassigned samples are available", () => {
-    renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: { shipment: populatedGridBoxShipment },
-    });
+    renderAndInjectForm(<GridBox parentId='1' />);
 
     fireEvent.click(screen.getByText("1"));
 
@@ -137,33 +133,39 @@ describe("Grid Box", () => {
   });
 
   it("should render four grid slots by default", () => {
-    renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: { shipment: populatedGridBoxShipment },
-    });
+    renderAndInjectForm(<GridBox parentId='1' />);
 
     expect(screen.getAllByRole("button")).toHaveLength(4);
   });
 
-  it("should derive capacity from sibling form component", async () => {
-    const FormParent = () => {
-      const formContext = useFormContext<BaseShipmentItem>();
-      return (
-        <>
-          <Controller
-            name='capacity'
-            render={({ field }) => <input data-testid='cap' {...field} value='3'></input>}
-          ></Controller>
-          <GridBox parentId='1' formContext={formContext} />
-        </>
-      );
-    };
+  it("should render sample selector if parent is top level container", () => {
+    renderAndInjectForm(<GridBox parentId='1' parentType='topLevelContainer' />);
 
-    renderWithFormAndStore(<FormParent />, {
-      preloadedState: { shipment: populatedGridBoxShipment },
+    fireEvent.click(screen.getByText("2"));
+
+    expect(screen.getByText(/proposal reference/i)).toBeInTheDocument();
+  });
+
+  it.each([
+    { count: 4, type: "1" },
+    { count: 8, type: "2" },
+    { count: 6, type: "3" },
+    { count: 12, type: "4" },
+    { count: 4, type: "auto" },
+  ])("should render $type subtype", ({ count, type }) => {
+    renderAndInjectForm(<GridBox parentId='1' containerSubType={type} />);
+    expect(screen.getAllByRole("button")).toHaveLength(count);
+  });
+
+  it("should display message if there are more children than grid box positions", async () => {
+    const modifiedShipment = structuredClone(populatedGridBoxShipment);
+    modifiedShipment.activeItem.children[0].data.location = 6;
+
+    renderAndInjectForm(<GridBox parentId='1' parentType='topLevelContainer' />, {
+      preloadedState: { shipment: modifiedShipment },
     });
 
-    fireEvent.change(screen.getByTestId("cap"), { target: { value: "5" } });
-    await waitFor(() => expect(screen.getAllByRole("button")).toHaveLength(5));
+    expect(screen.getByText(/remove sample/i)).toBeInTheDocument();
   });
 
   it("should not allow automatic creation on slot assignment if name is invalid", async () => {
@@ -185,7 +187,7 @@ describe("Grid Box", () => {
 
     renderWithFormAndStore(<FormParent />, {
       preloadedState: {
-        shipment: { ...populatedGridBoxShipment, unassigned: defaultShipment.unassigned },
+        shipment: { ...defaultShipment, unassigned: defaultShipment.unassigned },
       },
     });
 

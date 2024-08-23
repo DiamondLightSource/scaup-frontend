@@ -1,4 +1,4 @@
-import { ChildSelector } from "@/components/containers/childSelector";
+import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
@@ -9,47 +9,28 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { BaseContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
-import { SampleSelector } from "@/components/containers/SampleSelector";
+import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 
-export interface GridItemProps {
-  /** Whether or not this grid position has a sample in it */
-  hasSample: boolean;
-  /** Position of the grid in the parent grid box */
-  position: number;
-  /** Callback for clicking on a given position */
-  onSampleClick: () => void;
-}
-
-/**
- * Grid box component. Should be used in conjunction with a field allowing the user to select
- * how many slots (capacity) the grid box should have, inside the parent form.
- */
-export const GridBox = ({ parentId, parentType = "shipment", formContext }: BaseContainerProps) => {
+export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentGridBox = useSelector(selectActiveItem);
-  const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
+  const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
 
-  const capacity =
-    formContext !== undefined ? formContext.watch("capacity", 4) : currentGridBox!.data.capacity;
-  const parsedCapacity = useMemo(() => (capacity ? parseInt(capacity) : 4), [capacity]);
-
-  const samples = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
-    const newSamples = Array(parsedCapacity).fill(null);
+  const items = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
+    const newItems = Array(16).fill(null);
     if (currentGridBox!.children) {
       for (const innerSample of currentGridBox!.children) {
-        // Sample indexes start at 1; historical reasons
-        newSamples[innerSample.data.location - 1] = innerSample;
+        newItems[innerSample.data.location - 1] = innerSample;
       }
     }
-    return newSamples;
-  }, [currentGridBox, parsedCapacity]);
+    return newItems;
+  }, [currentGridBox]);
 
   const setLocation = useChildLocationManager({
     parentId,
-    parent: "containers",
-    child: "samples",
     parentType,
+    containerCreationPreset: { capacity: 16, type: "puck" },
   });
 
   const handlePopulatePosition = useCallback(
@@ -68,7 +49,7 @@ export const GridBox = ({ parentId, parentType = "shipment", formContext }: Base
 
   const handleGridClicked = useCallback(
     (sample: TreeData<PositionedItem> | null, i: number) => {
-      setCurrentSample(sample);
+      setCurrentItem(sample);
       setCurrentPosition(i);
       onOpen();
     },
@@ -86,34 +67,44 @@ export const GridBox = ({ parentId, parentType = "shipment", formContext }: Base
       borderColor='diamond.700'
       bg='#D0E0FF'
     >
-      {samples.map((sample, i) => (
+      {items.slice(0, 5).map((item, i) => (
         <GenericChildSlot
           key={i}
           label={i + 1}
-          hasSample={sample !== null}
-          onClick={() => handleGridClicked(sample, i)}
-          left={`${calcCircumferencePos(i, samples.length, 105, false)}px`}
-          top={`${calcCircumferencePos(i, samples.length, 105)}px`}
-          borderRadius='0'
+          hasSample={item !== null}
+          onClick={() => handleGridClicked(item, i)}
+          right={`${50 + calcCircumferencePos(i, 5, 55, false)}px`}
+          top={`${50 + calcCircumferencePos(i, 5, 55)}px`}
         />
       ))}
-      {parentType === "shipment" ? (
-        <ChildSelector
-          childrenType='sample'
+      {items.slice(5).map((item, i) => (
+        <GenericChildSlot
+          key={i}
+          onClick={() => handleGridClicked(item, i + 5)}
+          label={i + 6}
+          hasSample={item !== null}
+          right={`${calcCircumferencePos(i, 11, 105, false)}px`}
+          top={`${calcCircumferencePos(i, 11, 105)}px`}
+        />
+      ))}
+      {parentType === "topLevelContainer" ? (
+        <CrossShipmentSelector
+          childrenType='gridBox'
           onSelect={handlePopulatePosition}
           onRemove={handleRemoveSample}
-          selectedItem={currentSample}
+          selectedItem={currentItem}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      ) : (
+        <ChildSelector
+          childrenType='gridBox'
+          onSelect={handlePopulatePosition}
+          onRemove={handleRemoveSample}
+          selectedItem={currentItem}
           isOpen={isOpen}
           onClose={onClose}
           readOnly={formContext === undefined}
-        />
-      ) : (
-        <SampleSelector
-          selectedItem={currentSample}
-          isOpen={isOpen}
-          onClose={onClose}
-          onSelect={handlePopulatePosition}
-          onRemove={handleRemoveSample}
         />
       )}
     </Box>

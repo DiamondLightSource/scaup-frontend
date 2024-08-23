@@ -70,12 +70,13 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         toast({ title: "Successfully created item!" });
         router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
       } else {
+        await Item.patch(
+          activeItem!.id,
+          separateDetails(info, activeStep.endpoint),
+          activeStep.endpoint,
+        );
+
         await Promise.all([
-          Item.patch(
-            activeItem!.id,
-            separateDetails(info, activeStep.endpoint),
-            activeStep.endpoint,
-          ),
           dispatch(updateShipment({ shipmentId })),
           dispatch(updateUnassigned({ shipmentId })),
         ]);
