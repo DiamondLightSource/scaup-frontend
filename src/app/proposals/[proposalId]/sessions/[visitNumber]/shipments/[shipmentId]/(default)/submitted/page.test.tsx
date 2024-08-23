@@ -37,6 +37,7 @@ describe("Shipment Submission Overview", () => {
     render(await SubmissionOverview({ params }));
 
     fireEvent.click(screen.getByText(/arrange shipping/i));
+    fireEvent.click(screen.getByText(/continue/i));
 
     await waitFor(() =>
       expect(toastMock).toHaveBeenCalledWith({
