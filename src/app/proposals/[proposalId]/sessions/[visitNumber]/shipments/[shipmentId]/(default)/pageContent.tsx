@@ -22,11 +22,12 @@ export interface ShipmentHomeData {
 export interface ShipmentHomeContentProps {
   data: ShipmentHomeData;
   params: ShipmentParams;
+  isStaff: boolean;
 }
 
 // TODO: make this more generic
 // TODO: update logic for booking status check
-const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
+const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps) => {
   const toast = useToast();
   const router = useRouter();
 
@@ -75,6 +76,15 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           data={data.samples}
           onClick={handleSampleClicked}
         />
+        { isStaff && data.samples &&
+        <VStack w="100%" alignItems="start">
+        <Heading mt='1em' size='lg'>
+          Cassette
+        </Heading>
+        <Divider borderColor='gray.800' />
+        </VStack>
+}
+
         <Heading mt='1em' size='lg'>
           Pre-Session Information
         </Heading>
