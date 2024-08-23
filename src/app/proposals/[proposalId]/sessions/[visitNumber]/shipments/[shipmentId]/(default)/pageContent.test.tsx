@@ -52,6 +52,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -80,6 +81,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -100,6 +102,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -118,6 +121,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -136,6 +140,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -154,6 +159,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -175,6 +181,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -206,6 +213,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -230,6 +238,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -248,6 +257,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: true,
         }}
+        isStaff={false}
       />,
     );
 

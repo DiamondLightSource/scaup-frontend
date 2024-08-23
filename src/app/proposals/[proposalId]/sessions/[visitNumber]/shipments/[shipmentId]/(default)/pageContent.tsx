@@ -1,5 +1,6 @@
 "use client";
 
+import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
@@ -82,6 +83,7 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
           Cassette
         </Heading>
         <Divider borderColor='gray.800' />
+        <Cassette samples={data.samples}/>
         </VStack>
 }
 
