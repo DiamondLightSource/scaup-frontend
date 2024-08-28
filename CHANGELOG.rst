@@ -3,6 +3,25 @@ Changelog
 ==========
 
 +++++++++
+v0.4.0 (28/08/2024)
++++++++++
+
+**Added**
+
+- Inventory system
+- More grid box types
+- More puck types
+- User can now import samples from other shipments in proposal
+
+**Removed**
+
+- :code: `FIB followed by Kryos` option in gridbox page
+
+**Changed**
+
+- Clean up front page
+
++++++++++
 v0.3.0 (09/06/2024)
 +++++++++
 
