@@ -65,27 +65,21 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
           </Button>
         </HStack>
         <Divider borderColor='gray.800' />
-        <Table
-          w='100%'
-          headers={[
-            { key: "name", label: "name" },
-            { key: "status", label: "status" },
-            { key: "actions", label: "" },
-            { key: "parent", label: "parent" },
-            { key: "location", label: "location" },
-          ]}
-          data={data.samples}
-          onClick={handleSampleClicked}
-        />
-        { isStaff && data.samples &&
-        <VStack w="100%" alignItems="start">
-        <Heading mt='1em' size='lg'>
-          Cassette
-        </Heading>
-        <Divider borderColor='gray.800' />
-        <Cassette samples={data.samples}/>
-        </VStack>
-}
+        <HStack w='100%' alignItems='start'>
+          <Table
+            flex='1 0 0'
+            headers={[
+              { key: "name", label: "name" },
+              { key: "status", label: "status" },
+              { key: "actions", label: "" },
+              { key: "parent", label: "parent" },
+              { key: "location", label: "location" },
+            ]}
+            data={data.samples}
+            onClick={handleSampleClicked}
+          />
+          {isStaff && data.samples && <Cassette samples={data.samples} />}
+        </HStack>
 
         <Heading mt='1em' size='lg'>
           Pre-Session Information

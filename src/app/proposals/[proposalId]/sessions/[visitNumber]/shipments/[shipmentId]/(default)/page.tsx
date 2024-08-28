@@ -88,7 +88,11 @@ const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
               </Stat>
             ))}
           </HStack>
-          <ShipmentHomeContent params={params} data={shipmentData} isStaff={!!session && session.permissions.includes("em_admin")} />
+          <ShipmentHomeContent
+            params={params}
+            data={shipmentData}
+            isStaff={!!session && session.permissions.includes("em_admin")}
+          />
         </>
       )}
     </VStack>

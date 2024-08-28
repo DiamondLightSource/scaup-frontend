@@ -147,6 +147,25 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getAllByRole("group")[4]).toHaveAttribute("aria-disabled", "true");
   });
 
+  it("should render cassette if user is staff", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
+        isStaff={true}
+      />,
+    );
+
+    expect(screen.getByText(/cassette/i)).toBeInTheDocument();
+  });
+
   it("should redirect user to shipping service if 'edit booking' is clicked", () => {
     renderWithProviders(
       <ShipmentHomeContent

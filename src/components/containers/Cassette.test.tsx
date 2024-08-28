@@ -1,125 +1,55 @@
-import { Cane } from "@/components/containers/Cane";
-import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
-import { server } from "@/mocks/server";
-import { puck, renderAndInjectForm, testInitialState } from "@/utils/test-utils";
+import { renderAndInjectForm, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
+import { Cassette } from "@/components/containers/Cassette";
 
-const defaultShipment = { shipment: structuredClone(testInitialState) };
-
-defaultShipment.shipment.unassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck);
-
-const populatedContainer = {
-  name: "cane",
+const defaultSample = {
   id: 1,
-  data: { type: "cane" },
-  children: [{ ...puck, data: { location: 5 } }],
-} as TreeData<BaseShipmentItem>;
+  name: "cassette-sample",
+  subLocation: 1,
+  type: "sample",
+  shipmentId: 1,
+  proteinId: 1,
+};
 
-defaultShipment.shipment.activeItem = populatedContainer;
+describe("Cassette", () => {
+  it("should render 12 cassette slots", () => {
+    renderAndInjectForm(<Cassette samples={[]} />);
 
-const populatedContainerShipment = [
-  {
-    id: "dewar",
-    name: "dewar",
-    data: { type: "dewar" },
-    children: [populatedContainer],
-  },
-];
+    expect(screen.getAllByRole("button")).toHaveLength(12);
+  });
 
-describe("Cane", () => {
-  it("should create container if not yet in database before populating slot", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedContainerShipment }),
-        { once: true },
-      ),
+  it("should render passed samples", () => {
+    renderAndInjectForm(<Cassette samples={[defaultSample]} />);
 
-      http.post(
-        "http://localhost/api/shipments/:shipmentId/containers",
-        () => HttpResponse.json({ id: 9 }, { status: 201 }),
-        { once: true },
-      ),
-    );
+    expect(screen.getByText("cassette-sample")).toBeInTheDocument();
+  });
 
-    renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: defaultShipment,
-    });
+  it("should render selectable samples in modal", () => {
+    renderAndInjectForm(<Cassette samples={[{ ...defaultSample, subLocation: null }]} />);
 
-    fireEvent.click(screen.getByText("5"));
+    fireEvent.click(screen.getByText("12"));
+
+    expect(screen.getByText("cassette-sample")).toBeInTheDocument();
+  });
+
+  it("should close modal when adding sample to cassette", async () => {
+    renderAndInjectForm(<Cassette samples={[{ ...defaultSample, subLocation: null }]} />);
+
+    fireEvent.click(screen.getByText("12"));
+
+    expect(screen.getByText("cassette-sample")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByText("puck");
+    await waitFor(() => expect(screen.queryByText(/apply/i)).not.toBeInTheDocument());
   });
 
-  it("should render 10 cane slots", () => {
-    renderAndInjectForm(<Cane parentId='1' />);
+  it("should close modal when removing sample from cassette", async () => {
+    renderAndInjectForm(<Cassette samples={[defaultSample]} />);
 
-    expect(screen.getAllByRole("button")).toHaveLength(10);
-  });
-
-  it("should add item to container and update", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedContainerShipment }),
-        { once: true },
-      ),
-    );
-
-    renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
-    });
-
-    fireEvent.click(screen.getByText("5"));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await screen.findByText("puck");
-  });
-
-  it("should populate slots with data from state", () => {
-    renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          activeItem: populatedContainer,
-          isEdit: true,
-        },
-      },
-    });
-
-    screen.getByText("puck");
-  });
-
-  it("should remove item when remove is clicked", async () => {
-    const unpopulatedContainerShipment = structuredClone(populatedContainerShipment);
-    unpopulatedContainerShipment[0].children[0].children = [];
-
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: unpopulatedContainerShipment }),
-        { once: true },
-      ),
-    );
-
-    renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          activeItem: populatedContainer,
-          isEdit: true,
-        },
-      },
-    });
-
-    fireEvent.click(screen.getByText("puck"));
+    fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("button", { name: "Remove" }));
 
-    await waitFor(() => expect(screen.queryByText("puck")).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText(/apply/i)).not.toBeInTheDocument());
   });
 });
