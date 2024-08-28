@@ -15,7 +15,7 @@ v0.4.0 (28/08/2024)
 
 **Removed**
 
-- :code: `FIB followed by Kryos` option in gridbox page
+- :code:`FIB followed by Kryos` option in gridbox page
 
 **Changed**
 
