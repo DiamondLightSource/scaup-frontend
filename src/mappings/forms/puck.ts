@@ -12,4 +12,14 @@ export const puckForm = [
     },
     watch: true,
   },
+  {
+    id: "subType",
+    label: "Sub Type",
+    type: "dropdown",
+    values: [
+      { label: "1", value: "1" },
+      { label: "2", value: "2" },
+    ],
+    watch: true,
+  },
 ] as DynamicFormEntry[];

@@ -3,53 +3,109 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { calcCircumferencePos } from "@/utils/generic";
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Box, useDisclosure, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { BaseContainerProps, useChildLocationManager } from ".";
+import { ContainerProps, useChildLocationManager } from ".";
+import Image from "next/image";
 import { GenericChildSlot } from "@/components/containers/child";
 import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
+import { ContainerItem } from "@/types/generic";
 
-export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) => {
+const PUCK_IMAGES: Record<string, string> = {
+  "1": "/containers/puck1.svg",
+  "2": "/containers/puck2.svg",
+};
+const PUCK_TYPES: Record<string, ContainerItem[]> = {
+  "1": [
+    { x: 88, y: 20 },
+    { x: 168, y: 20 },
+    { x: 58, y: 80 },
+    { x: 128, y: 80 },
+    { x: 198, y: 80 },
+    { x: 18, y: 140 },
+    { x: 88, y: 140 },
+    { x: 158, y: 140 },
+    { x: 228, y: 140 },
+    { x: 58, y: 200 },
+    { x: 128, y: 200 },
+    { x: 198, y: 200 },
+  ],
+  "2": [
+    { x: 168, y: 30 },
+    { x: 228, y: 90 },
+    { x: 228, y: 167 },
+    { x: 168, y: 226 },
+    { x: 88, y: 226 },
+    { x: 28, y: 167 },
+    { x: 28, y: 90 },
+    { x: 88, y: 30 },
+    { x: 163, y: 90 },
+    { x: 163, y: 167 },
+    { x: 93, y: 167 },
+    { x: 93, y: 90 },
+  ],
+};
+
+export const Puck = ({
+  parentId,
+  parentType = "shipment",
+  formContext,
+  containerSubType,
+}: Omit<ContainerProps, "containerType">) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentGridBox = useSelector(selectActiveItem);
+  const currentPuck = useSelector(selectActiveItem);
   const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
 
-  const items = useMemo<Array<TreeData<PositionedItem> | null>>(() => {
-    const newItems = Array(16).fill(null);
-    if (currentGridBox!.children) {
-      for (const innerSample of currentGridBox!.children) {
-        newItems[innerSample.data.location - 1] = innerSample;
+  const positions = useMemo(() => {
+    const selectedType = PUCK_TYPES[containerSubType ?? "1"] || PUCK_TYPES["1"];
+    const newItems: Required<ContainerItem>[] = selectedType.map((v) => ({
+      ...v,
+      item: null,
+    }));
+    let itemOverload = false;
+
+    if (currentPuck!.children) {
+      for (const innerItem of currentPuck!.children) {
+        if (!newItems[innerItem.data.location - 1]) {
+          itemOverload = true;
+          continue;
+        }
+
+        newItems[innerItem.data.location - 1].item = innerItem;
       }
     }
-    return newItems;
-  }, [currentGridBox]);
+    return { items: newItems, itemOverload };
+  }, [currentPuck, containerSubType]);
+
+  const imageLocation = useMemo(
+    () => PUCK_IMAGES[containerSubType ?? "1"] || PUCK_IMAGES["1"],
+    [containerSubType],
+  );
 
   const setLocation = useChildLocationManager({
     parentId,
     parentType,
-    containerCreationPreset: { capacity: 16, type: "puck" },
   });
 
   const handlePopulatePosition = useCallback(
-    async (sample: TreeData<BaseShipmentItem>) => {
-      await setLocation(currentGridBox!.id, sample, currentPosition);
+    async (item: TreeData<BaseShipmentItem>) => {
+      await setLocation(currentPuck!.id, item, currentPosition);
     },
-    [currentGridBox, currentPosition, setLocation],
+    [currentPuck, currentPosition, setLocation],
   );
 
-  const handleRemoveSample = useCallback(
-    async (sample: TreeData<BaseShipmentItem>) => {
-      await setLocation(null, sample, null);
+  const handleRemoveItem = useCallback(
+    async (item: TreeData<BaseShipmentItem>) => {
+      await setLocation(null, item, null);
     },
     [setLocation],
   );
 
   const handleGridClicked = useCallback(
-    (sample: TreeData<PositionedItem> | null, i: number) => {
-      setCurrentItem(sample);
+    (item: TreeData<PositionedItem> | null, i: number) => {
+      setCurrentItem(item);
       setCurrentPosition(i);
       onOpen();
     },
@@ -57,56 +113,49 @@ export const Puck = ({ parentId, parentType, formContext }: BaseContainerProps) 
   );
 
   return (
-    <Box
-      w='296px'
-      h='296px'
-      m='20px'
-      position='relative'
-      border='3px solid'
-      borderRadius='100%'
-      borderColor='diamond.700'
-      bg='#D0E0FF'
-    >
-      {items.slice(0, 5).map((item, i) => (
-        <GenericChildSlot
-          key={i}
-          label={i + 1}
-          hasSample={item !== null}
-          onClick={() => handleGridClicked(item, i)}
-          right={`${50 + calcCircumferencePos(i, 5, 55, false)}px`}
-          top={`${50 + calcCircumferencePos(i, 5, 55)}px`}
-        />
-      ))}
-      {items.slice(5).map((item, i) => (
-        <GenericChildSlot
-          key={i}
-          onClick={() => handleGridClicked(item, i + 5)}
-          label={i + 6}
-          hasSample={item !== null}
-          right={`${calcCircumferencePos(i, 11, 105, false)}px`}
-          top={`${calcCircumferencePos(i, 11, 105)}px`}
-        />
-      ))}
-      {parentType === "topLevelContainer" ? (
-        <CrossShipmentSelector
-          childrenType='gridBox'
-          onSelect={handlePopulatePosition}
-          onRemove={handleRemoveSample}
-          selectedItem={currentItem}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      ) : (
-        <ChildSelector
-          childrenType='gridBox'
-          onSelect={handlePopulatePosition}
-          onRemove={handleRemoveSample}
-          selectedItem={currentItem}
-          isOpen={isOpen}
-          onClose={onClose}
-          readOnly={formContext === undefined}
-        />
+    <VStack w='296px'>
+      {positions.itemOverload && (
+        <Alert status='error'>
+          <AlertIcon />
+          <AlertDescription>
+            At least one item was previously assigned a position that does not exist in this puck.
+            Please <b>remove children</b> before switching puck types.
+          </AlertDescription>
+        </Alert>
       )}
-    </Box>
+      <Box w='296px' h='296px' position='relative' margin='20px'>
+        <Image width={296} height={296} alt='Puck' src={imageLocation} />
+        {positions.items.map((item, i) => (
+          <GenericChildSlot
+            key={i}
+            label={i + 1}
+            hasSample={item.item !== null}
+            onClick={() => handleGridClicked(item.item, i)}
+            left={`${item.x}px`}
+            top={`${item.y}px`}
+          />
+        ))}
+        {parentType === "shipment" ? (
+          <ChildSelector
+            childrenType='gridBox'
+            onSelect={handlePopulatePosition}
+            onRemove={handleRemoveItem}
+            selectedItem={currentItem}
+            isOpen={isOpen}
+            onClose={onClose}
+            readOnly={formContext === undefined}
+          />
+        ) : (
+          <CrossShipmentSelector
+            selectedItem={currentItem}
+            isOpen={isOpen}
+            onClose={onClose}
+            onSelect={handlePopulatePosition}
+            onRemove={handleRemoveItem}
+            childrenType='gridBox'
+          />
+        )}
+      </Box>
+    </VStack>
   );
 };

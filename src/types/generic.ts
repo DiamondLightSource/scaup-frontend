@@ -50,7 +50,7 @@ export interface InventoryItemParams {
 }
 
 export type RootParentType = "shipment" | "topLevelContainer";
-export interface GridBoxItem {
+export interface ContainerItem {
   item?: TreeData<PositionedItem> | null;
   // X position for item in visual representation
   x: number;
