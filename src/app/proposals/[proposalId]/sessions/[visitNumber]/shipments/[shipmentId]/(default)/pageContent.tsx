@@ -5,11 +5,11 @@ import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { createShipmentRequest } from "@/utils/client";
-import { Divider, HStack, Heading, VStack, useToast, Button, Spacer } from "@chakra-ui/react";
+import { Divider, HStack, Heading, VStack, useToast, Button, Spacer, Link } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 export interface ShipmentHomeData {
   counts: Record<string, number>;
@@ -54,6 +54,18 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
     [router, params],
   );
 
+  const samplesWithActions = useMemo(() => {
+    const patoPrefix = `${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/`;
+    return data.samples.map((sample) => ({
+      ...sample,
+      actions: sample.dataCollectionGroupId ? (
+        <Button size='xs' as={Link} href={patoPrefix + sample.dataCollectionGroupId}>
+          View Data
+        </Button>
+      ) : null,
+    }));
+  }, [data]);
+
   return (
     <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
       <VStack alignItems='start' flex='1 0 0'>
@@ -71,11 +83,11 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
             headers={[
               { key: "name", label: "name" },
               { key: "status", label: "status" },
-              { key: "actions", label: "" },
               { key: "parent", label: "parent" },
               { key: "location", label: "location" },
+              { key: "actions", label: "" },
             ]}
-            data={data.samples}
+            data={samplesWithActions}
             onClick={handleSampleClicked}
           />
           {isStaff && data.samples && <Cassette samples={data.samples} />}
