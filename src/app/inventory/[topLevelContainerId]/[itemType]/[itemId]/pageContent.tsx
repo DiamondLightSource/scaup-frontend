@@ -14,6 +14,7 @@ import {
   getCurrentStepIndex,
   internalEbicSteps,
   separateDetails,
+  steps,
 } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { InventoryItemParams } from "@/types/generic";
@@ -29,10 +30,15 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
-    () =>
-      internalEbicSteps[
+    () => {
+      if (params.itemType === "dewar") {
+        return steps[steps.length - 1];
+      }
+
+      return internalEbicSteps[
         getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)
-      ],
+      ]
+    },
     [activeItem],
   );
   const router = useRouter();
@@ -73,12 +79,13 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
 
         router.replace(`../${newItem.type}/${newItem.id}`, { scroll: false });
       } else {
+        await Item.patch(
+          activeItem!.id,
+          separateDetails(info, activeStep.endpoint),
+          activeStep.endpoint,
+        );
+
         await Promise.all([
-          Item.patch(
-            activeItem!.id,
-            separateDetails(info, activeStep.endpoint),
-            activeStep.endpoint,
-          ),
           dispatch(
             updateShipment({
               shipmentId: params.topLevelContainerId,
