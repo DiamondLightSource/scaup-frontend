@@ -6,7 +6,7 @@ import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
-import { GenericContainer } from "@/components/containers/generic";
+import { GenericContainer } from "@/components/containers/Generic";
 
 const defaultShipment = { shipment: structuredClone(initialState) };
 
