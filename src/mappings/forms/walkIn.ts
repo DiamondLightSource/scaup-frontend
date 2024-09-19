@@ -13,4 +13,13 @@ export const walkInForm = [
     },
   },
   ...topLevelContainerForm,
+  {
+    id: "code",
+    label: "Dewar Code",
+    type: "dropdown",
+    values: {
+      base: [{ label: "None", value: "" }],
+      $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
+    },
+  },
 ] as DynamicFormEntry[];
