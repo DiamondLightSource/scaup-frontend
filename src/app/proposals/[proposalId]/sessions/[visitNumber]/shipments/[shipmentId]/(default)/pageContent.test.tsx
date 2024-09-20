@@ -52,6 +52,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -80,6 +81,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -100,6 +102,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -118,6 +121,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -136,10 +140,30 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
     expect(screen.getAllByRole("group")[4]).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should render cassette if user is staff", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
+        isStaff={true}
+      />,
+    );
+
+    expect(screen.getByText(/cassette/i)).toBeInTheDocument();
   });
 
   it("should redirect user to shipping service if 'edit booking' is clicked", () => {
@@ -154,6 +178,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -175,6 +200,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -206,6 +232,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -230,6 +257,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -248,6 +276,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: true,
         }}
+        isStaff={false}
       />,
     );
 

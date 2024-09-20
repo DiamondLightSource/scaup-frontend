@@ -18,6 +18,8 @@ export interface ChildSelectorProps extends BaseChildSelectorProps {
   childrenType: BaseShipmentItem["type"];
   /** Disable editing controls */
   readOnly?: boolean;
+  /** Selectable children. If not provided, unassigned items are used */
+  selectableChildren?: TreeData[];
 }
 
 export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {

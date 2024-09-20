@@ -1,5 +1,6 @@
 "use client";
 
+import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
@@ -22,11 +23,12 @@ export interface ShipmentHomeData {
 export interface ShipmentHomeContentProps {
   data: ShipmentHomeData;
   params: ShipmentParams;
+  isStaff: boolean;
 }
 
 // TODO: make this more generic
 // TODO: update logic for booking status check
-const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
+const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps) => {
   const toast = useToast();
   const router = useRouter();
 
@@ -63,18 +65,22 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           </Button>
         </HStack>
         <Divider borderColor='gray.800' />
-        <Table
-          w='100%'
-          headers={[
-            { key: "name", label: "name" },
-            { key: "status", label: "status" },
-            { key: "actions", label: "" },
-            { key: "parent", label: "parent" },
-            { key: "location", label: "location" },
-          ]}
-          data={data.samples}
-          onClick={handleSampleClicked}
-        />
+        <HStack w='100%' alignItems='start'>
+          <Table
+            flex='1 0 0'
+            headers={[
+              { key: "name", label: "name" },
+              { key: "status", label: "status" },
+              { key: "actions", label: "" },
+              { key: "parent", label: "parent" },
+              { key: "location", label: "location" },
+            ]}
+            data={data.samples}
+            onClick={handleSampleClicked}
+          />
+          {isStaff && data.samples && <Cassette samples={data.samples} />}
+        </HStack>
+
         <Heading mt='1em' size='lg'>
           Pre-Session Information
         </Heading>

@@ -684,6 +684,8 @@ export interface components {
       containerId?: number | null;
       /** Location */
       location?: number | null;
+      /** Sub Location */
+      subLocation?: number | null;
       /** Details */
       details?: Record<string, never> | null;
       /** Comments */
