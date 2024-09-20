@@ -1,6 +1,6 @@
 import { toastMock } from "@/../vitest.setup";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
@@ -281,5 +281,33 @@ describe("Shipment Submission Overview", () => {
     );
 
     expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should display link to data collection group if available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [
+            {
+              id: 1,
+              name: "sample-test",
+              type: "grid",
+              shipmentId: 1,
+              proteinId: 1,
+              dataCollectionGroupId: 1,
+            },
+          ],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: true,
+        }}
+        isStaff={false}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "View Data" })).toBeInTheDocument();
   });
 });

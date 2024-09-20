@@ -25,9 +25,12 @@ export const metadata: Metadata = {
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
-  const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`, {
-    next: { tags: ["samples"] },
-  });
+  const resSamples = await authenticatedFetch.server(
+    `/shipments/${shipmentId}/samples?ignoreExternal=false`,
+    {
+      next: { tags: ["samples"] },
+    },
+  );
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
   const unassignedData = await getShipmentData(shipmentId, "/unassigned");
 
