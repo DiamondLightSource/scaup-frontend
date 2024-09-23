@@ -37,8 +37,14 @@ export const ItemForm = ({
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
 
   useEffect(() => {
-    setRenderedForm(formMapping[formType]);
-  }, [formType]);
+    const newForm = formMapping[formType];
+
+    if (formType === "dewar" && parentType === "topLevelContainer") {
+      newForm[newForm.findIndex((field) => field.id === "code")].isDisabled = true;
+    }
+
+    setRenderedForm(newForm);
+  }, [formType, parentType]);
 
   const handleWatchedUpdated = useCallback((formValues: FieldValues) => {
     if ("type" in formValues) {

@@ -1,4 +1,4 @@
-import { GenericContainer } from "@/components/containers/generic";
+import { GenericContainer } from "@/components/containers/Generic";
 import { GridBox } from "@/components/containers/GridBox";
 import {
   selectActiveItem,
@@ -99,6 +99,7 @@ export const useChildLocationManager = ({
          *
          * TODO: have some clever way of checking whether or not changes actually happened
          */
+        console.log(currentContainer)
         Item.patch(
           currentContainer!.id,
           { ...currentContainer!.data, type: values.type, subType: values.subType },
