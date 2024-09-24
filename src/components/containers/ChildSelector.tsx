@@ -33,6 +33,7 @@ export const ChildSelector = ({
   onSelect,
   onRemove,
   readOnly = false,
+  selectableChildren,
   ...props
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
@@ -44,10 +45,14 @@ export const ChildSelector = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
+    if (selectableChildren) {
+      return selectableChildren;
+    }
+
     return unassigned[0].children![childrenTypeData.index].children!.length
       ? unassigned[0].children![childrenTypeData.index].children
       : null;
-  }, [unassigned, childrenTypeData]);
+  }, [unassigned, childrenTypeData, selectableChildren]);
 
   const handleItemSelected = useCallback(async () => {
     if (onSelect && radioIndex !== null && unassignedItems) {

@@ -1,14 +1,15 @@
 "use client";
 
+import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { createShipmentRequest } from "@/utils/client";
-import { Divider, HStack, Heading, VStack, useToast, Button, Spacer } from "@chakra-ui/react";
+import { Divider, HStack, Heading, VStack, useToast, Button, Spacer, Link } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 export interface ShipmentHomeData {
   counts: Record<string, number>;
@@ -22,11 +23,12 @@ export interface ShipmentHomeData {
 export interface ShipmentHomeContentProps {
   data: ShipmentHomeData;
   params: ShipmentParams;
+  isStaff: boolean;
 }
 
 // TODO: make this more generic
 // TODO: update logic for booking status check
-const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
+const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps) => {
   const toast = useToast();
   const router = useRouter();
 
@@ -52,6 +54,18 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
     [router, params],
   );
 
+  const samplesWithActions = useMemo(() => {
+    const patoPrefix = `${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/`;
+    return data.samples.map((sample) => ({
+      ...sample,
+      actions: sample.dataCollectionGroupId ? (
+        <Button size='xs' as={Link} href={patoPrefix + sample.dataCollectionGroupId}>
+          View Data
+        </Button>
+      ) : null,
+    }));
+  }, [data]);
+
   return (
     <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
       <VStack alignItems='start' flex='1 0 0'>
@@ -63,18 +77,22 @@ const ShipmentHomeContent = ({ data, params }: ShipmentHomeContentProps) => {
           </Button>
         </HStack>
         <Divider borderColor='gray.800' />
-        <Table
-          w='100%'
-          headers={[
-            { key: "name", label: "name" },
-            { key: "status", label: "status" },
-            { key: "actions", label: "" },
-            { key: "parent", label: "parent" },
-            { key: "location", label: "location" },
-          ]}
-          data={data.samples}
-          onClick={handleSampleClicked}
-        />
+        <HStack w='100%' alignItems='start'>
+          <Table
+            flex='1 0 0'
+            headers={[
+              { key: "name", label: "name" },
+              { key: "status", label: "status" },
+              { key: "parent", label: "parent" },
+              { key: "location", label: "location" },
+              { key: "actions", label: "" },
+            ]}
+            data={samplesWithActions}
+            onClick={handleSampleClicked}
+          />
+          {isStaff && data.samples && <Cassette samples={data.samples} />}
+        </HStack>
+
         <Heading mt='1em' size='lg'>
           Pre-Session Information
         </Heading>

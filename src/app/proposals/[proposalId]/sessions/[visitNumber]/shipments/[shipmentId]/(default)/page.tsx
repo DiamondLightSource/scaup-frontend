@@ -16,6 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import ShipmentHomeContent from "./pageContent";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/mappings/authOptions";
 
 export const metadata: Metadata = {
   title: "Shipment - Sample Handling",
@@ -23,9 +25,12 @@ export const metadata: Metadata = {
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
-  const resSamples = await authenticatedFetch.server(`/shipments/${shipmentId}/samples`, {
-    next: { tags: ["samples"] },
-  });
+  const resSamples = await authenticatedFetch.server(
+    `/shipments/${shipmentId}/samples?ignoreExternal=false`,
+    {
+      next: { tags: ["samples"] },
+    },
+  );
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
   const unassignedData = await getShipmentData(shipmentId, "/unassigned");
 
@@ -56,6 +61,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
 
 const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
+  const session = await getServerSession(authOptions);
 
   return (
     <VStack alignItems='start'>
@@ -85,7 +91,11 @@ const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
               </Stat>
             ))}
           </HStack>
-          <ShipmentHomeContent params={params} data={shipmentData} />
+          <ShipmentHomeContent
+            params={params}
+            data={shipmentData}
+            isStaff={!!session && session.permissions.includes("em_admin")}
+          />
         </>
       )}
     </VStack>

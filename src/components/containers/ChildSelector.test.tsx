@@ -124,4 +124,17 @@ describe("Child Selector", () => {
 
     expect(screen.queryByText("Sample")).not.toBeInTheDocument();
   });
+
+  it("should render selectable children if passed", () => {
+    renderWithProviders(
+      <ChildSelector
+        childrenType='sample'
+        isOpen={true}
+        onClose={() => {}}
+        selectableChildren={[{ id: 1, name: "selectable-child", data: {} }]}
+      />,
+    );
+
+    expect(screen.getByText("selectable-child")).toBeInTheDocument();
+  });
 });

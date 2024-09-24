@@ -1,6 +1,6 @@
 import { toastMock } from "@/../vitest.setup";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
@@ -52,6 +52,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -80,6 +81,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -100,6 +102,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -118,6 +121,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -136,10 +140,30 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
     expect(screen.getAllByRole("group")[4]).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should render cassette if user is staff", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: null,
+          hasUnassigned: false,
+        }}
+        isStaff={true}
+      />,
+    );
+
+    expect(screen.getByText(/cassette/i)).toBeInTheDocument();
   });
 
   it("should redirect user to shipping service if 'edit booking' is clicked", () => {
@@ -154,6 +178,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -175,6 +200,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -206,6 +232,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -230,6 +257,7 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: false,
         }}
+        isStaff={false}
       />,
     );
 
@@ -248,9 +276,38 @@ describe("Shipment Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: true,
         }}
+        isStaff={false}
       />,
     );
 
     expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should display link to data collection group if available", () => {
+    renderWithProviders(
+      <ShipmentHomeContent
+        params={params}
+        data={{
+          samples: [
+            {
+              id: 1,
+              name: "sample-test",
+              type: "grid",
+              shipmentId: 1,
+              proteinId: 1,
+              dataCollectionGroupId: 1,
+            },
+          ],
+          counts: {},
+          dispatch: { status: "Booked" },
+          name: "",
+          preSessionInfo: { details: { pixelSize: 150 } },
+          hasUnassigned: true,
+        }}
+        isStaff={false}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "View Data" })).toBeInTheDocument();
   });
 });

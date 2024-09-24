@@ -88,4 +88,20 @@ describe("Inventory Item Page Content", () => {
 
     expect(screen.getByRole("button", { name: "Create New Item" })).toHaveAttribute("disabled");
   });
+
+  it("should disable code field if item is inventory dewar", () => {
+    renderWithProviders(
+      <ItemForm parentId='1' onSubmit={async () => {}} parentType='topLevelContainer' />,
+      {
+        preloadedState: {
+          shipment: {
+            ...baseShipment.shipment,
+            activeItem: { id: 1, data: { type: "dewar" }, name: "dewar" },
+          },
+        },
+      },
+    );
+
+    screen.getByRole("combobox", { name: "Dewar Code" }).hasAttribute("disabled");
+  });
 });

@@ -2,7 +2,7 @@ import { DynamicFormEntry } from "@/components/input/form/input";
 import { containerForm } from "@/mappings/forms/container";
 
 export const puckForm = [
-  ...containerForm,
+  ...containerForm.slice(0, 2),
   {
     id: "registeredContainer", // External ID?
     label: "Registered Container",
@@ -23,4 +23,14 @@ export const puckForm = [
     ],
     watch: true,
   },
+  {
+    id: "registeredContainer", // External ID?
+    label: "Registered Container",
+    type: "dropdown",
+    values: {
+      $ref: { parent: "#/containers", map: { value: "actualBarcode", label: "barcode" } },
+    },
+    watch: true,
+  },
+  ...containerForm.slice(2),
 ] as DynamicFormEntry[];

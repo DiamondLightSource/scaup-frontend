@@ -3,6 +3,20 @@ Changelog
 ==========
 
 +++++++++
+v0.5.0 (23/09/2024)
++++++++++
+
+**Added**
+
+- "View data" button if sample is linked to a collection
+- Cassette view (assign samples to cassette slots)
+
+**Changed**
+
+- Disabled dewar code field in inventory items
+
+
++++++++++
 v0.4.0 (28/08/2024)
 +++++++++
 

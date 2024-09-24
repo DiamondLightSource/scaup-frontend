@@ -1,6 +1,7 @@
 import { server } from "@/mocks/server";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { getServerSession } from "next-auth";
 
 const pathnameMock = vi.fn(() => "/");
 export const toastMock = vi.fn();
@@ -57,5 +58,13 @@ vi.mock("@chakra-ui/react", async (importOriginal) => {
     ...actual,
     createStandaloneToast: () => ({ toast: toastMock }),
     useToast: () => toastMock,
+  };
+});
+
+vi.mock("next-auth", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    getServerSession: () => {}
   };
 });
