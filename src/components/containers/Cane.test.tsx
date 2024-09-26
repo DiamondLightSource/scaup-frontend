@@ -71,6 +71,6 @@ describe("Cane", () => {
 
     await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
 
-    expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 9 }))
+    expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 9 }));
   });
 });
