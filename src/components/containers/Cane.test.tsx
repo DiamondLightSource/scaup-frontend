@@ -1,10 +1,11 @@
 import { Cane } from "@/components/containers/Cane";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
-import { server } from "@/mocks/server";
 import { puck, renderAndInjectForm, testInitialState } from "@/utils/test-utils";
-import { fireEvent, screen } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { setLocationMock } from "@/components/containers/__mocks__";
+
+vi.mock("@/components/containers");
 
 const defaultShipment = { shipment: structuredClone(testInitialState) };
 
@@ -19,52 +20,25 @@ const populatedContainer = {
 
 defaultShipment.shipment.activeItem = populatedContainer;
 
-const populatedContainerShipment = [
-  {
-    id: "dewar",
-    name: "dewar",
-    data: { type: "dewar" },
-    children: [populatedContainer],
-  },
-];
-
 describe("Cane", () => {
-  it("should create container if not yet in database before populating slot", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedContainerShipment }),
-        { once: true },
-      ),
-
-      http.post(
-        "http://localhost/api/shipments/:shipmentId/containers",
-        () => HttpResponse.json({ id: 9 }, { status: 201 }),
-        { once: true },
-      ),
-    );
-
-    renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: defaultShipment,
-    });
-
-    fireEvent.click(screen.getByText("5"));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await screen.findByText("puck");
-  });
-
   it("should render 10 cane slots", () => {
     renderAndInjectForm(<Cane parentId='1' />);
 
     expect(screen.getAllByRole("button")).toHaveLength(10);
   });
 
-  it.skip("should fire creation callback when apply is clicked", async () => {
+  it("should fire creation callback when apply is clicked", async () => {
     renderAndInjectForm(<Cane parentId='1' />, {
-      preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
+      preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: false } },
     });
+
+    fireEvent.click(screen.getByRole("button", { name: "1" }));
+    fireEvent.click(screen.getByRole("radio"));
+    fireEvent.click(screen.getByText("Apply"));
+
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
+
+    expect(setLocationMock).toHaveBeenCalledWith(1, expect.objectContaining({ id: 9 }), 0);
   });
 
   it("should populate slots with data from state", () => {
@@ -81,7 +55,7 @@ describe("Cane", () => {
     screen.getByText("puck");
   });
 
-  it.skip("should fire remove callback when remove is clicked", () => {
+  it("should fire remove callback when remove is clicked", async () => {
     renderAndInjectForm(<Cane parentId='1' />, {
       preloadedState: {
         shipment: {
@@ -91,5 +65,12 @@ describe("Cane", () => {
         },
       },
     });
+
+    fireEvent.click(screen.getByText("5"));
+    fireEvent.click(screen.getByText("Remove"));
+
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
+
+    expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 9 }))
   });
 });
