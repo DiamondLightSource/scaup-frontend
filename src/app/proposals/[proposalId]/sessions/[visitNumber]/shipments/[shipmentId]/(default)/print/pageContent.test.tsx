@@ -1,5 +1,5 @@
 import { BaseShipmentItem } from "@/mappings/pages";
-import { gridBox, renderWithProviders } from "@/utils/test-utils";
+import { gridBox, prepopData, renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import PrintableOverviewContent, { PrintButton } from "./pageContent";
 
@@ -17,7 +17,7 @@ const defaultShipment = {
           id: "container",
           name: "container",
           data: { type: "puck", registeredContainer: "DLS-01" },
-          children: [gridBox],
+          children: [{ ...gridBox, children: [sample] }],
         },
       ],
     },
@@ -40,13 +40,10 @@ describe("Shipment Printable Overview", () => {
 
   it("should display 'human' value of field if field is prepopulated with external data", () => {
     renderWithProviders(
-      <PrintableOverviewContent
-        shipment={defaultShipment}
-        prepopData={{ containers: [{ actualBarcode: "DLS-01", barcode: "barcode value" }] }}
-      />,
+      <PrintableOverviewContent shipment={defaultShipment} prepopData={prepopData} />,
     );
 
-    expect(screen.getByText("barcode value")).toBeInTheDocument();
+    expect(screen.getByText("AAA")).toBeInTheDocument();
   });
 });
 

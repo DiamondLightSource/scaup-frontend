@@ -105,7 +105,7 @@ export const gridBox: TreeData<BaseShipmentItem> = {
 export const sample: TreeData<BaseShipmentItem> = {
   id: 5,
   name: "sample-1",
-  data: { type: "sample" },
+  data: { type: "sample", proteinId: 1 },
 };
 
 export const puck: TreeData<BaseShipmentItem> = {

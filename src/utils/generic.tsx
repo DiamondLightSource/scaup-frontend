@@ -10,6 +10,8 @@ export interface JsonRefMap {
 export interface JsonRef {
   /** Reference, either in the form of a map or a path formatted as `#/parent/child` */
   $ref: JsonRefMap | string;
+  /** Base values to include in returned array */
+  base?: { [x: string]: any }[];
 }
 
 /**
@@ -24,13 +26,23 @@ export const parseJsonReferences = (pointer: string | JsonRef, pointee: Record<s
   if (typeof pointer === "object" && pointer.$ref !== undefined) {
     // TODO: test if pointer returns value rather than reference if syntax is not correct
     const ref: JsonRefMap | string = pointer.$ref;
+    const baseArray = Array.isArray(pointer.base) ? structuredClone(pointer.base) : null;
+    let pointerVal = parsePointer(
+      typeof ref === "object" ? ref.parent.slice(2) : ref.slice(2),
+      pointee,
+    );
 
-    if (typeof ref === "object") {
-      const value = parsePointer(ref.parent.slice(2), pointee);
-      return !Array.isArray(value) || value.length < 1 ? null : parseArrayUsingMap(ref.map, value);
+    if (!Array.isArray(pointerVal)) {
+      return baseArray ?? pointerVal;
     }
 
-    return parsePointer(ref.slice(2), pointee);
+    if (typeof ref === "object") {
+      pointerVal = parseArrayUsingMap(ref.map, pointerVal);
+    }
+
+    const fullValue = baseArray ? baseArray.concat(pointerVal) : pointerVal;
+
+    return fullValue.length < 1 ? null : fullValue;
   }
   return pointer;
 };
