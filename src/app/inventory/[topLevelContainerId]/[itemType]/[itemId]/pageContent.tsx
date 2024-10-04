@@ -6,8 +6,6 @@ import {
   selectIsEdit,
   setNewActiveItem,
   syncActiveItem,
-  updateShipment,
-  updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
 import {
   BaseShipmentItem,
@@ -39,7 +37,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
         getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)
       ]
     },
-    [activeItem],
+    [activeItem, params],
   );
   const router = useRouter();
 
@@ -85,26 +83,11 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
           activeStep.endpoint,
         );
 
-        await Promise.all([
-          dispatch(
-            updateShipment({
-              shipmentId: params.topLevelContainerId,
-              parentType: "topLevelContainer",
-            }),
-          ),
-          dispatch(
-            updateUnassigned({
-              shipmentId: params.topLevelContainerId,
-              parentType: "topLevelContainer",
-            }),
-          ),
-        ]);
-
         toast({ title: "Successfully saved item!" });
         router.replace(`../${info.type}/${activeItem!.id}`, { scroll: false });
       }
     },
-    [dispatch, toast, activeItem, activeIsEdit, params, router, activeStep],
+    [toast, activeItem, activeIsEdit, params, router, activeStep],
   );
 
   if (activeItem) {

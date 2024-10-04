@@ -2,39 +2,28 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, Step } from "@/mappings/pages";
 import { RootParentType } from "@/types/generic";
 import { CreationResponse } from "@/types/server";
-import { authenticatedFetch } from "@/utils/client";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { parentTypeToEndpoint } from "@/utils/client/shipment";
-import { revalidateServerTag } from "../server/cache";
+import { requestAndInvalidate } from "@/utils/server/request";
 
 const { toast } = createStandaloneToast();
 
-const displayError = async (action: string, response: Response | undefined) => {
-  let details = "Internal server error";
-  try {
-    if (response) {
-      const respBody = await response.json();
-      if (typeof respBody.detail === "string") {
-        details = respBody.detail;
-      }
-    }
-  } catch {}
+const displayError = async (action: string, response: any | undefined) => {
+  const details =
+    response && typeof response.detail === "string" ? "Internal server error" : response.detail;
   toast({ title: `Failed to ${action} item`, description: details, status: "error" });
 };
 
 const genericCreateItem = async (requestUrl: string, data: Record<string, any>) => {
-  const response = await authenticatedFetch.client(requestUrl, {
+  const response = await requestAndInvalidate(requestUrl, {
     method: "POST",
     body: JSON.stringify(data),
   });
 
-  if (response && response.status === 201) {
-    const newItem = await response.json();
-    revalidateServerTag("shipment");
-    return newItem.items ? newItem.items : newItem;
+  if (response.status === 201) {
+    return response.json.items || response.json;
   } else {
-    displayError("create", response);
-    throw new Error(`Failed to create item`);
+    displayError("create", response.json);
   }
 };
 export class Item {
@@ -43,17 +32,15 @@ export class Item {
     data: Omit<BaseShipmentItem, "type">,
     endpoint: Step["endpoint"],
   ) {
-    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, {
+    const response = await requestAndInvalidate(`/${endpoint}/${itemId}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
 
-    if (response && response.status === 200) {
-      revalidateServerTag("shipment");
-      return (await response.json()) as CreationResponse;
+    if (response.status === 200) {
+      return response.json as CreationResponse;
     } else {
-      displayError("modify", response);
-      throw new Error("Failed to modify item");
+      displayError("modify", response.json);
     }
   }
 
@@ -78,24 +65,14 @@ export class Item {
   }
 
   static async delete(itemId: TreeData["id"], endpoint: Step["endpoint"]) {
-    const response = await authenticatedFetch.client(`/${endpoint}/${itemId}`, {
+    const response = await requestAndInvalidate(`/${endpoint}/${itemId}`, {
       method: "DELETE",
     });
 
-    if (response && response.status === 204) {
-      revalidateServerTag("shipment");
+    if (response.status === 204) {
       return { status: "OK" };
     } else {
-      displayError("delete", response);
-      throw new Error("Failed to delete item");
+      displayError("delete", response.json);
     }
   }
-}
-
-export class InternalItem {
-  static async create(
-    parentId: TreeData["id"],
-    data: Record<string, any>,
-    endpoint: Step["endpoint"],
-  ) {}
 }

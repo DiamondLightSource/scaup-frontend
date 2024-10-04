@@ -1,17 +1,21 @@
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 
-import { Item } from "./item";
+import { Item } from "@/utils/client/item";
+import { toastMock } from "@/../vitest.setup";
 
 describe("Item Creation", () => {
-  it("should throw if request fails", async () => {
+  it("should display toast if request fails", async () => {
     server.use(
       http.post("http://localhost/api/shipments/1/samples", () =>
         HttpResponse.json({}, { status: 404 }),
       ),
     );
 
-    await expect(Item.create(1, {}, "samples")).rejects.toThrow();
+    await Item.create(1, {}, "samples");
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Failed to create item" }),
+    );
   });
 
   it("should return item creation response", async () => {
@@ -39,14 +43,17 @@ describe("Item Modification", () => {
     expect(itemResponse).toEqual({ id: 123 });
   });
 
-  it("should throw if request fails", async () => {
+  it("should display toast if request fails", async () => {
     server.use(
       http.patch("http://localhost/api/samples/1", () => HttpResponse.json({}, { status: 404 }), {
         once: true,
       }),
     );
 
-    await expect(Item.patch(1, {}, "samples")).rejects.toThrow();
+    await Item.patch(1, {}, "samples");
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Failed to modify item" }),
+    );
   });
 });
 
@@ -55,13 +62,16 @@ describe("Item Deletion", () => {
     const itemResponse = await Item.delete(1, "samples");
   });
 
-  it("should throw if request fails", async () => {
+  it("should display toast if request fails", async () => {
     server.use(
       http.delete("http://localhost/api/samples/1", () => HttpResponse.json({}, { status: 404 }), {
         once: true,
       }),
     );
 
-    await expect(Item.delete(1, "samples")).rejects.toThrow();
+    await Item.delete(1, "samples");
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Failed to delete item" }),
+    );
   });
 });

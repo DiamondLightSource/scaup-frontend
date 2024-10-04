@@ -97,7 +97,7 @@ export const ItemForm = ({
         setAddLoading(false);
       }
     },
-    [onSubmit],
+    [onSubmit, activeItem],
   );
 
   useEffect(() => {

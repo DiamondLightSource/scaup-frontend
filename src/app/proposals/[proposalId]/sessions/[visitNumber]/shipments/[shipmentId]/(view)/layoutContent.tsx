@@ -7,6 +7,7 @@ import {
   selectIsReview,
   setShipment,
   setUnassigned,
+  syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
 import { BasePage, BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { ShipmentParams } from "@/types/generic";
@@ -37,6 +38,7 @@ const ShipmentsLayoutContent = ({
     if (shipmentData) {
       dispatch(setShipment(shipmentData));
     }
+    dispatch(syncActiveItem());
   }, [shipmentData, dispatch]);
 
   useEffect(() => {
@@ -49,6 +51,7 @@ const ShipmentsLayoutContent = ({
         dispatch(setUnassigned({ items: item.children, type: item.id }));
       }
     }
+    dispatch(syncActiveItem());
   }, [unassignedItems, dispatch]);
 
   /** Set new active item */
@@ -74,7 +77,6 @@ const ShipmentsLayoutContent = ({
       <VStack spacing='0' alignItems='start'>
         <ShipmentOverview
           readOnly={isReview}
-          parentId={params.shipmentId}
           onActiveChanged={handleActiveChanged}
           title={params.proposalId}
         />

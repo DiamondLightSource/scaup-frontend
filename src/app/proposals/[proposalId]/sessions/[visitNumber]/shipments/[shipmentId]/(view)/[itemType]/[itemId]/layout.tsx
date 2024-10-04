@@ -1,6 +1,5 @@
 import { BasePage } from "@/mappings/pages";
 import { ItemParams } from "@/types/generic";
-import { components } from "@/types/schema";
 import { getShipmentData } from "@/utils/client/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
 

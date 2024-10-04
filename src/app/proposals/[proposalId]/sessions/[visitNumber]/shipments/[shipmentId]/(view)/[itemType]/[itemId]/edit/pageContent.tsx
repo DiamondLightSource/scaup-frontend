@@ -1,19 +1,8 @@
 "use client";
 import { ItemForm } from "@/components/input/form/ItemForm";
 import { TreeData } from "@/components/visualisation/treeView";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
-import {
-  BaseShipmentItem,
-  checkIsRoot,
-  getCurrentStepIndex,
-  separateDetails,
-  steps,
-} from "@/mappings/pages";
+import { selectActiveItem, selectIsEdit } from "@/features/shipment/shipmentSlice";
+import { BaseShipmentItem, getCurrentStepIndex, separateDetails, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
@@ -61,12 +50,6 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         values.id = newItem.id;
         values.name = newItem.name ?? "";
 
-        if (checkIsRoot(values)) {
-          await dispatch(updateShipment({ shipmentId }));
-        } else {
-          await dispatch(updateUnassigned({ shipmentId }));
-        }
-
         toast({ title: "Successfully created item!" });
         router.replace(`../../${info.type}/${newItem.id}/edit`, { scroll: false });
       } else {
@@ -76,16 +59,11 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
           activeStep.endpoint,
         );
 
-        await Promise.all([
-          dispatch(updateShipment({ shipmentId })),
-          dispatch(updateUnassigned({ shipmentId })),
-        ]);
-
         toast({ title: "Successfully saved item!" });
         router.replace(`../../${info.type}/${activeItem!.id}/edit`, { scroll: false });
       }
     },
-    [router, toast, dispatch, activeIsEdit, activeItem, shipmentId, activeStep],
+    [router, toast, activeIsEdit, activeItem, shipmentId, activeStep],
   );
 
   return (
