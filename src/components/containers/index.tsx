@@ -1,23 +1,17 @@
 import { GenericContainer } from "@/components/containers/Generic";
 import { GridBox } from "@/components/containers/GridBox";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  syncActiveItem,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
+import { selectActiveItem, selectIsEdit } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, Step, separateDetails } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
 import { Item } from "@/utils/client/item";
 import { useRouter } from "next/navigation";
 import { UseFormReturn, useFormContext } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
 import { Puck } from "@/components/containers/Puck";
 import { Cane } from "@/components/containers/Cane";
 import { RootParentType } from "@/types/generic";
 import { useCallback } from "react";
+import { CreationResponse } from "@/types/server";
 
 export interface BaseContainerProps {
   /** Shipment ID */
@@ -51,7 +45,6 @@ export const useChildLocationManager = ({
   containerCreationPreset = {},
   parentType = "shipment",
 }: ChildLocationManagerProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const currentContainer = useSelector(selectActiveItem);
   const isEdit = useSelector(selectIsEdit);
   const formContext = useFormContext();
@@ -79,19 +72,21 @@ export const useChildLocationManager = ({
 
       const actualLocation = location !== null ? location + 1 : null;
       let actualContainerId = containerId;
+      let newItem: null | CreationResponse = null;
 
       // There is no way of calling this callback if form context is undefined
       const values = separateDetails(formContext.getValues(), parent);
 
       // If container does not exist yet in database, we must create it
       if (!isEdit) {
-        const newItem = await Item.create(
+        const receivedItem = await Item.create(
           parentId,
           { ...containerCreationPreset, ...values },
           parent,
           parentType,
         );
-        actualContainerId = (Array.isArray(newItem) ? newItem[0].id : newItem.id) as number;
+        newItem = Array.isArray(receivedItem) ? receivedItem[0] : receivedItem;
+        actualContainerId = newItem.id;
       } else {
         /*
          * If user has modified the parent container, and hasn't saved before assigning a position
@@ -122,11 +117,12 @@ export const useChildLocationManager = ({
           (item) => item.data.location === actualLocation,
         );
 
+        // TODO: Move this to backend?
         if (conflictingChild) {
           await Item.patch(
             conflictingChild.id,
             {
-              actualLocation: null,
+              location: null,
               [parentKey]: null,
             },
             child,
@@ -143,17 +139,11 @@ export const useChildLocationManager = ({
         child,
       );
 
-      await Promise.all([
-        dispatch(updateShipment({ shipmentId: parentId, parentType })),
-        dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
-      ]);
-
-      dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
-      if (!isEdit) {
+      if (newItem) {
         if (parentType === "shipment") {
-          router.replace(`../../${values.type}/${actualContainerId}/edit`, { scroll: false });
+          router.replace(`../../${newItem.type}/${actualContainerId}/edit`, { scroll: false });
         } else {
-          router.replace(`../${values.type}/${actualContainerId}`, { scroll: false });
+          router.replace(`../${newItem.type}/${actualContainerId}`, { scroll: false });
         }
       }
     },
@@ -161,7 +151,6 @@ export const useChildLocationManager = ({
       child,
       containerCreationPreset,
       currentContainer,
-      dispatch,
       formContext,
       isEdit,
       parent,
