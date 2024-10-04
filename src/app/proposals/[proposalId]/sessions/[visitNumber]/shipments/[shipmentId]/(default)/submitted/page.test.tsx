@@ -8,19 +8,11 @@ import SubmissionOverview from "./page";
 
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
-vi.mock("next/cache", async (importOriginal) => {
-  const actual = await importOriginal<any>();
-  return {
-    ...actual,
-    revalidateTag: () => null,
-  };
-});
-
 describe("Shipment Submission Overview", () => {
   it("should render shipment contents", async () => {
     render(await SubmissionOverview({ params }));
 
-    expect(screen.getByText(/dewar/i)).toBeInTheDocument();
+    expect(screen.getByText("Dewar")).toBeInTheDocument();
     expect(screen.getByText(/puck/i)).toBeInTheDocument();
     expect(screen.getAllByText(/2/i)).toHaveLength(2);
   });
@@ -36,7 +28,7 @@ describe("Shipment Submission Overview", () => {
 
     render(await SubmissionOverview({ params }));
 
-    fireEvent.click(screen.getByText(/arrange shipping/i));
+    fireEvent.click(screen.getByText("Arrange Shipping"));
     fireEvent.click(screen.getByText(/continue/i));
 
     await waitFor(() =>

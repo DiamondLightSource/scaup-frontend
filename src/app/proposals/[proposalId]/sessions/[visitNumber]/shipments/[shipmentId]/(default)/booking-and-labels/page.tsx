@@ -1,0 +1,93 @@
+import { ShipmentParams } from "@/types/generic";
+import { authenticatedFetch } from "@/utils/client";
+import {
+  Button,
+  Divider,
+  HStack,
+  Heading,
+  Link,
+  List,
+  ListItem,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { Metadata } from "next";
+import NextLink from "next/link";
+import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
+
+export const metadata: Metadata = {
+  title: "Booking & Labels - Sample Handling",
+};
+
+const getIsBooked = async (shipmentId: string) => {
+  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+  const data = res && res.status === 200 ? await res.json() : [];
+
+  return data && !!data.data.shipmentRequest;
+};
+
+const BookingAndLabelsPage = async ({ params }: { params: ShipmentParams }) => {
+  const isBooked = await getIsBooked(params.shipmentId);
+
+  return (
+    <VStack alignItems='start'>
+      <VStack gap='0' alignItems='start' w='100%'>
+        <Heading size='md' color='gray.600'>
+          {params.proposalId}
+        </Heading>
+        <HStack w='100%'>
+          <Heading>Shipment Booking & Labels</Heading>
+        </HStack>
+        <Divider borderColor='gray.800' />
+      </VStack>
+      <VStack alignItems='start' w={{ base: "100%", md: "66%" }}>
+        <Text mb='2em'>
+          If you have already submitted your sample information, and you are sure you do not wish to
+          make any changes, you can follow the below steps to finalise the shipping process:
+        </Text>
+        <List spacing='3em'>
+          <ListItem>
+            <Heading size='lg'>Tracking labels</Heading>
+            <Text my='1em'>
+              Print tracking labels and affix them to the outside of the dewar and dewar case. If
+              you are sending multiple dewars, ensure the code on the label matches the code on the
+              dewar.
+            </Text>
+            <Button
+              as={NextLink}
+              href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
+            >
+              Print Tracking Labels
+            </Button>
+          </ListItem>
+          <ListItem>
+            <Heading size='lg'>Book shipment with courier (optional)</Heading>
+            <Text my='1em'>
+              You can arrange for your sample to be shipped using Diamond&#39;s DHL account, or you
+              can do it yourself with your courier of choice. Remember to{" "}
+              <b>affix the airway bill/courier label to the outside of the dewar case</b> in either
+              case.
+            </Text>
+            <ArrangeShipmentButton params={params} isBooked={isBooked} />
+          </ListItem>
+          <ListItem>
+            <Heading size='lg'>Request dewar return at the end of your session</Heading>
+            <Text my='1em'>
+              Once your session is finished, you must{" "}
+              <Link as={NextLink} href='returns'>
+                request for your dewars to be returned
+              </Link>{" "}
+              if you wish for them to be returned to your institution.
+            </Text>
+            <Text my='1em'>
+              If you have already printed the tracking label, you do not need to do so again once
+              you have submitted your dispatch request.
+            </Text>
+          </ListItem>
+        </List>
+      </VStack>
+    </VStack>
+  );
+};
+
+export default BookingAndLabelsPage;

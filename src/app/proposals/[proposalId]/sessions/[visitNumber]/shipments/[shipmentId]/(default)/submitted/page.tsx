@@ -11,13 +11,14 @@ import {
   Button,
   Divider,
   Heading,
+  HStack,
   Link,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import NextLink from "next/link";
-import ArrangeShipmentButton from "./pageContent";
+import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 
 export const metadata: Metadata = {
   title: "Shipment Submitted - Sample Handling",
@@ -68,6 +69,15 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
               <Heading alignSelf='start'>Contents</Heading>
               <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
             </VStack>
+            <Text fontSize='18px' my='1em'>
+              If you <b>do not plan to use Diamond&#39;s own courier</b> (DHL, on Diamond&#39;s
+              account), you <b>do not need to arrange shipping</b> through Diamond. When using your
+              own courier, ensure the labels provided by your courier are securely affixed.
+            </Text>
+            <Text fontSize='18px'>
+              Tracking labels <b>must</b> be securely affixed to the outside of both dewars and
+              dewar cases, even if using your own courier.
+            </Text>
             <Alert status='info' variant='info'>
               <AlertIcon />
               <AlertDescription>
@@ -76,17 +86,15 @@ const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
                   : "Once your shipment is booked with the courier service, you will not be able to edit the contents of the shipment any further."}
               </AlertDescription>
             </Alert>{" "}
-            {shipmentData.isBooked ? (
+            <HStack>
+              <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
               <Button
-                as={NextLink}
-                href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`}
-                bg='green.500'
+                as={Link}
+                href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
               >
-                View shipping information
+                Print Tracking Labels
               </Button>
-            ) : (
-              <ArrangeShipmentButton params={params} />
-            )}
+            </HStack>
           </>
         )}
       </VStack>

@@ -94,30 +94,3 @@ export const getPrepopData = async (proposalId: string) => {
   }
   return {};
 };
-
-/**
- * Create a shipment request in an external shipping service and redirect user
- *
- * @param shipmentId Shipment to create a shipment request for
- */
-export const createShipmentRequest = async (shipmentId: string) => {
-  const resp = await authenticatedFetch.client(`/shipments/${shipmentId}/request`, {
-    method: "POST",
-  });
-
-  if (resp && resp.status === 201) {
-    window.location.assign(`${process.env.NEXT_PUBLIC_API_URL}/shipments/${shipmentId}/request`);
-  } else {
-    let message = "Unable to create shipment request";
-    try {
-      const jsonRep = resp ? await resp.json() : {};
-      if (jsonRep.detail) {
-        message = jsonRep.detail;
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-
-    throw Error(message);
-  }
-};
