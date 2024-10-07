@@ -18,6 +18,7 @@ export const puckForm = [
     label: "Registered Container",
     type: "dropdown",
     values: {
+      base: [{ label: "None", value: "" }],
       $ref: { parent: "#/containers", map: { value: "actualBarcode", label: "barcode" } },
     },
     watch: true,
