@@ -8,7 +8,7 @@ const sampleData: BaseShipmentItem = {
   type: "sample",
   mesh: 1,
   hole: 1,
-  foil: "Au-flat",
+  supportMaterial: "Au-flat",
   film: 1,
 };
 
@@ -16,9 +16,8 @@ describe("Dynamic Form View", () => {
   it("should render labels as mapped in form schema", () => {
     renderWithForm(<DynamicFormView formType='sample' data={sampleData} />);
 
-    expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Film")).toBeInTheDocument();
+    expect(screen.getByText("Support Material")).toBeInTheDocument();
   });
 
   it("should not render items not described in form schema", () => {

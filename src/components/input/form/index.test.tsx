@@ -8,7 +8,7 @@ describe("Dynamic Form", () => {
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Film")).toBeInTheDocument();
+    expect(screen.getByText("Support Material")).toBeInTheDocument();
   });
 
   it("should render options for dropdown based on dynamic data if available", () => {
