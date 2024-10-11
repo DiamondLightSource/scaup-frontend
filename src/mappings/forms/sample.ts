@@ -25,6 +25,7 @@ export const sampleForm = [
     label: "Copies",
     type: "text",
     values: "1",
+    hint: "Number of grids of the same sample",
     validation: {
       min: 1,
       pattern: { value: /[0-9]+/, message: "Must be a valid number" },
@@ -61,8 +62,8 @@ export const sampleForm = [
     type: "separator",
   },
   {
-    id: "foil",
-    label: "Foil",
+    id: "supportMaterial",
+    label: "Support Material",
     type: "dropdown",
     values: [
       { label: "Quantifoil copper", value: "Quantifoil copper" },
@@ -77,8 +78,8 @@ export const sampleForm = [
     ],
   },
   {
-    id: "film",
-    label: "Film",
+    id: "foil",
+    label: "Foil",
     type: "dropdown",
     values: [
       { label: "Holey carbon", value: "Holey carbon" },
@@ -102,7 +103,7 @@ export const sampleForm = [
   },
   {
     id: "hole",
-    label: "Hole Diameter",
+    label: "Foil Hole Diameter",
     type: "dropdown",
     values: [
       { label: "R 0.6/1", value: "R 0.6/1" },

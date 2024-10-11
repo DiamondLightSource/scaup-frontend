@@ -4,16 +4,6 @@ import { containerForm } from "@/mappings/forms/container";
 export const puckForm = [
   ...containerForm.slice(0, 2),
   {
-    id: "registeredContainer", // External ID?
-    label: "Registered Container",
-    type: "dropdown",
-    values: {
-      base: [{ label: "None", value: "" }],
-      $ref: { parent: "#/containers", map: { value: "barcode", label: "barcode" } },
-    },
-    watch: true,
-  },
-  {
     id: "subType",
     label: "Sub Type",
     type: "dropdown",
@@ -28,6 +18,7 @@ export const puckForm = [
     label: "Registered Container",
     type: "dropdown",
     values: {
+      base: [{ label: "None", value: "" }],
       $ref: { parent: "#/containers", map: { value: "actualBarcode", label: "barcode" } },
     },
     watch: true,

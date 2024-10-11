@@ -31,7 +31,7 @@ export const gridBoxForm = [
     type: "dropdown",
     values: [
       { label: "Screw", value: "Screw" },
-      { label: "No screw", value: "No screw" },
+      { label: "Pin", value: "Pin" },
     ],
   },
   {
