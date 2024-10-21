@@ -1,11 +1,11 @@
 "use client";
-import { DynamicForm } from "@/components/input/form";
+import { DynamicForm, formMapping } from "@/components/input/form";
 import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export const metadata: Metadata = {
@@ -56,7 +56,7 @@ const PreSessionContent = ({
       <FormProvider {...formContext}>
         <form onSubmit={onSubmit} style={{ width: "100%" }}>
           <Box py='3' w={{ lg: "50%", base: "100%" }}>
-            <DynamicForm formType='preSession' />
+            <DynamicForm formType={formMapping["preSession"]} />
           </Box>
           <HStack h='3.5em' px='1em' bg='gray.200'>
             <Spacer />

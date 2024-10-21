@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { nameValidation } from "@/utils/generic";
 
@@ -119,13 +119,12 @@ export const sampleForm = [
   {
     id: "vitrification",
     label: "Vitrification",
-    type: "dropdown",
+    type: "editableDropdown",
     values: [
       { label: "GP2", value: "GP2" },
       { label: "Manual", value: "Manual" },
       { label: "Vitrobot", value: "Vitrobot" },
       { label: "High Pressure", value: "High Pressure" },
-      { label: "Other", value: "Other" },
     ],
   },
   {

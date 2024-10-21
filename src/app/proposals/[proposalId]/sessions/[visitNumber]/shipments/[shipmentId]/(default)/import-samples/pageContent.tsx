@@ -1,7 +1,7 @@
 "use client";
 
 import { DynamicForm } from "@/components/input/form";
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import {

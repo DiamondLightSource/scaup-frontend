@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { nameValidation } from "@/utils/generic";
 import { BaseShipmentItem } from "../pages";
 
