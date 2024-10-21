@@ -1,6 +1,6 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";
 import { Button, Heading } from "@chakra-ui/react";

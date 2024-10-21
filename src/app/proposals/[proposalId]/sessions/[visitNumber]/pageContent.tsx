@@ -1,6 +1,6 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { SessionParams } from "@/types/generic";
 import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";

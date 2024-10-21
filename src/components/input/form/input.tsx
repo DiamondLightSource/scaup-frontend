@@ -1,6 +1,6 @@
 "use client";
 import "@/styles/form.css";
-import { JsonRef } from "@/utils/generic";
+import { DynamicFormEntry } from "@/types/forms";
 import {
   Box,
   Checkbox,
@@ -13,25 +13,8 @@ import {
   Select,
   Textarea,
 } from "@chakra-ui/react";
-import { RegisterOptions, useFormContext } from "react-hook-form";
-
-export interface DynamicFormEntry {
-  /** Field label, displayed above/next to input */
-  label: string;
-  /** Field ID */
-  id: string;
-  /** Field type */
-  type: "text" | "dropdown" | "checkbox" | "textarea" | "separator" | "indicatorDropdown";
-  /** Validation options */
-  validation?: RegisterOptions;
-  values?: string | { label: string; value: string; extra?: string }[] | JsonRef;
-  /** Fire event when this field changes */
-  watch?: boolean;
-  /** Text to be displayed underneath label, commonly used for further clarification */
-  hint?: string;
-  /** Disable input */
-  isDisabled?: boolean;
-}
+import { Controller, useFormContext } from "react-hook-form";
+import { EditableDropdown } from "@/components/input/EditableDropdown";
 
 const indicatorMap: Record<string, string> = {
   GREEN: "🟢",
@@ -52,6 +35,7 @@ const InnerDynamicFormInput = ({
 }: DynamicFormEntry) => {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext();
 
@@ -115,6 +99,29 @@ const InnerDynamicFormInput = ({
               </option>
             ))}
         </Select>
+      );
+    case "editableDropdown":
+      if (!Array.isArray(values)) {
+        throw new Error("Editable dropdown only accepts array of fields");
+      }
+
+      return (
+        <Controller
+          control={control}
+          name={id}
+          render={({ field: { onChange, value }, fieldState: { error } }) => {
+            return (
+              <EditableDropdown
+                id={id}
+                values={values}
+                isDisabled={isDisabled}
+                error={error}
+                onChange={onChange}
+                selectedValue={value}
+              />
+            );
+          }}
+        />
       );
     case "checkbox":
       return (

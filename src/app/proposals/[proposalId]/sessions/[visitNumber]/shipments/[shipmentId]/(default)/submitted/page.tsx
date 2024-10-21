@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";

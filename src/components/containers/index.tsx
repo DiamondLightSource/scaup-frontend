@@ -99,7 +99,6 @@ export const useChildLocationManager = ({
          *
          * TODO: have some clever way of checking whether or not changes actually happened
          */
-        console.log(currentContainer)
         Item.patch(
           currentContainer!.id,
           { ...currentContainer!.data, type: values.type, subType: values.subType },
