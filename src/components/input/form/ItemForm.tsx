@@ -1,7 +1,7 @@
 "use client";
 import { Container } from "@/components/containers";
 import { DynamicForm, DynamicFormProps, formMapping } from "@/components/input/form";
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { selectActiveItem, selectIsEdit, setIsReview } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";

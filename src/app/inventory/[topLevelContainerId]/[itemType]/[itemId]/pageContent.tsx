@@ -27,11 +27,10 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
-  const activeStep = useMemo(
-    () => {
-      if (params.itemType === "dewar") {
-        return steps[steps.length - 1];
-      }
+  const activeStep = useMemo(() => {
+    if (params.itemType === "dewar") {
+      return steps[steps.length - 1];
+    }
 
       return internalEbicSteps[
         getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)

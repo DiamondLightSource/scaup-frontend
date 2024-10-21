@@ -1,15 +1,15 @@
 "use client";
-import { DynamicFormEntry, DynamicFormInput } from "@/components/input/form/input";
+import { DynamicFormInput } from "@/components/input/form/input";
 import { formMapping } from "@/mappings/forms";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { DynamicFormEntry } from "@/types/forms";
 import { parseJsonReferences } from "@/utils/generic";
 import { VStack } from "@chakra-ui/react";
 import { useEffect, useMemo } from "react";
 import { FieldValues, useFormContext, useWatch } from "react-hook-form";
 
 export interface DynamicFormProps {
-  /** Form input type */
-  formType: BaseShipmentItem["type"] | DynamicFormEntry[];
+  /** Form structure */
+  formType: DynamicFormEntry[];
   /** Default values */
   defaultValues?: Record<string, any>;
   /** Data to prepopulate the form fields with. Useful for dynamic dropdowns */
@@ -27,9 +27,7 @@ export const DynamicForm = ({
 }: DynamicFormProps) => {
   const { getValues } = useFormContext();
   const activeForm = useMemo(() => {
-    const form = structuredClone(
-      Array.isArray(formType) ? formType : (formMapping[formType] ?? []),
-    );
+    const form = structuredClone(formType);
 
     for (const field of form) {
       if (field.values && !Array.isArray(field.values)) {

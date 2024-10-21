@@ -1,6 +1,7 @@
 import { formMapping } from "@/components/input/form";
-import { DynamicFormEntry, getIndicatorSymbol } from "@/components/input/form/input";
+import { getIndicatorSymbol } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { DynamicFormEntry } from "@/types/forms";
 import { parseJsonReferences } from "@/utils/generic";
 import { Divider, HStack, Text, VStack } from "@chakra-ui/react";
 import { useMemo } from "react";

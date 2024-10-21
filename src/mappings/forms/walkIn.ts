@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { topLevelContainerForm } from "@/mappings/forms/topLevelContainer";
 import { nameValidation } from "@/utils/generic";
 

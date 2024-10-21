@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { nameValidation } from "@/utils/generic";
 
 export const gridBoxForm = [
@@ -31,7 +31,7 @@ export const gridBoxForm = [
     type: "dropdown",
     values: [
       { label: "Screw", value: "Screw" },
-      { label: "No screw", value: "No screw" },
+      { label: "Pin", value: "Pin" },
     ],
   },
   {

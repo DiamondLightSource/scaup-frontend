@@ -1,4 +1,4 @@
-import { DynamicFormEntry } from "@/components/input/form/input";
+import { DynamicFormEntry } from "@/types/forms";
 import { containerForm } from "@/mappings/forms/container";
 
 export const puckForm = [

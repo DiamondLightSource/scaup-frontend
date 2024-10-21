@@ -1,20 +1,20 @@
-import { DynamicForm } from "@/components/input/form";
+import { DynamicForm, formMapping } from "@/components/input/form";
 import { renderWithForm } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 
 describe("Dynamic Form", () => {
   it("should render form with all fields generated dynamically", () => {
-    renderWithForm(<DynamicForm formType='sample' />);
+    renderWithForm(<DynamicForm formType={formMapping["sample"]} />);
 
     expect(screen.getByText("Foil")).toBeInTheDocument();
     expect(screen.getByText("Mesh")).toBeInTheDocument();
-    expect(screen.getByText("Film")).toBeInTheDocument();
+    expect(screen.getByText("Support Material")).toBeInTheDocument();
   });
 
   it("should render options for dropdown based on dynamic data if available", () => {
     renderWithForm(
       <DynamicForm
-        formType='dewar'
+        formType={formMapping["dewar"]}
         prepopData={{
           dewars: [
             { dewarRegistryId: 123, facilityCode: "BI-99-9999" },
@@ -30,7 +30,7 @@ describe("Dynamic Form", () => {
 
   it("should watch provided fields", () => {
     const watchCallback = vi.fn();
-    renderWithForm(<DynamicForm formType='puck' onWatchedUpdated={watchCallback} />);
+    renderWithForm(<DynamicForm formType={formMapping["puck"]} onWatchedUpdated={watchCallback} />);
 
     fireEvent.change(screen.getByRole("combobox", { name: "Type" }), {
       target: { value: "falconTube" },
@@ -49,9 +49,5 @@ describe("Dynamic Form", () => {
     renderWithForm(<DynamicForm formType={[{ id: "name", label: "Name", type: "text" }]} />);
 
     expect(screen.getByText("Name")).toBeInTheDocument();
-  });
-
-  it("should not render anything if passed invalid form type", () => {
-    renderWithForm(<DynamicForm formType='doesnotexist' />);
   });
 });
