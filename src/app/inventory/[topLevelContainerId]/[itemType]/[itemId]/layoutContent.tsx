@@ -1,7 +1,7 @@
 "use client";
-import { InventoryItemLayoutProps, InventoryItemParams } from "@/types/generic";
+import { InventoryItemLayoutProps } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
-import { setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
+import { setShipment, setUnassigned, syncActiveItem } from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Divider, HStack, VStack } from "@chakra-ui/react";
@@ -35,6 +35,7 @@ export const ItemLayoutContent = ({
     if (shipmentData) {
       dispatch(setShipment([shipmentData]));
     }
+    dispatch(syncActiveItem());
   }, [shipmentData, dispatch]);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export const ItemLayoutContent = ({
     } else {
       dispatch(setUnassigned({ items: [], type: "container" }));
     }
+    dispatch(syncActiveItem());
   }, [unassignedItems, dispatch]);
 
   const handleStepChanged = useCallback(
@@ -82,12 +84,7 @@ export const ItemLayoutContent = ({
           {children}
         </VStack>
         <VStack height='100%' flex='1' alignItems='start' gap='0'>
-          <ShipmentOverview
-            title='Inventory'
-            parentId={params.topLevelContainerId}
-            parentType='topLevelContainer'
-            onActiveChanged={handleActiveChanged}
-          />
+          <ShipmentOverview title='Inventory' onActiveChanged={handleActiveChanged} />
         </VStack>
       </HStack>
     </VStack>

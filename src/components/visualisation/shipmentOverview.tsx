@@ -1,36 +1,22 @@
 import { TreeData, TreeView } from "@/components/visualisation/treeView";
-import {
-  selectActiveItem,
-  selectItems,
-  selectUnassigned,
-  syncActiveItem,
-  updateShipment,
-  updateUnassigned,
-} from "@/features/shipment/shipmentSlice";
+import { selectActiveItem, selectItems, selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, Step, getCurrentStepIndex, steps } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
-import { RootParentType } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { Box, Divider, Heading, Skeleton, useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export interface ShipmentOverviewInnerProps {
   onActiveChanged: (data: TreeData) => void;
   title: string;
-  parentId: string;
   readOnly?: boolean;
-  parentType?: RootParentType;
 }
 
 export const ShipmentOverview = ({
   title,
-  parentId,
   onActiveChanged,
   readOnly = false,
-  parentType = "shipment",
 }: ShipmentOverviewInnerProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
   const activeItem = useSelector(selectActiveItem);
@@ -44,29 +30,17 @@ export const ShipmentOverview = ({
           : { topLevelContainerId: null, parentId: null, location: null };
 
       await Item.patch(item.id, body, endpoint);
-      await Promise.all([
-        dispatch(updateShipment({ shipmentId: parentId, parentType })),
-        dispatch(updateUnassigned({ shipmentId: parentId, parentType })),
-      ]);
-      dispatch(syncActiveItem());
+      toast({ title: "Successfully unassigned item!" });
     },
-    [dispatch, parentId, parentType],
+    [toast],
   );
 
   const deleteItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
       await Item.delete(item.id, endpoint);
-
       toast({ title: "Successfully removed item!" });
-
-      if (endpoint === "topLevelContainers") {
-        await dispatch(updateShipment({ shipmentId: parentId, parentType }));
-      } else {
-        await dispatch(updateUnassigned({ shipmentId: parentId, parentType }));
-      }
-      dispatch(syncActiveItem());
     },
-    [parentId, dispatch, toast, parentType],
+    [toast],
   );
 
   /** Remove item from assigned item list (or delete, if root item) */

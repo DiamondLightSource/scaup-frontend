@@ -151,9 +151,9 @@ export const useChildLocationManager = ({
       dispatch(syncActiveItem({ id: actualContainerId ?? undefined, type: values.type }));
       if (!isEdit) {
         if (parentType === "shipment") {
-          router.replace(`../${actualContainerId}/edit`, { scroll: false });
+          router.replace(`../../${values.type}/${actualContainerId}/edit`, { scroll: false });
         } else {
-          router.replace(`${actualContainerId}`, { scroll: false });
+          router.replace(`../${values.type}/${actualContainerId}`, { scroll: false });
         }
       }
     },

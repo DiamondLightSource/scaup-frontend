@@ -2,9 +2,10 @@ import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { gridBox, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
+import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
+import { toastMock } from "@/../vitest.setup";
 
 const defaultShipment = [
   {
@@ -21,7 +22,7 @@ defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck)
 
 describe("Shipment Overview", () => {
   it("should render tree", () => {
-    renderWithProviders(<ShipmentOverview parentId='1' onActiveChanged={() => {}} title='' />, {
+    renderWithProviders(<ShipmentOverview onActiveChanged={() => {}} title='' />, {
       preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
     });
 
@@ -34,77 +35,36 @@ describe("Shipment Overview", () => {
   });
 
   it("should move non-root item to unassigned when remove is clicked", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId/unassigned",
-        () =>
-          HttpResponse.json({
-            containers: [defaultShipment[0].children[0]],
-          }),
-        { once: true },
-      ),
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () =>
-          HttpResponse.json({
-            children: [{ ...defaultShipment[0], children: [] }],
-          }),
-        { once: true },
-      ),
-    );
-
-    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} />, {
       preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
     });
 
     fireEvent.click(screen.getByText("dewar"));
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-
-    fireEvent.click(screen.getByText(/unassigned/i));
-    fireEvent.click(screen.getByText(/containers/i));
-
-    expect(screen.getByText("puck")).toBeInTheDocument();
-    await waitFor(() => expect(screen.getAllByText("Remove")).toHaveLength(2));
+    await waitFor(() =>
+      expect(toastMock).toBeCalledWith({ title: "Successfully unassigned item!" }),
+    );
   });
 
   it("should remove root item completely when remove is clicked", async () => {
-    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} />, {
       preloadedState: {
         shipment: { ...testInitialState, items: [{ ...defaultShipment[0], children: [] }] },
       },
     });
 
-    await screen.findByText("dewar");
+    screen.getByText("dewar");
 
     fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
-
-    await waitFor(() => expect(screen.queryByText("dewar")).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
+    );
   });
 
-  it("should update active item if removed item is the active item", async () => {
-    const { store } = renderWithProviders(
-      <ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />,
-      {
-        preloadedState: {
-          shipment: {
-            ...testInitialState,
-            unassigned: defaultUnassigned,
-            activeItem: puck,
-            isEdit: true,
-          },
-        },
-      },
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-    await waitFor(() => expect(store.getState().shipment.isEdit).toBe(false));
-  });
-
-  it("should not render body if shipment data is null", async () => {
-    const { store } = renderWithProviders(
-      <ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />,
-      { preloadedState: { shipment: { ...testInitialState, items: null } } },
-    );
+  it("should not render body if shipment data is null", () => {
+    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} />, {
+      preloadedState: { shipment: { ...testInitialState, items: null } },
+    });
 
     expect(screen.queryByText(/unassigned/i)).not.toBeInTheDocument();
   });
@@ -116,32 +76,16 @@ describe("Shipment Overview", () => {
       { data: { type: "gridBox", parentId: 6 }, id: 1, name: "Grid Box" },
     ];
 
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId/unassigned",
-        () =>
-          HttpResponse.json({
-            samples: [],
-            containers: [puck],
-            gridBoxes: [gridBox],
-          }),
-        { once: true },
-      ),
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({}, { status: 404 }),
-        { once: true },
-      ),
-    );
-
-    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} />, {
       preloadedState: {
         shipment: { ...testInitialState, unassigned: unassignedWithAssignedItem },
       },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-    await waitFor(() => expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(2));
+    await waitFor(() =>
+      expect(toastMock).toBeCalledWith({ title: "Successfully unassigned item!" }),
+    );
   });
 
   it("should remove item from unassigned when clicked", async () => {
@@ -156,14 +100,15 @@ describe("Shipment Overview", () => {
       ),
     );
 
-    renderWithProviders(<ShipmentOverview parentId='1' title='' onActiveChanged={() => {}} />, {
+    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} />, {
       preloadedState: {
         shipment: { ...testInitialState, unassigned: defaultUnassigned },
       },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /remove/i }));
-
-    await waitFor(() => expect(screen.queryByText(/remove/i)).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
+    );
   });
 });
