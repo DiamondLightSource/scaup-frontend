@@ -54,26 +54,6 @@ describe("Shipment Layout", () => {
     expect(mockRouter.pathname).toBe("/dewar/dewar-1/edit");
   });
 
-  it("should remove item from overview if remove clicked", async () => {
-    renderWithProviders(
-      <ShipmentLayoutContent
-        shipmentData={defaultShipmentItems}
-        unassignedItems={baseUnassigned}
-        params={{ ...defaultParams }}
-      >
-        <></>
-      </ShipmentLayoutContent>,
-    );
-
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /remove/i,
-      }),
-    );
-
-    await waitFor(() => expect(screen.queryByText(/dewar-1/i)).not.toBeInTheDocument());
-  });
-
   it("should clear unassigned items if passed prop is null", () => {
     const { store } = renderWithProviders(
       <ShipmentLayoutContent

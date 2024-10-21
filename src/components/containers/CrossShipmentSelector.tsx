@@ -60,7 +60,7 @@ export const CrossShipmentSelector = ({
 
       setItems(unassignedItems);
     }
-  }, [unassigned]);
+  }, [unassigned, childrenType, childrenTypeData]);
 
   const onSessionSelect = useCallback(async () => {
     const proposalMatches = proposalPattern.exec(proposalReference);
