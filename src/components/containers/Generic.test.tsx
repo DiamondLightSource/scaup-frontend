@@ -1,12 +1,12 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
-import { server } from "@/mocks/server";
 import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
-
 import { GenericContainer } from "@/components/containers/Generic";
+import { setLocationMock } from "@/components/containers/__mocks__";
+
+vi.mock("@/components/containers");
 
 const defaultShipment = { shipment: structuredClone(initialState) };
 
@@ -25,53 +25,19 @@ defaultShipment.shipment.activeItem = falconTube as TreeData<BaseShipmentItem>;
 
 const populatedContainer = { ...falconTube, children: [gridBox] } as TreeData<BaseShipmentItem>;
 
-const populatedContainerShipment = [
-  {
-    id: "dewar",
-    name: "dewar",
-    data: { type: "dewar" },
-    children: [populatedContainer],
-  },
-];
-
 describe("Generic Container", () => {
-  it("should create container if not yet in database before populating slot", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedContainerShipment }),
-        { once: true },
-      ),
-    );
-
+  it("should fire creation callback if apply clicked", async () => {
     renderAndInjectForm(<GenericContainer parentId='1' />, {
-      preloadedState: defaultShipment,
+      preloadedState: { shipment: { ...defaultShipment.shipment } },
     });
 
-    fireEvent.click(screen.getByText(/add/i));
+    fireEvent.click(screen.getByText("Add"));
     fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
+    fireEvent.click(screen.getByText("Apply"));
 
-    await screen.findByText(/remove/i);
-  });
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
 
-  it("should add item to container and update", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedContainerShipment }),
-        { once: true },
-      ),
-    ),
-      renderAndInjectForm(<GenericContainer parentId='1' />, {
-        preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: true } },
-      });
-
-    fireEvent.click(screen.getByText(/add/i));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await screen.findByText(/remove/i);
+    expect(setLocationMock).toHaveBeenCalledWith(123, expect.objectContaining({ id: 3 }));
   });
 
   it("should populate slots with data from state", () => {
@@ -86,7 +52,7 @@ describe("Generic Container", () => {
     });
 
     screen.getByText(/gridbox/i);
-    screen.getByText(/remove/i);
+    expect(screen.getByText(/remove/i)).toBeInTheDocument();
   });
 
   it("should display containers as children if parent is top level container", async () => {
@@ -103,24 +69,11 @@ describe("Generic Container", () => {
       },
     );
 
-    // TODO: fix this test
-
     fireEvent.click(screen.getByText(/add/i));
     await screen.findByText("Container");
   });
 
-  it("should remove item when remove is clicked", async () => {
-    const unpopulatedContainerShipment = structuredClone(populatedContainerShipment);
-    unpopulatedContainerShipment[0].children[0].children = [];
-
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: unpopulatedContainerShipment }, { status: 200 }),
-        { once: true },
-      ),
-    );
-
+  it("should fire remove callback when remove is clicked", () => {
     renderAndInjectForm(<GenericContainer parentId='1' />, {
       preloadedState: {
         shipment: {
@@ -131,11 +84,12 @@ describe("Generic Container", () => {
       },
     });
 
-    fireEvent.click(screen.getByText(/remove/i));
-    await waitFor(() => expect(screen.queryByText(/gridbox/i)).not.toBeInTheDocument());
+    fireEvent.click(screen.getByText("Remove"));
+
+    expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 3 }));
   });
 
-  it("should not render remove/add buttons if form context is not present", async () => {
+  it("should not render remove/add buttons if form context is not present", () => {
     renderWithProviders(<GenericContainer parentId='1' />, {});
 
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
