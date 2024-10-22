@@ -1,7 +1,12 @@
 "use client";
 import { InventoryItemLayoutProps } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
-import { setShipment, setUnassigned, syncActiveItem } from "@/features/shipment/shipmentSlice";
+import {
+  defaultUnassigned,
+  setShipment,
+  setUnassigned,
+  syncActiveItem,
+} from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Divider, HStack, VStack } from "@chakra-ui/react";
@@ -39,11 +44,14 @@ export const ItemLayoutContent = ({
   }, [shipmentData, dispatch]);
 
   useEffect(() => {
-    if (unassignedItems) {
-      dispatch(setUnassigned({ items: unassignedItems.items, type: "container" }));
-    } else {
-      dispatch(setUnassigned({ items: [], type: "container" }));
+    for (const item of defaultUnassigned[0].children) {
+      if (item.id !== "container") {
+        dispatch(setUnassigned({ items: item.children, type: item.id }));
+      } else {
+        dispatch(setUnassigned({ items: unassignedItems?.items ?? [], type: item.id }));
+      }
     }
+
     dispatch(syncActiveItem());
   }, [unassignedItems, dispatch]);
 

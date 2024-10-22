@@ -1,3 +1,5 @@
+
+import { setLocationMock } from "@/components/containers/__mocks__";
 import { server } from "@/mocks/server";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
@@ -27,6 +29,7 @@ beforeEach(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
   toastMock.mockClear();
+  setLocationMock.mockClear();
   cleanup();
 });
 

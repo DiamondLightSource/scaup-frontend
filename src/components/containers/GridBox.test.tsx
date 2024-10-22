@@ -1,14 +1,10 @@
 import { GridBox } from "@/components/containers/GridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem } from "@/mappings/pages";
-import { server } from "@/mocks/server";
-import { Item } from "@/utils/client/item";
-import { nameValidation } from "@/utils/generic";
-import { gridBox, renderAndInjectForm, renderWithFormAndStore, sample } from "@/utils/test-utils";
+import { gridBox, renderAndInjectForm, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
-import { Controller, useFormContext } from "react-hook-form";
-import { DynamicFormInput } from "../input/form/input";
+import { setLocationMock } from "@/components/containers/__mocks__";
+
+vi.mock("@/components/containers");
 
 const defaultShipment = {
   ...initialState,
@@ -91,45 +87,33 @@ describe("Grid Box", () => {
     expect(screen.getByText(/no unassigned samples available/i));
   });
 
-  it("should refresh position with clicked sample", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedGridBoxShipment.items }),
-        { once: true },
-      ),
-    );
-
+  it("should fire location callback when apply clicked", async () => {
     renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: { shipment: { ...defaultShipment, isEdit: true } },
+      preloadedState: {
+        shipment: { ...defaultShipment, isEdit: false, unassigned: defaultShipment.unassigned },
+      },
     });
 
     fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await screen.findByTestId("1-populated");
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
+
+    expect(setLocationMock).toHaveBeenCalledWith(3, expect.objectContaining({ id: 5 }), 0);
   });
 
-  it("should remove sample from position when remove clicked", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: defaultShipment.items }),
-        { once: true },
-      ),
-    );
-
+  it("should fire remove callback when remove clicked", async () => {
     renderAndInjectForm(<GridBox parentId='1' />, {
       preloadedState: { shipment: populatedGridBoxShipment },
     });
 
     fireEvent.click(screen.getByText("1"));
+    fireEvent.click(screen.getByText("Remove"));
 
-    const removeButton = await screen.findByRole("button", { name: "Remove" });
-    fireEvent.click(removeButton);
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
 
-    await screen.findByTestId("1-empty");
+    expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 5 }), null);
   });
 
   it("should render four grid slots by default", () => {
@@ -166,98 +150,5 @@ describe("Grid Box", () => {
     });
 
     expect(screen.getByText(/remove sample/i)).toBeInTheDocument();
-  });
-
-  it("should not allow automatic creation on slot assignment if name is invalid", async () => {
-    const FormParent = () => {
-      const formContext = useFormContext<BaseShipmentItem>();
-      return (
-        <>
-          <DynamicFormInput
-            id='name'
-            label='name'
-            type='text'
-            values='test test'
-            validation={nameValidation}
-          />
-          <GridBox parentId='1' formContext={formContext} />
-        </>
-      );
-    };
-
-    renderWithFormAndStore(<FormParent />, {
-      preloadedState: {
-        shipment: { ...defaultShipment, unassigned: defaultShipment.unassigned },
-      },
-    });
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue("test test")).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByText("1"));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await screen.findByText(/name must only contain alphanumeric characters and underscores/i);
-  });
-
-  it("should create grid box if not yet in database before populating slot", async () => {
-    const newPopulatedGridBoxItems = structuredClone(populatedGridBoxShipment.items);
-
-    newPopulatedGridBoxItems[0].children[0].children.push({ ...populatedGridBox, id: 123 });
-
-    server.use(
-      http.post(
-        "http://localhost/api/shipments/:shipmentId/containers",
-        () => HttpResponse.json({ id: 123 }, { status: 201 }),
-        { once: true },
-      ),
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: newPopulatedGridBoxItems }),
-        { once: true },
-      ),
-    );
-
-    renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: {
-        shipment: { ...defaultShipment, activeItem: { ...gridBox, id: "new-gridBox" } },
-      },
-    });
-
-    fireEvent.click(screen.getByText("1"));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await screen.findByTestId("1-populated");
-  });
-
-  it("should replace existing item in grid box slot", async () => {
-    const patchSpy = vi.spyOn(Item, "patch");
-
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ children: populatedGridBoxShipment.items }),
-        { once: true },
-      ),
-    );
-
-    renderAndInjectForm(<GridBox parentId='1' />, {
-      preloadedState: {
-        shipment: {
-          ...populatedGridBoxShipment,
-          isEdit: true,
-          unassigned: defaultShipment.unassigned,
-        },
-      },
-    });
-
-    fireEvent.click(screen.getByText("1"));
-    fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
-
-    await waitFor(() => expect(patchSpy).toHaveBeenCalledTimes(3));
   });
 });

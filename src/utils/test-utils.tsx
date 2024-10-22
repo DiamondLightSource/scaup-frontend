@@ -8,7 +8,7 @@ import React, { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Provider } from "react-redux";
 
-interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
+export interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: { shipment: ShipmentState };
   store?: ReturnType<typeof configureStore>;
 }
@@ -66,13 +66,13 @@ export const renderWithFormAndStore = (
   const Wrapper = ({ children }: PropsWithChildren<{}>) => {
     const formContext = useForm<BaseShipmentItem>();
     return (
-      <FormProvider {...formContext}>
-        <Provider store={store}>{children}</Provider>
-      </FormProvider>
+      <Provider store={store}>
+        <FormProvider {...formContext}>{children}</FormProvider>
+      </Provider>
     );
   };
 
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }), wrapper: Wrapper };
 };
 
 /** Render provided component with form context (passed as prop) and store */
