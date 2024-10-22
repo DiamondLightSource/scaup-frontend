@@ -10,15 +10,18 @@ v0.6.0 (22/10/2024)
 
 - Walk-ins now support optional dewar codes
 - Editable dropdown for fields which take generic options
+- Labels/shipment information page
 
 **Changed**
 
 - Grid box field names now better reflect reality
 - CRUD operations are now performed server side for better performance
+- Conflicting items are not resolved in the frontend anymore
 
 **Fixed**
 
 - Update URL with type of created object if type is not the default
+- Conflicting cassette items can no longer overlap
 
 +++++++++
 v0.5.0 (23/09/2024)
