@@ -3,6 +3,24 @@ Changelog
 ==========
 
 +++++++++
+v0.6.0 (22/10/2024)
++++++++++
+
+**Added**
+
+- Walk-ins now support optional dewar codes
+- Editable dropdown for fields which take generic options
+
+**Changed**
+
+- Grid box field names now better reflect reality
+- CRUD operations are now performed server side for better performance
+
+**Fixed**
+
+- Update URL with type of created object if type is not the default
+
++++++++++
 v0.5.0 (23/09/2024)
 +++++++++
 
