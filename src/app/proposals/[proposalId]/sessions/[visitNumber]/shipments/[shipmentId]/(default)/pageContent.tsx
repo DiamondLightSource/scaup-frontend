@@ -4,7 +4,6 @@ import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { createShipmentRequest } from "@/utils/client";
 import { Divider, HStack, Heading, VStack, useToast, Button, Spacer, Link } from "@chakra-ui/react";
 import { Table, TwoLineLink } from "@diamondlightsource/ui-components";
 import NextLink from "next/link";
@@ -32,20 +31,6 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
   const toast = useToast();
   const router = useRouter();
 
-  const handleBookingClicked = useCallback(async () => {
-    if (data.dispatch.status === "Booked") {
-      window.location.assign(
-        `${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`,
-      );
-    } else {
-      try {
-        await createShipmentRequest(params.shipmentId);
-      } catch (e) {
-        toast({ title: (e as Error).message, status: "error" });
-      }
-    }
-  }, [params, data, toast]);
-
   const handleSampleClicked = useCallback(
     (item: Record<string, any>) => {
       // TODO: this should be more generic if this is not going to be eBIC only (the "grid" bit)
@@ -64,7 +49,7 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
         </Button>
       ) : null,
     }));
-  }, [data]);
+  }, [data, params]);
 
   return (
     <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
@@ -143,11 +128,12 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
           View pre-session information in a printable format
         </TwoLineLink>
         <TwoLineLink
-          title={`${data.dispatch.status === "Booked" ? "Edit" : "Create"} Booking`}
-          onClick={handleBookingClicked}
-          isDisabled={data.hasUnassigned}
+          title='Booking & Labels'
+          as={NextLink}
+          href={`${params.shipmentId}/booking-and-labels`}
+          isDisabled={!data.counts.Dewar}
         >
-          Book pickup with courier
+          Book pickup with courier or print tracking labels
         </TwoLineLink>
         <TwoLineLink title='Request Return' href={`${params.shipmentId}/returns`}>
           Ask for dewars to be returned to your facility

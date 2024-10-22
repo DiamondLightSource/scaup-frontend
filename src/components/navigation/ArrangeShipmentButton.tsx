@@ -1,7 +1,7 @@
 "use client";
 
 import { ShipmentParams } from "@/types/generic";
-import { createShipmentRequest } from "@/utils/client";
+import { authenticatedFetch } from "@/utils/client";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -14,23 +14,56 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useCallback, useRef, useState } from "react";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 
-const ArrangeShipmentButton = ({ params }: { params: ShipmentParams }) => {
+export const ArrangeShipmentButton = ({
+  params,
+  isBooked = false,
+}: {
+  params: ShipmentParams;
+  isBooked?: boolean;
+}) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
+  const router = useRouter();
 
   const onShipmentCreateClicked = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      await createShipmentRequest(params.shipmentId);
-    } catch (e) {
-      toast({ title: (e as Error).message, status: "error" });
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const resp = await authenticatedFetch.client(`/shipments/${params.shipmentId}/request`, {
+      method: "POST",
+    });
+
+    if (resp && resp.status === 201) {
+      router.push(`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`);
+    } else {
+      let message = "Unable to create shipment request";
+
+      const jsonRep = resp ? await resp.json() : {};
+      if (jsonRep.detail) {
+        message = jsonRep.detail;
+      }
+      onClose();
+      console.warn(message);
+      toast({ title: message, status: "error" });
     }
-  }, [params, toast]);
+    setIsLoading(false);
+  }, [params, toast, router, onClose]);
+
+  if (isBooked) {
+    return (
+      <Button
+        onClick={() =>
+          router.push(`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/request`)
+        }
+        bg='green.500'
+      >
+        View Shipping Information
+      </Button>
+    );
+  }
 
   return (
     <>
@@ -60,5 +93,3 @@ const ArrangeShipmentButton = ({ params }: { params: ShipmentParams }) => {
     </>
   );
 };
-
-export default ArrangeShipmentButton;
