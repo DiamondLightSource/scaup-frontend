@@ -111,24 +111,6 @@ export const useChildLocationManager = ({
         }
       }
 
-      if (actualLocation !== null && currentContainer!.children) {
-        const conflictingChild = currentContainer!.children.find(
-          (item) => item.data.location === actualLocation,
-        );
-
-        // TODO: Move this to backend?
-        if (conflictingChild) {
-          await Item.patch(
-            conflictingChild.id,
-            {
-              location: null,
-              [parentKey]: null,
-            },
-            child,
-          );
-        }
-      }
-
       await Item.patch(
         childItem.id,
         {

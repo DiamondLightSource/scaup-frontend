@@ -83,35 +83,6 @@ describe("Container Child Location Manager", () => {
     expect(Item.patch).toHaveBeenCalledWith(1, { location: 2, parentId: 1 }, "containers");
   });
 
-  it("should patch conflicting item if position is already occupied", async () => {
-    const setLocation = generateHook(
-      { parentId: "1" },
-      {
-        preloadedState: {
-          shipment: {
-            ...initialState,
-            activeItem: {
-              ...puck,
-              children: [{ id: 5, name: "test", data: { type: "gridBox", location: 3 } }],
-            },
-            isEdit: true,
-          },
-        },
-      },
-    );
-    await setLocation(1, { id: 1, data: { type: "puck" }, name: "puck" }, 2);
-
-    expect(Item.patch).toHaveBeenCalledWith(
-      9,
-      { registeredContainer: "DLS-0001", type: "puck", subType: undefined },
-      "containers",
-    );
-
-    expect(Item.patch).toHaveBeenCalledWith(5, { location: null, parentId: null }, "containers");
-
-    expect(Item.patch).toHaveBeenCalledWith(1, { location: 3, parentId: 1 }, "containers");
-  });
-
   it("should not proceed if form errors exist", async () => {
     (useFormContext as any).mockImplementation(() => ({
       ...formContextMock,
