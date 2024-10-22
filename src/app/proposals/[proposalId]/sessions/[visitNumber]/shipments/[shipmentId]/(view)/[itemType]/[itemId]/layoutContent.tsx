@@ -4,6 +4,8 @@ import {
   selectActiveItem,
   selectIsEdit,
   selectIsReview,
+  selectItems,
+  selectUnassigned,
   setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
@@ -45,6 +47,9 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   const [currentStep, setCurrentStep] = useState(0);
   const [hasUnassigned, setHasUnassigned] = useState(true);
 
+  const currentShipment = useSelector(selectItems);
+  const currentUnassigned = useSelector(selectUnassigned);
+
   useEffect(() => {
     setCurrentStep(getCurrentStepIndex(params.itemType));
     if (params.itemId !== "new") {
@@ -52,7 +57,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
     } else {
       dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
     }
-  }, [params, dispatch]);
+  }, [params, dispatch, currentShipment, currentUnassigned]);
 
   const handleSetStep = useCallback(
     (step: number) => {
