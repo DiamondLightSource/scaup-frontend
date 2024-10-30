@@ -29,8 +29,6 @@ export default defineConfig({
         "src/styles",
         // Types
         "src/types",
-        // "Static" navigation objects, or objects otherwise imported from external libraries
-        "src/components/navigation",
         "src/index.ts",
         // Interfaces, contains no runtime code
         "src/utils/interfaces.tsx",

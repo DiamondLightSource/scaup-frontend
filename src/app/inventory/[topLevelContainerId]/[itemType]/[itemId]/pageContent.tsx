@@ -32,12 +32,10 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
       return steps[steps.length - 1];
     }
 
-      return internalEbicSteps[
-        getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)
-      ]
-    },
-    [activeItem, params],
-  );
+    return internalEbicSteps[
+      getCurrentStepIndex(activeItem ? activeItem.data.type : "sample", internalEbicSteps)
+    ];
+  }, [activeItem, params]);
   const router = useRouter();
 
   const activeIsEdit = useSelector(selectIsEdit);

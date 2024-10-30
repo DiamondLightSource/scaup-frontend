@@ -42,7 +42,7 @@ export const EditableDropdown = ({
   );
 
   useEffect(() => {
-    if(selectedValue === undefined) {
+    if (selectedValue === undefined) {
       return;
     }
 
