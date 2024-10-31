@@ -40,7 +40,17 @@ Building the distribution files:
 Testing
 ============
 
+Unit Tests
+------------
+
 - Run :code:`yarn test`
+
+End-to-End Tests
+------------
+
+- Create two environment variables, :code:`PLAYWRIGHT_USERNAME` and :code:`PLAYWRIGHT_PASSWORD` containing the username and password you use to authenticate to eBIC Sample Handling.
+- Deploy the backend and frontend. Keep in mind that since these are full E2E tests, Expeye/Microauth must also be available.
+- Run :code:`yarn e2e`
 
 ============
 Development

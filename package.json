@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "format": "prettier --write src/**/*.{ts,tsx,css}"
+    "format": "prettier --write src/**/*.{ts,tsx,css}",
+    "e2e": "mkdir -p playwright/.auth/user.json && playwright test"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
@@ -27,6 +28,7 @@
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.2",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^14.3.1",
     "@types/node": "20.16.5",
