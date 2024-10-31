@@ -19,6 +19,8 @@ export default defineConfig({
       reportsDirectory: "coverage",
       exclude: [
         "node_modules/",
+        // E2E tests
+        "e2e/",
         // Test mocks
         "src/mocks",
         // NextAuth
