@@ -8,6 +8,7 @@ import {
   Divider,
   HStack,
   Heading,
+  Link,
   Stat,
   StatLabel,
   StatNumber,
@@ -18,6 +19,7 @@ import { Metadata } from "next";
 import ShipmentHomeContent from "./pageContent";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/mappings/authOptions";
+import NextLink from "next/link";
 
 export const metadata: Metadata = {
   title: "Shipment - Sample Handling",
@@ -76,6 +78,9 @@ const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
         <VStack w='100%' mt='3em'>
           <Heading variant='notFound'>Shipment Unavailable</Heading>
           <Text>This shipment does not exist or you do not have permission to view it.</Text>
+          <Link as={NextLink} href='..'>
+            Return to session page
+          </Link>
         </VStack>
       ) : (
         <>

@@ -3,6 +3,7 @@ import { ShipmentParams } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
 import { getShipmentData } from "@/utils/client/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
+import { redirect } from "next/navigation";
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
@@ -15,6 +16,10 @@ const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
     params.shipmentId,
     "/unassigned",
   )) as UnassignedItemResponse | null;
+
+  if (shipmentData === null || unassignedItems === null) {
+    redirect("../..");
+  }
 
   return (
     <ShipmentsLayoutContent

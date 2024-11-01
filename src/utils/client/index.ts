@@ -56,7 +56,7 @@ authenticatedFetch.server = async (url: RequestInfo, init?: RequestInit) => {
     return await authenticatedFetch(process.env.SERVER_API_URL! + url, init, session);
   } catch (e) {
     console.log(e);
-    redirect(`${process.env.NEXTAUTH_URL}/signin`);
+    redirect(`${process.env.NEXTAUTH_URL}/signin/diamond`);
   }
 };
 

@@ -143,7 +143,8 @@ describe("Shipment Submission Overview", () => {
   });
 
   it("should display link to data collection group if available", () => {
-    renderWithProviders(<ShipmentHomeContent
+    renderWithProviders(
+      <ShipmentHomeContent
         params={params}
         data={{
           samples: [
@@ -155,7 +156,8 @@ describe("Shipment Submission Overview", () => {
               proteinId: 1,
               dataCollectionGroupId: 1,
             },
-          ],counts: {},
+          ],
+          counts: {},
           dispatch: { status: "Booked" },
           name: "",
           preSessionInfo: { details: { pixelSize: 150 } },

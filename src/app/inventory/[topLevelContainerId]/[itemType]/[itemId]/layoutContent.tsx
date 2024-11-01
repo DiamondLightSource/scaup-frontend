@@ -1,12 +1,7 @@
 "use client";
 import { InventoryItemLayoutProps } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  defaultUnassigned,
-  setShipment,
-  setUnassigned,
-  syncActiveItem,
-} from "@/features/shipment/shipmentSlice";
+import { defaultUnassigned, setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { Divider, HStack, VStack } from "@chakra-ui/react";
@@ -40,7 +35,6 @@ export const ItemLayoutContent = ({
     if (shipmentData) {
       dispatch(setShipment([shipmentData]));
     }
-    dispatch(syncActiveItem());
   }, [shipmentData, dispatch]);
 
   useEffect(() => {
@@ -51,8 +45,6 @@ export const ItemLayoutContent = ({
         dispatch(setUnassigned({ items: unassignedItems?.items ?? [], type: item.id }));
       }
     }
-
-    dispatch(syncActiveItem());
   }, [unassignedItems, dispatch]);
 
   const handleStepChanged = useCallback(

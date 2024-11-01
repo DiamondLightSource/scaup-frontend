@@ -3,18 +3,16 @@ import { ItemForm } from "@/components/input/form/ItemForm";
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectActiveItem, selectIsEdit } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, separateDetails, steps } from "@/mappings/pages";
-import { AppDispatch } from "@/store";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
   const toast = useToast();
-  const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
