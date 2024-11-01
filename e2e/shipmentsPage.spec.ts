@@ -30,7 +30,7 @@ test('should create new shipment using existing samples', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Import Existing Samples' })).toBeVisible({timeout: 10000});
 });
 
-test('should create new shipment', async ({ page }) => {
+test('should navigate to shipment page when shipment card clicked', async ({ page }) => {
   await page.goto('/proposals/bi23047/sessions/100');
 
   await page.getByRole('textbox', { name: 'Name' }).fill("70");
