@@ -44,3 +44,10 @@ next-env.d.ts
 !.yarn/plugins
 .pnp.*
 certificates
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+playwright/.auth

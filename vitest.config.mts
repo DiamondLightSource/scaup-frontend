@@ -1,10 +1,11 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
-import { defineConfig } from "vitest/config";
+import { defineConfig, configDefaults } from "vitest/config";
 
 export default defineConfig({
   plugins: [react()],
   test: {
+    exclude: [...configDefaults.exclude, "e2e"],
     globals: true,
     environment: "jsdom",
     setupFiles: ["vitest.setup.ts"],
@@ -19,6 +20,8 @@ export default defineConfig({
       reportsDirectory: "coverage",
       exclude: [
         "node_modules/",
+        // E2E tests
+        "e2e/",
         // Test mocks
         "src/mocks",
         // NextAuth
