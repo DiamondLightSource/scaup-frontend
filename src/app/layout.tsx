@@ -1,6 +1,6 @@
 import { Providers } from "@/app/providers";
-import { AppNavbar } from "@/components/navigation/appNavbar";
-import { Footer } from "@/components/navigation/footer";
+import { AppNavbar } from "@/components/navigation/AppNavbar";
+import { Footer } from "@/components/navigation/Footer";
 import "@/styles/main.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

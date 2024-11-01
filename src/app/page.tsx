@@ -1,4 +1,4 @@
-import { Button, Heading, Link, Text, VStack } from "@chakra-ui/react";
+import { Button, Heading, Link, VStack } from "@chakra-ui/react";
 import { Metadata } from "next/types";
 
 export const metadata: Metadata = {
