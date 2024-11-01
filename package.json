@@ -9,7 +9,7 @@
     "lint": "next lint",
     "test": "vitest",
     "format": "prettier --write src/**/*.{ts,tsx,css}",
-    "e2e": "mkdir -p playwright/.auth/user.json && playwright test"
+    "e2e": "mkdir -p playwright/.auth && touch playwright/.auth/user.json && playwright test"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
