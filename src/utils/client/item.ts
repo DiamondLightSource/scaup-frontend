@@ -10,7 +10,7 @@ const { toast } = createStandaloneToast();
 
 const displayError = async (action: string, response: any | undefined) => {
   const details =
-    response && typeof response.detail === "string" ? "Internal server error" : response.detail;
+    response && typeof response.detail === "string" ? response.detail : "Internal server error";
   toast({ title: `Failed to ${action} item`, description: details, status: "error" });
 };
 
