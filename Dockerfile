@@ -2,9 +2,11 @@ FROM node:20.11.0-alpine3.19 AS base
 
 ARG API_URL="/api"
 ARG DEV_CONTACT="guilherme.de-freitas@diamond.ac.uk"
+ARG APP_VERSION="0.1.0"
 
 ENV NEXT_PUBLIC_API_URL=${API_URL}
 ENV NEXT_PUBLIC_DEV_CONTACT=${DEV_CONTACT}
+ENV NEXT_PUBLIC_APP_VERSION=${APP_VERSION}
 
 # Install dependencies only when needed
 FROM base AS deps
