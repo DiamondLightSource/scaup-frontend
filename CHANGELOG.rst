@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v0.6.1 (05/11/2024)
++++++++++
+
+**Fixed**
+
+- Make footer readable
+- Display detailed errors on failed item creation
+
++++++++++
 v0.6.0 (22/10/2024)
 +++++++++
 
