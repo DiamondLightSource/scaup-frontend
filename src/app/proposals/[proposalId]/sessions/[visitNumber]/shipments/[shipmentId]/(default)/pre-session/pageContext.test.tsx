@@ -39,11 +39,9 @@ describe("Item Page Layout", () => {
       preloadedState,
     });
 
-    const finishButton = await waitFor(() =>
-      screen.findByRole("button", {
-        name: /finish/i,
-      }),
-    );
+    const finishButton = await screen.findByRole("button", {
+      name: /finish/i,
+    });
 
     fireEvent.click(finishButton);
 
