@@ -8,7 +8,7 @@ import { Divider, HStack, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { ItemStepper } from "@/components/navigation/ItemStepper";
-import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
 

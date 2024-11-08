@@ -13,7 +13,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -34,7 +34,7 @@ export interface TreeData<T = any> {
 
 export interface TreeViewProps extends AccordionProps {
   data: TreeData[];
-  onRemove?: (data: TreeData) => void;
+  onRemove?: (data: TreeData) => Promise<void>;
   onEdit?: (data: TreeData) => void;
   /** Disable edit/remove buttons */
   readOnly?: boolean;
@@ -70,10 +70,17 @@ export const TreeView = ({
     console.log(event.dataTransfer.getData("text"))
   }, []);
   */
+  const [currentlyLoading, setCurrentlyLoading] = useState<number|null|string>(null);
+
   const handleRemove = useCallback(
-    (item: TreeData) => {
+    async (item: TreeData) => {
       if (onRemove) {
-        onRemove(item);
+        setCurrentlyLoading(item.id);
+        try {
+          await onRemove(item);
+        } catch {
+          setCurrentlyLoading(null);
+        }
       }
     },
     [onRemove],
@@ -142,7 +149,7 @@ export const TreeView = ({
                   </h2>
 
                   {!(item.isUndeletable || readOnly || hasChildren(item)) && (
-                    <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)}>
+                    <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)} isLoading={item.id === currentlyLoading}>
                       Remove
                     </Button>
                   )}
