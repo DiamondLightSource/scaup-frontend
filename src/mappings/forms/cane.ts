@@ -9,6 +9,7 @@ export const caneForm = [
     type: "text",
     validation: {
       ...nameValidation,
+      required: "Required"
     },
   },
   {
