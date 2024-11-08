@@ -158,11 +158,9 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const finishButton = await waitFor(() =>
-      screen.findByRole("button", {
-        name: /continue to pre-session info/i,
-      }),
-    );
+    const finishButton = await screen.findByRole("button", {
+      name: /continue to pre-session info/i,
+    });
 
     fireEvent.click(finishButton);
 

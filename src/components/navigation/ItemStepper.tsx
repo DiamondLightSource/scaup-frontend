@@ -60,7 +60,10 @@ export const ItemStepper = ({
     const unassignedItems: TreeData[] = unassigned[0].children!;
 
     if (shipment) {
-      count[count.length - 1].total = shipment.length;
+      // If the last step is a top level container, include top level containers in the last step
+      if (steps[steps.length - 1].endpoint === "topLevelContainers") {
+        count[count.length - 1].total = shipment.length;
+      }
 
       for (let i = 1; i < steps.length; i++) {
         /*
