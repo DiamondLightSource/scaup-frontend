@@ -73,4 +73,16 @@ describe("Cane", () => {
 
     expect(setLocationMock).toHaveBeenCalledWith(null, expect.objectContaining({ id: 9 }));
   });
+
+  it("should not include canes as children of other canes", async () => {
+    const unassignedPuckShipment = structuredClone(defaultShipment);
+    unassignedPuckShipment.shipment.unassigned[0].children![1].children = [populatedContainer];
+
+    renderAndInjectForm(<Cane parentId='1' />, {
+      preloadedState: unassignedPuckShipment,
+    });
+
+    fireEvent.click(screen.getByText("5"));
+    expect(screen.getAllByRole("radio")).toHaveLength(1);
+  });
 });
