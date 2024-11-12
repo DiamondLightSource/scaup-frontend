@@ -6,7 +6,10 @@ export const metadata: Metadata = {
   title: "Edit Item - Sample Handling",
 };
 
-const ItemFormPage = async ({ params }: { params: { proposalId: string; shipmentId: string } }) => {
+const ItemFormPage = async (props: {
+  params: Promise<{ proposalId: string; shipmentId: string }>;
+}) => {
+  const params = await props.params;
   const prepopData = await getPrepopData(params.proposalId);
 
   return <ItemFormPageContent shipmentId={params.shipmentId} prepopData={prepopData} />;

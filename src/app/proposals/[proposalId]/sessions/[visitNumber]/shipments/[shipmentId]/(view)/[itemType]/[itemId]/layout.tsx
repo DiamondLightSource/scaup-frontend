@@ -5,10 +5,14 @@ import ShipmentsLayoutContent from "./layoutContent";
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
-  params: ItemParams;
+  params: Promise<ItemParams>;
 }
 
-const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
+const ShipmentsLayout = async (props: ShipmentsLayoutProps) => {
+  const params = await props.params;
+
+  const { children } = props;
+
   const data = await getShipmentData(params.shipmentId);
   const isBooked = data !== null && data.data.status === "Booked";
 

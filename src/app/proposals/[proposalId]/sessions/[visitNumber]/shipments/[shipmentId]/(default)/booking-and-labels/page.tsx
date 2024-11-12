@@ -26,7 +26,8 @@ const getIsBooked = async (shipmentId: string) => {
   return data && !!data.data.shipmentRequest;
 };
 
-const BookingAndLabelsPage = async ({ params }: { params: ShipmentParams }) => {
+const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const isBooked = await getIsBooked(params.shipmentId);
 
   return (

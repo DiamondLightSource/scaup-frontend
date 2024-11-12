@@ -4,7 +4,7 @@ import reducer, {
   setActiveItem,
   setNewActiveItem,
   setShipment,
-  syncActiveItem
+  syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { defaultData } from "@/mocks/handlers";
