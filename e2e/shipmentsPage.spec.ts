@@ -16,7 +16,7 @@ test('should create new shipment', async ({ page }) => {
 });
 
 test('should create new shipment using existing samples', async ({ page }) => {
-  await page.goto('proposals/bi23047/sessions/100');
+  await page.goto('/proposals/bi23047/sessions/100');
 
   await page.getByRole('textbox', { name: 'Name' }).fill("80");
   const checkBox = page.getByLabel("Use Existing Samples");
