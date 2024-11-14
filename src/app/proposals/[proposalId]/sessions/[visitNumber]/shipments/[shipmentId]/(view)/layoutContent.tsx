@@ -1,6 +1,6 @@
 "use client";
 
-import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import {
   defaultUnassigned,

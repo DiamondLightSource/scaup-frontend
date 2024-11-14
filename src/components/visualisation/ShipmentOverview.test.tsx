@@ -1,4 +1,4 @@
-import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
