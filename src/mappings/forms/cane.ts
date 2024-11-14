@@ -1,5 +1,4 @@
 import { DynamicFormEntry } from "@/types/forms";
-import { containerForm } from "@/mappings/forms/container";
 import { nameValidation } from "@/utils/generic";
 
 export const caneForm = [
@@ -9,6 +8,7 @@ export const caneForm = [
     type: "text",
     validation: {
       ...nameValidation,
+      required: "Required"
     },
   },
   {
