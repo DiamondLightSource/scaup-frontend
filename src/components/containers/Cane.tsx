@@ -1,7 +1,7 @@
 import { BaseContainerProps, useChildLocationManager } from "@/components/containers";
 import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
-import { selectActiveItem } from "@/features/shipment/shipmentSlice";
+import { selectActiveItem, selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { Button, Heading, List, Spacer, Tag, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
@@ -13,6 +13,15 @@ export const Cane = ({ parentId, formContext, parentType }: BaseContainerProps) 
   const currentContainer = useSelector(selectActiveItem);
   const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
+  const unassignedItems = useSelector(selectUnassigned);
+
+  const selectableChildren = useMemo(
+    () =>
+      unassignedItems[0]
+        .children!.find((category) => category.name === "Containers")!
+        .children!.filter((item) => item.data.type !== "cane"),
+    [unassignedItems],
+  );
 
   const setLocation = useChildLocationManager({
     parentId,
@@ -103,6 +112,7 @@ export const Cane = ({ parentId, formContext, parentType }: BaseContainerProps) 
         isOpen={isOpen}
         onClose={onClose}
         readOnly={formContext === undefined}
+        selectableChildren={selectableChildren}
       />
     </VStack>
   );
