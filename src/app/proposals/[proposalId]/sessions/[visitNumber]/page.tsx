@@ -34,7 +34,8 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
   return null;
 };
 
-const SessionOverview = async ({ params }: { params: SessionParams }) => {
+const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
+  const params = await props.params;
   const data = (await getShipments(params.proposalId, params.visitNumber)) as
     | components["schemas"]["MixedShipment"][]
     | null;

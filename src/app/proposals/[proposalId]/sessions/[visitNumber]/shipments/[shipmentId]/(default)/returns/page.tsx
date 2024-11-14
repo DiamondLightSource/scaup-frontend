@@ -18,7 +18,8 @@ const getTopLevelContainers = async (shipmentId: string) => {
   return null;
 };
 
-const ReturnRequests = async ({ params }: { params: ShipmentParams }) => {
+const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const tlcData = await getTopLevelContainers(params.shipmentId);
 
   return (

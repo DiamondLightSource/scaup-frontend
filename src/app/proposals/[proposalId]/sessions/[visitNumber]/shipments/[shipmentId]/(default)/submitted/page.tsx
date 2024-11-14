@@ -38,7 +38,8 @@ const getShipmentData = async (shipmentId: string) => {
   return { counts, formModel, isBooked: !!(data && data.data.shipmentRequest) };
 };
 
-const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
+const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const shipmentData = await getShipmentData(params.shipmentId);
 
   return (

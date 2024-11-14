@@ -6,7 +6,8 @@ export const metadata: Metadata = {
   title: "Edit Item - Sample Handling",
 };
 
-const ItemFormPage = async ({ params }: { params: InventoryItemParams }) => {
+const ItemFormPage = async (props: { params: Promise<InventoryItemParams> }) => {
+  const params = await props.params;
   return <ItemFormPageContent params={params} />;
 };
 

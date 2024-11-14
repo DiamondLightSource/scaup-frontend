@@ -61,7 +61,8 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
   return { counts, samples, dispatch: data.data, name: data.name, preSessionInfo, hasUnassigned };
 };
 
-const ShipmentHome = async ({ params }: { params: ShipmentParams }) => {
+const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
   const session = await getServerSession(authOptions);
 

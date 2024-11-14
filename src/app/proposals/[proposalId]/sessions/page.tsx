@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-const ProposalRedirect = ({ params }: { params: { proposalId: string } }) => {
+const ProposalRedirect = async (props: { params: Promise<{ proposalId: string }> }) => {
+  const params = await props.params;
   redirect(`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions`);
 };
 

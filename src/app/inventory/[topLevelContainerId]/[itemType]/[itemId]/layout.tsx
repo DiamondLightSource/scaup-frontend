@@ -19,7 +19,11 @@ const getUnassignedItems = async () => {
     : null;
 };
 
-const ItemLayout = async ({ children, params }: InventoryItemLayoutProps) => {
+const ItemLayout = async (props: InventoryItemLayoutProps) => {
+  const params = await props.params;
+
+  const { children } = props;
+
   const shipmentData = (await getShipmentData(
     params.topLevelContainerId,
     "",

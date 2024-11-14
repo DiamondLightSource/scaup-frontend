@@ -7,9 +7,10 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, account, user }) {
       if (account) {
+        const cookieStore = await cookies();
         token.accessToken = account.access_token;
         token.permissions = user.permissions;
-        cookies().set({
+        cookieStore.set({
           name: `__Host-${process.env.OAUTH_COOKIE_NAME}`,
           value: token.accessToken as string,
           httpOnly: true,

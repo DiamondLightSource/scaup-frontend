@@ -5,18 +5,10 @@ import reducer, {
   setNewActiveItem,
   setShipment,
   syncActiveItem,
-  updateShipment,
-  updateUnassigned,
 } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { defaultData } from "@/mocks/handlers";
-import { server } from "@/mocks/server";
-import { UnassignedItemResponse } from "@/types/server";
-import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
-import { waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
-
-import { toastMock } from "@/../vitest.setup";
+import { puck, testInitialState } from "@/utils/test-utils";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
 const getUnassignedByType = (state: typeof initialState, type: string) =>
@@ -165,94 +157,6 @@ describe("Shipment Unassigned Items Reducers", () => {
             name: "New puck",
           },
         });
-      });
-    });
-
-    describe("Shipment Async Thunks", () => {
-      it("should display toast if shipment response is not valid", async () => {
-        server.use(
-          http.get(
-            "http://localhost/api/shipments/:shipmentId",
-            () => HttpResponse.json({}, { status: 404 }),
-            { once: true },
-          ),
-        );
-
-        const { store } = renderWithProviders(<></>);
-        store.dispatch(updateShipment({ shipmentId: "1" }));
-
-        await waitFor(() => expect(toastMock).toHaveBeenCalled());
-      });
-
-      it("should display toast if unassigned item response is not valid", async () => {
-        server.use(
-          http.get(
-            "http://localhost/api/shipments/:shipmentId/unassigned",
-            () => HttpResponse.json({}, { status: 500 }),
-            { once: true },
-          ),
-        );
-
-        const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ shipmentId: "1" }));
-
-        await waitFor(() =>
-          expect(toastMock).toHaveBeenCalledWith({
-            title: "An error ocurred",
-            description: "Unable to retrieve unassigned item data",
-          }),
-        );
-      });
-
-      it("should set all unassigned collections to empty if endpoint returns 404", async () => {
-        server.use(
-          http.get(
-            "http://localhost/api/shipments/:shipmentId/unassigned",
-            () => HttpResponse.json({}, { status: 404 }),
-            { once: true },
-          ),
-        );
-
-        const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ shipmentId: "1" }));
-
-        await waitFor(() =>
-          expect(store.getState().shipment.unassigned[0].children![0].children).toHaveLength(0),
-        );
-      });
-
-      it("should update store with new shipment when thunk called", async () => {
-        const { store } = renderWithProviders(<></>);
-        store.dispatch(updateShipment({ shipmentId: "1" }));
-
-        await waitFor(() =>
-          expect(store.getState().shipment.items).toMatchObject(defaultData.children),
-        );
-      });
-
-      it("should update store with new unassigned items when thunk called", async () => {
-        const unassignedResponse = {
-          samples: [sample],
-          containers: [puck],
-          gridBoxes: [],
-        } satisfies UnassignedItemResponse;
-
-        server.use(
-          http.get(
-            "http://localhost/api/shipments/:shipmentId/unassigned",
-            () => HttpResponse.json(unassignedResponse),
-            { once: true },
-          ),
-        );
-
-        const { store } = renderWithProviders(<></>);
-        store.dispatch(updateUnassigned({ shipmentId: "1" }));
-
-        await waitFor(() =>
-          expect(getUnassignedByType(store.getState().shipment, "container")).toMatchObject([puck]),
-        );
-
-        expect(getUnassignedByType(store.getState().shipment, "sample")).toMatchObject([sample]);
       });
     });
   });

@@ -19,7 +19,8 @@ const getPreSessionData = async (shipmentId: string) => {
   }
 };
 
-const PreSession = async ({ params }: { params: ShipmentParams }) => {
+const PreSession = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const preSessionData = await getPreSessionData(params.shipmentId);
   return (
     <VStack gap='0' alignItems='start' w='100%'>
