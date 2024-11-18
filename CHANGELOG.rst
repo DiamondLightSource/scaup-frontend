@@ -3,6 +3,20 @@ Changelog
 ==========
 
 +++++++++
+v0.6.2 (18/11/2024)
++++++++++
+
+**Added**
+
+- Remove button now displays loading indicator when clicked
+- Global 404 page
+
+**Fixed**
+
+- Canes can no longer have other canes as children
+- Page title always gets updated on item creation in inventory items
+
++++++++++
 v0.6.1 (05/11/2024)
 +++++++++
 
