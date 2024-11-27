@@ -11,6 +11,7 @@ import NextLink from "next/link";
 
 const getUnassignedItems = async () => {
   const res = await authenticatedFetch.server("/internal-containers/unassigned", {
+    cache: "force-cache",
     next: { tags: ["shipment"] },
   });
 

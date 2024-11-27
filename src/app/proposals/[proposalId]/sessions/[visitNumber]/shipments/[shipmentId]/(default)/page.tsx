@@ -30,7 +30,8 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
   const resSamples = await authenticatedFetch.server(
     `/shipments/${shipmentId}/samples?ignoreExternal=false`,
     {
-      next: { tags: ["samples"] },
+      cache: "force-cache",
+      next: { tags: ["samples", "shipment"] },
     },
   );
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);

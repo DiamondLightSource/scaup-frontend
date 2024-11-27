@@ -15,6 +15,7 @@ export const getShipmentData = async (
   const res = await authenticatedFetch.server(
     `/${parentTypeToEndpoint[parentType]}/${shipmentId}${suffix}`,
     {
+      cache: "force-cache",
       next: { tags: ["shipment"] },
     },
   );
