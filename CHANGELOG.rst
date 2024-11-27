@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.6.3 (27/11/2024)
++++++++++
+
+**Changed**
+
+- Enabled caching for most server-side endpoints
+
++++++++++
 v0.6.2 (18/11/2024)
 +++++++++
 
