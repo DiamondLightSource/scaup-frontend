@@ -88,7 +88,10 @@ interface PrepopDataModel {
 }
 
 export const getPrepopData = async (proposalId: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`);
+  const res = await authenticatedFetch.server(`/proposals/${proposalId}/data`, {
+    cache: "force-cache",
+    next: { tags: ["proposalData"] },
+  });
   if (res && res.status === 200) {
     return (await res.json()) as PrepopDataModel;
   }
