@@ -45,4 +45,4 @@ build-image:
   only:
     - tags
   script:
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile Dockerfile --destination $IMAGE_NAME --build-arg API_URL=/api --build-arg DEV_CONTACT=guilherme.de-freitas@diamond.ac.uk
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile Dockerfile --destination $IMAGE_NAME --build-arg APP_VERSION=$CI_COMMIT_TAG --build-arg API_URL=/api --build-arg DEV_CONTACT=guilherme.de-freitas@diamond.ac.uk

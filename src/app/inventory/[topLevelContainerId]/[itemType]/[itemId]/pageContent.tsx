@@ -4,6 +4,8 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
+  selectItems,
+  selectUnassigned,
   setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
@@ -40,13 +42,16 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
 
   const activeIsEdit = useSelector(selectIsEdit);
 
+  const currentShipment = useSelector(selectItems);
+  const currentUnassigned = useSelector(selectUnassigned);
+
   useEffect(() => {
     if (params.itemId !== "new") {
       dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
     } else {
       dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
     }
-  }, [params, dispatch]);
+  }, [params, dispatch, currentShipment, currentUnassigned]);
 
   const onSubmit = useCallback(
     async (info: FieldValues) => {

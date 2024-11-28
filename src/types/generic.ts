@@ -10,7 +10,7 @@ export interface ItemFormPageContentProps {
 
 export interface InventoryItemLayoutProps {
   children: React.ReactElement;
-  params: InventoryItemParams;
+  params: Promise<InventoryItemParams>;
 }
 
 export interface ChildSelectorProps extends BaseChildSelectorProps {

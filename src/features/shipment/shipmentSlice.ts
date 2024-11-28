@@ -4,55 +4,13 @@ import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";
 import { RootParentType } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
-import { authenticatedFetch } from "@/utils/client";
-import { parentTypeToEndpoint } from "@/utils/client/shipment";
 import { recursiveFind, setTagInPlace } from "@/utils/tree";
-import { createStandaloneToast } from "@chakra-ui/react";
-import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-
-const { toast } = createStandaloneToast();
+import { PayloadAction, createSlice, current } from "@reduxjs/toolkit";
 
 export interface ShipmentThunkParams {
   shipmentId: string;
   parentType?: RootParentType;
 }
-
-export const updateShipment = createAsyncThunk(
-  "shipment/updateShipment",
-  async ({ shipmentId, parentType = "shipment" }: ShipmentThunkParams, thunkAPI) => {
-    const parentEndpoint = parentTypeToEndpoint[parentType];
-    const response = await authenticatedFetch.client(`/${parentEndpoint}/${shipmentId}`);
-    if (response && response.status === 200) {
-      const shipment = await response.json();
-      return parentType === "shipment" ? shipment.children : [shipment];
-    } else {
-      toast({ title: "An error ocurred", description: "Unable to retrieve shipment data" });
-      thunkAPI.rejectWithValue(null);
-    }
-  },
-);
-
-export const updateUnassigned = createAsyncThunk(
-  "shipment/updateUnassigned",
-  async ({ shipmentId, parentType = "shipment" }: ShipmentThunkParams, thunkAPI) => {
-    const parentEndpoint = parentTypeToEndpoint[parentType];
-    const endpointPrefix = `/${parentEndpoint}${parentType === "shipment" ? `/${shipmentId}` : ""}`;
-    const response = await authenticatedFetch.client(`${endpointPrefix}/unassigned`);
-    if (response) {
-      if (response.status === 200) {
-        const unassigned = await response.json();
-        if (parentType === "topLevelContainer") {
-          return { gridBoxes: [], samples: [], containers: unassigned.items };
-        }
-        return unassigned;
-      } else if (response.status === 404) {
-        return { gridBoxes: [], samples: [], containers: [] };
-      }
-    }
-    toast({ title: "An error ocurred", description: "Unable to retrieve unassigned item data" });
-    thunkAPI.rejectWithValue(null);
-  },
-);
 
 export interface ShipmentState {
   /** Shipment items (assigned) */
@@ -113,31 +71,6 @@ export const initialState: ShipmentState = {
 export const shipmentSlice = createSlice({
   name: "shipment",
   initialState,
-  extraReducers: (builder) => {
-    builder.addCase(updateShipment.fulfilled, (state, action: PayloadAction<TreeData[]>) => {
-      if (action.payload) {
-        const newItems = structuredClone(action.payload);
-        setTagInPlace(newItems);
-        state.items = newItems;
-      }
-    });
-    builder.addCase(
-      updateUnassigned.fulfilled,
-      (state, action: PayloadAction<UnassignedItemResponse>) => {
-        if (action.payload) {
-          let newUnassigned = structuredClone(current(state.unassigned));
-
-          for (const [key, value] of Object.entries(action.payload)) {
-            setInUnassignedClone(newUnassigned, value, pluralToSingular[key]);
-          }
-
-          setTagInPlace(newUnassigned);
-          state.unassigned = newUnassigned;
-        }
-      },
-    );
-    builder.addCase(updateShipment.rejected, () => {});
-  },
   reducers: {
     setShipment: (state, action: PayloadAction<ShipmentState["items"]>) => {
       const newItems = structuredClone(action.payload)!;

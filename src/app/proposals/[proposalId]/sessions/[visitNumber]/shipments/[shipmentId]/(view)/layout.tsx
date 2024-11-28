@@ -7,10 +7,14 @@ import { redirect } from "next/navigation";
 
 export interface ShipmentsLayoutProps {
   children: React.ReactElement<BasePage>;
-  params: ShipmentParams;
+  params: Promise<ShipmentParams>;
 }
 
-const ShipmentsLayout = async ({ children, params }: ShipmentsLayoutProps) => {
+const ShipmentsLayout = async (props: ShipmentsLayoutProps) => {
+  const params = await props.params;
+
+  const { children } = props;
+
   const shipmentData = await getShipmentData(params.shipmentId);
   const unassignedItems = (await getShipmentData(
     params.shipmentId,

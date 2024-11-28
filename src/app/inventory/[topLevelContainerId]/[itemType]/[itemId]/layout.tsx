@@ -11,6 +11,7 @@ import NextLink from "next/link";
 
 const getUnassignedItems = async () => {
   const res = await authenticatedFetch.server("/internal-containers/unassigned", {
+    cache: "force-cache",
     next: { tags: ["shipment"] },
   });
 
@@ -19,7 +20,11 @@ const getUnassignedItems = async () => {
     : null;
 };
 
-const ItemLayout = async ({ children, params }: InventoryItemLayoutProps) => {
+const ItemLayout = async (props: InventoryItemLayoutProps) => {
+  const params = await props.params;
+
+  const { children } = props;
+
   const shipmentData = (await getShipmentData(
     params.topLevelContainerId,
     "",

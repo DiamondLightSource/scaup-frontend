@@ -1,5 +1,5 @@
 "use client";
-import { InventoryItemLayoutProps } from "@/types/generic";
+import { InventoryItemLayoutProps, InventoryItemParams } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
 import { defaultUnassigned, setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
@@ -8,13 +8,15 @@ import { Divider, HStack, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { ItemStepper } from "@/components/navigation/ItemStepper";
-import { ShipmentOverview } from "@/components/visualisation/shipmentOverview";
+import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
 
-export interface InventoryItemLayoutContentProps extends InventoryItemLayoutProps {
+export interface InventoryItemLayoutContentProps {
   shipmentData: TreeData<BaseShipmentItem> | null;
   unassignedItems: components["schemas"]["Paged_GenericItem_"] | null;
+  children: React.ReactElement;
+  params: InventoryItemParams;
 }
 
 export const ItemLayoutContent = ({

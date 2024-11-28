@@ -7,13 +7,12 @@ export const metadata: Metadata = {
   title: "Import Existing Samples - Sample Handling",
 };
 
-const SubmissionOverview = async ({
-  params,
-  searchParams,
-}: {
-  params: ShipmentParams;
-  searchParams: { new: string };
+const SubmissionOverview = async (props: {
+  params: Promise<ShipmentParams>;
+  searchParams: Promise<{ new: string }>;
 }) => {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   return (
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>

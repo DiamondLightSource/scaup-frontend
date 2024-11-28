@@ -24,7 +24,8 @@ export const metadata: Metadata = {
   title: "Shipment Overview - Sample Handling",
 };
 
-const SubmissionOverview = async ({ params }: { params: ShipmentParams }) => {
+const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) => {
+  const params = await props.params;
   const rawShipmentData = (await getShipmentData(params.shipmentId)) as TreeData<BaseShipmentItem>;
   const unassignedData = await getShipmentData(params.shipmentId, "/unassigned");
   const prepopData = await getPrepopData(params.proposalId);
