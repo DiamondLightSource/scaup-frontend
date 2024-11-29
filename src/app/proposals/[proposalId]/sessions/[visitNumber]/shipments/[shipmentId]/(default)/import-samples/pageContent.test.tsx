@@ -94,7 +94,7 @@ describe("Import Samples Page Content", () => {
     await screen.findByText("No samples available for transfer in this session.");
   });
 
-  it("should redirect to shipments page if shipment is not new", async () => {
+  it("should redirect to sample collection page if sample collection is not new", async () => {
     const assignSpy = vi.spyOn(window.location, "assign");
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
@@ -110,7 +110,7 @@ describe("Import Samples Page Content", () => {
     await waitFor(() => expect(assignMock).toBeCalledWith("./"));
   });
 
-  it("should redirect to pre-session page if shipment is new", async () => {
+  it("should redirect to pre-session page if sample collection is new", async () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
 

@@ -2,11 +2,11 @@ import { server } from "@/mocks/server";
 import { renderWithProviders } from "@/utils/test-utils";
 import { HttpResponse, http } from "msw";
 import InventoryLayout from "./layout";
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 const defaultParams = { itemType: "", itemId: "", topLevelContainerId: "1" };
 
-describe("Shipment Layout", () => {
+describe("Inventory Layout", () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });

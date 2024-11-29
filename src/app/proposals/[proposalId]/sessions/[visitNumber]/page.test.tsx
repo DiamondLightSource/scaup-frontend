@@ -20,7 +20,7 @@ describe("Proposal Page Content", () => {
     expect(screen.getByText("Session Unavailable")).toBeInTheDocument();
   });
 
-  it("should display message if there are no shipments in this proposal", async () => {
+  it("should display message if there are no sample collections in this session", async () => {
     server.use(
       http.get(
         "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
@@ -31,7 +31,7 @@ describe("Proposal Page Content", () => {
     render(await ProposalOverview(baseParams));
 
     expect(
-      screen.getByText("This session has no shipments assigned to it yet. You can:"),
+      screen.getByText("This session has no sample collections assigned to it yet. You can:"),
     ).toBeInTheDocument();
   });
 

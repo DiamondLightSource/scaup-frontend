@@ -24,8 +24,8 @@ const SubmissionOverview = async (props: {
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
         <Text>
-          Import existing samples from other shipments, for use in this shipment. Ensure your sample
-          is already being stored at eBIC.
+          Import existing samples from other sample collections, for use in this sample collection.
+          Ensure your sample is already being stored at eBIC.
         </Text>
       </VStack>
       <ImportSamplesPageContent params={params} isNew={searchParams.new === "true"} />

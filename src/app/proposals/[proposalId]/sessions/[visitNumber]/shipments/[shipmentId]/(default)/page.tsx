@@ -22,7 +22,7 @@ import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 
 export const metadata: Metadata = {
-  title: "Shipment - Sample Handling",
+  title: "Sample Collection - Sample Handling",
 };
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
@@ -71,15 +71,17 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
-          Shipment
+          Sample Collection
         </Heading>
         <Heading>{shipmentData ? shipmentData.name : "Shipment"}</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       {shipmentData === null ? (
         <VStack w='100%' mt='3em'>
-          <Heading variant='notFound'>Shipment Unavailable</Heading>
-          <Text>This shipment does not exist or you do not have permission to view it.</Text>
+          <Heading variant='notFound'>Sample Collection Unavailable</Heading>
+          <Text>
+            This sample collection does not exist or you do not have permission to view it.
+          </Text>
           <Link as={NextLink} href='..'>
             Return to session page
           </Link>

@@ -1,9 +1,4 @@
-import { toastMock } from "@/../vitest.setup";
-import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { HttpResponse, http } from "msw";
-import mockRouter from "next-router-mock";
+import { render, screen } from "@testing-library/react";
 import BookingAndLabelsPage from "./page";
 
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };

@@ -21,7 +21,7 @@ import SubmissionOverviewContent, { PrintButton } from "./pageContent";
 import { allItemsEmptyInDict } from "@/utils/generic";
 
 export const metadata: Metadata = {
-  title: "Shipment Overview - Sample Handling",
+  title: "Sample Collection Overview - Sample Handling",
 };
 
 const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) => {
@@ -42,7 +42,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
           {params.proposalId}
         </Heading>
         <HStack w='100%'>
-          <Heading>Shipment Items</Heading>
+          <Heading>Sample Collection Items</Heading>
           <Spacer />
           <PrintButton />
         </HStack>
@@ -52,7 +52,8 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
         <Alert status='info' variant='info'>
           <AlertIcon />
           <AlertDescription>
-            This shipment contains unassigned items, which are not included in this listing.
+            This sample collection contains unassigned items, which are not included in this
+            listing.
           </AlertDescription>
         </Alert>
       )}
@@ -62,11 +63,11 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
         <VStack mt='2em' alignItems='start'>
           <Heading size='lg'>No assigned items</Heading>
           <Text>
-            This shipment contains <b>no assigned items</b>. You must{" "}
+            This sample collection contains <b>no assigned items</b>. You must{" "}
             <Link as={NextLink} href='edit'>
               add at least one item
             </Link>{" "}
-            to this shipment to get a list of contents.
+            to this sample collection to get a list of contents.
           </Text>
         </VStack>
       )}

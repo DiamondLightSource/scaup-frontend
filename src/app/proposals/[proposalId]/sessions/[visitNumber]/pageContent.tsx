@@ -19,7 +19,7 @@ const shipmentForm = [
   {
     id: "importSamples",
     label: "Use Existing Samples",
-    hint: "Use samples from an existing shipment, which are already stored in the facility",
+    hint: "Use samples from an existing sample collection, which is already stored in the facility",
     type: "checkbox",
   },
 ] as DynamicFormEntry[];
@@ -52,12 +52,12 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "20em",
+          width: "40em",
           flex: "1 0 auto",
         }}
       >
         <Heading mt='3' mb='0.5em' size='lg' color='grey.700'>
-          Create New Shipment
+          Create New Sample Collection
         </Heading>
         <DynamicForm formType={shipmentForm} />
         <Button w='150px' mt='1em' type='submit' bg='green.500' isLoading={isLoading}>

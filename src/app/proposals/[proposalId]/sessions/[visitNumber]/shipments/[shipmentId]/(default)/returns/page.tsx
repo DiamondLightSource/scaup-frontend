@@ -5,7 +5,7 @@ import { Divider, HStack, Heading, Link, Tag, Text, VStack } from "@chakra-ui/re
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shipment - Request Returns",
+  title: "Request Returns - Sample Handling",
 };
 
 const getTopLevelContainers = async (shipmentId: string) => {

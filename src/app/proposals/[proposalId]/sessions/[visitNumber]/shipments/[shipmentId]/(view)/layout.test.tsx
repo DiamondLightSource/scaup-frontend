@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 const defaultParams = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
 
-describe("Shipment Layout", () => {
+describe("Sample Collection Layout", () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });

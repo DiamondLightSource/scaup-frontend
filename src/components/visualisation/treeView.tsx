@@ -70,7 +70,7 @@ export const TreeView = ({
     console.log(event.dataTransfer.getData("text"))
   }, []);
   */
-  const [currentlyLoading, setCurrentlyLoading] = useState<number|null|string>(null);
+  const [currentlyLoading, setCurrentlyLoading] = useState<number | null | string>(null);
 
   const handleRemove = useCallback(
     async (item: TreeData) => {
@@ -149,7 +149,13 @@ export const TreeView = ({
                   </h2>
 
                   {!(item.isUndeletable || readOnly || hasChildren(item)) && (
-                    <Button bg='red.600' mr='1' size='xs' onClick={() => handleRemove(item)} isLoading={item.id === currentlyLoading}>
+                    <Button
+                      bg='red.600'
+                      mr='1'
+                      size='xs'
+                      onClick={() => handleRemove(item)}
+                      isLoading={item.id === currentlyLoading}
+                    >
                       Remove
                     </Button>
                   )}

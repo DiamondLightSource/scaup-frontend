@@ -64,7 +64,7 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
           <ListItem>
             <Heading size='lg'>Book shipment with courier (optional)</Heading>
             <Text my='1em'>
-              You can arrange for your sample to be shipped using Diamond&#39;s DHL account, or you
+              You can arrange for your samples to be shipped using Diamond&#39;s DHL account, or you
               can do it yourself with your courier of choice. Remember to{" "}
               <b>affix the airway bill/courier label to the outside of the dewar case</b> in either
               case.

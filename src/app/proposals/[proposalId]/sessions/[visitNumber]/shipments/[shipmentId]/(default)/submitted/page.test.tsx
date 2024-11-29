@@ -8,7 +8,7 @@ import SubmissionOverview from "./page";
 
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
-describe("Shipment Submission Overview", () => {
+describe("Sample Collection Submission Overview", () => {
   it("should render shipment contents", async () => {
     render(await SubmissionOverview({ params }));
 

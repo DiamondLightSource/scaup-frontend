@@ -2,7 +2,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { getCurrentStepIndex } from "@/mappings/pages";
 import { renderWithProviders, sample, testInitialState } from "@/utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 import ShipmentLayoutContent from "./layoutContent";
 
@@ -17,7 +17,7 @@ const defaultUnassigned = structuredClone(initialState.unassigned);
 
 defaultUnassigned[0].children![getCurrentStepIndex("sample")].children!.push(sample);
 
-describe("Shipment Layout", () => {
+describe("Sample Collection Layout", () => {
   it("should render proposal name as heading", () => {
     renderWithProviders(
       <ShipmentLayoutContent

@@ -28,7 +28,6 @@ export interface ShipmentHomeContentProps {
 // TODO: make this more generic
 // TODO: update logic for booking status check
 const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps) => {
-  const toast = useToast();
   const router = useRouter();
 
   const handleSampleClicked = useCallback(
@@ -58,7 +57,7 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
           <Heading size='lg'>Samples</Heading>
           <Spacer />
           <Button as={NextLink} href={`${params.shipmentId}/import-samples`} size='sm'>
-            Import from Shipment
+            Import Samples from Session
           </Button>
         </HStack>
         <Divider borderColor='gray.800' />
@@ -98,12 +97,12 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
       <VStack alignItems='start'>
         <Heading size='lg'>Actions</Heading>
         <TwoLineLink
-          title='Edit Shipment'
+          title='Edit Sample Collection'
           as={NextLink}
           href={`${params.shipmentId}/edit`}
           isDisabled={data.dispatch.status === "Booked"}
         >
-          Edit shipment contents, or add new items
+          Edit sample collection contents, or add new items
         </TwoLineLink>
         <TwoLineLink
           title={`${data.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
@@ -113,11 +112,15 @@ const ShipmentHomeContent = ({ data, params, isStaff }: ShipmentHomeContentProps
         >
           Set imaging conditions, grid/data acquisition parameters
         </TwoLineLink>
-        <TwoLineLink title='Review Shipment' as={NextLink} href={`${params.shipmentId}/review`}>
-          Review shipment contents
+        <TwoLineLink
+          title='Review Sample Collection'
+          as={NextLink}
+          href={`${params.shipmentId}/review`}
+        >
+          Review sample collection contents
         </TwoLineLink>
         <TwoLineLink title='Print Contents' as={NextLink} href={`${params.shipmentId}/print`}>
-          View shippable contents in a printable format
+          View contents in a printable format
         </TwoLineLink>
         <TwoLineLink
           title='Print Pre-Session Information'

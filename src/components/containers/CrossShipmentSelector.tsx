@@ -150,8 +150,8 @@ export const CrossShipmentSelector = ({
           <Heading size='md'>Items</Heading>
           <Divider />
           <Text my='10px'>
-            Select {childrenTypeData.data.singular.toLocaleLowerCase()} from existing shipment, or
-            unassigned items
+            Select {childrenTypeData.data.singular.toLocaleLowerCase()} from existing sample
+            collection, or unassigned items
           </Text>
           <Text fontWeight='600'>Proposal Reference</Text>
           <Input

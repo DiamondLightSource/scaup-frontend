@@ -6,7 +6,7 @@ import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
-describe("Shipment Submission Overview", () => {
+describe("Sample Collection Submission Overview", () => {
   it("should render item quantities", async () => {
     renderWithProviders(await ShipmentHome({ params: params }));
 
@@ -34,7 +34,9 @@ describe("Shipment Submission Overview", () => {
     renderWithProviders(await ShipmentHome({ params: params }));
 
     expect(
-      screen.getByText(/this shipment does not exist or you do not have permission to view it./i),
+      screen.getByText(
+        /this sample collection does not exist or you do not have permission to view it./i,
+      ),
     ).toBeInTheDocument();
   });
 });

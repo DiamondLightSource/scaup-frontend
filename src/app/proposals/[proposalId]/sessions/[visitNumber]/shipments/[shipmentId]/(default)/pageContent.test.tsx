@@ -5,8 +5,8 @@ import ShipmentHomeContent from "./pageContent";
 
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
-describe("Shipment Submission Overview", () => {
-  it("should not enable 'edit shipment' button if shipment is already booked", () => {
+describe("Sample Collection Submission Overview", () => {
+  it("should not enable 'edit sample collection' button if shipment is already booked", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
@@ -25,7 +25,7 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getAllByRole("group")[0]).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("should render shipment samples", () => {
+  it("should render sample collection samples", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}
@@ -170,7 +170,7 @@ describe("Shipment Submission Overview", () => {
     expect(screen.getByRole("link", { name: "View Data" })).toBeInTheDocument();
   });
 
-  it("should disable booking and labels link if no dewars are present in the shipment", () => {
+  it("should disable booking and labels link if no dewars are present in the sample collection", () => {
     renderWithProviders(
       <ShipmentHomeContent
         params={params}

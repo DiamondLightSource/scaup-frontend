@@ -4,7 +4,7 @@ import { Heading, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shipment - Sample Handling",
+  title: "Pre-Session Data - Sample Handling",
 };
 
 const PreSessionPrintContent = ({ data }: { data: Record<string, any> | null }) => {

@@ -14,7 +14,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useCallback, useRef, useState } from "react";
-import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
 export const ArrangeShipmentButton = ({
