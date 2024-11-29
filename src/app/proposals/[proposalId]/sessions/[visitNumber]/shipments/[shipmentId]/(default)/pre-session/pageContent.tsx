@@ -9,7 +9,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export const metadata: Metadata = {
-  title: "Pre-Session Information - Sample Handling",
+  title: "Pre-Session Information - Scaup",
 };
 
 const PreSessionContent = ({

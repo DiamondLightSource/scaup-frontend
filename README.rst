@@ -1,10 +1,10 @@
 |code_ci| |code_cov| |license|
 
 ============== ==============================================================
-Source code https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend
+Source code https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend
 ============== ==============================================================
 
-eBIC sample handling service (frontend)
+Scaup (frontend)
 
 ==========
 Configuration
@@ -19,8 +19,8 @@ Configuration is done through environment variables:
 * :code:`OAUTH_COOKIE_NAME`: Authentication token cookie name
 * :code:`OAUTH_DISCOVERY_ENDPOINT`: OIDC discovery endpoint
 * :code:`OAUTH_PROFILE_INFO_ENDPOINT`: Microauth's profile endpoint. May be removed in the future if our auth solution provides profile info as well.
-* :code:`SERVER_API_URL`: Sample Handling API URL from the server perspective. Note that relative paths such as `/api` cannot be used, since the user has no concept of relative paths. Paths must be absolute. This can be modified at runtime/deploy time.
-* :code:`NEXT_PUBLIC_API_URL`: Sample Handling API URL
+* :code:`SERVER_API_URL`: Scaup API URL from the server perspective. Note that relative paths such as `/api` cannot be used, since the user has no concept of relative paths. Paths must be absolute. This can be modified at runtime/deploy time.
+* :code:`NEXT_PUBLIC_API_URL`: SCAUP API URL
 * :code:`NEXT_PUBLIC_DEV_CONTACT`: Developer contact email
 * :code:`PATO_URL`: URL of the PATo instance you want to target for redirects
 * :code:`SYNCHWEB_URL`: URL of the SynchWeb instance you want to target for redirects
@@ -48,7 +48,7 @@ Unit Tests
 End-to-End Tests
 ------------
 
-- Create two environment variables, :code:`PLAYWRIGHT_USERNAME` and :code:`PLAYWRIGHT_PASSWORD` containing the username and password you use to authenticate to eBIC Sample Handling.
+- Create two environment variables, :code:`PLAYWRIGHT_USERNAME` and :code:`PLAYWRIGHT_PASSWORD` containing the username and password you use to authenticate to Scaup.
 - Deploy the backend and frontend. Keep in mind that since these are full E2E tests, Expeye/Microauth must also be available.
 - Run :code:`yarn e2e`
 
@@ -58,12 +58,12 @@ Development
 
 To run Next in development mode, run :code:`yarn dev`. If you don't have certificates set up, or if you're using self-signed certificates, Node might throw up errors and block connections. To avoid that, run :code:`NODE_TLS_REJECT_UNAUTHORIZED=0 yarn dev`
 
-.. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/badges/master/pipeline.svg
-    :target: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/-/pipelines
+.. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/badges/master/pipeline.svg
+    :target: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/-/pipelines
     :alt: Code CI
 
-.. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/badges/master/coverage.svg
-    :target: https://gitlab.diamond.ac.uk/lims/ebic-sample-handling/frontend/-/pipelines
+.. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/badges/master/coverage.svg
+    :target: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/-/pipelines
     :alt: Code Coverage
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg

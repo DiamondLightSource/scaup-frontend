@@ -4,10 +4,9 @@ import { Divider, Grid, Heading, Stat, StatNumber, Text, VStack } from "@chakra-
 import { Metadata } from "next";
 import Link from "next/link";
 import { TopLevelContainerCreationForm } from "./pageContent";
-import { revalidateTag } from "next/cache";
 
 export const metadata: Metadata = {
-  title: "Inventory - Sample Handling",
+  title: "Inventory - Scaup",
 };
 
 const getContainers = async () => {

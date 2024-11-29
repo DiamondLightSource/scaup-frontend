@@ -16,7 +16,7 @@ import NextLink from "next/link";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 
 export const metadata: Metadata = {
-  title: "Booking & Labels - Sample Handling",
+  title: "Booking & Labels - Scaup",
 };
 
 const getIsBooked = async (shipmentId: string) => {

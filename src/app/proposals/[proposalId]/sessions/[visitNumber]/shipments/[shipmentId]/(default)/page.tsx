@@ -22,7 +22,7 @@ import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sample Collection - Sample Handling",
+  title: "Sample Collection - Scaup",
 };
 
 const getShipmentAndSampleData = async (shipmentId: string) => {

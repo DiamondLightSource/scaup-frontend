@@ -20,7 +20,7 @@ import { Metadata } from "next";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 
 export const metadata: Metadata = {
-  title: "Sample Collection Submitted - Sample Handling",
+  title: "Sample Collection Submitted - Scaup",
 };
 
 const getShipmentData = async (shipmentId: string) => {

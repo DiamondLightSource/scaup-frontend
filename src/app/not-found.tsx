@@ -3,7 +3,7 @@ import { Metadata } from "next/types";
 import NextLink from "next/link";
 
 export const metadata: Metadata = {
-  title: "404 - Sample Handling",
+  title: "404 - SCAUP",
 };
 
 const PageNotFound = () => (
