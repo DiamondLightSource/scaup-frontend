@@ -13,11 +13,14 @@ import {
   Text,
   Divider,
   CheckboxGroup,
+  HStack,
+  Link,
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { authenticatedFetch } from "@/utils/client";
 import { Item } from "@/utils/client/item";
+import { useRouter } from "next/navigation";
 
 interface SessionData {
   session: string;
@@ -47,6 +50,7 @@ const ImportSamplesPageContent = ({
   isNew: boolean;
 }) => {
   const toast = useToast();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const formContextSession = useForm<SessionData>();
   const [samples, setSamples] = useState<components["schemas"]["SampleOut"][] | null | undefined>();
@@ -68,25 +72,27 @@ const ImportSamplesPageContent = ({
     }
   });
 
-  const handleFinish = useCallback(async () => {
-    if (samples) {
-      try {
-        await Promise.all(
-          samples!.map((sample) =>
-            Item.patch(sample.id, { shipmentId: params.shipmentId }, "samples"),
-          ),
-        );
+  const handleFinish = useCallback(
+    async (skip: boolean = false) => {
+      if (samples) {
+        try {
+          await Promise.all(
+            checkedItems.map((i) =>
+              Item.patch(samples[parseInt(i)].id, { shipmentId: params.shipmentId, containerId: null }, "samples"),
+            ),
+          );
 
-        // TODO: replace this with server actions?
-        window.location.assign(isNew ? "pre-session" : "./");
-      } catch {
-        toast({ title: "Could not update items, please try again later", status: "error" });
+          router.push(skip ? "pre-session?skipPush=true" : "gridBox/new/edit");
+        } catch {
+          toast({ title: "Could not update items, please try again later", status: "error" });
+        }
       }
-    }
-  }, [samples, params, isNew, toast]);
+    },
+    [samples, params, toast, checkedItems, router],
+  );
 
   return (
-    <VStack alignItems='start' w='100%'>
+    <VStack alignItems='start' w={{ base: "100%", md: "66%" }}>
       <FormProvider {...formContextSession}>
         <form onSubmit={onSubmitSession} style={{ width: "100%" }}>
           <DynamicForm formType={sessionForm} />
@@ -99,7 +105,7 @@ const ImportSamplesPageContent = ({
         Select Samples
       </Heading>
       {samples && samples.length > 0 ? (
-        <VStack divider={<Divider borderColor='diamond.600' />} w='100%'>
+        <VStack divider={<Divider borderColor='diamond.600' />} w='100%' mb="1em">
           <CheckboxGroup
             onChange={(values: string[]) => {
               setCheckedItems(values);
@@ -124,14 +130,19 @@ const ImportSamplesPageContent = ({
           </Heading>
         )
       )}
+      {(checkedItems.length > 0) && isNew && (
+        <Text>
+          If you are not transferring these samples to a new container,{" "}
+          <Link onClick={() => handleFinish(true)}>skip to entering pre-session information</Link>.
+        </Text>
+      )}
       <Button
-        mt='1em'
-        onClick={handleFinish}
-        bg='green.500'
+        onClick={() => handleFinish(false)}
         isDisabled={!samples || checkedItems.length < 1}
         isLoading={isLoading}
+        bg="green.500"
       >
-        {isNew ? "Continue" : "Finish"}
+        Save and continue editing
       </Button>
     </VStack>
   );
