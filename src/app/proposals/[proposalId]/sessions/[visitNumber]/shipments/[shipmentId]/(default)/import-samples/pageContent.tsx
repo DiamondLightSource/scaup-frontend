@@ -56,7 +56,7 @@ const ImportSamplesPageContent = ({
   const onSubmitSession = formContextSession.handleSubmit(async (info) => {
     setIsLoading(true);
     const res = await authenticatedFetch.client(
-      `/proposals/${params.proposalId}/sessions/${info.session}/samples?isInternal=true`,
+      `/proposals/${params.proposalId}/sessions/${info.session}/samples?isInternal=false`,
     );
     setIsLoading(false);
 
