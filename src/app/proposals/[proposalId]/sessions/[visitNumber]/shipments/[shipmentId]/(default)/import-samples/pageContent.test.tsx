@@ -8,27 +8,6 @@ import ImportSamplesPageContent from "./pageContent";
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Import Samples Page Content", () => {
-  let originalWindowLocation = window.location;
-  let assignMock = vi.fn();
-
-  beforeEach(() => {
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      enumerable: true,
-      value: { assign: assignMock },
-    });
-  });
-
-  afterEach(() => {
-    assignMock.mockClear();
-
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      enumerable: true,
-      value: originalWindowLocation,
-    });
-  });
-
   it("should render samples", async () => {
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
 
@@ -57,7 +36,7 @@ describe("Import Samples Page Content", () => {
 
     fireEvent.click(checkbox);
 
-    expect(screen.getByRole("button", { name: "Finish" })).not.toHaveAttribute("disabled");
+    expect(screen.getByText("Save and continue editing")).not.toHaveAttribute("disabled");
   });
 
   it("should display message if no samples are available", async () => {
@@ -94,22 +73,6 @@ describe("Import Samples Page Content", () => {
     await screen.findByText("No samples available for transfer in this session.");
   });
 
-  it("should redirect to shipments page if shipment is not new", async () => {
-    const assignSpy = vi.spyOn(window.location, "assign");
-    mockRouter.setCurrentUrl("shipments/1/import-samples");
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
-
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
-
-    const checkbox = await screen.findByRole("checkbox");
-
-    fireEvent.click(checkbox);
-    fireEvent.click(screen.getByRole("button", { name: "Finish" }));
-
-    await waitFor(() => expect(assignMock).toBeCalledWith("./"));
-  });
-
   it("should redirect to pre-session page if shipment is new", async () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
     renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
@@ -120,8 +83,23 @@ describe("Import Samples Page Content", () => {
     const checkbox = await screen.findByRole("checkbox");
 
     fireEvent.click(checkbox);
-    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    fireEvent.click(screen.getByText("skip to entering pre-session information" ));
 
-    await waitFor(() => expect(assignMock).toBeCalledWith("pre-session"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/pre-session"));
+  });
+
+  it("should redirect to shipment page if 'Save and continue editing' is clicked", async () => {
+    mockRouter.setCurrentUrl("shipments/1/import-samples");
+    renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+
+    const checkbox = await screen.findByRole("checkbox");
+
+    fireEvent.click(checkbox);
+    fireEvent.click(screen.getByText("Save and continue editing"));
+
+    await waitFor(() => expect(mockRouter.pathname).toBe("/gridBox/new/edit"));
   });
 });
