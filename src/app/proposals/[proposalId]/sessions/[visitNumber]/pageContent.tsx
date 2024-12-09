@@ -57,7 +57,7 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
         }}
       >
         <Heading mt='3' mb='0.5em' size='lg' color='grey.700'>
-          Create new shipment
+          Create New Shipment
         </Heading>
         <DynamicForm formType={shipmentForm} />
         <Button w='150px' mt='1em' type='submit' bg='green.500' isLoading={isLoading}>
