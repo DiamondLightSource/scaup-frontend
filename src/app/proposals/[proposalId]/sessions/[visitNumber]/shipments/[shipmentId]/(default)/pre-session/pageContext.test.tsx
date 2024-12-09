@@ -104,4 +104,26 @@ describe("Item Page Layout", () => {
 
     expect(screen.getByDisplayValue("250")).toBeInTheDocument();
   });
+
+  it("should ignore push if skipPush is set", async () => {
+    server.use(
+      http.post(
+        "http://localhost/api/shipments/:shipmentId/push",
+        () => HttpResponse.json({}, { status: 404 }),
+        { once: true },
+      ),
+    );
+    
+    renderWithProviders(<PreSessionContent params={params} prepopData={{ pixelSize: 250 }} skipPush={true} />, {
+      preloadedState,
+    });
+
+    const finishButton = await screen.findByRole("button", {
+      name: /finish/i,
+    });
+
+    fireEvent.click(finishButton);
+
+    await waitFor(() => expect(mockRouter.pathname).toBe("/submitted"));
+  });
 });
