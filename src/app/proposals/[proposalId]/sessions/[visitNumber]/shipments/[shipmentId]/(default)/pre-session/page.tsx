@@ -5,7 +5,7 @@ import PreSessionContent from "./pageContent";
 import { authenticatedFetch } from "@/utils/client";
 
 export const metadata: Metadata = {
-  title: "Pre-Session Data - Sample Handling",
+  title: "Pre-Session Data - Scaup",
 };
 
 const getPreSessionData = async (shipmentId: string) => {

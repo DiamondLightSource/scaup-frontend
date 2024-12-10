@@ -18,7 +18,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Session - Sample Handling",
+  title: "Session - Scaup",
 };
 
 const getShipments = async (proposalId: string, visitNumber: string) => {

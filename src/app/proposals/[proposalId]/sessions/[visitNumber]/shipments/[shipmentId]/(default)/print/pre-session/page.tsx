@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { PrintButton } from "../pageContent";
 
 export const metadata: Metadata = {
-  title: "Pre Session - Sample Handling",
+  title: "Pre Session - Scaup",
 };
 
 const getPreSessionData = async (shipmentId: string) => {

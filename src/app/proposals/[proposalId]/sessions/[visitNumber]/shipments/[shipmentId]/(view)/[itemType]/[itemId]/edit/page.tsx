@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ItemFormPageContent from "./pageContent";
 
 export const metadata: Metadata = {
-  title: "Edit Item - Sample Handling",
+  title: "Edit Item - Scaup",
 };
 
 const ItemFormPage = async (props: {

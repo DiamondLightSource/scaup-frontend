@@ -21,7 +21,7 @@ import SubmissionOverviewContent, { PrintButton } from "./pageContent";
 import { allItemsEmptyInDict } from "@/utils/generic";
 
 export const metadata: Metadata = {
-  title: "Sample Collection Overview - Sample Handling",
+  title: "Sample Collection Overview - Scaup",
 };
 
 const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) => {

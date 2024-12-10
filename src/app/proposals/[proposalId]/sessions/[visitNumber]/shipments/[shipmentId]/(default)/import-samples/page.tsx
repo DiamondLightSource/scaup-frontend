@@ -4,7 +4,7 @@ import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Import Existing Samples - Sample Handling",
+  title: "Import Existing Samples - Scaup",
 };
 
 const SubmissionOverview = async (props: {

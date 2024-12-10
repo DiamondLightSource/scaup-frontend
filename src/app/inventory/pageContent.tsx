@@ -27,12 +27,12 @@ export const TopLevelContainerCreationForm = () => {
       setIsLoading(true);
       const newTlc = (await Item.create(
         null,
-        { name: info.name, type: "dewar", code: "" },
+        { name: info.name, type: "inventoryDewar", code: "" },
         "topLevelContainers",
         "topLevelContainer",
       )) as CreationResponse;
 
-      router.push(`inventory/${newTlc.id}/dewar/${newTlc.id}`);
+      router.push(`inventory/${newTlc.id}/gridBox/new`);
     } catch (e) {
     } finally {
       setIsLoading(false);

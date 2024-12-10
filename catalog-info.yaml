@@ -1,15 +1,15 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: sample-handling-frontend
-  title: Sample Handling Frontend
-  description: A web application for declaring the contents of sample shipments
+  name: scaup-frontend
+  title: Scaup Frontend
+  description: A web application for sample shipping, definition, and experiment parametrisation
 spec:
   type: website
   lifecycle: experimental
-  system: sample-handling
+  system: scaup
   owner: group:lims
   dependsOn:
     - component:web-ui-components
   consumesApis:
-    - sample-handling-api
+    - scaup-api

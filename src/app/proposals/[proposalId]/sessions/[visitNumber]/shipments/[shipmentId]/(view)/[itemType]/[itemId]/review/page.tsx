@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ReviewPageContent from "./pageContent";
 
 export const metadata: Metadata = {
-  title: "Review Sample Collection - Sample Handling",
+  title: "Review Sample Collection - Scaup",
 };
 
 const ReviewPage = async (props: {
