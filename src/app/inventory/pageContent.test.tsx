@@ -11,6 +11,6 @@ describe("Inventory Page Content", () => {
     });
 
     fireEvent.click(screen.getByRole("button", { name: "Create" }));
-    await waitFor(() => expect(mockRouter.pathname).toBe("/inventory/1/dewar/1"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/inventory/1/gridBox/new"));
   });
 });
