@@ -3,6 +3,20 @@ Changelog
 ==========
 
 +++++++++
+v0.7.0 (10/12/2024)
++++++++++
+
+**Added**
+
+- Option to choose between skipping to pre-session or adding sample collection containers in sample import page
+- Separate form for storage dewars
+
+**Changed**
+
+- Renamed "shipment" to "sample collection"
+- Renamed application to Scaup
+
++++++++++
 v0.6.3 (27/11/2024)
 +++++++++
 
