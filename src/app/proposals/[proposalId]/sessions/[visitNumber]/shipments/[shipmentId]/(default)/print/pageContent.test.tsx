@@ -24,7 +24,7 @@ const defaultShipment = {
   ],
 };
 
-describe("Shipment Printable Overview", () => {
+describe("Sample Collection Printable Overview", () => {
   it("should position if item has position", () => {
     renderWithProviders(<PrintableOverviewContent shipment={defaultShipment} prepopData={{}} />);
 

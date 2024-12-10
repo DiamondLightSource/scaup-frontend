@@ -18,7 +18,7 @@ const selectedSample = {
   data: { type: "sample", location: 1 },
 } as TreeData<PositionedItem>;
 
-describe("Cross Shipment Child Selector", () => {
+describe("Cross Sample Collection Child Selector", () => {
   it("should render all samples that belong to selected sessions", async () => {
     renderWithProviders(
       <CrossShipmentSelector childrenType='sample' isOpen={true} onClose={() => {}} />,

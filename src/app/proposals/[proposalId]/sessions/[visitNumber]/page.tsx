@@ -46,7 +46,7 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
         <Heading size='md' color='gray.600'>
           {params.proposalId}-{params.visitNumber}
         </Heading>
-        <Heading>Session Shipments</Heading>
+        <Heading>Session Sample Collections</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       {data === null ? (
@@ -58,10 +58,10 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
         <>
           <VStack alignItems='start' w='100%'>
             <Text fontSize='18px' mt='2'>
-              View existing shipments for this session, or add new shipments.
+              View existing sample collections for this session, or add new sample collections.
             </Text>{" "}
             <Heading mt='3' size='lg' color='grey.700'>
-              Select Existing Shipment
+              Select Existing Sample Collection
             </Heading>
           </VStack>
           {data.length > 0 ? (
@@ -113,7 +113,9 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
               </Heading>
             </>
           ) : (
-            <Text fontWeight='600'>This session has no shipments assigned to it yet. You can:</Text>
+            <Text fontWeight='600'>
+              This session has no sample collections assigned to it yet. You can:
+            </Text>
           )}
           <ShipmentCreationForm proposalId={params.proposalId} visitNumber={params.visitNumber} />
         </>

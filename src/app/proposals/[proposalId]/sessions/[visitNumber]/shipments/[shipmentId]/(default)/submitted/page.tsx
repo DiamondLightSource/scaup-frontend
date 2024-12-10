@@ -17,11 +17,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import NextLink from "next/link";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 
 export const metadata: Metadata = {
-  title: "Shipment Submitted - Sample Handling",
+  title: "Sample Collection Submitted - Sample Handling",
 };
 
 const getShipmentData = async (shipmentId: string) => {
@@ -48,7 +47,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
         <Heading size='md' color='gray.600'>
           {params.proposalId}-{params.visitNumber}
         </Heading>
-        <Heading>Shipment Overview</Heading>
+        <Heading>Sample Collection Overview</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
@@ -61,7 +60,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
             color='diamond.600'
             href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}`}
           >
-            return to the shipment list.
+            return to the sample collection list.
           </Link>
         </Text>
         {Object.keys(shipmentData.counts).length > 0 && (

@@ -11,11 +11,9 @@ import { defaultData } from "@/mocks/handlers";
 import { puck, testInitialState } from "@/utils/test-utils";
 
 const sample: TreeData<BaseShipmentItem> = { id: "1", name: "Sample 01", data: { type: "sample" } };
-const getUnassignedByType = (state: typeof initialState, type: string) =>
-  state.unassigned[0].children!.find((item) => item.id === type)!.children;
 
-describe("Shipment Unassigned Items Reducers", () => {
-  describe("Shipment Items Reducers", () => {
+describe("Sample Collection Unassigned Items Reducers", () => {
+  describe("Sample Collection Items Reducers", () => {
     it("should update shipment items with new shipment items", () => {
       const newShipment: TreeData<BaseShipmentItem>[] = [
         { id: "Foo", name: "Bar", data: { type: "sample" } },

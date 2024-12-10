@@ -71,7 +71,7 @@ describe("Puck", () => {
     screen.getByTestId("5-populated");
   });
 
-  it("should render cross shipment child selector if parent type is 'topLevelContainer'", () => {
+  it("should render cross sample collection child selector if parent type is 'topLevelContainer'", () => {
     renderAndInjectForm(<Puck parentId='1' parentType='topLevelContainer' />);
 
     fireEvent.click(screen.getByTestId("5-empty"));

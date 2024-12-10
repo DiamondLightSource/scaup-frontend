@@ -6,7 +6,7 @@ import ShipmentPrintableOverview from "./page";
 
 const params = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
 
-describe("Shipment Printable Overview Page", () => {
+describe("Sample Collection Printable Overview Page", () => {
   it("should render shipment contents", async () => {
     renderWithProviders(await ShipmentPrintableOverview({ params }));
 
@@ -25,7 +25,9 @@ describe("Shipment Printable Overview Page", () => {
 
     renderWithProviders(await ShipmentPrintableOverview({ params }));
 
-    expect(screen.getByText(/this shipment contains unassigned items/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/this sample collection contains unassigned items/i),
+    ).toBeInTheDocument();
   });
 
   it("should render warning if there are no items in the shipment", async () => {

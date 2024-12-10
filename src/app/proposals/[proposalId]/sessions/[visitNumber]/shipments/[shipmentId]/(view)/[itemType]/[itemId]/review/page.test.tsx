@@ -7,7 +7,7 @@ describe("Review Page", () => {
     renderWithProviders(await ReviewPage({ params: { shipmentId: "1", proposalId: "1" } }));
 
     expect(
-      screen.getByText(/you can still edit your shipment after submitting/i),
+      screen.getByText(/you can still edit your sample collection after submitting/i),
     ).toBeInTheDocument();
   });
 });

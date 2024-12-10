@@ -20,7 +20,7 @@ const defaultUnassigned = structuredClone(testInitialState.unassigned);
 
 defaultUnassigned[0].children![getCurrentStepIndex("puck")].children!.push(puck);
 
-describe("Shipment Overview", () => {
+describe("Sample Collection Overview", () => {
   it("should render tree", () => {
     renderWithProviders(<ShipmentOverview onActiveChanged={() => {}} title='' />, {
       preloadedState: { shipment: { ...testInitialState, items: defaultShipment } },
