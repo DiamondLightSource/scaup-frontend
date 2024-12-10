@@ -3,22 +3,17 @@ import { DynamicForm, formMapping } from "@/components/input/form";
 import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
-import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-export const metadata: Metadata = {
-  title: "Pre-Session Information - Scaup",
-};
-
-const PreSessionContent = ({
-  params,
-  prepopData,
-}: {
+export interface PreSessionContentProps {
   params: ShipmentParams;
   prepopData: Record<string, any> | null;
-}) => {
+  skipPush?: boolean;
+}
+
+const PreSessionContent = ({ params, prepopData, skipPush }: PreSessionContentProps) => {
   const formContext = useForm({ values: prepopData ?? {} });
   const toast = useToast();
   const router = useRouter();
@@ -26,9 +21,17 @@ const PreSessionContent = ({
 
   const onSubmit = formContext.handleSubmit(async (info) => {
     setIsLoading(true);
-    const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
-      method: "POST",
-    });
+    if (!skipPush) {
+      const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
+        method: "POST",
+      });
+
+      if (!response || response.status !== 200) {
+        toast({ description: "Could not update items! Please try again later", status: "error" });
+        setIsLoading(false);
+        return;
+      }
+    }
 
     const preSessionResponse = await authenticatedFetch.client(
       `/shipments/${params.shipmentId}/preSession`,
@@ -39,12 +42,7 @@ const PreSessionContent = ({
     );
     setIsLoading(false);
 
-    if (
-      preSessionResponse &&
-      response &&
-      response.status === 200 &&
-      preSessionResponse.status === 201
-    ) {
+    if (preSessionResponse && preSessionResponse.status === 201) {
       router.push("submitted");
     } else {
       toast({ description: "Could not update items! Please try again later", status: "error" });
