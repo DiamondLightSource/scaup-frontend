@@ -157,6 +157,7 @@ export const Container = ({ containerType, ...props }: ContainerProps) => {
       return <Cane {...props} />;
     case "dewar":
     case "walk-in":
+    case "inventoryDewar":
       return <GenericContainer parent='topLevelContainers' child='containers' {...props} />;
     default:
       return null;
