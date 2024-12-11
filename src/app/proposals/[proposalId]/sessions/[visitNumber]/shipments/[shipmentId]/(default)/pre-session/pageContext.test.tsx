@@ -113,10 +113,13 @@ describe("Item Page Layout", () => {
         { once: true },
       ),
     );
-    
-    renderWithProviders(<PreSessionContent params={params} prepopData={{ pixelSize: 250 }} skipPush={true} />, {
-      preloadedState,
-    });
+
+    renderWithProviders(
+      <PreSessionContent params={params} prepopData={{ pixelSize: 250 }} skipPush={true} />,
+      {
+        preloadedState,
+      },
+    );
 
     const finishButton = await screen.findByRole("button", {
       name: /finish/i,

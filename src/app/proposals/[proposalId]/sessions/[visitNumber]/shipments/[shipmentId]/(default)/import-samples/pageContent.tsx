@@ -78,7 +78,11 @@ const ImportSamplesPageContent = ({
         try {
           await Promise.all(
             checkedItems.map((i) =>
-              Item.patch(samples[parseInt(i)].id, { shipmentId: params.shipmentId, containerId: null }, "samples"),
+              Item.patch(
+                samples[parseInt(i)].id,
+                { shipmentId: params.shipmentId, containerId: null },
+                "samples",
+              ),
             ),
           );
 
@@ -105,7 +109,7 @@ const ImportSamplesPageContent = ({
         Select Samples
       </Heading>
       {samples && samples.length > 0 ? (
-        <VStack divider={<Divider borderColor='diamond.600' />} w='100%' mb="1em">
+        <VStack divider={<Divider borderColor='diamond.600' />} w='100%' mb='1em'>
           <CheckboxGroup
             onChange={(values: string[]) => {
               setCheckedItems(values);
@@ -130,7 +134,7 @@ const ImportSamplesPageContent = ({
           </Heading>
         )
       )}
-      {(checkedItems.length > 0) && isNew && (
+      {checkedItems.length > 0 && isNew && (
         <Text>
           If you are not transferring these samples to a new container,{" "}
           <Link onClick={() => handleFinish(true)}>skip to entering pre-session information</Link>.
@@ -140,7 +144,7 @@ const ImportSamplesPageContent = ({
         onClick={() => handleFinish(false)}
         isDisabled={!samples || checkedItems.length < 1}
         isLoading={isLoading}
-        bg="green.500"
+        bg='green.500'
       >
         Save and continue editing
       </Button>

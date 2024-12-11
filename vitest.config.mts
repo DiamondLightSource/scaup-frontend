@@ -37,6 +37,7 @@ export default defineConfig({
         "src/utils/interfaces.tsx",
         // Store and middleware files
         "src/*.tsx",
+        "src/**/__mocks__"
       ],
     },
   },
