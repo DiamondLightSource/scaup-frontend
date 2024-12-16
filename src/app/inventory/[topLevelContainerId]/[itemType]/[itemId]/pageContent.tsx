@@ -30,7 +30,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(() => {
-    if (params.itemType === "dewar") {
+    if (params.itemType === "storageDewar") {
       return steps[steps.length - 1];
     }
 
