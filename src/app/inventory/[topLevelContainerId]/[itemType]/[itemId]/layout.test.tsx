@@ -1,10 +1,10 @@
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, wrapInPromise } from "@/utils/test-utils";
 import { HttpResponse, http } from "msw";
 import InventoryLayout from "./layout";
 import { screen } from "@testing-library/react";
 
-const defaultParams = { itemType: "", itemId: "", topLevelContainerId: "1" };
+const params = wrapInPromise({ itemType: "", itemId: "", topLevelContainerId: "1" });
 
 describe("Inventory Layout", () => {
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe("Inventory Layout", () => {
   });
 
   it("should render child content", async () => {
-    renderWithProviders(await InventoryLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await InventoryLayout({ children: <></>, params }));
   });
 
   it("should redirect to previous page if shipments data item request returns error", async () => {
@@ -24,7 +24,7 @@ describe("Inventory Layout", () => {
       ),
     );
 
-    renderWithProviders(await InventoryLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await InventoryLayout({ children: <></>, params }));
 
     expect(screen.getByText("Return to inventory page")).toBeInTheDocument();
   });
@@ -38,7 +38,7 @@ describe("Inventory Layout", () => {
       ),
     );
 
-    renderWithProviders(await InventoryLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await InventoryLayout({ children: <></>, params }));
     expect(screen.getByText("Return to inventory page")).toBeInTheDocument();
   });
 });

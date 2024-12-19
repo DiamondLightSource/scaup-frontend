@@ -1,10 +1,10 @@
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, wrapInPromise } from "@/utils/test-utils";
 import { HttpResponse, http } from "msw";
 import ShipmentsLayout from "@/app/proposals/[proposalId]/sessions/[visitNumber]/shipments/[shipmentId]/(view)/layout";
 import { redirect } from "next/navigation";
 
-const defaultParams = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
+const params = wrapInPromise({ shipmentId: "1", proposalId: "1", visitNumber: "1" });
 
 describe("Sample Collection Layout", () => {
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe("Sample Collection Layout", () => {
   });
 
   it("should render child content", async () => {
-    renderWithProviders(await ShipmentsLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
   });
 
   it("should redirect to previous page if shipments data item request returns error", async () => {
@@ -24,7 +24,7 @@ describe("Sample Collection Layout", () => {
       ),
     );
 
-    renderWithProviders(await ShipmentsLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
     expect(redirect).toHaveBeenCalledOnce();
   });
 
@@ -37,7 +37,7 @@ describe("Sample Collection Layout", () => {
       ),
     );
 
-    renderWithProviders(await ShipmentsLayout({ children: <></>, params: defaultParams }));
+    renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
 
     expect(redirect).toHaveBeenCalledOnce();
   });

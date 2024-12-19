@@ -1,14 +1,13 @@
 import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { baseShipmentParams, renderWithProviders } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
-const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Sample Collection Submission Overview", () => {
   it("should render item quantities", async () => {
-    renderWithProviders(await ShipmentHome({ params: params }));
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getByText(/grid box/i)).toBeInTheDocument();
     expect(screen.getAllByText("2")).toHaveLength(2);
@@ -20,7 +19,7 @@ describe("Sample Collection Submission Overview", () => {
         HttpResponse.json({ ...defaultData, data: { status: "Booked" } }),
       ),
     );
-    renderWithProviders(await ShipmentHome({ params: params }));
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getByText(/booked/i)).toBeInTheDocument();
   });
@@ -31,7 +30,7 @@ describe("Sample Collection Submission Overview", () => {
         HttpResponse.json({}, { status: 404 }),
       ),
     );
-    renderWithProviders(await ShipmentHome({ params: params }));
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(
       screen.getByText(

@@ -96,6 +96,16 @@ export const renderAndInjectForm = (
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
+export const wrapInPromise = <T extends Record<string, any>>(params: T) =>
+  new Promise((resolve) => resolve(params)) as Promise<T>;
+
+export const baseSessionParams = {
+  params: wrapInPromise({ proposalId: "cm1234", visitNumber: "1" }),
+};
+export const baseShipmentParams = {
+  params: wrapInPromise({ proposalId: "cm00001", shipmentId: "1", visitNumber: "1" }),
+};
+
 export const gridBox: TreeData<BaseShipmentItem> = {
   id: 3,
   name: "gridBox",

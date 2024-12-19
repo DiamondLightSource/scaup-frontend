@@ -5,12 +5,12 @@ import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 import SubmissionOverview from "./page";
+import { baseShipmentParams } from "@/utils/test-utils";
 
-const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Sample Collection Submission Overview", () => {
   it("should render shipment contents", async () => {
-    render(await SubmissionOverview({ params }));
+    render(await SubmissionOverview(baseShipmentParams));
 
     expect(screen.getByText("Dewar")).toBeInTheDocument();
     expect(screen.getByText(/puck/i)).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe("Sample Collection Submission Overview", () => {
       ),
     );
 
-    render(await SubmissionOverview({ params }));
+    render(await SubmissionOverview(baseShipmentParams));
 
     fireEvent.click(screen.getByText("Arrange Shipping"));
     fireEvent.click(screen.getByText(/continue/i));
@@ -49,7 +49,7 @@ describe("Sample Collection Submission Overview", () => {
       ),
     );
 
-    render(await SubmissionOverview({ params }));
+    render(await SubmissionOverview(baseShipmentParams));
 
     expect(screen.getByText(/view shipping information/i)).toBeInTheDocument();
     expect(screen.getByText(/the shipping process has already been started/i)).toBeInTheDocument();
