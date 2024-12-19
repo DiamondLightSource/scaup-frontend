@@ -89,6 +89,22 @@ describe("Inventory Item Page Content", () => {
     expect(screen.getByRole("button", { name: "Create New Item" })).toHaveAttribute("disabled");
   });
 
+  it("should disable 'add' button if item is sample/grid/dewar and it is not an existing item", () => {
+    renderWithProviders(
+      <ItemForm parentId='1' parentType='topLevelContainer' onSubmit={async () => {}} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...baseShipment.shipment,
+            isEdit: false,
+          },
+        },
+      },
+    );
+
+    expect(screen.getByRole("button", { name: "Add" })).toHaveAttribute("disabled");
+  });
+
   it("should disable code field if item is inventory dewar", () => {
     renderWithProviders(
       <ItemForm parentId='1' onSubmit={async () => {}} parentType='topLevelContainer' />,

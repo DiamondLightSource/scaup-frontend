@@ -8,7 +8,7 @@ import { AppDispatch } from "@/store";
 import { RootParentType } from "@/types/generic";
 import { Box, Button, HStack, Spacer } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -35,6 +35,13 @@ export const ItemForm = ({
   const [formType, setFormType] = useState("sample");
   const [formSubType, setFormSubType] = useState<string | undefined>(undefined);
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
+
+  const isCreationDisabled = useMemo(
+    () =>
+      parentType === "topLevelContainer" &&
+      ["storageDewar", "grid", "sample"].includes(activeItem!.data.type),
+    [parentType, activeItem],
+  );
 
   useEffect(() => {
     const newForm = formMapping[formType];
@@ -148,17 +155,14 @@ export const ItemForm = ({
         </HStack>
         <HStack h='3.5em' px='1em' bg='gray.200'>
           <Spacer />
-          <Button
-            onClick={redirectToNew}
-            isDisabled={
-              !activeIsEdit ||
-              (parentType === "topLevelContainer" &&
-                ["dewar", "grid", "sample"].includes(activeItem!.data.type))
-            }
-          >
+          <Button onClick={redirectToNew} isDisabled={!activeIsEdit || isCreationDisabled}>
             Create New Item
           </Button>
-          <Button isLoading={isAddLoading} type='submit'>
+          <Button
+            isLoading={isAddLoading}
+            isDisabled={isCreationDisabled && !activeIsEdit}
+            type='submit'
+          >
             {activeIsEdit ? "Save" : "Add"}
           </Button>
         </HStack>
