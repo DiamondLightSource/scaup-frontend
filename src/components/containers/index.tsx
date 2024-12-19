@@ -12,6 +12,7 @@ import { Cane } from "@/components/containers/Cane";
 import { RootParentType } from "@/types/generic";
 import { useCallback } from "react";
 import { CreationResponse } from "@/types/server";
+import { StorageDewar } from "./StorageDewar";
 
 export interface BaseContainerProps {
   /** Shipment ID */
@@ -157,8 +158,9 @@ export const Container = ({ containerType, ...props }: ContainerProps) => {
       return <Cane {...props} />;
     case "dewar":
     case "walk-in":
-    case "inventoryDewar":
       return <GenericContainer parent='topLevelContainers' child='containers' {...props} />;
+    case "storageDewar":
+      return <StorageDewar {...props} />;
     default:
       return null;
   }

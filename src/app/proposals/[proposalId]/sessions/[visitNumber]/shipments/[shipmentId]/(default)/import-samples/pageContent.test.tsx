@@ -83,7 +83,7 @@ describe("Import Samples Page Content", () => {
     const checkbox = await screen.findByRole("checkbox");
 
     fireEvent.click(checkbox);
-    fireEvent.click(screen.getByText("skip to entering pre-session information" ));
+    fireEvent.click(screen.getByText("skip to entering pre-session information"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/pre-session"));
   });

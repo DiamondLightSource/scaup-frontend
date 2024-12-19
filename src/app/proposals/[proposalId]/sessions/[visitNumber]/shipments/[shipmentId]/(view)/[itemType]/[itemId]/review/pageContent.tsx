@@ -50,7 +50,9 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
       </Box>
       <Alert status='info' variant='info'>
         <AlertIcon />
-        <AlertDescription>You can still edit your sample collection after submitting.</AlertDescription>
+        <AlertDescription>
+          You can still edit your sample collection after submitting.
+        </AlertDescription>
       </Alert>
     </VStack>
   );

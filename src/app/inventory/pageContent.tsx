@@ -27,7 +27,7 @@ export const TopLevelContainerCreationForm = () => {
       setIsLoading(true);
       const newTlc = (await Item.create(
         null,
-        { name: info.name, type: "inventoryDewar", code: "" },
+        { name: info.name, type: "storageDewar", code: "" },
         "topLevelContainers",
         "topLevelContainer",
       )) as CreationResponse;

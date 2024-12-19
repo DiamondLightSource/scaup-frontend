@@ -13,7 +13,10 @@ const getPreSessionData = async (shipmentId: string) => {
   return res && res.status === 200 ? (await res.json()).details : null;
 };
 
-const PreSession = async (props: { params: Promise<ShipmentParams> , searchParams: Promise<{ skipPush: boolean }>}) => {
+const PreSession = async (props: {
+  params: Promise<ShipmentParams>;
+  searchParams: Promise<{ skipPush: boolean }>;
+}) => {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const preSessionInfo = await getPreSessionData(params.shipmentId);
@@ -25,7 +28,11 @@ const PreSession = async (props: { params: Promise<ShipmentParams> , searchParam
         </Heading>
         <Heading>Pre-Session Information</Heading>
         <Divider borderColor='gray.800' />
-        <PreSessionContent params={params} prepopData={preSessionInfo} skipPush={searchParams && searchParams.skipPush}/>
+        <PreSessionContent
+          params={params}
+          prepopData={preSessionInfo}
+          skipPush={searchParams && searchParams.skipPush}
+        />
       </VStack>
     </VStack>
   );
