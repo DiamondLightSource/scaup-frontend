@@ -1,10 +1,10 @@
 import ProposalOverview from "@/app/proposals/[proposalId]/sessions/[visitNumber]/page";
 import { server } from "@/mocks/server";
+import { baseSessionParams } from "@/utils/test-utils";
 import { render, screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 
 const baseShipment = { id: 1, proposalReference: "cm00001", name: "", creationDate: "" };
-const baseParams = { params: { proposalId: "cm1234", visitNumber: "1" } };
 
 describe("Proposal Page Content", () => {
   it("should display message if proposal is not available", async () => {
@@ -15,7 +15,7 @@ describe("Proposal Page Content", () => {
       ),
     );
 
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
 
     expect(screen.getByText("Session Unavailable")).toBeInTheDocument();
   });
@@ -28,7 +28,7 @@ describe("Proposal Page Content", () => {
       ),
     );
 
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
 
     expect(
       screen.getByText("This session has no sample collections assigned to it yet. You can:"),
@@ -36,7 +36,7 @@ describe("Proposal Page Content", () => {
   });
 
   it("should display proposal reference in page title", async () => {
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
 
     expect(screen.getByText("cm1234-1")).toBeInTheDocument();
   });
@@ -49,7 +49,7 @@ describe("Proposal Page Content", () => {
       ),
     );
 
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
     expect(screen.getByText("?")).toBeInTheDocument();
   });
 
@@ -61,7 +61,7 @@ describe("Proposal Page Content", () => {
       ),
     );
 
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
     expect(screen.getByText("Submitted")).toBeInTheDocument();
   });
 
@@ -73,7 +73,7 @@ describe("Proposal Page Content", () => {
       ),
     );
 
-    render(await ProposalOverview(baseParams));
+    render(await ProposalOverview(baseSessionParams));
     expect(screen.getByText("Draft")).toBeInTheDocument();
   });
 });

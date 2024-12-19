@@ -1,12 +1,12 @@
-import { renderWithProviders } from "@/utils/test-utils";
+import { baseShipmentParams, renderWithProviders, wrapInPromise } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import PreSession from "./page";
 
-const params = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
+const props = {...baseShipmentParams, searchParams: wrapInPromise({skipPush: true})}
 
 describe("Pre-Session Page", () => {
   it("should render page", async () => {
-    renderWithProviders(await PreSession({ params }));
+    renderWithProviders(await PreSession(props));
 
     expect(screen.getByText(/grid information/i)).toBeInTheDocument();
   });

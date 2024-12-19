@@ -3,12 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 import ReturnRequests from "./page";
-
-const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "2" };
+import { baseShipmentParams } from "@/utils/test-utils";
 
 describe("Return Requests", () => {
   it("should render available dewars", async () => {
-    render(await ReturnRequests({ params }));
+    render(await ReturnRequests(baseShipmentParams));
 
     expect(screen.getByText(/dewar-001/i)).toBeInTheDocument();
     expect(screen.getByText(/request return/i)).toBeInTheDocument();
@@ -23,7 +22,7 @@ describe("Return Requests", () => {
       ),
     );
 
-    render(await ReturnRequests({ params }));
+    render(await ReturnRequests(baseShipmentParams));
     expect(screen.getByText(/no dewars/i)).toBeInTheDocument();
   });
 
@@ -36,7 +35,7 @@ describe("Return Requests", () => {
       ),
     );
 
-    render(await ReturnRequests({ params }));
+    render(await ReturnRequests(baseShipmentParams));
     expect(screen.getByText(/no dewars/i)).toBeInTheDocument();
   });
 });

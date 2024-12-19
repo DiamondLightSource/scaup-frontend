@@ -1,14 +1,12 @@
 import { server } from "@/mocks/server";
-import { renderWithProviders, sample } from "@/utils/test-utils";
+import { baseShipmentParams, renderWithProviders, sample } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentPrintableOverview from "./page";
 
-const params = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
-
 describe("Sample Collection Printable Overview Page", () => {
   it("should render shipment contents", async () => {
-    renderWithProviders(await ShipmentPrintableOverview({ params }));
+    renderWithProviders(await ShipmentPrintableOverview(baseShipmentParams));
 
     expect(screen.getByText("Dewar")).toBeInTheDocument();
     expect(screen.getByText("Grid Box 1")).toBeInTheDocument();
@@ -23,7 +21,7 @@ describe("Sample Collection Printable Overview Page", () => {
       ),
     );
 
-    renderWithProviders(await ShipmentPrintableOverview({ params }));
+    renderWithProviders(await ShipmentPrintableOverview(baseShipmentParams));
 
     expect(
       screen.getByText(/this sample collection contains unassigned items/i),
@@ -39,7 +37,7 @@ describe("Sample Collection Printable Overview Page", () => {
       ),
     );
 
-    renderWithProviders(await ShipmentPrintableOverview({ params }));
+    renderWithProviders(await ShipmentPrintableOverview(baseShipmentParams));
 
     expect(screen.getAllByText(/no assigned items/i)).toHaveLength(2);
   });
