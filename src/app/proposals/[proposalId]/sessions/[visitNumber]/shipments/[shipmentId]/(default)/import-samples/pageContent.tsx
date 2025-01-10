@@ -13,8 +13,8 @@ import {
   Text,
   Divider,
   CheckboxGroup,
-  HStack,
   Link,
+  Tag,
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -74,13 +74,20 @@ const ImportSamplesPageContent = ({
 
   const handleFinish = useCallback(
     async (skip: boolean = false) => {
+      setIsLoading(true);
       if (samples) {
         try {
           await Promise.all(
             checkedItems.map((i) =>
-              Item.patch(
-                samples[parseInt(i)].id,
-                { shipmentId: params.shipmentId, containerId: null },
+              Item.create(
+                params.shipmentId,
+                {
+                  ...samples[parseInt(i)],
+                  containerId: null,
+                  location: null,
+                  subLocation: null,
+                  externalId: null,
+                },
                 "samples",
               ),
             ),
@@ -89,6 +96,8 @@ const ImportSamplesPageContent = ({
           router.push(skip ? "pre-session?skipPush=true" : "gridBox/new/edit");
         } catch {
           toast({ title: "Could not update items, please try again later", status: "error" });
+        } finally {
+          setIsLoading(false);
         }
       }
     },
@@ -119,7 +128,7 @@ const ImportSamplesPageContent = ({
               {samples.map((sample, i) => (
                 <Checkbox w='100%' value={i.toString()} key={i}>
                   <Heading flex='1 0 0' size='md'>
-                    {sample.name}
+                    {sample.name} <Tag colorScheme='purple'>{sample.parentShipmentName}</Tag>
                   </Heading>
                   <Text>{sample.comments}</Text>
                 </Checkbox>
