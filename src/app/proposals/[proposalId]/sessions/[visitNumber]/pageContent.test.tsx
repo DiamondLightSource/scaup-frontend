@@ -10,7 +10,7 @@ describe("Proposal Page Content", () => {
       target: { value: "New Name" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByText("Create"));
     await waitFor(() => expect(mockRouter.pathname).toBe("/1/shipments/123/edit"));
   });
 
@@ -22,7 +22,7 @@ describe("Proposal Page Content", () => {
     });
 
     fireEvent.click(screen.getByRole("checkbox"));
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByText("Create"));
     await waitFor(() => expect(mockRouter.pathname).toBe("/1/shipments/123/import-samples"));
   });
 });

@@ -25,7 +25,7 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
 
     await screen.findByText("sample-in-session");
   });
@@ -36,9 +36,9 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
     fireEvent.click(await screen.findByRole("radio"));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByText("Apply"));
 
     rerender(<CrossShipmentSelector childrenType='sample' isOpen={true} onClose={() => {}} />);
 
@@ -70,7 +70,7 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
 
     await screen.findByText("No samples available for this session.");
   });
@@ -102,9 +102,9 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
     fireEvent.click(await screen.findByRole("radio"));
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    fireEvent.click(screen.getByText("Apply"));
 
     expect(itemClickCallback).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -140,7 +140,7 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "inv4l1dname" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
 
     expect(toastMock).toHaveBeenCalledWith({
       status: "error",
@@ -175,7 +175,7 @@ describe("Cross Sample Collection Child Selector", () => {
     );
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
-    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+    fireEvent.click(screen.getByText("Select"));
 
     await screen.findByText("filtered-gridbox");
   });

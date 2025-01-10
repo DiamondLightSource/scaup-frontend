@@ -32,7 +32,7 @@ describe("Generic Container with Positions", () => {
       preloadedState: { shipment: { ...defaultShipment.shipment, isEdit: false } },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "1" }));
+    fireEvent.click(screen.getByText("1"));
     fireEvent.click(screen.getByRole("radio"));
     fireEvent.click(screen.getByText("Apply"));
 

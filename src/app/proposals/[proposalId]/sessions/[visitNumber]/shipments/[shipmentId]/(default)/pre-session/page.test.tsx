@@ -2,7 +2,7 @@ import { baseShipmentParams, renderWithProviders, wrapInPromise } from "@/utils/
 import { screen } from "@testing-library/react";
 import PreSession from "./page";
 
-const props = {...baseShipmentParams, searchParams: wrapInPromise({skipPush: true})}
+const props = { ...baseShipmentParams, searchParams: wrapInPromise({ skipPush: true }) };
 
 describe("Pre-Session Page", () => {
   it("should render page", async () => {

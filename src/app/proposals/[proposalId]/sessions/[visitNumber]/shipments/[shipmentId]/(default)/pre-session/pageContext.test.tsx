@@ -39,9 +39,7 @@ describe("Item Page Layout", () => {
       preloadedState,
     });
 
-    const finishButton = await screen.findByRole("button", {
-      name: /finish/i,
-    });
+    const finishButton = screen.getByText("Finish");
 
     fireEvent.click(finishButton);
 
@@ -64,9 +62,7 @@ describe("Item Page Layout", () => {
       preloadedState,
     });
 
-    const finishButton = await screen.findByRole("button", {
-      name: /finish/i,
-    });
+    const finishButton = screen.getByText("Finish");
 
     fireEvent.click(finishButton);
 
@@ -86,9 +82,7 @@ describe("Item Page Layout", () => {
       },
     });
 
-    const finishButton = await screen.findByRole("button", {
-      name: /finish/i,
-    });
+    const finishButton = screen.getByText("Finish");
 
     fireEvent.click(finishButton);
 
@@ -121,9 +115,7 @@ describe("Item Page Layout", () => {
       },
     );
 
-    const finishButton = await screen.findByRole("button", {
-      name: /finish/i,
-    });
+    const finishButton = screen.getByText("Finish");
 
     fireEvent.click(finishButton);
 
