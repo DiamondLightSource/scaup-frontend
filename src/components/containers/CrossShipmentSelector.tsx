@@ -74,6 +74,9 @@ export const CrossShipmentSelector = ({
     let endpoint = childrenTypeData.data.endpoint;
     if (childrenTypeData.data.endpoint === "containers") {
       endpoint += `?type=${childrenType}`;
+    } else if (childrenTypeData.data.endpoint === "samples") {
+      // Ignore samples which belong to internal containers
+      endpoint += `?ignoreInternal=true`;
     }
     setIsLoading(true);
     const res = await authenticatedFetch.client(
