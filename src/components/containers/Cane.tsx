@@ -19,6 +19,7 @@ export const Cane = (props: BaseContainerProps) => {
     <GenericContainerWithPosition
       selectableChildren={selectableChildren}
       capacity={10}
+      presetType="cane"
       {...props}
     />
   );
