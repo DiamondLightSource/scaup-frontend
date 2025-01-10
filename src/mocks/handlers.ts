@@ -100,7 +100,16 @@ export const handlers = [
   ),
 
   http.get("http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples", () =>
-    HttpResponse.json({ items: [{ id: 1, name: "sample-in-session", data: { type: "sample" } }] }),
+    HttpResponse.json({
+      items: [
+        {
+          id: 1,
+          name: "sample-in-session",
+          parentShipmentName: "test-shipment",
+          data: { type: "sample" },
+        },
+      ],
+    }),
   ),
 
   // Containers

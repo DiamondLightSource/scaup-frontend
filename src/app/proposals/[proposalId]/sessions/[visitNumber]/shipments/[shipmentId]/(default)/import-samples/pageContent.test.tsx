@@ -102,4 +102,14 @@ describe("Import Samples Page Content", () => {
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/gridBox/new/edit"));
   });
+
+  it("should display shipment name as tag", async () => {
+    mockRouter.setCurrentUrl("shipments/1/import-samples");
+    renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Select" }));
+
+    await screen.findByText("test-shipment");
+  });
 });

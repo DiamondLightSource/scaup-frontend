@@ -705,7 +705,10 @@ export interface components {
       parent?: string | null;
       /** Type */
       type: string;
+      /** Data Collection Group ID */
       dataCollectionGroupId?: number | null;
+      /** Parent shipment name */
+      parentShipmentName?: number | null;
     };
     /** ShipmentChildren */
     ShipmentChildren: {
