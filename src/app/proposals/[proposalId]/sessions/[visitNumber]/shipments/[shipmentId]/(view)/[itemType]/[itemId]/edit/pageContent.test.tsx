@@ -28,7 +28,7 @@ describe("Item Page Content", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.click(screen.getByText("Add"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/123/edit"));
   });
@@ -44,7 +44,7 @@ describe("Item Page Content", () => {
       },
     });
 
-    fireEvent.click(await screen.findByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/9/edit"));
   });

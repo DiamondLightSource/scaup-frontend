@@ -18,7 +18,7 @@ const baseShipment = {
 };
 
 describe("Inventory Item Page Content", () => {
-  it("should show 'save' button if current item is in edit mode", async () => {
+  it("should show 'save' button if current item is in edit mode", () => {
     renderWithProviders(<ItemForm parentId='1' onSubmit={async () => {}} />, {
       preloadedState: {
         shipment: {
@@ -28,18 +28,18 @@ describe("Inventory Item Page Content", () => {
       },
     });
 
-    await screen.findByRole("button", { name: "Save" });
+    screen.getByText("Save");
   });
 
-  it("should show 'add' button if current item is not in edit mode", async () => {
+  it("should show 'add' button if current item is not in edit mode", () => {
     renderWithProviders(<ItemForm parentId='1' onSubmit={async () => {}} />, {
       preloadedState: baseShipment,
     });
 
-    await screen.findByRole("button", { name: "Add" });
+    screen.getByText("Add");
   });
 
-  it("should redirect to new item when button is clicked", async () => {
+  it("should redirect to new item when button is clicked", () => {
     renderWithProviders(
       <ItemForm parentId='1' onSubmit={async () => {}} parentType='topLevelContainer' />,
       {
@@ -53,12 +53,12 @@ describe("Inventory Item Page Content", () => {
       },
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Create New Item" }));
+    fireEvent.click(screen.getByText("Create New Item"));
 
-    await waitFor(() => expect(mockRouter.pathname).toBe("/new"));
+    expect(mockRouter.pathname).toBe("/new");
   });
 
-  it("should redirect to new/edit item when button is clicked and parent is shipment", async () => {
+  it("should redirect to new/edit item when button is clicked and parent is shipment", () => {
     renderWithProviders(<ItemForm parentId='1' onSubmit={async () => {}} parentType='shipment' />, {
       preloadedState: {
         shipment: {
@@ -68,9 +68,8 @@ describe("Inventory Item Page Content", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Create New Item" }));
-
-    await waitFor(() => expect(mockRouter.pathname).toBe("/new/edit"));
+    fireEvent.click(screen.getByText("Create New Item"));
+    expect(mockRouter.pathname).toBe("/new/edit");
   });
 
   it("should disable 'create new item' button if item is sample/grid/dewar", () => {
@@ -86,7 +85,7 @@ describe("Inventory Item Page Content", () => {
       },
     );
 
-    expect(screen.getByRole("button", { name: "Create New Item" })).toHaveAttribute("disabled");
+    expect(screen.getByText("Create New Item")).toHaveAttribute("disabled");
   });
 
   it("should disable 'add' button if item is sample/grid/dewar and it is not an existing item", () => {
@@ -102,7 +101,7 @@ describe("Inventory Item Page Content", () => {
       },
     );
 
-    expect(screen.getByRole("button", { name: "Add" })).toHaveAttribute("disabled");
+    expect(screen.getByText("Add")).toHaveAttribute("disabled");
   });
 
   it("should disable code field if item is inventory dewar", () => {

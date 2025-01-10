@@ -3,7 +3,6 @@ import { setLocationMock } from "@/components/containers/__mocks__";
 import { server } from "@/mocks/server";
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { getServerSession } from "next-auth";
 
 const pathnameMock = vi.fn(() => "/");
 export const toastMock = vi.fn();

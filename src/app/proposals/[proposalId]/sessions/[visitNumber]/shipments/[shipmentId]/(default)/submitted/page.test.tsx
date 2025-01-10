@@ -7,7 +7,6 @@ import { HttpResponse, http } from "msw";
 import SubmissionOverview from "./page";
 import { baseShipmentParams } from "@/utils/test-utils";
 
-
 describe("Sample Collection Submission Overview", () => {
   it("should render shipment contents", async () => {
     render(await SubmissionOverview(baseShipmentParams));

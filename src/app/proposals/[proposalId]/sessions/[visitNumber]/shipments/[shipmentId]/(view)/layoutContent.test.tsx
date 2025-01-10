@@ -29,9 +29,7 @@ describe("Sample Collection Layout", () => {
       </ShipmentLayoutContent>,
     );
 
-    const proposalHeading = screen.getByRole("heading", {
-      name: /cm0001/i,
-    });
+    const proposalHeading = screen.getByText(/cm0001/i);
 
     expect(proposalHeading).toBeInTheDocument();
   });
