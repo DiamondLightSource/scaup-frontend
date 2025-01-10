@@ -3,6 +3,24 @@ Changelog
 ==========
 
 +++++++++
+v0.8.0 (10/01/2025)
++++++++++
+
+**Added**
+
+- Demark positions in storage dewars
+
+**Fixed**
+
+- Storage dewar title is now correctly displayed
+- Prevent creating dewars in dewars
+- Fix test typing errors
+
+**Changed**
+
+- Ignore samples in internal containers in inventory
+
++++++++++
 v0.7.0 (10/12/2024)
 +++++++++
 
