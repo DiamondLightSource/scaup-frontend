@@ -80,9 +80,7 @@ describe("Item Page Layout Content", () => {
       </ItemPageLayoutContent>,
     );
 
-    const editButton = screen.getByRole("button", {
-      name: /continue/i,
-    });
+    const editButton = screen.getByText("Continue");
 
     fireEvent.click(editButton);
 
@@ -104,9 +102,7 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const editButton = screen.getByRole("button", {
-      name: /edit/i,
-    });
+    const editButton = screen.getByText("Edit");
 
     fireEvent.click(editButton);
 
@@ -120,9 +116,7 @@ describe("Item Page Layout Content", () => {
       </ItemPageLayoutContent>,
     );
 
-    const continueButton = screen.getByRole("button", {
-      name: /continue/i,
-    });
+    const continueButton = screen.getByText("Continue");
 
     expect(continueButton).toBeInTheDocument();
   });
@@ -134,9 +128,7 @@ describe("Item Page Layout Content", () => {
       </ItemPageLayoutContent>,
     );
 
-    const finishButton = screen.getByRole("button", {
-      name: /continue/i,
-    });
+    const finishButton = screen.getByText("Continue");
 
     fireEvent.click(finishButton);
 
@@ -158,9 +150,7 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const finishButton = await screen.findByRole("button", {
-      name: /continue to pre-session info/i,
-    });
+    const finishButton = screen.getByText("Continue to Pre-Session Info");
 
     fireEvent.click(finishButton);
 
@@ -220,9 +210,7 @@ describe("Item Page Layout Content", () => {
       },
     );
 
-    const editButton = screen.getByRole("button", {
-      name: /edit/i,
-    });
+    const editButton = screen.getByText("Edit");
 
     expect(editButton).toHaveAttribute("disabled");
   });

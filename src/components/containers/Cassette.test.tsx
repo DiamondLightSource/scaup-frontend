@@ -39,17 +39,17 @@ describe("Cassette", () => {
 
     expect(screen.getByText("cassette-sample")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("radio"));
-    fireEvent.click(screen.getByText(/apply/i));
+    fireEvent.click(screen.getByText("Apply"));
 
-    await waitFor(() => expect(screen.queryByText(/apply/i)).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
   });
 
   it("should close modal when removing sample from cassette", async () => {
     renderAndInjectForm(<Cassette samples={[defaultSample]} />);
 
     fireEvent.click(screen.getByText("1"));
-    fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+    fireEvent.click(screen.getByText("Remove"));
 
-    await waitFor(() => expect(screen.queryByText(/apply/i)).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
   });
 });

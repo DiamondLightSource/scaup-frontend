@@ -11,14 +11,14 @@ describe("Tree View", () => {
   it("should render remove/edit buttons by default", () => {
     render(<TreeView data={[{ id: "1", name: "Test", data: {} }]} />);
 
-    expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+    expect(screen.getByText("Remove")).toBeInTheDocument();
     expect(screen.getByLabelText(/view/i)).toBeInTheDocument();
   });
 
   it("should not render remove button if specified", () => {
     render(<TreeView data={[{ id: "1", isUndeletable: true, name: "Test", data: {} }]} />);
 
-    expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Remove")).not.toBeInTheDocument();
   });
 
   it("should not apply viewable styling if item is not viewable", () => {
@@ -38,13 +38,13 @@ describe("Tree View", () => {
 
     fireEvent.click(screen.getByText(/parent/i));
 
-    expect(screen.getAllByRole("button", { name: "Remove" })).toHaveLength(1);
+    expect(screen.getAllByText("Remove")).toHaveLength(1);
   });
 
   it("should not render remove button if component is set to read only mode", () => {
     render(<TreeView readOnly={true} data={[{ id: "1", name: "Parent", data: {} }]} />);
 
-    expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Remove")).not.toBeInTheDocument();
   });
 
   it("should render item tag", () => {

@@ -22,7 +22,7 @@ describe("Inventory Item Page Content", () => {
   it("should redirect once item is created", async () => {
     renderWithProviders(<ItemFormPageContent params={params} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add" }));
+    fireEvent.click(screen.getByText("Add"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/1"));
   });
@@ -37,7 +37,7 @@ describe("Inventory Item Page Content", () => {
       },
     });
 
-    fireEvent.click(await screen.findByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/2"));
   });

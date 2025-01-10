@@ -10,7 +10,7 @@ describe("Inventory Page Content", () => {
       target: { value: "New Name" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Create" }));
+    fireEvent.click(screen.getByText("Create"));
     await waitFor(() => expect(mockRouter.pathname).toBe("/inventory/1/gridBox/new"));
   });
 });

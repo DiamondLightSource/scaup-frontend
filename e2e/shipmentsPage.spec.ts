@@ -10,7 +10,7 @@ test('should create new sample collection', async ({ page }) => {
   await page.goto('/proposals/bi23047/sessions/100');
 
   await page.getByRole('textbox', { name: 'Name' }).fill("70");
-  await page.getByRole("button", {name: "Create"}).click();
+  await page.getByText("Create").click();
 
   await expect(page.getByRole('heading', { name: 'New Sample' })).toBeVisible({timeout: 10000});
 });

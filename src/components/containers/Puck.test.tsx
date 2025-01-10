@@ -75,7 +75,7 @@ describe("Puck", () => {
     renderAndInjectForm(<Puck parentId='1' parentType='topLevelContainer' />);
 
     fireEvent.click(screen.getByTestId("5-empty"));
-    screen.getByRole("button", { name: "Select" });
+    screen.getByText("Select");
   });
 
   it("should fire remove callback when remove is clicked", async () => {

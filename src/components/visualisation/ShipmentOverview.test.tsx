@@ -40,7 +40,7 @@ describe("Sample Collection Overview", () => {
     });
 
     fireEvent.click(screen.getByText("dewar"));
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
+    fireEvent.click(screen.getByText("Remove"));
     await waitFor(() =>
       expect(toastMock).toBeCalledWith({ title: "Successfully unassigned item!" }),
     );
@@ -55,7 +55,7 @@ describe("Sample Collection Overview", () => {
 
     screen.getByText("dewar");
 
-    fireEvent.click(screen.getAllByRole("button", { name: /remove/i })[0]);
+    fireEvent.click(screen.getAllByText("Remove")[0]);
     await waitFor(() =>
       expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
     );
@@ -82,7 +82,7 @@ describe("Sample Collection Overview", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
+    fireEvent.click(screen.getByText("Remove"));
     await waitFor(() =>
       expect(toastMock).toBeCalledWith({ title: "Successfully unassigned item!" }),
     );
@@ -106,7 +106,7 @@ describe("Sample Collection Overview", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /remove/i }));
+    fireEvent.click(screen.getByText("Remove"));
     await waitFor(() =>
       expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
     );

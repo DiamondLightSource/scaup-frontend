@@ -167,7 +167,7 @@ describe("Sample Collection Submission Overview", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "View Data" })).toBeInTheDocument();
+    expect(screen.getByText("View Data")).toBeInTheDocument();
   });
 
   it("should disable booking and labels link if no dewars are present in the sample collection", () => {
