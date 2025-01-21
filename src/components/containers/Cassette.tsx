@@ -1,3 +1,5 @@
+"use client";
+
 import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem } from "@/mappings/pages";
