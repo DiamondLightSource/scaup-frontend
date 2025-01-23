@@ -120,7 +120,7 @@ describe("Sample Collection Submission Overview", () => {
       />,
     );
 
-    expect(screen.getByText("Pixel Size")).toBeInTheDocument();
+    expect(screen.getByText("Pixel Size (Å)")).toBeInTheDocument();
   });
 
   it("should display pre-session data if available", () => {

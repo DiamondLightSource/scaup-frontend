@@ -54,17 +54,34 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
         <Text fontSize='18px' my='1em'>
           Your sample information was <b>successfully submitted!</b> You may{" "}
           {Object.keys(shipmentData.counts).length > 0 &&
-            "now arrange for your samples to be shipped to Diamond, or "}
+            "now arrange for your samples to be shipped to Diamond, "}
+          <Link
+            textDecoration='underline'
+            color='diamond.600'
+            href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}/shimpents/${params.shipmentId}`}
+          >
+            return to the sample collection summary
+          </Link>
+          , or{" "}
           <Link
             textDecoration='underline'
             color='diamond.600'
             href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}`}
           >
-            return to the sample collection list.
-          </Link>
+            return to the sample collection list
+          </Link>{" "}
+          for further editing before shipping your sample collection.
         </Text>
         {Object.keys(shipmentData.counts).length > 0 && (
           <>
+            <Alert status='info' variant='info'>
+              <AlertIcon />
+              <AlertDescription>
+                {shipmentData.isBooked
+                  ? "The shipping process has already been started, contents may not be edited any further."
+                  : "Once your shipment is booked with the courier service, you will not be able to edit the contents of the shipment any further."}
+              </AlertDescription>
+            </Alert>
             <VStack w='40%' border='1px solid' borderColor='diamond.300' p='1em'>
               <Heading alignSelf='start'>Contents</Heading>
               <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
@@ -78,14 +95,6 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               Tracking labels <b>must</b> be securely affixed to the outside of both dewars and
               dewar cases, even if using your own courier.
             </Text>
-            <Alert status='info' variant='info'>
-              <AlertIcon />
-              <AlertDescription>
-                {shipmentData.isBooked
-                  ? "The shipping process has already been started, contents may not be edited any further."
-                  : "Once your shipment is booked with the courier service, you will not be able to edit the contents of the shipment any further."}
-              </AlertDescription>
-            </Alert>{" "}
             <HStack>
               <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
               <Button
