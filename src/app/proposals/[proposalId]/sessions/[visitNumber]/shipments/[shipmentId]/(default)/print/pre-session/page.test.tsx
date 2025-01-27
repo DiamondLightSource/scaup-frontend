@@ -1,10 +1,10 @@
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, wrapInPromise } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import PreSession from "./page";
 
-const params = { shipmentId: "1", proposalId: "1", visitNumber: "1" };
+const params = wrapInPromise({ shipmentId: "1", proposalId: "1", visitNumber: "1" });
 
 describe("Pre-Session Printable Page", () => {
   it("should render pre-session information", async () => {

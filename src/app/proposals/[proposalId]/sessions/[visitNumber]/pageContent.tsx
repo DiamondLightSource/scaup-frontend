@@ -15,7 +15,13 @@ interface ShipmentData {
 }
 
 const shipmentForm = [
-  { id: "name", label: "Name", type: "text", validation: { required: "Required" } },
+  {
+    id: "name",
+    label: "Name",
+    type: "text",
+    hint: 'Use a descriptive name, that indicates what the samples will be used in. For example, "FIB"',
+    validation: { required: "Required" },
+  },
   {
     id: "importSamples",
     label: "Use Existing Samples",
