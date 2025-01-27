@@ -81,7 +81,7 @@ describe("Sample Collection Submission Overview", () => {
     );
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
-    expect(screen.getByText("Pixel Size")).toBeInTheDocument();
+    expect(screen.getByText("Pixel Size (Å)")).toBeInTheDocument();
   });
 
   it("should disable booking and labels link if no dewars are present in the sample collection", async () => {
