@@ -95,8 +95,6 @@ describe("Sample Collection Submission Overview", () => {
     );
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
-    screen.logTestingPlaygroundURL();
-
     expect(screen.getByTestId("booking-label")).toHaveAttribute("aria-disabled", "true");
   });
 });
