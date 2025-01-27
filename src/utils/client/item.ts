@@ -8,9 +8,16 @@ import { requestAndInvalidate } from "@/utils/server/request";
 
 const { toast } = createStandaloneToast();
 
-const displayError = async (action: string, response: any | undefined) => {
-  const details =
-    response && typeof response.detail === "string" ? response.detail : "Internal server error";
+export const displayError = async (action: string, response: any | undefined) => {
+  let details = "Internal server error";
+  if (typeof response.detail === "string") {
+    details = response.detail;
+  } else if (Array.isArray(response.detail)) {
+    details = (response.detail as Array<any>).reduce(
+      (acc: string, current) => acc.concat(current.msg),
+      "",
+    );
+  }
   toast({ title: `Failed to ${action} item`, description: details, status: "error" });
 };
 
