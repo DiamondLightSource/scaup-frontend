@@ -1,3 +1,5 @@
+"use client";
+
 import { formMapping } from "@/components/input/form";
 import { getIndicatorSymbol } from "@/components/input/form/input";
 import { BaseShipmentItem } from "@/mappings/pages";

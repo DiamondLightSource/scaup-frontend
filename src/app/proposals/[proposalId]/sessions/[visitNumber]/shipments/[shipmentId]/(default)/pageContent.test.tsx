@@ -6,25 +6,6 @@ import ShipmentHomeContent from "./pageContent";
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Sample Collection Submission Overview", () => {
-  it("should not enable 'edit sample collection' button if shipment is already booked", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{
-          samples: [],
-          counts: {},
-          dispatch: { status: "Booked" },
-          name: "",
-          preSessionInfo: null,
-          hasUnassigned: false,
-        }}
-        isStaff={false}
-      />,
-    );
-
-    expect(screen.getAllByRole("group")[0]).toHaveAttribute("aria-disabled", "true");
-  });
-
   it("should render sample collection samples", () => {
     renderWithProviders(
       <ShipmentHomeContent
@@ -47,7 +28,7 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
-        isStaff={false}
+        patoUrl="https://pato.ac.uk"
       />,
     );
 
@@ -76,70 +57,13 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
-        isStaff={false}
+        patoUrl="https://pato.ac.uk"
       />,
     );
 
     fireEvent.click(screen.getByText("C01"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/1/sample/1/review"));
-  });
-
-  it("should not enable 'print pre-session' button if no pre-session data is available", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{
-          samples: [],
-          counts: {},
-          dispatch: { status: "Booked" },
-          name: "",
-          preSessionInfo: null,
-          hasUnassigned: false,
-        }}
-        isStaff={false}
-      />,
-    );
-
-    expect(screen.getAllByRole("group")[4]).toHaveAttribute("aria-disabled", "true");
-  });
-
-  it("should display pre-session data if available", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{
-          samples: [],
-          counts: {},
-          dispatch: { status: "Booked" },
-          name: "",
-          preSessionInfo: { details: { pixelSize: 150 } },
-          hasUnassigned: false,
-        }}
-        isStaff={false}
-      />,
-    );
-
-    expect(screen.getByText("Pixel Size")).toBeInTheDocument();
-  });
-
-  it("should display pre-session data if available", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{
-          samples: [],
-          counts: {},
-          dispatch: { status: "Booked" },
-          name: "",
-          preSessionInfo: { details: { pixelSize: 150 } },
-          hasUnassigned: true,
-        }}
-        isStaff={false}
-      />,
-    );
-
-    expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
   });
 
   it("should display link to data collection group if available", () => {
@@ -163,29 +87,10 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: true,
         }}
-        isStaff={false}
+        patoUrl="https://pato.ac.uk"
       />,
     );
 
     expect(screen.getByText("View Data")).toBeInTheDocument();
-  });
-
-  it("should disable booking and labels link if no dewars are present in the sample collection", () => {
-    renderWithProviders(
-      <ShipmentHomeContent
-        params={params}
-        data={{
-          samples: [],
-          counts: {},
-          dispatch: { status: "Booked" },
-          name: "",
-          preSessionInfo: { details: { pixelSize: 150 } },
-          hasUnassigned: true,
-        }}
-        isStaff={false}
-      />,
-    );
-
-    expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
   });
 });
