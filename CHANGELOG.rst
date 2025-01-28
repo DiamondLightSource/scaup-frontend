@@ -3,6 +3,19 @@ Changelog
 ==========
 
 +++++++++
+v0.9.0 (28/01/2025)
++++++++++
+
+**Added**
+
+- Add button for generating PDF reports of sample collection
+
+**Changed**
+
+- Replace measurement units
+- Improve wording on help texts
+
++++++++++
 v0.8.0 (10/01/2025)
 +++++++++
 
