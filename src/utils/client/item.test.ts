@@ -1,7 +1,7 @@
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";
 
-import { Item } from "@/utils/client/item";
+import { Item, displayError } from "@/utils/client/item";
 import { toastMock } from "@/../vitest.setup";
 
 describe("Item Creation", () => {
@@ -58,8 +58,8 @@ describe("Item Modification", () => {
 });
 
 describe("Item Deletion", () => {
-  it("should return item deletion response", async () => {
-    const itemResponse = await Item.delete(1, "samples");
+  it("should delete item", async () => {
+    await Item.delete(1, "samples");
   });
 
   it("should display toast if request fails", async () => {
@@ -72,6 +72,35 @@ describe("Item Deletion", () => {
     await Item.delete(1, "samples");
     expect(toastMock).toHaveBeenCalledWith(
       expect.objectContaining({ title: "Failed to delete item" }),
+    );
+  });
+});
+
+describe("Error Handling", () => {
+  it("should display error if details are available", () => {
+    displayError("create", { detail: "Test Detail" });
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Failed to create item", description: "Test Detail" }),
+    );
+  });
+
+  it("should display error if details are available (as array)", () => {
+    displayError("create", { detail: [{ msg: "Test Detail In Array" }] });
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Failed to create item",
+        description: "Test Detail In Array",
+      }),
+    );
+  });
+
+  it("should display default error message if no details are available", () => {
+    displayError("create", { notDetail: "not a detail message" });
+    expect(toastMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Failed to create item",
+        description: "Internal server error",
+      }),
     );
   });
 });
