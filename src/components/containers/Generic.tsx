@@ -100,6 +100,7 @@ export const GenericContainer = ({
         isOpen={isOpen}
         onClose={onClose}
         readOnly={formContext === undefined}
+        acceptMultiple={true}
       />
     </Box>
   );

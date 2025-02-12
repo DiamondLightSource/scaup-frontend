@@ -20,6 +20,8 @@ export interface ChildSelectorProps extends BaseChildSelectorProps {
   readOnly?: boolean;
   /** Selectable children. If not provided, unassigned items are used */
   selectableChildren?: TreeData[];
+  /** Enable multiple children to be selected */
+  acceptMultiple?: boolean;
 }
 
 export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
