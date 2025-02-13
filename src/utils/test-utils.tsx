@@ -112,6 +112,12 @@ export const gridBox: TreeData<BaseShipmentItem> = {
   data: { type: "gridBox", location: 5 },
 };
 
+export const gridBox2: TreeData<BaseShipmentItem> = {
+  id: 4,
+  name: "gridBox2",
+  data: { type: "gridBox", location: 4 },
+};
+
 export const sample: TreeData<BaseShipmentItem> = {
   id: 5,
   name: "sample-1",
