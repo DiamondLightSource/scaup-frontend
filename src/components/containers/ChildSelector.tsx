@@ -36,7 +36,7 @@ export const ChildSelector = ({
   onRemove,
   readOnly = false,
   selectableChildren,
-  acceptMultiple = false,
+  acceptMultiple,
   ...props
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
@@ -60,7 +60,13 @@ export const ChildSelector = ({
   const handleItemSelected = useCallback(async () => {
     if (onSelect && selectedItems.length !== 0 && unassignedItems) {
       setIsLoading(true);
-      await Promise.all(selectedItems.map((item) => onSelect(unassignedItems[Number(item)])));
+
+      if (acceptMultiple) {
+        await onSelect(selectedItems.map((item) => unassignedItems[Number(item)]));
+      } else {
+        await onSelect(unassignedItems[Number(selectedItems[0])]);
+      }
+
       setIsLoading(false);
     }
     props.onClose();
@@ -135,9 +141,7 @@ export const ChildSelector = ({
                 acceptMultiple ? (
                   <VStack>
                     <CheckboxGroup
-                      onChange={(values) =>
-                        setSelectedItems(values.map((value) => value.toString()))
-                      }
+                      onChange={(values) => setSelectedItems(values.map(String))}
                     >
                       {unassignedItems.map((item, i) => (
                         <HStack
