@@ -26,6 +26,10 @@ export const requestAndInvalidate = async (url: string, init: RequestInit) => {
 
   if (response.ok) {
     revalidateTag("shipment");
+    if (init.method === "POST" && url.includes("topLevelContainer")) {
+      // Since a dewar might be created
+      revalidateTag("proposalData");
+    }
   } else {
     console.warn(`Request '${url}' returned '${response.status}'`, init, responseBody);
   }
