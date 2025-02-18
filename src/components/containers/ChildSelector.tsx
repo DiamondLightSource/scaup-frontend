@@ -44,7 +44,7 @@ export const ChildSelector = ({
     const index = getCurrentStepIndex(childrenType);
     return { data: steps[index], index };
   }, [childrenType]);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
@@ -62,9 +62,9 @@ export const ChildSelector = ({
       setIsLoading(true);
 
       if (acceptMultiple) {
-        await onSelect(selectedItems.map((item) => unassignedItems[Number(item)]));
+        await onSelect(selectedItems.map((item) => unassignedItems[item]));
       } else {
-        await onSelect(unassignedItems[Number(selectedItems[0])]);
+        await onSelect(unassignedItems[selectedItems[0]]);
       }
 
       setIsLoading(false);
@@ -140,9 +140,7 @@ export const ChildSelector = ({
               {unassignedItems && unassignedItems.length > 0 ? (
                 acceptMultiple ? (
                   <VStack>
-                    <CheckboxGroup
-                      onChange={(values) => setSelectedItems(values.map(String))}
-                    >
+                    <CheckboxGroup onChange={(values) => setSelectedItems(values.map(Number))}>
                       {unassignedItems.map((item, i) => (
                         <HStack
                           w='100%'
@@ -162,7 +160,7 @@ export const ChildSelector = ({
                   </VStack>
                 ) : (
                   <VStack w='100%'>
-                    <RadioGroup w='100%' onChange={(index) => setSelectedItems([index])}>
+                    <RadioGroup w='100%' onChange={(index) => setSelectedItems([Number(index)])}>
                       {unassignedItems.map((item, i) => (
                         <HStack
                           w='100%'
