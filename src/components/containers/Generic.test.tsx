@@ -46,8 +46,10 @@ describe("Generic Container", () => {
 
     await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
 
-    expect(setLocationMock).toHaveBeenNthCalledWith(1, 123, expect.objectContaining({ id: 3 }));
-    expect(setLocationMock).toHaveBeenNthCalledWith(2, 123, expect.objectContaining({ id: 4 }));
+    expect(setLocationMock).toHaveBeenCalledWith(123, [
+      expect.objectContaining({ id: 3 }),
+      expect.objectContaining({ id: 4 }),
+    ]);
   });
 
   it("should populate slots with data from state", () => {

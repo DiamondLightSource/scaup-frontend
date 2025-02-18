@@ -93,7 +93,7 @@ describe("Child Selector", () => {
     fireEvent.click(screen.getByRole("checkbox"));
     fireEvent.click(screen.getByText(/apply/i));
 
-    await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith(sample));
+    await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith([sample]));
   });
 
   it("should fire event if item is removed", async () => {
