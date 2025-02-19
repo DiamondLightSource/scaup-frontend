@@ -25,7 +25,7 @@ export const GenericContainer = ({
 
   const handlePopulatePosition = useCallback(
     async (samples: TreeData<BaseShipmentItem>[]) => {
-      setLocation(currentContainer!.id, samples);
+      await setLocation(currentContainer!.id, samples);
     },
     [currentContainer, setLocation],
   );
