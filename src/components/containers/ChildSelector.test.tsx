@@ -74,6 +74,28 @@ describe("Child Selector", () => {
     await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith(sample));
   });
 
+  it("should use checklist if multiple containers accepted", async () => {
+    const itemClickCallback = vi.fn();
+
+    renderWithProviders(
+      <ChildSelector
+        childrenType='sample'
+        isOpen={true}
+        onClose={() => {}}
+        onSelect={itemClickCallback}
+        acceptMultiple={true}
+      />,
+      {
+        preloadedState: { shipment: { ...initialState, unassigned: defaultUnassigned } },
+      },
+    );
+
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByText(/apply/i));
+
+    await waitFor(() => expect(itemClickCallback).toHaveBeenCalledWith([sample]));
+  });
+
   it("should fire event if item is removed", async () => {
     const itemRemoveCallback = vi.fn();
 

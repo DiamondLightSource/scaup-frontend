@@ -61,7 +61,7 @@ export const useChildLocationManager = ({
   const setLocation = useCallback(
     async (
       containerId: TreeData["id"] | null,
-      childItem: TreeData<BaseShipmentItem>,
+      childItems: TreeData<BaseShipmentItem> | TreeData<BaseShipmentItem>[],
       location: number | null = null,
     ) => {
       const checkForm = formContext.handleSubmit(() => {});
@@ -112,13 +112,18 @@ export const useChildLocationManager = ({
         }
       }
 
-      await Item.patch(
-        childItem.id,
-        {
-          location: actualLocation,
-          [parentKey]: actualContainerId,
-        },
-        child,
+      const itemsToAssign = Array.isArray(childItems) ? childItems : [childItems];
+      await Promise.all(
+        itemsToAssign.map((item) =>
+          Item.patch(
+            item.id,
+            {
+              location: actualLocation,
+              [parentKey]: actualContainerId,
+            },
+            child,
+          ),
+        ),
       );
 
       if (newItem) {

@@ -5,6 +5,8 @@ import { ChildSelectorProps } from "@/types/generic";
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Divider,
   HStack,
   Heading,
@@ -34,6 +36,7 @@ export const ChildSelector = ({
   onRemove,
   readOnly = false,
   selectableChildren,
+  acceptMultiple,
   ...props
 }: ChildSelectorProps) => {
   const unassigned = useSelector(selectUnassigned);
@@ -41,7 +44,7 @@ export const ChildSelector = ({
     const index = getCurrentStepIndex(childrenType);
     return { data: steps[index], index };
   }, [childrenType]);
-  const [radioIndex, setRadioIndex] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
@@ -55,13 +58,19 @@ export const ChildSelector = ({
   }, [unassigned, childrenTypeData, selectableChildren]);
 
   const handleItemSelected = useCallback(async () => {
-    if (onSelect && radioIndex !== null && unassignedItems) {
+    if (onSelect && selectedItems.length !== 0 && unassignedItems) {
       setIsLoading(true);
-      await onSelect(unassignedItems[Number(radioIndex)]);
+
+      if (acceptMultiple) {
+        await onSelect(selectedItems.map((item) => unassignedItems[item]));
+      } else {
+        await onSelect(unassignedItems[selectedItems[0]]);
+      }
+
       setIsLoading(false);
     }
     props.onClose();
-  }, [onSelect, props, radioIndex, unassignedItems]);
+  }, [onSelect, props, selectedItems, unassignedItems, acceptMultiple]);
 
   const handleRemoveClicked = useCallback(async () => {
     if (onRemove && selectedItem) {
@@ -79,7 +88,7 @@ export const ChildSelector = ({
      * and this needs to be handled appropriately.
      */
     if (!props.isOpen) {
-      setRadioIndex(null);
+      setSelectedItems([]);
     }
   }, [props.isOpen]);
 
@@ -129,25 +138,47 @@ export const ChildSelector = ({
           {!readOnly && (
             <>
               {unassignedItems && unassignedItems.length > 0 ? (
-                <VStack w='100%'>
-                  <RadioGroup w='100%' onChange={setRadioIndex}>
-                    {unassignedItems.map((item, i) => (
-                      <HStack
-                        w='100%'
-                        key={item.id}
-                        borderBottom='1px solid'
-                        borderColor='diamond.200'
-                        py='10px'
-                      >
-                        <Stat>
-                          <StatLabel>{childrenTypeData.data.singular}</StatLabel>
-                          <StatNumber>{item.name}</StatNumber>
-                        </Stat>
-                        <Radio borderColor='black' value={i.toString()} size='lg' />
-                      </HStack>
-                    ))}
-                  </RadioGroup>
-                </VStack>
+                acceptMultiple ? (
+                  <VStack>
+                    <CheckboxGroup onChange={(values) => setSelectedItems(values.map(Number))}>
+                      {unassignedItems.map((item, i) => (
+                        <HStack
+                          w='100%'
+                          key={item.id}
+                          borderBottom='1px solid'
+                          borderColor='diamond.200'
+                          py='10px'
+                        >
+                          <Stat>
+                            <StatLabel>{childrenTypeData.data.singular}</StatLabel>
+                            <StatNumber>{item.name}</StatNumber>
+                          </Stat>
+                          <Checkbox value={i.toString()} size='lg' />
+                        </HStack>
+                      ))}
+                    </CheckboxGroup>
+                  </VStack>
+                ) : (
+                  <VStack w='100%'>
+                    <RadioGroup w='100%' onChange={(index) => setSelectedItems([Number(index)])}>
+                      {unassignedItems.map((item, i) => (
+                        <HStack
+                          w='100%'
+                          key={item.id}
+                          borderBottom='1px solid'
+                          borderColor='diamond.200'
+                          py='10px'
+                        >
+                          <Stat>
+                            <StatLabel>{childrenTypeData.data.singular}</StatLabel>
+                            <StatNumber>{item.name}</StatNumber>
+                          </Stat>
+                          <Radio borderColor='black' value={i.toString()} size='lg' />
+                        </HStack>
+                      ))}
+                    </RadioGroup>
+                  </VStack>
+                )
               ) : (
                 <Text py='2' color='gray.600'>
                   No unassigned {childrenTypeData.data.title.toLowerCase()} available. Add a new{" "}
@@ -163,7 +194,7 @@ export const ChildSelector = ({
             Cancel
           </Button>
           <Button
-            isDisabled={radioIndex === null}
+            isDisabled={selectedItems === null}
             ml='0.5em'
             onClick={handleItemSelected}
             isLoading={isLoading}

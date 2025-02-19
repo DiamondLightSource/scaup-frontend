@@ -24,8 +24,8 @@ export const GenericContainer = ({
   const setLocation = useChildLocationManager({ parentId, parent, child, parentType });
 
   const handlePopulatePosition = useCallback(
-    async (sample: TreeData<BaseShipmentItem>) => {
-      await setLocation(currentContainer!.id, sample);
+    async (samples: TreeData<BaseShipmentItem>[]) => {
+      await setLocation(currentContainer!.id, samples);
     },
     [currentContainer, setLocation],
   );
@@ -100,6 +100,7 @@ export const GenericContainer = ({
         isOpen={isOpen}
         onClose={onClose}
         readOnly={formContext === undefined}
+        acceptMultiple={true}
       />
     </Box>
   );

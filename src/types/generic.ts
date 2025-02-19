@@ -13,22 +13,33 @@ export interface InventoryItemLayoutProps {
   params: Promise<InventoryItemParams>;
 }
 
-export interface ChildSelectorProps extends BaseChildSelectorProps {
+export type ChildSelectorProps = MultipleChildSelectorProps | SingleChildSelectorProps;
+
+export interface MultipleChildSelectorProps extends BaseChildSelectorProps {
+  /** Enable multiple children to be selected */
+  acceptMultiple: true;
+  /** Callback for item selection event */
+  onSelect?: (child: TreeData<BaseShipmentItem>[]) => Promise<void>;
+}
+
+export interface SingleChildSelectorProps extends BaseChildSelectorProps {
+  /** Enable multiple children to be selected */
+  acceptMultiple?: false;
+  /** Callback for item selection event */
+  onSelect?: (child: TreeData<BaseShipmentItem>) => Promise<void>;
+}
+
+export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
+  /** Currently selected item for container position */
+  selectedItem?: TreeData<PositionedItem> | null;
+  /** Callback for item removal event */
+  onRemove?: (child: TreeData<PositionedItem>) => Promise<void>;
   /** Type of container's children */
   childrenType: BaseShipmentItem["type"];
   /** Disable editing controls */
   readOnly?: boolean;
   /** Selectable children. If not provided, unassigned items are used */
   selectableChildren?: TreeData[];
-}
-
-export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
-  /** Currently selected item for container position */
-  selectedItem?: TreeData<PositionedItem> | null;
-  /** Callback for item selection event */
-  onSelect?: (child: TreeData<BaseShipmentItem>) => Promise<void>;
-  /** Callback for item removal event */
-  onRemove?: (child: TreeData<PositionedItem>) => Promise<void>;
 }
 
 export interface SessionParams {

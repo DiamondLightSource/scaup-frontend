@@ -1,7 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
-import { gridBox, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
+import { gridBox, gridBox2, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { GenericContainer } from "@/components/containers/Generic";
 import { setLocationMock } from "@/components/containers/__mocks__";
@@ -12,6 +12,7 @@ const defaultShipment = { shipment: structuredClone(initialState) };
 
 defaultShipment.shipment.unassigned[0].children![getCurrentStepIndex("gridBox")].children!.push(
   gridBox,
+  gridBox2,
 );
 
 const falconTube = {
@@ -32,12 +33,23 @@ describe("Generic Container", () => {
     });
 
     fireEvent.click(screen.getByText("Add"));
-    fireEvent.click(screen.getByRole("radio"));
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes.length).toBe(2);
+
+    for (const checkbox of checkboxes) {
+      fireEvent.click(checkbox);
+      expect(checkbox).toBeChecked();
+    }
+
     fireEvent.click(screen.getByText("Apply"));
 
     await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());
 
-    expect(setLocationMock).toHaveBeenCalledWith(123, expect.objectContaining({ id: 3 }));
+    expect(setLocationMock).toHaveBeenCalledWith(123, [
+      expect.objectContaining({ id: 3 }),
+      expect.objectContaining({ id: 4 }),
+    ]);
   });
 
   it("should populate slots with data from state", () => {
