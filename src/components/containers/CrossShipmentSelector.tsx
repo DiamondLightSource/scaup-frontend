@@ -24,10 +24,9 @@ import {
 import { authenticatedFetch } from "@/utils/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChildSelectorProps } from "@/types/generic";
-import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
+import { getCurrentStepIndex, steps } from "@/mappings/pages";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { useSelector } from "react-redux";
-import { TreeData } from "../visualisation/treeView";
 
 const proposalPattern = /^([A-z]{2}[0-9]+)-([0-9]+)$/;
 
@@ -37,7 +36,7 @@ export const CrossShipmentSelector = ({
   selectedItem,
   childrenType,
   ...props
-}: Omit<ChildSelectorProps, "readOnly" | "acceptMultiple">) => {
+}: Omit<ChildSelectorProps, "readOnly">) => {
   const toast = useToast();
   const childrenTypeData = useMemo(() => {
     const index = getCurrentStepIndex(childrenType);
@@ -97,7 +96,7 @@ export const CrossShipmentSelector = ({
     if (onSelect && radioIndex !== null && items) {
       setIsLoading(true);
       const selectedItem = items[Number(radioIndex)];
-      await (onSelect as (item: TreeData<BaseShipmentItem>) => Promise<void>)({
+      await onSelect({
         data: { type: selectedItem.type },
         name: selectedItem.name ?? "",
         id: selectedItem.id,
