@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { authenticatedFetch } from "@/utils/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChildSelectorProps } from "@/types/generic";
+import { SingleChildSelectorProps } from "@/types/generic";
 import { getCurrentStepIndex, steps } from "@/mappings/pages";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { useSelector } from "react-redux";
@@ -36,7 +36,7 @@ export const CrossShipmentSelector = ({
   selectedItem,
   childrenType,
   ...props
-}: Omit<ChildSelectorProps, "readOnly">) => {
+}: Omit<SingleChildSelectorProps, "readOnly" | "acceptMultiple">) => {
   const toast = useToast();
   const childrenTypeData = useMemo(() => {
     const index = getCurrentStepIndex(childrenType);

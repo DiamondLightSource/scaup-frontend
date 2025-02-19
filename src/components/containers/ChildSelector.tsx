@@ -70,7 +70,7 @@ export const ChildSelector = ({
       setIsLoading(false);
     }
     props.onClose();
-  }, [onSelect, props, selectedItems, unassignedItems]);
+  }, [onSelect, props, selectedItems, unassignedItems, acceptMultiple]);
 
   const handleRemoveClicked = useCallback(async () => {
     if (onRemove && selectedItem) {
