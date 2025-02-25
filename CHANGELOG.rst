@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v0.10.0 (28/02/2025)
++++++++++
+
+**Added**
+
+- Users can now automatically generate dewar code
+- Users can add multiple items at once to containers without slots 
+
++++++++++
 v0.9.0 (28/01/2025)
 +++++++++
 
