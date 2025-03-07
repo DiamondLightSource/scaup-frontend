@@ -8,11 +8,6 @@ export interface PositionedItem extends BaseShipmentItem {
 
 export const sampleForm = [
   {
-    id: "sample-separator",
-    label: "Sample",
-    type: "separator",
-  },
-  {
     id: "name",
     label: "Name",
     type: "text",
@@ -57,7 +52,7 @@ export const sampleForm = [
   },
   {
     id: "grid-separator",
-    label: "Grid",
+    label: "Grid Information",
     type: "separator",
   },
   {

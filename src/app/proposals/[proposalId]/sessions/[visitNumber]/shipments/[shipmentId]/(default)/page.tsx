@@ -117,7 +117,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start'>
-                <ShipmentHomeContent data={shipmentData} params={params} patoUrl={process.env.PATO_URL!}/>
+                <ShipmentHomeContent
+                  data={shipmentData}
+                  params={params}
+                  patoUrl={process.env.PATO_URL!}
+                />
                 {isStaff && shipmentData.samples && <Cassette samples={shipmentData.samples} />}
               </HStack>
 
@@ -165,7 +169,10 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <TwoLineLink title='Print Contents' as={NextLink} href={`${params.shipmentId}/print`}>
                 View contents in a printable tree format
               </TwoLineLink>
-              <TwoLineLink title='Print Contents as Tables' href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/pdf-report`}>
+              <TwoLineLink
+                title='Print Contents as Tables'
+                href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/pdf-report`}
+              >
                 View contents in a printable tabled format
               </TwoLineLink>
               <TwoLineLink
@@ -173,7 +180,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 as={NextLink}
                 href={`${params.shipmentId}/print/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo}
-                data-testid="pre-session-label"
+                data-testid='pre-session-label'
               >
                 View pre-session information in a printable format
               </TwoLineLink>
@@ -182,7 +189,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 as={NextLink}
                 href={`${params.shipmentId}/booking-and-labels`}
                 isDisabled={!shipmentData.counts.Dewar}
-                data-testid="booking-label"
+                data-testid='booking-label'
               >
                 Book pickup with courier or print tracking labels
               </TwoLineLink>
