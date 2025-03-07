@@ -28,7 +28,7 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
-        patoUrl="https://pato.ac.uk"
+        patoUrl='https://pato.ac.uk'
       />,
     );
 
@@ -57,7 +57,7 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: null,
           hasUnassigned: false,
         }}
-        patoUrl="https://pato.ac.uk"
+        patoUrl='https://pato.ac.uk'
       />,
     );
 
@@ -87,7 +87,7 @@ describe("Sample Collection Submission Overview", () => {
           preSessionInfo: { details: { pixelSize: 150 } },
           hasUnassigned: true,
         }}
-        patoUrl="https://pato.ac.uk"
+        patoUrl='https://pato.ac.uk'
       />,
     );
 
