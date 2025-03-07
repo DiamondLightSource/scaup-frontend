@@ -3,6 +3,19 @@ Changelog
 ==========
 
 +++++++++
+v0.10.1 (07/03/2025)
++++++++++
+
+**Removed**
+
+- Removed "Save and edit" option in import samples page
+- Removed "You can still edit your samples after you submitted" warning
+
+**Fixed**
+
+- Fixed typo in shipments link in "submitted"
+
++++++++++
 v0.10.0 (28/02/2025)
 +++++++++
 
