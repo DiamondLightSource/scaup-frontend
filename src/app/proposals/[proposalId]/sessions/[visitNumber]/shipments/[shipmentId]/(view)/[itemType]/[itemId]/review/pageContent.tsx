@@ -48,12 +48,6 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
         )}
         <Container parentId={shipmentId} containerType={activeItem!.data.type} />
       </Box>
-      <Alert status='info' variant='info'>
-        <AlertIcon />
-        <AlertDescription>
-          You can still edit your sample collection after submitting.
-        </AlertDescription>
-      </Alert>
     </VStack>
   );
 };

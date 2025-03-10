@@ -72,38 +72,35 @@ const ImportSamplesPageContent = ({
     }
   });
 
-  const handleFinish = useCallback(
-    async (skip: boolean = false) => {
-      setIsLoading(true);
-      if (samples) {
-        try {
-          await Promise.all(
-            checkedItems.map((i) =>
-              Item.create(
-                params.shipmentId,
-                {
-                  ...samples[parseInt(i)],
-                  containerId: null,
-                  location: null,
-                  subLocation: null,
-                  externalId: null,
-                  parents: [samples[parseInt(i)].id],
-                },
-                "samples",
-              ),
+  const handleFinish = useCallback(async () => {
+    setIsLoading(true);
+    if (samples) {
+      try {
+        await Promise.all(
+          checkedItems.map((i) =>
+            Item.create(
+              params.shipmentId,
+              {
+                ...samples[parseInt(i)],
+                containerId: null,
+                location: null,
+                subLocation: null,
+                externalId: null,
+                parents: [samples[parseInt(i)].id],
+              },
+              "samples",
             ),
-          );
+          ),
+        );
 
-          router.push(skip ? "pre-session?skipPush=true" : "gridBox/new/edit");
-        } catch {
-          toast({ title: "Could not update items, please try again later", status: "error" });
-        } finally {
-          setIsLoading(false);
-        }
+        router.push("pre-session");
+      } catch {
+        toast({ title: "Could not update items, please try again later", status: "error" });
+      } finally {
+        setIsLoading(false);
       }
-    },
-    [samples, params, toast, checkedItems, router],
-  );
+    }
+  }, [samples, params, toast, checkedItems, router]);
 
   return (
     <VStack alignItems='start' w={{ base: "100%", md: "66%" }}>
@@ -144,19 +141,13 @@ const ImportSamplesPageContent = ({
           </Heading>
         )
       )}
-      {checkedItems.length > 0 && isNew && (
-        <Text>
-          If you are not transferring these samples to a new container,{" "}
-          <Link onClick={() => handleFinish(true)}>skip to entering pre-session information</Link>.
-        </Text>
-      )}
       <Button
-        onClick={() => handleFinish(false)}
+        onClick={handleFinish}
         isDisabled={!samples || checkedItems.length < 1}
         isLoading={isLoading}
         bg='green.500'
       >
-        Save and continue editing
+        Save and enter pre-session information
       </Button>
     </VStack>
   );

@@ -58,7 +58,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
           <Link
             textDecoration='underline'
             color='diamond.600'
-            href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}/shimpents/${params.shipmentId}`}
+            href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}/shipments/${params.shipmentId}`}
           >
             return to the sample collection summary
           </Link>
