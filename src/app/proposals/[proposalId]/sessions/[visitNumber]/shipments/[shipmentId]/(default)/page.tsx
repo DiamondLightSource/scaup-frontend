@@ -18,13 +18,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import ShipmentHomeContent from "./pageContent";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 import { TwoLineLink } from "@diamondlightsource/ui-components";
 import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
+import { SampleCard } from "@/components/navigation/SampleCard";
 
 export const metadata: Metadata = {
   title: "Sample Collection - Scaup",
@@ -39,6 +39,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
       next: { tags: ["samples", "shipment"] },
     },
   );
+
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
   const unassignedData = await getShipmentData(shipmentId, "/unassigned");
 
@@ -54,7 +55,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
     counts[pascalToSpace(key)] = value;
   }
 
-  let samples = [];
+  let samples: components["schemas"]["SampleOut"][] = [];
   if (resSamples.status === 200) {
     samples = (await resSamples.json()).items;
   }
@@ -117,7 +118,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start'>
-                <ShipmentHomeContent data={shipmentData} params={params} patoUrl={process.env.PATO_URL!}/>
+                <VStack w='75%' py='20px'>
+                  {shipmentData.samples.map((sample) => (
+                    <SampleCard key={sample.id} sample={sample} />
+                  ))}
+                </VStack>
                 {isStaff && shipmentData.samples && <Cassette samples={shipmentData.samples} />}
               </HStack>
 
@@ -165,7 +170,10 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <TwoLineLink title='Print Contents' as={NextLink} href={`${params.shipmentId}/print`}>
                 View contents in a printable tree format
               </TwoLineLink>
-              <TwoLineLink title='Print Contents as Tables' href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/pdf-report`}>
+              <TwoLineLink
+                title='Print Contents as Tables'
+                href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/pdf-report`}
+              >
                 View contents in a printable tabled format
               </TwoLineLink>
               <TwoLineLink
@@ -173,7 +181,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 as={NextLink}
                 href={`${params.shipmentId}/print/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo}
-                data-testid="pre-session-label"
+                data-testid='pre-session-label'
               >
                 View pre-session information in a printable format
               </TwoLineLink>
@@ -182,7 +190,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 as={NextLink}
                 href={`${params.shipmentId}/booking-and-labels`}
                 isDisabled={!shipmentData.counts.Dewar}
-                data-testid="booking-label"
+                data-testid='booking-label'
               >
                 Book pickup with courier or print tracking labels
               </TwoLineLink>

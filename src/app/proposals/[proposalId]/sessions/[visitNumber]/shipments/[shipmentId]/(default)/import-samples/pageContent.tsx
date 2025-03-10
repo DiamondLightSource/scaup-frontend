@@ -87,6 +87,7 @@ const ImportSamplesPageContent = ({
                   location: null,
                   subLocation: null,
                   externalId: null,
+                  parents: [samples[parseInt(i)].id],
                 },
                 "samples",
               ),
