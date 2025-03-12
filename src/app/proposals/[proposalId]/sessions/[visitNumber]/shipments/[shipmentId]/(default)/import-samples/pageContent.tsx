@@ -42,13 +42,7 @@ const sessionForm = [
   },
 ] as DynamicFormEntry[];
 
-const ImportSamplesPageContent = ({
-  params,
-  isNew,
-}: {
-  params: ShipmentParams;
-  isNew: boolean;
-}) => {
+const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
   const toast = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);

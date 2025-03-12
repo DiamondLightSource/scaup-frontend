@@ -107,7 +107,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </Stat>
             ))}
           </HStack>
-          <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
+          <HStack w='100%' mt='1em' alignItems='start' gap='3em' flexWrap='wrap'>
             <VStack alignItems='start' flex='1 0 0'>
               <HStack w='100%'>
                 <Heading size='lg'>Samples</Heading>
@@ -117,10 +117,15 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 </Button>
               </HStack>
               <Divider borderColor='gray.800' />
-              <HStack w='100%' alignItems='start'>
-                <VStack w='75%' py='20px'>
+              <HStack w='100%' alignItems='start' flexWrap='wrap'>
+                <VStack w='75%' py='20px' flex='1 0 0'>
                   {shipmentData.samples.map((sample) => (
-                    <SampleCard key={sample.id} sample={sample} />
+                    <SampleCard
+                      key={sample.id}
+                      sample={sample}
+                      params={params}
+                      patoUrl={process.env.PATO_URL!}
+                    />
                   ))}
                 </VStack>
                 {isStaff && shipmentData.samples && <Cassette samples={shipmentData.samples} />}
@@ -142,7 +147,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 </Heading>
               )}
             </VStack>
-            <VStack alignItems='start'>
+            <VStack alignItems='start' minW='200px'>
               <Heading size='lg'>Actions</Heading>
               <TwoLineLink
                 title='Edit Sample Collection'

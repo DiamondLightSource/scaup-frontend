@@ -28,7 +28,7 @@ const SubmissionOverview = async (props: {
           Ensure your sample is already being stored at eBIC.
         </Text>
       </VStack>
-      <ImportSamplesPageContent params={params} isNew={searchParams.new === "true"} />
+      <ImportSamplesPageContent params={params} />
     </VStack>
   );
 };

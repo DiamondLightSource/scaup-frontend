@@ -5,20 +5,16 @@ import { CreationResponse } from "@/types/server";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { parentTypeToEndpoint } from "@/utils/client/shipment";
 import { requestAndInvalidate } from "@/utils/server/request";
+import { parseNetworkError } from "../generic";
 
 const { toast } = createStandaloneToast();
 
-export const displayError = async (action: string, response: any | undefined) => {
-  let details = "Internal server error";
-  if (typeof response?.detail === "string") {
-    details = response.detail;
-  } else if (Array.isArray(response.detail)) {
-    details = (response?.detail as Array<any>).reduce(
-      (acc: string, current) => acc.concat(current.msg),
-      "",
-    );
-  }
-  toast({ title: `Failed to ${action} item`, description: details, status: "error" });
+export const displayError = async (action: string, response?: Record<string, any>) => {
+  toast({
+    title: `Failed to ${action} item`,
+    description: parseNetworkError(response),
+    status: "error",
+  });
 };
 
 const genericCreateItem = async (requestUrl: string, data: Record<string, any>) => {

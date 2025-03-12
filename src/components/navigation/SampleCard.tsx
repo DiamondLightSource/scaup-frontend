@@ -1,6 +1,6 @@
 "use client";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client"
+import { authenticatedFetch } from "@/utils/client";
 import {
   Box,
   Stat,
@@ -17,31 +17,49 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import NextLink from "next/link";
+import { ShipmentParams } from "@/types/generic";
+import { parseNetworkError } from "@/utils/generic";
 
 export interface SampleCardProps {
+  /** Sample to display */
   sample: components["schemas"]["SampleOut"];
+  /** URL to PATo */
+  patoUrl: string;
+  /** Page params */
+  params: ShipmentParams;
 }
 
-export const SampleCard = ({ sample }: SampleCardProps) => {
+/**
+ * A view that displays sample information and provides links to descendents, ancestors, collected data, and itself
+ */
+export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
   const router = useRouter();
   const toast = useToast();
+
+  const urlPrefix = useMemo(
+    () => `/proposals/${params.proposalId}/sessions/${params.visitNumber}/shipments/`,
+    [params],
+  );
 
   const handleGridBoxClicked = useCallback(async () => {
     const resp = await authenticatedFetch.client(`/containers/${sample.containerId}`);
 
     if (resp?.status !== 200) {
-      toast();
+      const jsonResponse = await resp?.json().catch(() => undefined);
+      toast({
+        status: "error",
+        title: "Failed to get sample data",
+        description: parseNetworkError(jsonResponse),
+      });
       return;
     }
 
     const container: components["schemas"]["ContainerOut"] = await resp.json();
 
-    router.push(`./${container.shipmentId}/${container.type}/${container.id}/review`);
-  }, [sample, router, toast]);
-
-  console.log(sample);
+    router.push(`${urlPrefix}${container.shipmentId}/${container.type}/${container.id}/review`);
+  }, [sample, router, toast, urlPrefix]);
 
   return (
     <Box w='100%' key={sample.id}>
@@ -70,8 +88,18 @@ export const SampleCard = ({ sample }: SampleCardProps) => {
               <StatHelpText m='0'>Not assigned to a container</StatHelpText>
             )}
           </VStack>
-          <Button>View Data</Button>
-          <Button as={NextLink} href={`./${sample.shipmentId}/${sample.type}/${sample.id}/review`}>
+          {sample.dataCollectionGroupId && (
+            <Button
+              as={NextLink}
+              href={`${patoUrl}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
+            >
+              View Data
+            </Button>
+          )}
+          <Button
+            as={NextLink}
+            href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}
+          >
             View Sample
           </Button>
         </HStack>
@@ -86,7 +114,7 @@ export const SampleCard = ({ sample }: SampleCardProps) => {
                 color='gray.300'
                 key={parent.id}
                 as={NextLink}
-                href={`./${parent.shipmentId}/${parent.type}/${parent.id}/review`}
+                href={`${urlPrefix}${parent.shipmentId}/${parent.type}/${parent.id}/review`}
               >
                 {parent.name}
               </Link>
@@ -102,7 +130,7 @@ export const SampleCard = ({ sample }: SampleCardProps) => {
                 color='gray.300'
                 key={child.id}
                 as={NextLink}
-                href={`./${child.shipmentId}/${child.type}/${child.id}/review`}
+                href={`${urlPrefix}${child.shipmentId}/${child.type}/${child.id}/review`}
               >
                 {child.name}
               </Link>

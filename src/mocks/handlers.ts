@@ -124,6 +124,10 @@ export const handlers = [
       }),
   ),
 
+  http.get("http://localhost/api/containers/:containerId", () =>
+    HttpResponse.json({ name: "Container", id: 1, shipmentId: 1, type: "gridBox" }),
+  ),
+
   http.post("http://localhost/api/internal-containers/containers", () =>
     HttpResponse.json({ name: "Container", id: 1, type: "puck" }, { status: 201 }),
   ),
