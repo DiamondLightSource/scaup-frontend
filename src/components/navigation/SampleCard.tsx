@@ -79,9 +79,9 @@ export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
                 {sample.dataCollectionGroupId ? "Collected" : "Created"}
               </Tag>
             </StatLabel>
-            {sample.containerId && sample.parent ? (
+            {sample.containerId && sample.container ? (
               <StatHelpText m='0'>
-                In <Link onClick={handleGridBoxClicked}>{sample.parent}</Link>{" "}
+                In <Link onClick={handleGridBoxClicked}>{sample.container}</Link>{" "}
                 {sample.location && `, slot ${sample.location}`}
               </StatHelpText>
             ) : (

@@ -399,7 +399,11 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /**
+     * Get Container
+     * @description Get container
+     */
+    get: operations["get_container_containers__containerId__get"];
     put?: never;
     post?: never;
     /**
@@ -856,8 +860,8 @@ export interface components {
       shipmentId: number;
       /** Proteinid */
       proteinId: number;
-      /** Parent */
-      parent?: string | null;
+      /** Container */
+      container?: string | null;
       /** Type */
       type: string;
       /** Datacollectiongroupid */
@@ -1800,6 +1804,37 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SampleOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_container_containers__containerId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        containerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
         };
       };
       /** @description Validation Error */

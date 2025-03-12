@@ -46,7 +46,7 @@ describe("Sample Card", () => {
   it("should render link if parent container is provided", async () => {
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, parent: "parent-gridbox", containerId: 5 }}
+        sample={{ ...baseSample, container: "parent-gridbox", containerId: 5 }}
         params={params}
         patoUrl=''
       />,
@@ -64,7 +64,7 @@ describe("Sample Card", () => {
   it("should include slot in container text if sample has location", () => {
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, parent: "parent-gridbox", containerId: 5, location: 10 }}
+        sample={{ ...baseSample, container: "parent-gridbox", containerId: 5, location: 10 }}
         params={params}
         patoUrl=''
       />,
@@ -117,7 +117,7 @@ describe("Sample Card", () => {
 
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, parent: "parent-gridbox", containerId: 5 }}
+        sample={{ ...baseSample, container: "parent-gridbox", containerId: 5 }}
         params={params}
         patoUrl=''
       />,

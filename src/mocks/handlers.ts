@@ -93,7 +93,7 @@ export const handlers = [
 
   http.get("http://localhost/api/shipments/:shipmentId/samples", () =>
     HttpResponse.json({
-      items: [{ parent: "Container", id: 1, name: "Sample" }],
+      items: [{ container: "Container", id: 1, name: "Sample" }],
       total: 1,
       limit: 20,
     }),
