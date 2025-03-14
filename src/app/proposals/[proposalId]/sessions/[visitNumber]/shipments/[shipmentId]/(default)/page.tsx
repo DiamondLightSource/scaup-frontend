@@ -118,7 +118,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start' flexWrap='wrap'>
-                <VStack w='75%' py='20px' flex='1 0 0'>
+                <VStack w='75%' py='20px' flex='1 0 0' h="22em" overflowY="scroll">
                   {shipmentData.samples.map((sample) => (
                     <SampleCard key={sample.id} sample={sample} params={params} />
                   ))}
