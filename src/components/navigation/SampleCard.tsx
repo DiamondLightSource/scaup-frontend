@@ -43,8 +43,16 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
       >
         <HStack flexWrap='wrap'>
           <VStack alignItems='start' flex='1 0 0' minW='200px'>
-            <StatLabel flexDirection='row' display='flex' gap='1em'>
-              <Heading size='md'>{sample.name}</Heading>
+            <StatLabel flexDirection='row' display='flex' gap='1em' flexWrap='wrap'>
+              <Heading
+                size='md'
+                textOverflow='ellipsis'
+                overflow='hidden'
+                whiteSpace='nowrap'
+                maxW='15vw'
+              >
+                {sample.name}
+              </Heading>
               <Tag colorScheme={sample.dataCollectionGroupId ? "green" : "yellow"}>
                 {sample.dataCollectionGroupId ? "Collected" : "Created"}
               </Tag>
