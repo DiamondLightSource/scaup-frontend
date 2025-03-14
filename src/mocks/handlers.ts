@@ -4,7 +4,7 @@ import { http, HttpResponse } from "msw";
 export const defaultData = {
   id: 1,
   name: "Shipment",
-  data: {},
+  data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1 },
   children: [
     {
       name: "Dewar",

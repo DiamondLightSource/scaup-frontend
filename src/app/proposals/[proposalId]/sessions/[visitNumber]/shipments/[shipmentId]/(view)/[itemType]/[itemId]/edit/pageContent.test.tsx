@@ -10,23 +10,32 @@ const baseShipment = {
       {
         id: 1,
         data: { type: "dewar" },
-        name: "dewar",
+        name: "first-dewar",
         children: [{ id: 2, data: { type: "puck" }, name: "puck" }],
       },
     ],
   },
 };
 
+const params = {
+  shipmentId: "1",
+  itemId: "2",
+  itemType: "puck",
+  proposalId: "cm1",
+  visitNumber: "1",
+};
+
 describe("Item Page Content", () => {
   it("should redirect once item is created", async () => {
-    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
-      preloadedState: {
-        shipment: {
-          ...baseShipment.shipment,
-          activeItem: puck,
-        },
+    renderWithProviders(
+      <ItemFormPageContent
+        params={{ ...params, itemId: "new", itemType: "puck" }}
+        prepopData={{}}
+      />,
+      {
+        preloadedState: baseShipment,
       },
-    });
+    );
 
     fireEvent.click(screen.getByText("Add"));
 
@@ -34,18 +43,14 @@ describe("Item Page Content", () => {
   });
 
   it("should redirect once item is saved", async () => {
-    renderWithProviders(<ItemFormPageContent shipmentId='1' prepopData={{}} />, {
-      preloadedState: {
-        shipment: {
-          ...baseShipment.shipment,
-          isEdit: true,
-          activeItem: puck,
-        },
-      },
+    renderWithProviders(<ItemFormPageContent params={params} prepopData={{}} />, {
+      preloadedState: baseShipment,
     });
+
+    await screen.findByText("Puck");
 
     fireEvent.click(screen.getByText("Save"));
 
-    await waitFor(() => expect(mockRouter.pathname).toBe("/puck/9/edit"));
+    await waitFor(() => expect(mockRouter.pathname).toBe("/puck/2/edit"));
   });
 });

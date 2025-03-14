@@ -1,6 +1,4 @@
-"use client";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
 import {
   Box,
   Stat,
@@ -13,53 +11,25 @@ import {
   Button,
   Link,
   Text,
-  useToast,
   Spacer,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
 import NextLink from "next/link";
 import { ShipmentParams } from "@/types/generic";
-import { parseNetworkError } from "@/utils/generic";
 
 export interface SampleCardProps {
   /** Sample to display */
   sample: components["schemas"]["SampleOut"];
-  /** URL to PATo */
-  patoUrl: string;
   /** Page params */
   params: ShipmentParams;
 }
 
 /**
- * A view that displays sample information and provides links to descendents, ancestors, collected data, and itself
+ * A view that displays sample information and provides links to descendents, ancestors, collected data, and itself.
+ *
+ * This is a server-rendered component.
  */
-export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
-  const router = useRouter();
-  const toast = useToast();
-
-  const urlPrefix = useMemo(
-    () => `/proposals/${params.proposalId}/sessions/${params.visitNumber}/shipments/`,
-    [params],
-  );
-
-  const handleGridBoxClicked = useCallback(async () => {
-    const resp = await authenticatedFetch.client(`/containers/${sample.containerId}`);
-
-    if (resp?.status !== 200) {
-      const jsonResponse = await resp?.json().catch(() => undefined);
-      toast({
-        status: "error",
-        title: "Failed to get sample data",
-        description: parseNetworkError(jsonResponse),
-      });
-      return;
-    }
-
-    const container: components["schemas"]["ContainerOut"] = await resp.json();
-
-    router.push(`${urlPrefix}${container.shipmentId}/${container.type}/${container.id}/review`);
-  }, [sample, router, toast, urlPrefix]);
+export const SampleCard = ({ sample, params }: SampleCardProps) => {
+  const urlPrefix = `/proposals/${params.proposalId}/sessions/${params.visitNumber}/shipments/`;
 
   return (
     <Box w='100%' key={sample.id}>
@@ -79,9 +49,9 @@ export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
                 {sample.dataCollectionGroupId ? "Collected" : "Created"}
               </Tag>
             </StatLabel>
-            {sample.containerId && sample.container ? (
+            {sample.containerId && sample.containerName ? (
               <StatHelpText m='0'>
-                In <Link onClick={handleGridBoxClicked}>{sample.container}</Link>{" "}
+                In <Link href={`/containers/${sample.containerId}`}>{sample.containerName}</Link>{" "}
                 {sample.location && `, slot ${sample.location}`}
               </StatHelpText>
             ) : (
@@ -91,7 +61,7 @@ export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
           {sample.dataCollectionGroupId && (
             <Button
               as={NextLink}
-              href={`${patoUrl}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
+              href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
             >
               View Data
             </Button>
@@ -106,10 +76,10 @@ export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
       </Stat>
 
       <HStack w='100%' bg='purple' fontSize='14px' fontWeight='600' color='white' p='5px'>
-        {Array.isArray(sample.parents) && sample.parents.length > 0 && (
+        {Array.isArray(sample.originSamples) && sample.originSamples.length > 0 && (
           <Text>
             Derived from{" "}
-            {sample.parents.map((parent) => (
+            {sample.originSamples.map((parent) => (
               <Link
                 color='gray.300'
                 key={parent.id}
@@ -122,10 +92,10 @@ export const SampleCard = ({ sample, params, patoUrl }: SampleCardProps) => {
           </Text>
         )}
         <Spacer />
-        {Array.isArray(sample.children) && sample.children.length > 0 && (
+        {Array.isArray(sample.derivedSamples) && sample.derivedSamples.length > 0 && (
           <Text>
             Originated{" "}
-            {sample.children.map((child) => (
+            {sample.derivedSamples.map((child) => (
               <Link
                 color='gray.300'
                 key={child.id}

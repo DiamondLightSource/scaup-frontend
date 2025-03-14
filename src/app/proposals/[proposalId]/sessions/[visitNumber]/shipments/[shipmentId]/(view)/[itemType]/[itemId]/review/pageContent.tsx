@@ -4,10 +4,9 @@ import { Container } from "@/components/containers";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import {
   selectActiveItem,
-  selectIsEdit,
   selectItems,
-  setActiveItem,
   setIsReview,
+  syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Alert, AlertDescription, AlertIcon, Box, Skeleton, VStack } from "@chakra-ui/react";
@@ -15,22 +14,16 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
+const ReviewPageContent = ({ params, prepopData }: ItemFormPageContentProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const items = useSelector(selectItems);
-  const isEdit = useSelector(selectIsEdit);
   const activeItem = useSelector(selectActiveItem);
 
   useEffect(() => {
-    if (!isEdit && activeItem && items && items.length > 0) {
-      // If current active item does not exist
-      const newItem = items[0];
-      dispatch(setActiveItem({ item: newItem, isEdit: true }));
-      router.replace(`../../${newItem.data.type}/${newItem.id}/review`);
-    }
+    dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
     dispatch(setIsReview(true));
-  }, [dispatch, items, router, activeItem, isEdit]);
+  }, [dispatch, items, router, params]);
 
   return (
     <VStack h='100%' w='100%'>
@@ -46,8 +39,18 @@ const ReviewPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps)
         ) : (
           <Skeleton h='80%' w='100%' />
         )}
-        <Container parentId={shipmentId} containerType={activeItem!.data.type} />
+        <Container
+          parentId={params.shipmentId}
+          containerType={activeItem!.data.type}
+          containerSubType={activeItem!.data.subType}
+        />
       </Box>
+      <Alert status='info' variant='info'>
+        <AlertIcon />
+        <AlertDescription>
+          You can still edit your sample collection after submitting.
+        </AlertDescription>
+      </Alert>
     </VStack>
   );
 };

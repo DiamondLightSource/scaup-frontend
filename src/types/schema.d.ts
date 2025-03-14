@@ -618,6 +618,13 @@ export interface components {
       id: number;
       /** Type */
       type: string;
+      /** Isinternal */
+      isInternal: boolean;
+      /**
+       * Internalstoragecontainer
+       * @description Internal storage container this container is currently in.Only set if this is stored in the facility
+       */
+      internalStorageContainer?: number | null;
     };
     /** GenericItem */
     GenericItem: {
@@ -700,6 +707,8 @@ export interface components {
       type?: string | null;
       /** Shipmentid */
       shipmentId?: number | null;
+      /** Isinternal */
+      isInternal?: boolean | null;
     };
     /** OptionalSample */
     OptionalSample: {
@@ -860,18 +869,18 @@ export interface components {
       shipmentId: number;
       /** Proteinid */
       proteinId: number;
-      /** Container */
-      container?: string | null;
+      /** Containername */
+      containerName?: string | null;
       /** Type */
       type: string;
       /** Datacollectiongroupid */
       dataCollectionGroupId?: number | null;
       /** Parentshipmentname */
       parentShipmentName?: string | null;
-      /** Parents */
-      parents?: components["schemas"]["SampleOut"][] | null;
-      /** Children */
-      children?: components["schemas"]["SampleOut"][] | null;
+      /** Originsamples */
+      originSamples?: components["schemas"]["SampleOut"][] | null;
+      /** Derivedsamples */
+      derivedSamples?: components["schemas"]["SampleOut"][] | null;
     };
     /** ShipmentChildren */
     ShipmentChildren: {

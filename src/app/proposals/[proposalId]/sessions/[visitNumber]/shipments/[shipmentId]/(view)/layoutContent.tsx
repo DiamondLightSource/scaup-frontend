@@ -73,7 +73,7 @@ const ShipmentsLayoutContent = ({
       w='100%'
       gap='1em'
     >
-      {children}
+      {shipmentData && children}
       <VStack spacing='0' alignItems='start'>
         <ShipmentOverview
           readOnly={isReview}
