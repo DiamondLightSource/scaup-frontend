@@ -85,8 +85,8 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
 
       <HStack w='100%' bg='purple' fontSize='14px' fontWeight='600' color='white' p='5px'>
         {Array.isArray(sample.originSamples) && sample.originSamples.length > 0 && (
-          <Text>
-            Derived from{" "}
+          <HStack>
+            <Text>Derived from </Text>
             {sample.originSamples.map((parent) => (
               <Link
                 color='gray.300'
@@ -97,12 +97,12 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
                 {parent.name}
               </Link>
             ))}
-          </Text>
+          </HStack>
         )}
         <Spacer />
         {Array.isArray(sample.derivedSamples) && sample.derivedSamples.length > 0 && (
-          <Text>
-            Originated{" "}
+          <HStack>
+            <Text>Originated </Text>
             {sample.derivedSamples.map((child) => (
               <Link
                 color='gray.300'
@@ -113,7 +113,7 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
                 {child.name}
               </Link>
             ))}
-          </Text>
+          </HStack>
         )}
       </HStack>
     </Box>

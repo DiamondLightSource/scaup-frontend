@@ -1,7 +1,6 @@
 import { renderWithProviders } from "@/utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { SampleCard } from "./SampleCard";
-import mockRouter from "next-router-mock";
 
 const baseSample = { name: "test-sample", id: 1, type: "grid", proteinId: 1, shipmentId: 1 };
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
@@ -73,16 +72,66 @@ describe("Sample Card", () => {
     );
   });
 
+  it("should display multiple children", () => {
+    renderWithProviders(
+      <SampleCard
+        sample={{
+          ...baseSample,
+          derivedSamples: [
+            { ...baseSample, name: "child-sample" },
+            { ...baseSample, name: "child-sample-2" },
+          ],
+        }}
+        params={params}
+      />,
+    );
+
+    expect(screen.getByText("Originated")).toBeInTheDocument();
+    expect(screen.getByText("child-sample")).toHaveAttribute(
+      "href",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+    );
+    expect(screen.getByText("child-sample-2")).toHaveAttribute(
+      "href",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+    );
+  });
+
   it("should display parents", () => {
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, originSamples: [{ ...baseSample, name: "child-sample" }] }}
+        sample={{ ...baseSample, originSamples: [{ ...baseSample, name: "parent-sample" }] }}
         params={params}
       />,
     );
 
     expect(screen.getByText("Derived from")).toBeInTheDocument();
-    expect(screen.getByText("child-sample")).toHaveAttribute(
+    expect(screen.getByText("parent-sample")).toHaveAttribute(
+      "href",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+    );
+  });
+
+  it("should display multiple parents", () => {
+    renderWithProviders(
+      <SampleCard
+        sample={{
+          ...baseSample,
+          originSamples: [
+            { ...baseSample, name: "parent-sample" },
+            { ...baseSample, name: "parent-sample-2" },
+          ],
+        }}
+        params={params}
+      />,
+    );
+
+    expect(screen.getByText("Derived from")).toBeInTheDocument();
+    expect(screen.getByText("parent-sample")).toHaveAttribute(
+      "href",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+    );
+    expect(screen.getByText("parent-sample-2")).toHaveAttribute(
       "href",
       "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
     );
