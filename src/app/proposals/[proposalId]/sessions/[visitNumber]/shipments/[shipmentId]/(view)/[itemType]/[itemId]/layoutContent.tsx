@@ -45,7 +45,6 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   const activeStep = useMemo(() => getCurrentStepIndex(params.itemType), [params]);
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [hasUnassigned, setHasUnassigned] = useState(true);
 
   const currentShipment = useSelector(selectItems);
   const currentUnassigned = useSelector(selectUnassigned);
@@ -88,24 +87,10 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
     }
   }, [handleSetStep, activeStep, router, isReview]);
 
-  const cannotFinish = useMemo(
-    () => activeStep >= steps.length - 1 && hasUnassigned,
-    [activeStep, hasUnassigned],
-  );
-
-  const handleTypeCountChanged = useCallback((typeCount: TypeCount[]) => {
-    setHasUnassigned(typeCount.some((count) => count.unassigned > 0));
-  }, []);
-
   return (
     <>
       <GridItem flexBasis='fill' flexShrink='0' w='100%' area='stepper'>
-        <ItemStepper
-          steps={steps}
-          onStepChanged={handleSetStep}
-          onTypeCountChanged={handleTypeCountChanged}
-          currentStep={currentStep}
-        />
+        <ItemStepper steps={steps} onStepChanged={handleSetStep} currentStep={currentStep} />
         <Divider mb='10px' />
       </GridItem>
 
@@ -135,11 +120,6 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
       <GridItem area='nav'>
         <HStack h='100%' px='1em' bg='gray.200'>
-          {cannotFinish && (
-            <Text fontWeight='600' color='gray.600'>
-              Cannot progress without assigning all items to a container!
-            </Text>
-          )}
           <Spacer />
           {isReview && (
             <Button
@@ -150,7 +130,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
               Edit
             </Button>
           )}
-          <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
+          <Button onClick={handleContinue} bg='green.500'>
             {isReview ? "Continue to Pre-Session Info" : "Continue"}
           </Button>
         </HStack>

@@ -155,7 +155,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
                 as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
-                isDisabled={shipmentData.dispatch.status === "Booked" || shipmentData.hasUnassigned}
+                isDisabled={shipmentData.dispatch.status === "Booked"}
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>
