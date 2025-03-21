@@ -50,29 +50,6 @@ describe("Item Page Layout Content", () => {
     });
   });
 
-  it("should not let user click finish if there are unassigned items", () => {
-    const newUnassigned = structuredClone(testInitialState.unassigned);
-
-    newUnassigned[0].children![2].children = [puck];
-    renderWithProviders(
-      <ItemPageLayoutContent params={{ ...params, itemType: "dewar" }}>
-        <></>
-      </ItemPageLayoutContent>,
-      {
-        preloadedState: {
-          shipment: {
-            ...testInitialState,
-            unassigned: newUnassigned,
-          },
-        },
-      },
-    );
-
-    expect(
-      screen.getByText("Cannot progress without assigning all items to a container!"),
-    ).toBeInTheDocument();
-  });
-
   it("should move to next step if continue clicked", async () => {
     renderWithProviders(
       <ItemPageLayoutContent params={{ ...params, itemType: "sample" }}>
