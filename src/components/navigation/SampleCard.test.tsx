@@ -79,7 +79,7 @@ describe("Sample Card", () => {
           ...baseSample,
           derivedSamples: [
             { ...baseSample, name: "child-sample" },
-            { ...baseSample, name: "child-sample-2" },
+            { ...baseSample, name: "child-sample-2", id: 2 },
           ],
         }}
         params={params}
@@ -93,7 +93,7 @@ describe("Sample Card", () => {
     );
     expect(screen.getByText("child-sample-2")).toHaveAttribute(
       "href",
-      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/2/review",
     );
   });
 
