@@ -119,7 +119,7 @@ describe("Sample Card", () => {
           ...baseSample,
           originSamples: [
             { ...baseSample, name: "parent-sample" },
-            { ...baseSample, name: "parent-sample-2" },
+            { ...baseSample, name: "parent-sample-2", id: 2 },
           ],
         }}
         params={params}
@@ -133,7 +133,7 @@ describe("Sample Card", () => {
     );
     expect(screen.getByText("parent-sample-2")).toHaveAttribute(
       "href",
-      "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
+      "/proposals/cm00001/sessions/1/shipments/1/grid/2/review",
     );
   });
 });
