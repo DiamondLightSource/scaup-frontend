@@ -20,6 +20,11 @@ const populatedContainer = {
   children: [{ ...gridBox, data: { location: 5 } }],
 } as TreeData<BaseShipmentItem>;
 
+const populatedContainerStored = {
+  ...puck,
+  children: [{ ...gridBox, data: { location: 5, store: true } }],
+} as TreeData<BaseShipmentItem>;
+
 describe("Puck", () => {
   it.each([
     { count: 12, type: "1" },
@@ -76,6 +81,20 @@ describe("Puck", () => {
 
     fireEvent.click(screen.getByTestId("5-empty"));
     screen.getByText("Select");
+  });
+
+  it("should highlight items stored at eBIC", () => {
+    renderAndInjectForm(<Puck parentId='1' />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          activeItem: populatedContainerStored,
+          isEdit: true,
+        },
+      },
+    });
+
+    expect(screen.getByText("5")).toHaveAttribute("title", "Stored at eBIC");
   });
 
   it("should fire remove callback when remove is clicked", async () => {

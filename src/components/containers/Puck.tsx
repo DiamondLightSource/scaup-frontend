@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { ContainerProps, useChildLocationManager } from ".";
 import Image from "next/image";
-import { GenericChildSlot } from "@/components/containers/child";
+import { GenericChildSlot, GenericChildSlotProps } from "@/components/containers/child";
 import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 import { ContainerItem } from "@/types/generic";
 
@@ -125,16 +125,22 @@ export const Puck = ({
       )}
       <Box w='296px' h='296px' position='relative' margin='20px'>
         <Image width={296} height={296} alt='Puck' src={imageLocation} />
-        {positions.items.map((item, i) => (
-          <GenericChildSlot
-            key={i}
-            label={i + 1}
-            hasSample={item.item !== null}
-            onClick={() => handleGridClicked(item.item, i)}
-            left={`${item.x}px`}
-            top={`${item.y}px`}
-          />
-        ))}
+        {positions.items.map((item, i) => {
+          const props: GenericChildSlotProps = {
+            label: i + 1,
+            hasSample: item.item !== null,
+            onClick: () => handleGridClicked(item.item, i),
+            left: `${item.x}px`,
+            top: `${item.y}px`,
+          };
+
+          if (item.item && item.item.data.store === true) {
+            props.bgColor = "#46BDB2";
+            props.title = "Stored at eBIC";
+          }
+
+          return <GenericChildSlot key={i} {...props} />;
+        })}
         {parentType === "shipment" ? (
           <ChildSelector
             childrenType='gridBox'

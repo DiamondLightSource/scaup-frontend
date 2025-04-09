@@ -25,6 +25,10 @@ const falconTube = {
 defaultShipment.shipment.activeItem = falconTube as TreeData<BaseShipmentItem>;
 
 const populatedContainer = { ...falconTube, children: [gridBox] } as TreeData<BaseShipmentItem>;
+const populatedContainerStored = {
+  ...falconTube,
+  children: [{ ...gridBox, data: { ...gridBox.data, store: true } }],
+} as TreeData<BaseShipmentItem>;
 
 describe("Generic Container", () => {
   it("should fire creation callback if apply clicked", async () => {
@@ -106,5 +110,19 @@ describe("Generic Container", () => {
 
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/add/i)).not.toBeInTheDocument();
+  });
+
+  it("should highlight grid boxes stored at eBIC", () => {
+    renderAndInjectForm(<GenericContainer parentId='1' />, {
+      preloadedState: {
+        shipment: {
+          ...initialState,
+          activeItem: populatedContainerStored,
+          isEdit: true,
+        },
+      },
+    });
+
+    expect(screen.getByLabelText("gridBox")).toHaveAttribute("title", "Stored at eBIC");
   });
 });

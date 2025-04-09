@@ -67,23 +67,28 @@ export const GenericContainer = ({
         Contents
       </Heading>
       <List overflowY='scroll' h='80%'>
-        {(currentContainer!.children ?? []).map((item) => (
-          <ListItem
-            key={item.id}
-            p='5px'
-            display='flex'
-            bg='diamond.50'
-            mb='3px'
-            borderRadius='4px'
-          >
-            <Text flex='1 0 0'>{item.name}</Text>
-            {formContext !== undefined && (
-              <Button bg='red.600' size='xs' onClick={() => handleRemoveSample(item)}>
-                Remove
-              </Button>
-            )}
-          </ListItem>
-        ))}
+        {(currentContainer!.children ?? []).map((item) => {
+          const isStored = childSpecificType === "gridBox" && item.data.store;
+          return (
+            <ListItem
+              key={item.id}
+              p='5px'
+              display='flex'
+              bg={isStored ? "#46BDB2" : "diamond.50"}
+              mb='3px'
+              borderRadius='4px'
+              title={isStored ? "Stored at eBIC" : undefined}
+              aria-label={item.name}
+            >
+              <Text flex='1 0 0'>{item.name}</Text>
+              {formContext !== undefined && (
+                <Button bg='red.600' size='xs' onClick={() => handleRemoveSample(item)}>
+                  Remove
+                </Button>
+              )}
+            </ListItem>
+          );
+        })}
         <ListItem mt='5px'>
           {formContext !== undefined && (
             <Button w='100%' size='sm' onClick={onOpen}>
