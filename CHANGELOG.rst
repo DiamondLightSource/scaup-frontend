@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.10.2 (11/04/2025
++++++++++
+
+**Removed**
+
+- Remove "no unassigned items" requirement
+
++++++++++
 v0.10.1 (07/03/2025)
 +++++++++
 
