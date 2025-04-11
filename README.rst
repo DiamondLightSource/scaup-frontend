@@ -1,7 +1,7 @@
-|code_ci| |code_cov| |license|
+|code_ci| |license|
 
 ============== ==============================================================
-Source code https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend
+Source code https://github.com/DiamondLightSource/scaup-frontend
 ============== ==============================================================
 
 Scaup (frontend)
@@ -58,13 +58,9 @@ Development
 
 To run Next in development mode, run :code:`yarn dev`. If you don't have certificates set up, or if you're using self-signed certificates, Node might throw up errors and block connections. To avoid that, run :code:`NODE_TLS_REJECT_UNAUTHORIZED=0 yarn dev`
 
-.. |code_ci| image:: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/badges/master/pipeline.svg
-    :target: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/-/pipelines
+.. |code_ci| image:: https://github.com/DiamondLightSource/scaup-frontend/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/DiamondLightSource/scaup-frontend/actions/workflows/test.yml
     :alt: Code CI
-
-.. |code_cov| image:: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/badges/master/coverage.svg
-    :target: https://gitlab.diamond.ac.uk/lims/ebic-scaup/frontend/-/pipelines
-    :alt: Code Coverage
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
     :target: https://opensource.org/licenses/Apache-2.0
