@@ -22,6 +22,7 @@ Configuration is done through environment variables:
 * :code:`SERVER_API_URL`: Scaup API URL from the server perspective. Note that relative paths such as `/api` cannot be used, since the user has no concept of relative paths. Paths must be absolute. This can be modified at runtime/deploy time.
 * :code:`NEXT_PUBLIC_API_URL`: SCAUP API URL
 * :code:`NEXT_PUBLIC_DEV_CONTACT`: Developer contact email
+* :code:`NEXT_PUBLIC_APP_VERSION`: App version
 * :code:`PATO_URL`: URL of the PATo instance you want to target for redirects
 * :code:`SYNCHWEB_URL`: URL of the SynchWeb instance you want to target for redirects
 
