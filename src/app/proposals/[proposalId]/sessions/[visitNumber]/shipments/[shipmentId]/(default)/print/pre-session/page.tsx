@@ -1,9 +1,9 @@
-import PreSessionContent from "@/app/proposals/[proposalId]/sessions/[visitNumber]/shipments/[shipmentId]/(default)/print/pre-session/pageContent";
 import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
 import { Divider, HStack, Heading, Spacer, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { PrintButton } from "../pageContent";
+import { DynamicFormView } from "@/components/visualisation/formView";
 
 export const metadata: Metadata = {
   title: "Pre Session - Scaup",
@@ -33,7 +33,19 @@ const PreSession = async (props: { params: Promise<ShipmentParams> }) => {
         <PrintButton />
       </HStack>
       <Divider borderColor='gray.800' />
-      <PreSessionContent data={preSessionData} />;
+      <VStack alignItems='start' w='100%'>
+        {preSessionData ? (
+          <DynamicFormView
+            formType='preSession'
+            data={preSessionData}
+            prepopData={preSessionData}
+          />
+        ) : (
+          <Heading w='100%' py='1em' variant='notFound'>
+            No pre-session information available
+          </Heading>
+        )}
+      </VStack>
     </VStack>
   );
 };
