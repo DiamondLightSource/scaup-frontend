@@ -9,7 +9,7 @@ const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Import Samples Page Content", () => {
   it("should render samples", async () => {
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
@@ -18,7 +18,7 @@ describe("Import Samples Page Content", () => {
   });
 
   it("should not allow invalid session references", async () => {
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "invalidname" } });
     fireEvent.click(screen.getByText("Select"));
@@ -27,7 +27,7 @@ describe("Import Samples Page Content", () => {
   });
 
   it("should enable continue button if samples are selected", async () => {
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
@@ -50,7 +50,7 @@ describe("Import Samples Page Content", () => {
       ),
     );
 
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
@@ -67,7 +67,7 @@ describe("Import Samples Page Content", () => {
       ),
     );
 
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={false} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
@@ -77,7 +77,7 @@ describe("Import Samples Page Content", () => {
 
   it("should redirect to pre-session page if 'Save and enter pre-session information' is clicked", async () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
@@ -92,7 +92,7 @@ describe("Import Samples Page Content", () => {
 
   it("should display shipment name as tag", async () => {
     mockRouter.setCurrentUrl("shipments/1/import-samples");
-    renderWithProviders(<ImportSamplesPageContent params={params} isNew={true} />);
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
 
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByRole("button", { name: "Select" }));

@@ -117,3 +117,21 @@ export const nameValidation = {
  */
 export const allItemsEmptyInDict = (data: Record<string, any[]> | null) =>
   data !== null && Object.values(data).some((v) => v.length > 0);
+
+/**
+ * Parse network error response and display relevant error message
+ * @param response Response to parse (JSON body)
+ * @returns Returned error message, or default 'internal server error' message
+ */
+export const parseNetworkError = (response?: Record<string, any>) => {
+  let details = "Internal server error";
+  if (typeof response?.detail === "string") {
+    details = response.detail;
+  } else if (Array.isArray(response?.detail)) {
+    details = (response?.detail as Array<any>).reduce(
+      (acc: string, current) => acc.concat(current.msg),
+      "",
+    );
+  }
+  return details;
+};

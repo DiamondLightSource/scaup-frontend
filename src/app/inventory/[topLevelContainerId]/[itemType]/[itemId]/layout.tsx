@@ -2,7 +2,6 @@ import { authenticatedFetch } from "@/utils/client";
 import { ItemLayoutContent } from "./layoutContent";
 import React from "react";
 import { getShipmentData } from "@/utils/client/shipment";
-import { BaseShipmentItem } from "@/mappings/pages";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
 import { InventoryItemLayoutProps } from "@/types/generic";
@@ -29,7 +28,7 @@ const ItemLayout = async (props: InventoryItemLayoutProps) => {
     params.topLevelContainerId,
     "",
     "topLevelContainer",
-  )) as TreeData<BaseShipmentItem>;
+  )) as TreeData;
 
   const unassignedItems = await getUnassignedItems();
 

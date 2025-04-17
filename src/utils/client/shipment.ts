@@ -11,7 +11,7 @@ export const getShipmentData = async (
   shipmentId: string,
   suffix: string = "",
   parentType: RootParentType = "shipment",
-): Promise<Record<string, any> | null> => {
+) => {
   const res = await authenticatedFetch.server(
     `/${parentTypeToEndpoint[parentType]}/${shipmentId}${suffix}`,
     {
