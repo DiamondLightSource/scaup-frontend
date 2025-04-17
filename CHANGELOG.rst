@@ -3,12 +3,24 @@ Changelog
 ==========
 
 +++++++++
+v0.11.0 (17/04/2025)
++++++++++
+
+**Added**
+
+- Highlight grid boxes stored at eBIC
+
++++++++++
 v0.10.2 (11/04/2025)
 +++++++++
 
 **Removed**
 
 - Remove "no unassigned items" requirement
+
+**Changed**
+
+- Include additional tracking label instructions
 
 +++++++++
 v0.10.1 (07/03/2025)
