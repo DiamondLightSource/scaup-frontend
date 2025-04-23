@@ -80,7 +80,8 @@ export interface paths {
     put?: never;
     /**
      * Create Top Level Container
-     * @description Create new container in shipment
+     * @description Create new container in shipment. If the top level container type is 'dewar' and the provided code is
+     *     empty or null, a new one is created.
      */
     post: operations["create_top_level_container_shipments__shipmentId__topLevelContainers_post"];
     delete?: never;
@@ -181,6 +182,86 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/shipments/{shipmentId}/tracking-labels": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Shipping Labels
+     * @description Get shipping labels for dewar
+     */
+    get: operations["get_shipping_labels_shipments__shipmentId__tracking_labels_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/update-status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Update Shipment Status
+     * @description Update shipment status
+     */
+    post: operations["update_shipment_status_shipments__shipmentId__update_status_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/assign-data-collection-groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Assign Dcg In Sublocation
+     * @description Update data collection group sample ID in ISPyB. Does not return data.
+     */
+    post: operations["assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/pdf-report": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Pdf Report
+     * @description Get PDF report of shipment
+     */
+    get: operations["get_pdf_report_shipments__shipmentId__pdf_report_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/proposals/{proposalReference}/sessions/{visitNumber}/shipments": {
     parameters: {
       query?: never;
@@ -267,6 +348,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/assign-data-collection-groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Assign Dcg In Sublocation
+     * @description Update data collection group sample ID in ISPyB. Does not return data.
+     */
+    post: operations["assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/samples/{sampleId}": {
     parameters: {
       query?: never;
@@ -298,7 +399,11 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /**
+     * Get Container
+     * @description Get container
+     */
+    get: operations["get_container_containers__containerId__get"];
     put?: never;
     post?: never;
     /**
@@ -379,6 +484,46 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/internal-containers/containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create Orphan Container
+     * @description Create orphan container
+     */
+    post: operations["create_orphan_container_internal_containers_containers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/internal-containers/topLevelContainers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create Orphan Top Level Container
+     * @description Create orphan container
+     */
+    post: operations["create_orphan_top_level_container_internal_containers_topLevelContainers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/internal-containers/{topLevelContainerId}": {
     parameters: {
       query?: never;
@@ -422,6 +567,8 @@ export interface components {
       requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
       /**
        * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
@@ -429,11 +576,13 @@ export interface components {
       name?: string | null;
       /** Comments */
       comments?: string | null;
+      /** Type */
+      type: string;
       /**
-       * Type
-       * @enum {string}
+       * Isinternal
+       * @default false
        */
-      type: "puck" | "falconTube" | "gridBox" | "genericContainer";
+      isInternal: boolean;
     };
     /** ContainerOut */
     ContainerOut: {
@@ -454,6 +603,8 @@ export interface components {
       requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
       /**
        * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
@@ -461,9 +612,19 @@ export interface components {
       name?: string | null;
       /** Comments */
       comments?: string | null;
+      /** Shipmentid */
+      shipmentId: number;
       /** Id */
       id: number;
+      /** Type */
       type: string;
+      /** Isinternal */
+      isInternal: boolean;
+      /**
+       * Internalstoragecontainer
+       * @description Internal storage container this container is currently in.Only set if this is stored in the facility
+       */
+      internalStorageContainer?: number | null;
     };
     /** GenericItem */
     GenericItem: {
@@ -479,6 +640,7 @@ export interface components {
     GenericItemData: {
       /** Type */
       type: string;
+    } & {
       [key: string]: unknown;
     };
     /** HTTPValidationError */
@@ -532,6 +694,8 @@ export interface components {
       requestedReturn: boolean | null;
       /** Registeredcontainer */
       registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
       /**
        * Name
        * @description Base container name. If name is not provided, the container's type followedby the container index is used
@@ -540,9 +704,11 @@ export interface components {
       /** Comments */
       comments?: string | null;
       /** Type */
-      type?: ("puck" | "falconTube" | "gridBox" | "genericContainer") | null;
+      type?: string | null;
       /** Shipmentid */
       shipmentId?: number | null;
+      /** Isinternal */
+      isInternal?: boolean | null;
     };
     /** OptionalSample */
     OptionalSample: {
@@ -550,6 +716,8 @@ export interface components {
       containerId?: number | null;
       /** Location */
       location?: number | null;
+      /** Sublocation */
+      subLocation?: number | null;
       /** Details */
       details?: Record<string, never> | null;
       /** Comments */
@@ -563,17 +731,13 @@ export interface components {
       proteinId?: number | null;
       /** Type */
       type?: string | null;
+      /** Shipmentid */
+      shipmentId?: number | null;
     };
     /** OptionalTopLevelContainer */
     OptionalTopLevelContainer: {
-      /** Status */
-      status?: string | null;
-      /** Capacity */
-      capacity?: number | null;
       /** Details */
       details?: Record<string, never> | null;
-      /** Location */
-      location?: number | null;
       /** Comments */
       comments?: string | null;
       /**
@@ -659,6 +823,8 @@ export interface components {
       containerId?: number | null;
       /** Location */
       location?: number | null;
+      /** Sublocation */
+      subLocation?: number | null;
       /** Details */
       details?: Record<string, never> | null;
       /** Comments */
@@ -677,6 +843,8 @@ export interface components {
        * @default 1
        */
       copies: number;
+      /** Parents */
+      parents?: number[] | null;
     };
     /** SampleOut */
     SampleOut: {
@@ -684,7 +852,7 @@ export interface components {
       containerId?: number | null;
       /** Location */
       location?: number | null;
-      /** Sub Location */
+      /** Sublocation */
       subLocation?: number | null;
       /** Details */
       details?: Record<string, never> | null;
@@ -701,14 +869,18 @@ export interface components {
       shipmentId: number;
       /** Proteinid */
       proteinId: number;
-      /** Parent */
-      parent?: string | null;
+      /** Containername */
+      containerName?: string | null;
       /** Type */
       type: string;
-      /** Data Collection Group ID */
+      /** Datacollectiongroupid */
       dataCollectionGroupId?: number | null;
-      /** Parent shipment name */
-      parentShipmentName?: number | null;
+      /** Parentshipmentname */
+      parentShipmentName?: string | null;
+      /** Originsamples */
+      originSamples?: components["schemas"]["SampleOut"][] | null;
+      /** Derivedsamples */
+      derivedSamples?: components["schemas"]["SampleOut"][] | null;
     };
     /** ShipmentChildren */
     ShipmentChildren: {
@@ -749,16 +921,32 @@ export interface components {
       /** Shipmentrequest */
       shipmentRequest?: number | null;
     };
+    /** StatusUpdate */
+    StatusUpdate: {
+      /** Origin Url */
+      origin_url: string;
+      /** Journey Type */
+      journey_type: string;
+      /** Status */
+      status: string;
+      /** Tracking Number */
+      tracking_number: string;
+      /** Pickup Confirmation Code */
+      pickup_confirmation_code?: string | null;
+      /** Pickup Confirmation Timestamp */
+      pickup_confirmation_timestamp: string | null;
+    };
+    /** SublocationAssignment */
+    SublocationAssignment: {
+      /** Sublocation */
+      subLocation: number;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+    };
     /** TopLevelContainerIn */
     TopLevelContainerIn: {
-      /** Status */
-      status?: string | null;
-      /** Capacity */
-      capacity?: number | null;
       /** Details */
       details?: Record<string, never> | null;
-      /** Location */
-      location?: number | null;
       /** Comments */
       comments?: string | null;
       /**
@@ -769,18 +957,17 @@ export interface components {
       /** Type */
       type: string;
       /** Code */
-      code: string;
+      code?: string | null;
+      /**
+       * Isinternal
+       * @default false
+       */
+      isInternal: boolean;
     };
     /** TopLevelContainerOut */
     TopLevelContainerOut: {
-      /** Status */
-      status?: string | null;
-      /** Capacity */
-      capacity?: number | null;
       /** Details */
       details?: Record<string, never> | null;
-      /** Location */
-      location?: number | null;
       /** Comments */
       comments?: string | null;
       /**
@@ -1024,6 +1211,7 @@ export interface operations {
   get_samples_shipments__shipmentId__samples_get: {
     parameters: {
       query?: {
+        ignoreExternal?: boolean;
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
         /** @description Number of results to show */
@@ -1218,6 +1406,141 @@ export interface operations {
       };
     };
   };
+  get_shipping_labels_shipments__shipmentId__tracking_labels_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+          "application/pdf": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_shipment_status_shipments__shipmentId__update_status_post: {
+    parameters: {
+      query: {
+        token: string;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StatusUpdate"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ShipmentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SublocationAssignment"][];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_pdf_report_shipments__shipmentId__pdf_report_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get: {
     parameters: {
       query?: {
@@ -1294,6 +1617,9 @@ export interface operations {
   get_samples_proposals__proposalReference__sessions__visitNumber__samples_get: {
     parameters: {
       query?: {
+        ignoreExternal?: boolean;
+        internalOnly?: boolean;
+        ignoreInternal?: boolean;
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
         /** @description Number of results to show */
@@ -1333,6 +1659,8 @@ export interface operations {
       query?: {
         /** @description Only display containers assigned to internal containers */
         isInternal?: boolean;
+        /** @description Container type to filter by */
+        type?: string;
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
         /** @description Number of results to show */
@@ -1377,6 +1705,42 @@ export interface operations {
       cookie?: never;
     };
     requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SublocationAssignment"][];
+      };
+    };
     responses: {
       /** @description Successful Response */
       200: {
@@ -1449,6 +1813,37 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SampleOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_container_containers__containerId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        containerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
         };
       };
       /** @description Validation Error */
@@ -1645,6 +2040,72 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["Paged_GenericItem_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_orphan_container_internal_containers_containers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ContainerIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_orphan_top_level_container_internal_containers_topLevelContainers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TopLevelContainerIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TopLevelContainerOut"];
         };
       };
       /** @description Validation Error */

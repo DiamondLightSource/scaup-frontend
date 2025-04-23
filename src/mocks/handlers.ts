@@ -4,7 +4,7 @@ import { http, HttpResponse } from "msw";
 export const defaultData = {
   id: 1,
   name: "Shipment",
-  data: {},
+  data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1 },
   children: [
     {
       name: "Dewar",
@@ -93,7 +93,7 @@ export const handlers = [
 
   http.get("http://localhost/api/shipments/:shipmentId/samples", () =>
     HttpResponse.json({
-      items: [{ parent: "Container", id: 1, name: "Sample" }],
+      items: [{ container: "Container", id: 1, name: "Sample" }],
       total: 1,
       limit: 20,
     }),
@@ -122,6 +122,10 @@ export const handlers = [
         total: 1,
         limit: 20,
       }),
+  ),
+
+  http.get("http://localhost/api/containers/:containerId", () =>
+    HttpResponse.json({ name: "Container", id: 1, shipmentId: 1, type: "gridBox" }),
   ),
 
   http.post("http://localhost/api/internal-containers/containers", () =>

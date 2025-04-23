@@ -1,14 +1,6 @@
 "use client";
 import { ItemStepper, TypeCount } from "@/components/navigation/ItemStepper";
-import {
-  selectActiveItem,
-  selectIsEdit,
-  selectIsReview,
-  selectItems,
-  selectUnassigned,
-  setNewActiveItem,
-  syncActiveItem,
-} from "@/features/shipment/shipmentSlice";
+import { selectActiveItem, selectIsEdit, selectIsReview } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { ItemParams } from "@/types/generic";
@@ -46,17 +38,9 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  const currentShipment = useSelector(selectItems);
-  const currentUnassigned = useSelector(selectUnassigned);
-
   useEffect(() => {
     setCurrentStep(getCurrentStepIndex(params.itemType));
-    if (params.itemId !== "new") {
-      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
-    } else {
-      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
-    }
-  }, [params, dispatch, currentShipment, currentUnassigned]);
+  }, [params, dispatch]);
 
   const handleSetStep = useCallback(
     (step: number) => {

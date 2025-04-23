@@ -18,20 +18,20 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import ShipmentHomeContent from "./pageContent";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 import { TwoLineLink } from "@diamondlightsource/ui-components";
 import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
+import { SampleCard } from "@/components/navigation/SampleCard";
 
 export const metadata: Metadata = {
   title: "Sample Collection - Scaup",
 };
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
-  const data = (await getShipmentData(shipmentId)) as components["schemas"]["ShipmentChildren"];
+  const data = await getShipmentData(shipmentId);
   const resSamples = await authenticatedFetch.server(
     `/shipments/${shipmentId}/samples?ignoreExternal=false`,
     {
@@ -39,8 +39,9 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
       next: { tags: ["samples", "shipment"] },
     },
   );
+
   const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
-  const unassignedData = await getShipmentData(shipmentId, "/unassigned");
+  const unassignedData = (await getShipmentData(shipmentId, "/unassigned")) as Record<string, any>;
 
   const hasUnassigned = allItemsEmptyInDict(unassignedData);
 
@@ -54,7 +55,7 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
     counts[pascalToSpace(key)] = value;
   }
 
-  let samples = [];
+  let samples: components["schemas"]["SampleOut"][] = [];
   if (resSamples.status === 200) {
     samples = (await resSamples.json()).items;
   }
@@ -106,7 +107,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </Stat>
             ))}
           </HStack>
-          <HStack w='100%' mt='1em' alignItems='start' gap='3em'>
+          <HStack w='100%' mt='1em' alignItems='start' gap='3em' flexWrap='wrap'>
             <VStack alignItems='start' flex='1 0 0'>
               <HStack w='100%'>
                 <Heading size='lg'>Samples</Heading>
@@ -116,12 +117,12 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 </Button>
               </HStack>
               <Divider borderColor='gray.800' />
-              <HStack w='100%' alignItems='start'>
-                <ShipmentHomeContent
-                  data={shipmentData}
-                  params={params}
-                  patoUrl={process.env.PATO_URL!}
-                />
+              <HStack w='100%' alignItems='start' flexWrap='wrap'>
+                <VStack w='75%' my='20px' flex='1 0 0' h='22em' overflowY='scroll'>
+                  {shipmentData.samples.map((sample) => (
+                    <SampleCard key={sample.id} sample={sample} params={params} />
+                  ))}
+                </VStack>
                 {isStaff && shipmentData.samples && <Cassette samples={shipmentData.samples} />}
               </HStack>
 
@@ -141,7 +142,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 </Heading>
               )}
             </VStack>
-            <VStack alignItems='start'>
+            <VStack alignItems='start' minW='200px'>
               <Heading size='lg'>Actions</Heading>
               <TwoLineLink
                 title='Edit Sample Collection'

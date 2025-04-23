@@ -1,18 +1,24 @@
 "use client";
 import { ItemForm } from "@/components/input/form/ItemForm";
 import { TreeData } from "@/components/visualisation/treeView";
-import { selectActiveItem, selectIsEdit } from "@/features/shipment/shipmentSlice";
+import {
+  selectActiveItem,
+  selectIsEdit,
+  setNewActiveItem,
+  syncActiveItem,
+} from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, separateDetails, steps } from "@/mappings/pages";
 import { ItemFormPageContentProps } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProps) => {
+const ItemFormPageContent = ({ params, prepopData }: ItemFormPageContentProps) => {
   const toast = useToast();
+  const dispatch = useDispatch();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
@@ -21,6 +27,14 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
   const router = useRouter();
 
   const activeIsEdit = useSelector(selectIsEdit);
+
+  useEffect(() => {
+    if (params.itemId !== "new") {
+      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
+    } else {
+      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
+    }
+  }, [dispatch]);
 
   const onSubmit = useCallback(
     async (info: FieldValues) => {
@@ -36,7 +50,7 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         };
 
         let newItem = await Item.create(
-          shipmentId,
+          params.shipmentId,
           separateDetails(info, activeStep.endpoint),
           activeStep.endpoint,
         );
@@ -61,12 +75,12 @@ const ItemFormPageContent = ({ shipmentId, prepopData }: ItemFormPageContentProp
         router.replace(`../../${info.type}/${activeItem!.id}/edit`, { scroll: false });
       }
     },
-    [router, toast, activeIsEdit, activeItem, shipmentId, activeStep],
+    [router, toast, activeIsEdit, activeItem, params.shipmentId, activeStep],
   );
 
   return (
     <ItemForm
-      parentId={shipmentId}
+      parentId={params.shipmentId}
       parentType='shipment'
       prepopData={prepopData}
       onSubmit={onSubmit}

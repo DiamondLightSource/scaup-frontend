@@ -4,7 +4,7 @@ import { BaseShipmentItem } from "@/mappings/pages";
 import { ModalProps } from "@chakra-ui/react";
 
 export interface ItemFormPageContentProps {
-  shipmentId: string;
+  params: ItemParams;
   prepopData: Record<string, any>;
 }
 
@@ -60,6 +60,10 @@ export interface InventoryItemParams {
   itemType: string;
   itemId: string;
   topLevelContainerId: string;
+}
+
+export interface ContainerParams {
+  containerId: number;
 }
 
 export type RootParentType = "shipment" | "topLevelContainer";

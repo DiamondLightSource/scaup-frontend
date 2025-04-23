@@ -1,7 +1,7 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
-import { Divider, HStack, Heading, Link, Tag, Text, VStack } from "@chakra-ui/react";
+import { Divider, HStack, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -52,7 +52,6 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                 <Heading flex='1 0 0' size='md'>
                   {tlc.name ?? "Unnamed Dewar"}
                 </Heading>
-                <Tag colorScheme={tlc.status ? "green" : "gray"}>{tlc.status ?? "Unknown"}</Tag>
                 <Link href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
                   Request Return
                 </Link>
