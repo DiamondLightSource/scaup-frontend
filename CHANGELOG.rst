@@ -1,6 +1,13 @@
 ==========
 Changelog
 ==========
++++++++++
+v0.12.0 (25/04/2025)
++++++++++
+
+**Added**
+
+- Display ancestors/descendants of samples
 
 +++++++++
 v0.11.0 (17/04/2025)
