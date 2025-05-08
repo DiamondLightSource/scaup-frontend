@@ -1,6 +1,15 @@
 ==========
 Changelog
 ==========
+
++++++++++
+v0.13.0 (08/05/2025)
++++++++++
+
+**Added**
+
+- Include warning for international shipments before shipping
+
 +++++++++
 v0.12.0 (25/04/2025)
 +++++++++
