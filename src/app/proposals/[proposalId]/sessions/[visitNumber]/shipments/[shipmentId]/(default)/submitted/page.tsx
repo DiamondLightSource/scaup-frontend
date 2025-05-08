@@ -86,6 +86,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               <Heading alignSelf='start'>Contents</Heading>
               <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
             </VStack>
+
             <Text fontSize='18px' mt='1em'>
               If you <b>do not plan to use Diamond&#39;s own courier</b> (DHL, on Diamond&#39;s
               account), you <b>do not need to arrange shipping</b> through Diamond. When using your
@@ -104,12 +105,21 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               >
                 sample collection summary page
               </Link>
-              . You will be automatically redirected to that page once you finish setting up shipping.
+              . You will be automatically redirected to that page once you finish setting up
+              shipping.
             </Text>
             <Text fontSize='18px'>
               Tracking labels <b>must</b> be securely affixed to the outside of both dewars and
               dewar cases, even if using your own courier.
             </Text>
+            <Alert status='info' variant='info'>
+              <AlertIcon />
+              <AlertDescription>
+                If your shipment originates from outside the UK, and you plan to ship through
+                Diamond, email eBIC support at{" "}
+                <Link href={`mailto:${process.env.CONTACT_EMAIL}`}>{process.env.CONTACT_EMAIL}</Link>
+              </AlertDescription>
+            </Alert>
             <HStack>
               <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
               <Button
