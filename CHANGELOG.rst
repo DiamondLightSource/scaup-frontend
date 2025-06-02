@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v0.13.1 (02/06/2025)
++++++++++
+
+**Fixed**
+
+- Docker image now uses UID for user
+- Links to API resources now use a frontend-friendly link
+
++++++++++
 v0.13.0 (08/05/2025)
 +++++++++
 
