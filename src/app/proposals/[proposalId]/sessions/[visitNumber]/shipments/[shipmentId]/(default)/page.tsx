@@ -172,7 +172,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Print Contents as Tables'
-                href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/pdf-report`}
+                href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/pdf-report`}
               >
                 View contents in a printable tabled format
               </TwoLineLink>

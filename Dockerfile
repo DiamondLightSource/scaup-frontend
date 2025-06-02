@@ -54,7 +54,8 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-USER nextjs
+# Must be number so that runAsNonRoot check can complete
+USER 1001
 
 EXPOSE 3000
 

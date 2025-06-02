@@ -124,7 +124,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
               <Button
                 as={Link}
-                href={`${process.env.SERVER_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
+                href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
               >
                 Print Tracking Labels
               </Button>
