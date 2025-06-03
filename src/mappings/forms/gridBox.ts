@@ -39,6 +39,7 @@ export const gridBoxForm = [
     label: "Keep gridbox at facility for future use",
     hint: "Please inform lab contact",
     type: "checkbox",
+    isDisabled: true,
   },
   {
     id: "comments",

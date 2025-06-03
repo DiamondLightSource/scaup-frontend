@@ -117,7 +117,9 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               <AlertDescription>
                 If your shipment originates from outside the UK, and you plan to ship through
                 Diamond, email eBIC support at{" "}
-                <Link href={`mailto:${process.env.CONTACT_EMAIL}`}>{process.env.CONTACT_EMAIL}</Link>
+                <Link href={`mailto:${process.env.CONTACT_EMAIL}`}>
+                  {process.env.CONTACT_EMAIL}
+                </Link>
               </AlertDescription>
             </Alert>
             <HStack>

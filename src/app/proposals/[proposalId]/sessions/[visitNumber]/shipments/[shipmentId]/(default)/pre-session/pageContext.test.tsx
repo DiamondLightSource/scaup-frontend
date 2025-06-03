@@ -23,6 +23,25 @@ const preloadedState = {
   },
 };
 
+/**
+ * Fill in required fields and press the finish button
+ */
+const fillInFormAndSubmit = () => {
+  fireEvent.change(screen.getByRole("textbox", { name: "Pixel Size (Å)" }), {
+    target: { value: "1" },
+  });
+  fireEvent.change(screen.getByRole("textbox", { name: "Total Dose (e-/Å)" }), {
+    target: { value: "1" },
+  });
+  fireEvent.change(screen.getByRole("textbox", { name: "Dose per Frame (e-/Å)" }), {
+    target: { value: "1" },
+  });
+
+  const finishButton = screen.getByText("Finish");
+
+  fireEvent.click(finishButton);
+};
+
 describe("Item Page Layout", () => {
   it("should not redirect if shipment submission fails", async () => {
     server.use(
@@ -39,9 +58,7 @@ describe("Item Page Layout", () => {
       preloadedState,
     });
 
-    const finishButton = screen.getByText("Finish");
-
-    fireEvent.click(finishButton);
+    fillInFormAndSubmit();
 
     await waitFor(() => expect(toastMock).toHaveBeenCalled());
     expect(mockRouter.pathname).not.toBe("/pre-session");
@@ -62,9 +79,7 @@ describe("Item Page Layout", () => {
       preloadedState,
     });
 
-    const finishButton = screen.getByText("Finish");
-
-    fireEvent.click(finishButton);
+    fillInFormAndSubmit();
 
     await waitFor(() => expect(toastMock).toHaveBeenCalled());
     expect(mockRouter.pathname).not.toBe("/pre-session");
@@ -82,9 +97,7 @@ describe("Item Page Layout", () => {
       },
     });
 
-    const finishButton = screen.getByText("Finish");
-
-    fireEvent.click(finishButton);
+    fillInFormAndSubmit();
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/submitted"));
   });
@@ -115,9 +128,7 @@ describe("Item Page Layout", () => {
       },
     );
 
-    const finishButton = screen.getByText("Finish");
-
-    fireEvent.click(finishButton);
+    fillInFormAndSubmit();
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/submitted"));
   });
