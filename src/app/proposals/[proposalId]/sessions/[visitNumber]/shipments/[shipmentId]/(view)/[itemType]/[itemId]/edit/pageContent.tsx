@@ -4,6 +4,7 @@ import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
+  selectItems,
   setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
@@ -20,6 +21,7 @@ const ItemFormPageContent = ({ params, prepopData }: ItemFormPageContentProps) =
   const toast = useToast();
   const dispatch = useDispatch();
   const activeItem = useSelector(selectActiveItem);
+  const activeShipment = useSelector(selectItems);
   const activeStep = useMemo(
     () => steps[getCurrentStepIndex(activeItem ? activeItem.data.type : "sample")],
     [activeItem],
@@ -34,7 +36,8 @@ const ItemFormPageContent = ({ params, prepopData }: ItemFormPageContentProps) =
     } else {
       dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
     }
-  }, [dispatch]);
+  }, [dispatch, params.itemId, params.itemType, activeShipment]);
+  // Keep activeShipment as a dependency - in case the shipment is updated by something else
 
   const onSubmit = useCallback(
     async (info: FieldValues) => {
