@@ -70,6 +70,13 @@ describe("Dynamic Form Field", () => {
     renderWithForm(<DynamicFormInput type='text' id='1' label='Test' isDisabled={true} />);
     expect(screen.getByRole("textbox")).toHaveAttribute("disabled");
   });
+
+  it("should display asterisk if field is required", () => {
+    renderWithForm(
+      <DynamicFormInput type='text' id='1' label='Test' validation={{ required: true }} />,
+    );
+    expect(screen.getByText("*")).toBeInTheDocument();
+  });
 });
 
 describe("Indicator Provider", () => {

@@ -38,16 +38,25 @@ export const preSessionForm = [
     label: "Pixel Size (Å)",
     hint: "Please refer to the latest instrument calibrated pixel sizes on the eBIC website",
     type: "text",
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "totalDose",
     label: "Total Dose (e-/Å)",
     type: "text",
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "dosePerFrame",
     label: "Dose per Frame (e-/Å)",
     type: "text",
+    validation: {
+      required: "Required",
+    },
   },
 
   {

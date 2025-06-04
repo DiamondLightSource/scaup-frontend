@@ -166,7 +166,11 @@ export const DynamicFormInput = ({
   }
 
   return (
-    <FormControl isInvalid={!!errors[id]}>
+    <FormControl
+      isInvalid={!!errors[id]}
+      isRequired={!!validation?.required}
+      isDisabled={isDisabled}
+    >
       {type !== "checkbox" && (
         <>
           <FormLabel fontWeight='600' fontSize='18px' mb='0' htmlFor={id}>
