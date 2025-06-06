@@ -79,7 +79,22 @@ export const handlers = [
 
   http.get("http://localhost/api/shipments/:shipmentId/topLevelContainers", () =>
     HttpResponse.json({
-      items: [{ externalId: 1, status: "Booked", id: 1, name: "Dewar-001" }],
+      items: [
+        {
+          externalId: 1,
+          status: "Booked",
+          id: 1,
+          name: "Dewar-001",
+          history: [
+            {
+              storageLocation: "m01",
+              dewarId: 1,
+              dewarStatus: "opened",
+              arrivalDate: "2025-01-01T00:00:00Z",
+            },
+          ],
+        },
+      ],
       total: 1,
       limit: 20,
     }),

@@ -55,8 +55,8 @@ export interface paths {
     put?: never;
     /**
      * Push Shipment
-     * @description Push shipment to ISPyB. Unassigned items (such as a container with no parent top level
-     *     container) are ignored.
+     * @description Push shipment to ISPyB. Unassigned containers (such as a container with no parent top level
+     *     container) are ignored. Unassigned samples are pushed to ISPyB.
      */
     post: operations["push_shipment_shipments__shipmentId__push_post"];
     delete?: never;
@@ -648,33 +648,6 @@ export interface components {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
     };
-    /** MixedShipment */
-    MixedShipment: {
-      /** Id */
-      id: number;
-      /** Proposalcode */
-      proposalCode: string;
-      /** Proposalnumber */
-      proposalNumber: number;
-      /** Visitnumber */
-      visitNumber: number;
-      /** Name */
-      name: string;
-      /** Comments */
-      comments?: string | null;
-      /** Creationdate */
-      creationDate: string | null;
-      /** Status */
-      status?: string | null;
-      /** Shipmentrequest */
-      shipmentRequest?: number | null;
-      /**
-       * Creationstatus
-       * @default draft
-       * @enum {string}
-       */
-      creationStatus: "draft" | "submitted";
-    };
     /** OptionalContainer */
     OptionalContainer: {
       /** Toplevelcontainerid */
@@ -774,10 +747,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[MixedShipment] */
-    Paged_MixedShipment_: {
+    /** Paged[SampleOut] */
+    Paged_SampleOut_: {
       /** Items */
-      items: components["schemas"]["MixedShipment"][];
+      items: components["schemas"]["SampleOut"][];
       /** Total */
       total: number;
       /** Page */
@@ -785,10 +758,10 @@ export interface components {
       /** Limit */
       limit: number;
     };
-    /** Paged[SampleOut] */
-    Paged_SampleOut_: {
+    /** Paged[ShipmentOut] */
+    Paged_ShipmentOut_: {
       /** Items */
-      items: components["schemas"]["SampleOut"][];
+      items: components["schemas"]["ShipmentOut"][];
       /** Total */
       total: number;
       /** Page */
@@ -881,6 +854,8 @@ export interface components {
       originSamples?: components["schemas"]["SampleOut"][] | null;
       /** Derivedsamples */
       derivedSamples?: components["schemas"]["SampleOut"][] | null;
+      /** Externalid */
+      externalId?: number | null;
     };
     /** ShipmentChildren */
     ShipmentChildren: {
@@ -920,6 +895,13 @@ export interface components {
       status?: string | null;
       /** Shipmentrequest */
       shipmentRequest?: number | null;
+      /**
+       * Laststatusupdate
+       * Format: date-time
+       */
+      lastStatusUpdate: string;
+      /** Externalid */
+      externalId?: number | null;
     };
     /** StatusUpdate */
     StatusUpdate: {
@@ -942,6 +924,17 @@ export interface components {
       subLocation: number;
       /** Datacollectiongroupid */
       dataCollectionGroupId: number;
+    };
+    /** TopLevelContainerHistory */
+    TopLevelContainerHistory: {
+      /** Storagelocation */
+      storageLocation?: string | null;
+      /** Dewarid */
+      dewarId: number;
+      /** Dewarstatus */
+      dewarStatus: string;
+      /** Arrivaldate */
+      arrivalDate?: string | null;
     };
     /** TopLevelContainerIn */
     TopLevelContainerIn: {
@@ -981,6 +974,13 @@ export interface components {
       type: string;
       /** Externalid */
       externalId?: number | null;
+      /**
+       * Barcode
+       * Format: uuid
+       */
+      barCode: string;
+      /** History */
+      history?: components["schemas"]["TopLevelContainerHistory"][] | null;
     };
     /** UnassignedItems */
     UnassignedItems: {
@@ -1011,7 +1011,10 @@ export type $defs = Record<string, never>;
 export interface operations {
   get_shipment_shipments__shipmentId__get: {
     parameters: {
-      query?: never;
+      query?: {
+        /** @description Whether to get children as part of the request */
+        getChildren?: boolean;
+      };
       header?: never;
       path: {
         shipmentId: number;
@@ -1564,7 +1567,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["Paged_MixedShipment_"];
+          "application/json": components["schemas"]["Paged_ShipmentOut_"];
         };
       };
       /** @description Validation Error */

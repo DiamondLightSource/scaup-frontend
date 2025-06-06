@@ -11,12 +11,13 @@ export const getShipmentData = async (
   shipmentId: string,
   suffix: string = "",
   parentType: RootParentType = "shipment",
+  getChildren: boolean = true,
 ) => {
   const res = await authenticatedFetch.server(
-    `/${parentTypeToEndpoint[parentType]}/${shipmentId}${suffix}`,
+    `/${parentTypeToEndpoint[parentType]}/${shipmentId}${suffix}?getChildren=${getChildren}`,
     {
       cache: "force-cache",
-      next: { tags: ["shipment"] },
+      next: { tags: [getChildren ? "shipment" : "childless-shipment"] },
     },
   );
 

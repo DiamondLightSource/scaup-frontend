@@ -135,3 +135,13 @@ export const parseNetworkError = (response?: Record<string, any>) => {
   }
   return details;
 };
+
+/**
+ * Take ISO6801 date and format it into a human readable format
+ * @param dateString Original date string
+ * @returns Human readable date string
+ */
+export const formatDate = (dateString: string) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleString("en-GB");
+};
