@@ -88,7 +88,7 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                     <Heading size='md'>Transport History</Heading>
                     <Box w='100%' overflowY='scroll' h='20em' p='1em'>
                       {tlc.history ? (
-                        <Stepper index={0} orientation='vertical' height='400px' gap='0' size='sm'>
+                        <Stepper index={0} orientation='vertical' maxH="400px" gap='0' size='sm'>
                           {tlc.history.map((item, index) => (
                             <Step key={index}>
                               <StepIndicator
