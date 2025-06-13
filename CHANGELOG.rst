@@ -3,6 +3,19 @@ Changelog
 ==========
 
 +++++++++
+v0.14.0 (13/06/2025)
++++++++++
+
+**Added**
+
+- Display dewar history
+- Display asterisk for required fields
+
+**Fixed**
+
+- Fixed shipments not being updated
+
++++++++++
 v0.13.1 (02/06/2025)
 +++++++++
 
