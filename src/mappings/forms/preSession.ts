@@ -29,6 +29,49 @@ export const preSessionForm = [
     ],
   },
   {
+    id: "sessionSetupSeparator",
+    label: "Session Setup",
+    type: "separator",
+  },
+  {
+    id: "useTomoEpu",
+    label: "Use Tomo or EPU?",
+    type: "dropdown",
+    values: [
+      {
+        label: "Tomo",
+        value: "Tomo",
+      },
+      {
+        label: "EPU",
+        value: "EPU",
+      },
+    ],
+  },
+  {
+    id: "experimentType",
+    label: "Experiment Type",
+    type: "dropdown",
+    values: [
+      {
+        label: "3D-ED",
+        value: "3D-ED",
+      },
+      {
+        label: "Tomography",
+        value: "Tomography",
+      },
+      {
+        label: "Lamellaetomography",
+        value: "Lamellaetomography",
+      },
+      {
+        label: "Single Particle Analysis",
+        value: "Single Particle Analysis",
+      },
+    ],
+  },
+  {
     id: "imagingSeparator",
     label: "Imaging Conditions",
     type: "separator",
@@ -85,49 +128,6 @@ export const preSessionForm = [
     id: "tiltScheme",
     label: "Preferred Tilt Scheme",
     type: "text",
-  },
-  {
-    id: "sessionSetupSeparator",
-    label: "Session Setup",
-    type: "separator",
-  },
-  {
-    id: "useTomoEpu",
-    label: "Use Tomo or EPU?",
-    type: "dropdown",
-    values: [
-      {
-        label: "Tomo",
-        value: "Tomo",
-      },
-      {
-        label: "EPU",
-        value: "EPU",
-      },
-    ],
-  },
-  {
-    id: "experimentType",
-    label: "Experiment Type",
-    type: "dropdown",
-    values: [
-      {
-        label: "3D-ED",
-        value: "3D-ED",
-      },
-      {
-        label: "Tomography",
-        value: "Tomography",
-      },
-      {
-        label: "Lamellaetomography",
-        value: "Lamellaetomography",
-      },
-      {
-        label: "Single Particle Analysis",
-        value: "Single Particle Analysis",
-      },
-    ],
   },
   {
     id: "comments",

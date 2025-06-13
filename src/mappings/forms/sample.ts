@@ -44,17 +44,11 @@ export const sampleForm = [
     id: "buffer",
     label: "Buffer",
     type: "text",
-    validation: {
-      required: "Required",
-    },
   },
   {
     id: "concentration",
     label: "Concentration (mg/ml)",
     type: "text",
-    validation: {
-      required: "Required",
-    },
   },
   {
     id: "grid-separator",

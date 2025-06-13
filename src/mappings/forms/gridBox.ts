@@ -15,13 +15,14 @@ export const gridBoxForm = [
   {
     id: "subType",
     label: "Type",
+    hint: "Please select the closest type to the one you're using",
     type: "dropdown",
     values: [
+      { label: "Auto Grid Box", value: "auto" },
       { label: "1", value: "1" },
       { label: "2", value: "2" },
       { label: "3", value: "3" },
       { label: "4", value: "4" },
-      { label: "Auto", value: "auto" },
     ],
     watch: true,
   },
@@ -44,7 +45,7 @@ export const gridBoxForm = [
   {
     id: "comments",
     label: "Comments",
-    hint: "General comments, such as 'gridbox requires special tools to open'",
+    hint: "General comments, such as direction c-clip is facing respective to notch",
     type: "textarea",
   },
 ] as DynamicFormEntry[];
