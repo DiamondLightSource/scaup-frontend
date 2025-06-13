@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
-  const data = await getShipmentData(shipmentId);
+  const data = await getShipmentData(shipmentId, "", "shipment", false);
   const resSamples = await authenticatedFetch.server(
     `/shipments/${shipmentId}/samples?ignoreExternal=false`,
     {
@@ -108,7 +108,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
             ))}
           </HStack>
           <HStack w='100%' mt='1em' alignItems='start' gap='3em' flexWrap='wrap'>
-            <VStack alignItems='start' flex='1 0 0'>
+            <VStack alignItems='start' flex='1 0 600px'>
               <HStack w='100%'>
                 <Heading size='lg'>Samples</Heading>
                 <Spacer />
@@ -142,7 +142,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 </Heading>
               )}
             </VStack>
-            <VStack alignItems='start' minW='200px'>
+            <VStack alignItems='start' maxW='400px'>
               <Heading size='lg'>Actions</Heading>
               <TwoLineLink
                 title='Edit Sample Collection'
@@ -194,8 +194,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               >
                 Book pickup with courier or print tracking labels
               </TwoLineLink>
-              <TwoLineLink title='Request Return' href={`${params.shipmentId}/returns`}>
-                Ask for dewars to be returned to your facility
+              <TwoLineLink
+                title='Manage Dewar Logistics'
+                href={`${params.shipmentId}/dewar-logistics`}
+              >
+                View tracking history or ask for dewars to be returned to your facility
               </TwoLineLink>
             </VStack>
           </HStack>

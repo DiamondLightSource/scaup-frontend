@@ -57,7 +57,7 @@ describe("Proposal Page Content", () => {
     server.use(
       http.get(
         "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
-        () => HttpResponse.json({ items: [{ ...baseShipment, creationStatus: "submitted" }] }),
+        () => HttpResponse.json({ items: [{ ...baseShipment, externalId: 1 }] }),
       ),
     );
 
@@ -69,7 +69,7 @@ describe("Proposal Page Content", () => {
     server.use(
       http.get(
         "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
-        () => HttpResponse.json({ items: [{ ...baseShipment, creationStatus: "draft" }] }),
+        () => HttpResponse.json({ items: [{ ...baseShipment }] }),
       ),
     );
 

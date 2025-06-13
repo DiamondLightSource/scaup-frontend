@@ -21,6 +21,18 @@ export const metadata: Metadata = {
   title: "Session - Scaup",
 };
 
+const VALID_SHIPMENT_STATUSES: Record<string, string> = {
+  "at facility": "green",
+  "awb created": "purple",
+  "dispatch-requested": "purple",
+  opened: "green",
+  "pickup booked": "purple",
+  "pickup cancelled": "red",
+  processing: "green",
+  "sent to facility": "green",
+  "transfer-requested": "purple",
+};
+
 const getShipments = async (proposalId: string, visitNumber: string) => {
   const res = await authenticatedFetch.server(
     `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
@@ -34,10 +46,25 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
   return null;
 };
 
+const getShipmentStatus = (shipment: components["schemas"]["ShipmentOut"]) => {
+  if (shipment.status === null || shipment.status === undefined) {
+    const creationStatus = shipment.externalId ? "Submitted" : "Draft";
+    return {
+      colour: creationStatus === "Submitted" ? "green" : "gray",
+      statusText: creationStatus,
+    };
+  }
+
+  return {
+    colour: VALID_SHIPMENT_STATUSES[shipment.status] || "gray",
+    statusText: shipment.status,
+  };
+};
+
 const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
   const params = await props.params;
   const data = (await getShipments(params.proposalId, params.visitNumber)) as
-    | components["schemas"]["MixedShipment"][]
+    | components["schemas"]["ShipmentOut"][]
     | null;
 
   return (
@@ -83,10 +110,8 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
                       cursor='pointer'
                     >
                       <StatLabel>
-                        <Tag
-                          colorScheme={shipment.creationStatus === "submitted" ? "green" : "gray"}
-                        >
-                          {shipment.creationStatus === "submitted" ? "Submitted" : "Draft"}
+                        <Tag colorScheme={getShipmentStatus(shipment).colour}>
+                          {getShipmentStatus(shipment).statusText}
                         </Tag>
                       </StatLabel>
                       <StatNumber>
