@@ -159,4 +159,21 @@ describe("Child Selector", () => {
 
     expect(screen.getByText("selectable-child")).toBeInTheDocument();
   });
+
+  it("should display details if child is sample", () => {
+    renderWithProviders(
+      <ChildSelector
+        childrenType='sample'
+        isOpen={true}
+        onClose={() => {}}
+        selectableChildren={[
+          { id: 1, name: "selectable-child", data: { type: "Sample", concentration: 123 } },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("selectable-child")).toBeInTheDocument();
+    expect(screen.getByText("Concentration:")).toBeInTheDocument();
+    expect(screen.getByText("123")).toBeInTheDocument();
+  });
 });

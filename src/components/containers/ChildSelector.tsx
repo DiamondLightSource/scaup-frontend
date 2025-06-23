@@ -8,6 +8,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Divider,
+  Grid,
   HStack,
   Heading,
   Modal,
@@ -28,6 +29,67 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+interface ChildItemDetailsProps {
+  childType: string;
+  childData: TreeData<BaseShipmentItem>;
+  childId: number;
+  hasCheckbox?: boolean;
+}
+
+interface ChildItemDetailsFieldProps {
+  value?: number | string | null;
+  label: string;
+  measurementUnit?: string;
+}
+
+const ChildItemDetailsField = ({ value, label, measurementUnit }: ChildItemDetailsFieldProps) => (
+  <HStack w='100%' color='#686464'>
+    <Text w='140px' fontWeight='800'>
+      {label}:
+    </Text>
+    <Text>{value || "?"}</Text>
+    {value && <Text>{measurementUnit}</Text>}
+  </HStack>
+);
+
+const ChildItemDetails = ({
+  childType,
+  childData,
+  childId,
+  hasCheckbox = false,
+}: ChildItemDetailsProps) => (
+  <VStack w='100%' key={childId} borderBottom='1px solid' borderColor='diamond.200' py='10px'>
+    <HStack w='100%'>
+      <Stat>
+        <StatLabel>{childType}</StatLabel>
+        <StatNumber>{childData.name}</StatNumber>
+        {childType === "Sample" && (
+          <Grid w='100%' gap='0' templateColumns='repeat(2, 1fr)' mt='10px'>
+            <ChildItemDetailsField
+              label='Concentration'
+              value={childData.data.concentration}
+              measurementUnit='mg/ml'
+            />
+            <ChildItemDetailsField label='Buffer' value={childData.data.buffer} />
+            <ChildItemDetailsField
+              label='Support Material'
+              value={childData.data.supportMaterial}
+            />
+            <ChildItemDetailsField label='Foil' value={childData.data.foil} />
+            <ChildItemDetailsField label='Mesh' value={childData.data.mesh} />
+            <ChildItemDetailsField label='Hole Diameter' value={childData.data.hole} />
+          </Grid>
+        )}
+      </Stat>
+      {hasCheckbox ? (
+        <Checkbox value={childId.toString()} size='lg' />
+      ) : (
+        <Radio borderColor='black' value={childId.toString()} size='lg' />
+      )}
+    </HStack>
+  </VStack>
+);
 
 export const ChildSelector = ({
   selectedItem,
@@ -136,48 +198,31 @@ export const ChildSelector = ({
             </Box>
           )}
           {!readOnly && (
-            <>
+            <VStack w='100%'>
               {unassignedItems && unassignedItems.length > 0 ? (
                 acceptMultiple ? (
-                  <VStack>
-                    <CheckboxGroup onChange={(values) => setSelectedItems(values.map(Number))}>
-                      {unassignedItems.map((item, i) => (
-                        <HStack
-                          w='100%'
-                          key={item.id}
-                          borderBottom='1px solid'
-                          borderColor='diamond.200'
-                          py='10px'
-                        >
-                          <Stat>
-                            <StatLabel>{childrenTypeData.data.singular}</StatLabel>
-                            <StatNumber>{item.name}</StatNumber>
-                          </Stat>
-                          <Checkbox value={i.toString()} size='lg' />
-                        </HStack>
-                      ))}
-                    </CheckboxGroup>
-                  </VStack>
+                  <CheckboxGroup onChange={(values) => setSelectedItems(values.map(Number))}>
+                    {unassignedItems.map((item, i) => (
+                      <ChildItemDetails
+                        key={i}
+                        childType={childrenTypeData.data.singular}
+                        childData={item}
+                        childId={i}
+                        hasCheckbox={true}
+                      />
+                    ))}
+                  </CheckboxGroup>
                 ) : (
-                  <VStack w='100%'>
-                    <RadioGroup w='100%' onChange={(index) => setSelectedItems([Number(index)])}>
-                      {unassignedItems.map((item, i) => (
-                        <HStack
-                          w='100%'
-                          key={item.id}
-                          borderBottom='1px solid'
-                          borderColor='diamond.200'
-                          py='10px'
-                        >
-                          <Stat>
-                            <StatLabel>{childrenTypeData.data.singular}</StatLabel>
-                            <StatNumber>{item.name}</StatNumber>
-                          </Stat>
-                          <Radio borderColor='black' value={i.toString()} size='lg' />
-                        </HStack>
-                      ))}
-                    </RadioGroup>
-                  </VStack>
+                  <RadioGroup w='100%' onChange={(index) => setSelectedItems([Number(index)])}>
+                    {unassignedItems.map((item, i) => (
+                      <ChildItemDetails
+                        key={i}
+                        childType={childrenTypeData.data.singular}
+                        childData={item}
+                        childId={i}
+                      />
+                    ))}
+                  </RadioGroup>
                 )
               ) : (
                 <Text py='2' color='gray.600'>
@@ -186,7 +231,7 @@ export const ChildSelector = ({
                   {childrenTypeData.data.singular.toLowerCase()} from its container.
                 </Text>
               )}
-            </>
+            </VStack>
           )}
         </ModalBody>
         <ModalFooter>
