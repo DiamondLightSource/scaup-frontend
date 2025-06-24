@@ -12,6 +12,7 @@ import {
   Button,
   useDisclosure,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -76,7 +77,11 @@ export const ArrangeShipmentButton = ({
               Arrange Shipping
             </AlertDialogHeader>
             <AlertDialogBody>
-              Are you sure? You can&apos;t undo this action afterwards.
+              <Text>Are you sure? You can&apos;t undo this action afterwards.</Text>
+              <Text mt="10px">
+                This will book a shipment through Diamond&apos;s DHL account, do not proceed if
+                you&apos;re shipping internationally or with other couriers.
+              </Text>
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
