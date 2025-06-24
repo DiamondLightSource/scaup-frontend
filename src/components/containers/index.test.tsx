@@ -96,4 +96,15 @@ describe("Container Child Location Manager", () => {
 
     expect(Item.patch).not.toHaveBeenCalled();
   });
+
+  it("should not redirect if parent does not exist and couldn't be autocreated", async () => {
+    vi.mocked(Item.create).mockReturnValueOnce(new Promise(() => null));
+    const setLocation = generateHook(
+      { parentId: "1" },
+      { preloadedState: { shipment: { ...initialState, activeItem: puck, isEdit: true } } },
+    );
+    await setLocation(1, { id: 1, data: { type: "puck" }, name: "puck" }, 1);
+
+    expect(Item.patch).not.toHaveBeenCalled();
+  });
 });
