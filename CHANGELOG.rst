@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.15.0 (24/06/2025)
++++++++++
+
+**Added**
+
+- Sample information is now displayed in sample selection dialogue for grid box slots
+
++++++++++
 v0.14.0 (13/06/2025)
 +++++++++
 

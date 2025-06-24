@@ -86,6 +86,11 @@ export const useChildLocationManager = ({
           parent,
           parentType,
         );
+
+        if (!receivedItem) {
+          return;
+        }
+
         newItem = Array.isArray(receivedItem) ? receivedItem[0] : receivedItem;
         actualContainerId = newItem.id;
       } else {
