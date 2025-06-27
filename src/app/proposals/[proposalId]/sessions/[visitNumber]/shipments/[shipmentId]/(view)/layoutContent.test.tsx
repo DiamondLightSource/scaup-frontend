@@ -18,7 +18,7 @@ const defaultUnassigned = structuredClone(initialState.unassigned);
 defaultUnassigned[0].children![getCurrentStepIndex("sample")].children!.push(sample);
 
 describe("Sample Collection Layout", () => {
-  it("should render proposal name as heading", () => {
+  it("should render proposal name and session as heading", () => {
     renderWithProviders(
       <ShipmentLayoutContent
         shipmentData={null}
@@ -29,7 +29,7 @@ describe("Sample Collection Layout", () => {
       </ShipmentLayoutContent>,
     );
 
-    const proposalHeading = screen.getByText(/cm0001/i);
+    const proposalHeading = screen.getByText(/cm0001-1/i);
 
     expect(proposalHeading).toBeInTheDocument();
   });

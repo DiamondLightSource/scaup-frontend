@@ -78,7 +78,7 @@ const ShipmentsLayoutContent = ({
         <ShipmentOverview
           readOnly={isReview}
           onActiveChanged={handleActiveChanged}
-          title={params.proposalId}
+          title={`${params.proposalId}-${params.visitNumber}`}
         />
       </VStack>
     </Grid>
