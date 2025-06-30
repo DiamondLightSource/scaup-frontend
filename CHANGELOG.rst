@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v0.15.1 (30/06/2025)
++++++++++
+
+**Changed**
+
+- Update heading names
+- Display session number in shipment overview
+
++++++++++
 v0.15.0 (24/06/2025)
 +++++++++
 
