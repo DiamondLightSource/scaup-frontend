@@ -78,7 +78,7 @@ export const ArrangeShipmentButton = ({
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text>Are you sure? You can&apos;t undo this action afterwards.</Text>
-              <Text mt="10px">
+              <Text mt='10px'>
                 This will book a shipment through Diamond&apos;s DHL account, do not proceed if
                 you&apos;re shipping internationally or with other couriers.
               </Text>

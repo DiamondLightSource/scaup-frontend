@@ -73,7 +73,7 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
         <Heading size='md' color='gray.600'>
           {params.proposalId}-{params.visitNumber}
         </Heading>
-        <Heading>Session Sample Collections</Heading>
+        <Heading>Session Samples Dashboard</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       {data === null ? (

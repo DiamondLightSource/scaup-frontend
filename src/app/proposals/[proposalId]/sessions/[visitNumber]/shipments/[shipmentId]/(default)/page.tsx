@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
-  const data = await getShipmentData(shipmentId, "", "shipment", false);
+  const data = await getShipmentData(shipmentId, "", "shipment", true);
   const resSamples = await authenticatedFetch.server(
     `/shipments/${shipmentId}/samples?ignoreExternal=false`,
     {

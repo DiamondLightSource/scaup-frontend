@@ -68,7 +68,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
             color='diamond.600'
             href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}`}
           >
-            return to the sample collection list
+            return to the session samples dashboard
           </Link>{" "}
           for further editing before shipping your sample collection.
         </Text>
