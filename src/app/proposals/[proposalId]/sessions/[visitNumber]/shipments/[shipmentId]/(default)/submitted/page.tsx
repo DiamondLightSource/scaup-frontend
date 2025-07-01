@@ -1,7 +1,7 @@
 import { DynamicFormEntry } from "@/types/forms";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { ShipmentParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
+import NextLink from "next/link";
 import { pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
@@ -18,14 +18,18 @@ import {
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
+import { getShipmentData } from "@/utils/client/shipment";
 
 export const metadata: Metadata = {
   title: "Sample Collection Submitted - Scaup",
 };
 
-const getShipmentData = async (shipmentId: string) => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
-  const data = res && res.status === 200 ? await res.json() : [];
+const getShipment = async (shipmentId: string) => {
+  const data = await getShipmentData(shipmentId);
+
+  if (data === null) {
+    return null;
+  }
 
   const counts = recursiveCountTypeInstances(data.children);
   const formModel: DynamicFormEntry[] = Object.keys(counts).map((key) => ({
@@ -39,7 +43,17 @@ const getShipmentData = async (shipmentId: string) => {
 
 const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) => {
   const params = await props.params;
-  const shipmentData = await getShipmentData(params.shipmentId);
+  const shipmentData = await getShipment(params.shipmentId);
+
+  if (shipmentData === null) {
+    return <VStack w='100%' mt='3em'>
+      <Heading variant='notFound'>Sample Collection Unavailable</Heading>
+      <Text>This sample collection does not exist or you do not have permission to view it.</Text>
+      <Link as={NextLink} href='..'>
+        Return to session page
+      </Link>
+    </VStack>;
+  }
 
   return (
     <VStack alignItems='start'>

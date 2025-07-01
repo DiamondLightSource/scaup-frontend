@@ -11,9 +11,7 @@ import {
   Link,
   Step,
   StepDescription,
-  StepIcon,
   StepIndicator,
-  StepNumber,
   StepSeparator,
   StepStatus,
   StepTitle,
@@ -21,7 +19,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { steps } from "framer-motion";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
