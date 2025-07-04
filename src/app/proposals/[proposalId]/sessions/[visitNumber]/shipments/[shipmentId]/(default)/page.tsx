@@ -148,7 +148,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title='Edit Sample Collection'
                 as={NextLink}
                 href={`${params.shipmentId}/edit`}
-                isDisabled={shipmentData.dispatch.status === "Booked"}
+                isDisabled={!!shipmentData.dispatch.shipmentRequest}
               >
                 Edit sample collection contents, or add new items
               </TwoLineLink>
@@ -156,7 +156,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
                 as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
-                isDisabled={shipmentData.dispatch.status === "Booked"}
+                isDisabled={!!shipmentData.dispatch.shipmentRequest}
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>
@@ -189,7 +189,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title='Booking & Labels'
                 as={NextLink}
                 href={`${params.shipmentId}/booking-and-labels`}
-                isDisabled={!shipmentData.counts.Dewar}
+                isDisabled={!shipmentData.counts.Dewar || !shipmentData.dispatch.externalId}
                 data-testid='booking-label'
               >
                 Book pickup with courier or print tracking labels

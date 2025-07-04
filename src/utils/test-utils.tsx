@@ -130,6 +130,12 @@ export const puck: TreeData<BaseShipmentItem> = {
   data: { type: "puck", registeredContainer: "DLS-0001" },
 };
 
+export const dewar: TreeData<BaseShipmentItem> = {
+  id: 15,
+  name: "dewar",
+  data: { type: "dewar", code: "DLS-0001" },
+};
+
 export const cane: TreeData<BaseShipmentItem> = {
   id: 10,
   name: "cane",

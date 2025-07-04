@@ -49,10 +49,16 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
         <List spacing='3em'>
           <ListItem>
             <Heading size='lg'>Tracking labels</Heading>
-            <Text my='1em'>
+            <Text mt='1em'>
               Print tracking labels and affix them to the outside of the dewar and dewar case. If
               you are sending multiple dewars, ensure the code on the label matches the code on the
               dewar.
+            </Text>
+            <Text my='1em'>
+              If a dewar doesn&#39;t have a barcode (such as the ones on the last page) already, cut
+              out the barcode on the last page and affix it to the dewar. If you&#39;re sending
+              multiple dewars, ensure the dewar matches the barcode you&#39;ve selected for it
+              previously.
             </Text>
             <Button
               as={NextLink}

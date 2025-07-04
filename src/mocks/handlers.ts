@@ -1,9 +1,10 @@
-import { pluralToSingular } from "@/mappings/pages";
+import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { http, HttpResponse } from "msw";
 
-export const defaultData = {
+export const defaultData: BaseShipmentItem = {
   id: 1,
   name: "Shipment",
+  type: "shipment",
   data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1 },
   children: [
     {
