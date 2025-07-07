@@ -130,7 +130,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 Pre-Session Information
               </Heading>
               <Divider borderColor='gray.800' />
-              {shipmentData.preSessionInfo ? (
+              {shipmentData.preSessionInfo?.details ? (
                 <DynamicFormView
                   formType='preSession'
                   data={shipmentData.preSessionInfo.details}
@@ -156,7 +156,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
                 as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
-                isDisabled={!!shipmentData.dispatch.shipmentRequest}
+                isDisabled={
+                  !!shipmentData.dispatch.shipmentRequest ||
+                  !shipmentData.preSessionInfo ||
+                  !!shipmentData.preSessionInfo.isLocked
+                }
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>
