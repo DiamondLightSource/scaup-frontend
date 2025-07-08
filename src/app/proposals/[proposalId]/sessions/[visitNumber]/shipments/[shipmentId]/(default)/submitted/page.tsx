@@ -46,13 +46,15 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
   const shipmentData = await getShipment(params.shipmentId);
 
   if (shipmentData === null) {
-    return <VStack w='100%' mt='3em'>
-      <Heading variant='notFound'>Sample Collection Unavailable</Heading>
-      <Text>This sample collection does not exist or you do not have permission to view it.</Text>
-      <Link as={NextLink} href='..'>
-        Return to session page
-      </Link>
-    </VStack>;
+    return (
+      <VStack w='100%' mt='3em'>
+        <Heading variant='notFound'>Sample Collection Unavailable</Heading>
+        <Text>This sample collection does not exist or you do not have permission to view it.</Text>
+        <Link as={NextLink} href='..'>
+          Return to session page
+        </Link>
+      </VStack>
+    );
   }
 
   return (

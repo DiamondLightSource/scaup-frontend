@@ -1,6 +1,6 @@
 import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
-import { baseShipmentParams, renderWithProviders } from "@/utils/test-utils";
+import { baseShipmentParams, dewar, renderWithProviders } from "@/utils/test-utils";
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
@@ -47,7 +47,7 @@ describe("Sample Collection Submission Overview", () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ ...defaultData, data: { status: "Booked" } }),
+        () => HttpResponse.json({ ...defaultData, data: { shipmentRequest: 1 } }),
         { once: true },
       ),
     );
@@ -86,6 +86,21 @@ describe("Sample Collection Submission Overview", () => {
 
   it("should disable booking and labels link if no dewars are present in the sample collection", async () => {
     const noDewarData = structuredClone(defaultData);
+
+    noDewarData.children = [];
+    server.use(
+      http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(noDewarData), {
+        once: true,
+      }),
+    );
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
+
+    expect(screen.getByTestId("booking-label")).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should disable booking and labels link if shipment hasn't been pushed to ISPyB", async () => {
+    let noDewarData = structuredClone(defaultData);
+    noDewarData = { ...defaultData, children: [dewar] };
 
     noDewarData.children = [];
     server.use(

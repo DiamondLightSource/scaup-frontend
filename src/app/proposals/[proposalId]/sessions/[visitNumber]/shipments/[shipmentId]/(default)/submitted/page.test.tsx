@@ -42,8 +42,7 @@ describe("Sample Collection Submission Overview", () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId",
-        () =>
-          HttpResponse.json({ ...defaultData, data: { shipmentRequest: 123 } }),
+        () => HttpResponse.json({ ...defaultData, data: { shipmentRequest: 123 } }),
         { once: true },
       ),
     );
@@ -58,8 +57,7 @@ describe("Sample Collection Submission Overview", () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId",
-        () =>
-          HttpResponse.json({ }, { status: 404 }),
+        () => HttpResponse.json({}, { status: 404 }),
         { once: true },
       ),
     );
