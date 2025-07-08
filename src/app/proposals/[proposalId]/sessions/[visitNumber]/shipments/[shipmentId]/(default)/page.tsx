@@ -157,7 +157,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
                 isDisabled={
-                  !!shipmentData.dispatch.shipmentRequest ||
                   !shipmentData.preSessionInfo ||
                   !!shipmentData.preSessionInfo.isLocked
                 }

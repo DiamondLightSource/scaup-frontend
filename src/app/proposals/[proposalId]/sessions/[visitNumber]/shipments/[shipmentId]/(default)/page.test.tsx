@@ -56,19 +56,6 @@ describe("Sample Collection Submission Overview", () => {
     expect(screen.getAllByRole("group")[0]).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("should not enable 'edit pre-session information' button if shipment is already booked", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ ...defaultData, data: { shipmentRequest: 1 } }),
-        { once: true },
-      ),
-    );
-    renderWithProviders(await ShipmentHome(baseShipmentParams));
-
-    expect(screen.getAllByRole("group")[1]).toHaveAttribute("aria-disabled", "true");
-  });
-
   it("should not enable 'edit pre-session information' button if session is locked", async () => {
     server.use(
       http.get(
