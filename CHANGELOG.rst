@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.15.3 (10/07/2025)
++++++++++
+
+**Changed**
+
+- Lock out edits for pre session information 24h before session
+
++++++++++
 v0.15.2 (08/07/2025)
 +++++++++
 
