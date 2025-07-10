@@ -789,6 +789,11 @@ export interface components {
     PreSessionOut: {
       /** Details */
       details?: Record<string, never> | null;
+      /**
+       * Islocked
+       * @default false
+       */
+      isLocked: boolean;
     };
     /** SampleIn */
     SampleIn: {
