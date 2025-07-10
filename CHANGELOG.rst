@@ -3,6 +3,19 @@ Changelog
 ==========
 
 +++++++++
+v0.15.2 (08/07/2025)
++++++++++
+
+**Changed**
+
+- Improve button disabling logic in sample collection overview
+- Update tracking label instructions
+
+**Fixed**
+
+- Display error message if sample colleciton does not exist in submission page
+
++++++++++
 v0.15.1 (30/06/2025)
 +++++++++
 
