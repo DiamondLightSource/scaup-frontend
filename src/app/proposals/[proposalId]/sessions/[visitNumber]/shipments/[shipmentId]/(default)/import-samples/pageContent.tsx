@@ -117,14 +117,18 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
             }}
           >
             <VStack w='100%' divider={<Divider />}>
-              {samples.map((sample, i) => (
-                <Checkbox w='100%' value={i.toString()} key={i}>
-                  <Heading flex='1 0 0' size='md'>
-                    {sample.name} <Tag colorScheme='purple'>{sample.parentShipmentName}</Tag>
-                  </Heading>
-                  <Text>{sample.comments}</Text>
-                </Checkbox>
-              ))}
+              {samples.map((sample, i) => {
+                const hasChildren = !!(sample.derivedSamples && sample.derivedSamples.length > 0);
+                return (
+                  <Checkbox isDisabled={hasChildren} w='100%' value={i.toString()} key={i}>
+                    <Heading flex='1 0 0' size='md'>
+                      {sample.name} <Tag colorScheme='purple'>{sample.parentShipmentName}</Tag>
+                    </Heading>
+                    <Text>{sample.comments}</Text>
+                    {hasChildren && <Text>Sample already imported</Text>}
+                  </Checkbox>
+                );
+              })}
             </VStack>
           </CheckboxGroup>
         </VStack>
