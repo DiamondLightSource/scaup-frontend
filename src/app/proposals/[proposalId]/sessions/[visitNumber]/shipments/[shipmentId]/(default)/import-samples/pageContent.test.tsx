@@ -1,5 +1,5 @@
 import { server } from "@/mocks/server";
-import { renderWithProviders } from "@/utils/test-utils";
+import { renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import mockRouter from "next-router-mock";
@@ -56,6 +56,35 @@ describe("Import Samples Page Content", () => {
     fireEvent.click(screen.getByText("Select"));
 
     await screen.findByText("No samples available for transfer in this session.");
+  });
+
+  it("should disable checkbox if sample has already been imported", async () => {
+    server.use(
+      http.get(
+        "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples",
+        () =>
+          HttpResponse.json({
+            items: [
+              {
+                id: 1,
+                name: "sample-in-session",
+                parentShipmentName: "test-shipment",
+                data: { type: "sample" },
+                derivedSamples: [{}],
+              },
+            ],
+          }),
+        { once: true },
+      ),
+    );
+
+    renderWithProviders(<ImportSamplesPageContent params={params} />);
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
+    fireEvent.click(screen.getByText("Select"));
+
+    const sample = await screen.findByRole("checkbox");
+    expect(sample).toHaveAttribute("disabled");
   });
 
   it("should display message if samples GET request fails", async () => {
