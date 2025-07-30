@@ -68,7 +68,7 @@ describe("Grid Box", () => {
 
     fireEvent.click(screen.getByText("2"));
 
-    expect(screen.getByText(/select sample/i)).toBeInTheDocument();
+    expect(screen.getByText(/select grid/i)).toBeInTheDocument();
   });
 
   it("should pre-populate positions with data from state", () => {
@@ -79,12 +79,12 @@ describe("Grid Box", () => {
     expect(screen.getByTestId("1-populated")).toBeInTheDocument();
   });
 
-  it("should display message if no unassigned samples are available", () => {
+  it("should display message if no unassigned grids are available", () => {
     renderAndInjectForm(<GridBox parentId='1' />);
 
     fireEvent.click(screen.getByText("1"));
 
-    expect(screen.getByText(/no unassigned samples available/i));
+    expect(screen.getByText(/no unassigned grids available/i));
   });
 
   it("should fire location callback when apply clicked", async () => {

@@ -41,7 +41,7 @@ describe("Import Samples Page Content", () => {
     );
   });
 
-  it("should display message if no samples are available", async () => {
+  it("should display message if no grids are available", async () => {
     server.use(
       http.get(
         "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/samples",
@@ -55,7 +55,7 @@ describe("Import Samples Page Content", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
 
-    await screen.findByText("No samples available for transfer in this session.");
+    await screen.findByText("No grids available for transfer in this session.");
   });
 
   it("should disable checkbox if sample has already been imported", async () => {
@@ -101,7 +101,7 @@ describe("Import Samples Page Content", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
     fireEvent.click(screen.getByText("Select"));
 
-    await screen.findByText("No samples available for transfer in this session.");
+    await screen.findByText("No grids available for transfer in this session.");
   });
 
   it("should redirect to pre-session page if 'Save and enter pre-session information' is clicked", async () => {

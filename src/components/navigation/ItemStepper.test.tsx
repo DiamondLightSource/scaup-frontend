@@ -26,7 +26,7 @@ describe("Item Stepper", () => {
   it("should render steps", () => {
     renderWithProviders(<ItemStepper steps={steps} onStepChanged={() => {}} currentStep={0} />);
 
-    expect(screen.getByLabelText("Samples Step")).toBeInTheDocument();
+    expect(screen.getByLabelText("Grids Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Grid Boxes Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Containers Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Packages Step")).toBeInTheDocument();

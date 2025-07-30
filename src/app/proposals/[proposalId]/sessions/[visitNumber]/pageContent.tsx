@@ -19,13 +19,13 @@ const shipmentForm = [
     id: "name",
     label: "Name",
     type: "text",
-    hint: 'Use a descriptive name, that indicates what the samples will be used in. For example, "FIB"',
+    hint: 'Use a descriptive name, that indicates what the grids will be used in. For example, "FIB"',
     validation: { required: "Required" },
   },
   {
     id: "importSamples",
-    label: "Use Existing Samples",
-    hint: "Use samples from an existing sample collection, which is already stored in the facility",
+    label: "Use Existing Grids",
+    hint: "Use grids from an existing sample collection, which is already stored in the facility",
     type: "checkbox",
   },
 ] as DynamicFormEntry[];

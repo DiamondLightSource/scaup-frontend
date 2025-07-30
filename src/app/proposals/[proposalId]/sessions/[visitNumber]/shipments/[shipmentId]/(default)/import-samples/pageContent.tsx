@@ -107,7 +107,7 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
         </form>
       </FormProvider>
       <Heading size='lg' mt='1em' color={samples !== undefined ? undefined : "diamond.200"}>
-        Select Samples
+        Select Grids
       </Heading>
       {samples && samples.length > 0 ? (
         <VStack divider={<Divider borderColor='diamond.600' />} w='100%' mb='1em'>
@@ -125,7 +125,7 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
                       {sample.name} <Tag colorScheme='purple'>{sample.parentShipmentName}</Tag>
                     </Heading>
                     <Text>{sample.comments}</Text>
-                    {hasChildren && <Text>Sample already imported</Text>}
+                    {hasChildren && <Text>Grid already imported</Text>}
                   </Checkbox>
                 );
               })}
@@ -135,7 +135,7 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
       ) : (
         samples !== undefined && (
           <Heading variant='notFound' size='md'>
-            No samples available for transfer in this session.
+            No grids available for transfer in this session.
           </Heading>
         )
       )}
