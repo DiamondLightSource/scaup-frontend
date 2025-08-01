@@ -10,7 +10,7 @@ describe("Sample Card", () => {
     renderWithProviders(<SampleCard sample={baseSample} params={params} />);
 
     expect(screen.getByText("test-sample")).toBeInTheDocument();
-    expect(screen.getByText("View Sample")).toHaveAttribute(
+    expect(screen.getByText("View Grid")).toHaveAttribute(
       "href",
       "/proposals/cm00001/sessions/1/shipments/1/grid/1/review",
     );
