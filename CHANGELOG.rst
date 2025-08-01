@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.15.4 (01/08/2025)
++++++++++
+
+**Changed**
+
+- Rename mentions of sample instances to grids
+
++++++++++
 v0.15.3 (10/07/2025)
 +++++++++
 
