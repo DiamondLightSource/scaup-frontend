@@ -4,7 +4,7 @@ import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Import Existing Samples - Scaup",
+  title: "Import Existing Grids - Scaup",
 };
 
 const SubmissionOverview = async (props: {
@@ -19,13 +19,13 @@ const SubmissionOverview = async (props: {
         <Heading size='md' color='gray.600'>
           {params.proposalId}-{params.visitNumber}
         </Heading>
-        <Heading>Import Existing Samples</Heading>
+        <Heading>Import Existing Grids</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       <VStack alignItems='start' w='100%' gap='1em'>
         <Text>
-          Import existing samples from other sample collections, for use in this sample collection.
-          Ensure your sample is already being stored at eBIC.
+          Import existing grids from other sample collections, for use in this sample collection.
+          Ensure your grid is already being stored at eBIC.
         </Text>
       </VStack>
       <ImportSamplesPageContent params={params} />

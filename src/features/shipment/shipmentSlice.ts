@@ -33,7 +33,7 @@ export const defaultUnassigned = [
     data: {},
     children: [
       {
-        name: "Samples",
+        name: "Grids",
         id: "sample",
         isUndeletable: true,
         isNotViewable: true,

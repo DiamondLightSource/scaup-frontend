@@ -21,7 +21,7 @@ describe("Child Selector", () => {
       preloadedState: { shipment: { ...initialState, unassigned: defaultUnassigned } },
     });
 
-    expect(screen.getByText("Sample")).toBeInTheDocument();
+    expect(screen.getByText("Grid")).toBeInTheDocument();
   });
 
   it("should render selected item if passed", () => {
@@ -37,7 +37,7 @@ describe("Child Selector", () => {
       },
     );
 
-    expect(screen.getAllByText("Sample")).toHaveLength(2);
+    expect(screen.getAllByText("Grid")).toHaveLength(2);
   });
 
   it("should render message if no unassigned items are available", () => {
@@ -50,7 +50,7 @@ describe("Child Selector", () => {
       />,
     );
 
-    screen.getByText(/no unassigned samples/i);
+    screen.getByText(/no unassigned grids/i);
   });
 
   it("should fire event if item is selected", async () => {
@@ -128,7 +128,7 @@ describe("Child Selector", () => {
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument();
   });
 
-  it("should not render unassigned samples if in read only mode", () => {
+  it("should not render unassigned grids if in read only mode", () => {
     const itemClickCallback = vi.fn();
 
     renderWithProviders(
@@ -144,7 +144,7 @@ describe("Child Selector", () => {
       },
     );
 
-    expect(screen.queryByText("Sample")).not.toBeInTheDocument();
+    expect(screen.queryByText("Grid")).not.toBeInTheDocument();
   });
 
   it("should render selectable children if passed", () => {

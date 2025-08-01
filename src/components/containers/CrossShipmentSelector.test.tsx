@@ -56,7 +56,7 @@ describe("Cross Sample Collection Child Selector", () => {
     expect(screen.getByText("puck")).toBeInTheDocument();
   });
 
-  it("should render message if selected session has no samples available", async () => {
+  it("should render message if selected session has no grids available", async () => {
     server.use(
       http.get(
         "http://localhost/api/proposals/:proposalId/sessions/:visitNumber/samples",
@@ -72,7 +72,7 @@ describe("Cross Sample Collection Child Selector", () => {
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "cm1234-5" } });
     fireEvent.click(screen.getByText("Select"));
 
-    await screen.findByText("No samples available for this session.");
+    await screen.findByText("No grids available for this session.");
   });
 
   it("should render selected item if passed", () => {

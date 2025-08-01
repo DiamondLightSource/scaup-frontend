@@ -78,9 +78,9 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
         <Heading size='md' color='gray.600'>
-          Sample Collection
+          {shipmentData ? shipmentData.name : "Shipment"}
         </Heading>
-        <Heading>{shipmentData ? shipmentData.name : "Shipment"}</Heading>
+        <Heading>Sample Collection Summary</Heading>
         <Divider borderColor='gray.800' />
       </VStack>
       {shipmentData === null ? (
@@ -110,10 +110,10 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
           <HStack w='100%' mt='1em' alignItems='start' gap='3em' flexWrap='wrap'>
             <VStack alignItems='start' flex='1 0 600px'>
               <HStack w='100%'>
-                <Heading size='lg'>Samples</Heading>
+                <Heading size='lg'>Grids</Heading>
                 <Spacer />
                 <Button as={NextLink} href={`${params.shipmentId}/import-samples`} size='sm'>
-                  Import Samples from Session
+                  Import Grids from Session
                 </Button>
               </HStack>
               <Divider borderColor='gray.800' />
@@ -156,10 +156,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
                 as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
-                isDisabled={
-                  !shipmentData.preSessionInfo ||
-                  !!shipmentData.preSessionInfo.isLocked
-                }
+                isDisabled={!shipmentData.preSessionInfo || !!shipmentData.preSessionInfo.isLocked}
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>

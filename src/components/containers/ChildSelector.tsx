@@ -64,7 +64,7 @@ const ChildItemDetails = ({
       <Stat>
         <StatLabel>{childType}</StatLabel>
         <StatNumber>{childData.name}</StatNumber>
-        {childType === "Sample" && (
+        {childType === "Grid" && (
           <Grid w='100%' gap='0' templateColumns='repeat(2, 1fr)' mt='10px'>
             <ChildItemDetailsField
               label='Concentration'

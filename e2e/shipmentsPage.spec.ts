@@ -15,11 +15,11 @@ test('should create new sample collection', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'New Sample' })).toBeVisible({timeout: 10000});
 });
 
-test('should create new sample collection using existing samples', async ({ page }) => {
+test('should create new sample collection using existing grids', async ({ page }) => {
   await page.goto('/proposals/bi23047/sessions/100');
 
   await page.getByRole('textbox', { name: 'Name' }).fill("80");
-  const checkBox = page.getByLabel("Use Existing Samples");
+  const checkBox = page.getByLabel("Use Existing grids");
   const boundingBox = (await checkBox.boundingBox())!;
 
   // Move the cursor to centre of checkbox
@@ -27,7 +27,7 @@ test('should create new sample collection using existing samples', async ({ page
 
   await page.getByRole("button", {name: "Create"}).click();
   
-  await expect(page.getByRole('heading', { name: 'Import Existing Samples' })).toBeVisible({timeout: 10000});
+  await expect(page.getByRole('heading', { name: 'Import Existing Grids' })).toBeVisible({timeout: 10000});
 });
 
 test('should navigate to sample collection page when sample collection card clicked', async ({ page }) => {

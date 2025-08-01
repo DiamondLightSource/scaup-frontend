@@ -78,7 +78,7 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
             as={NextLink}
             href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}
           >
-            View Sample
+            View Grid
           </Button>
         </HStack>
       </Stat>
