@@ -27,12 +27,12 @@ export const gridBoxForm = [
     watch: true,
   },
   {
-    id: "lid",
-    label: "Lid",
+    id: "c-clip",
+    label: "C-Clip Direction",
     type: "dropdown",
     values: [
-      { label: "Screw", value: "Screw" },
-      { label: "Pin", value: "Pin" },
+      { label: "Anti-Clockwise", value: "Anti-Clockwise" },
+      { label: "Clockwise", value: "Clockwise" },
     ],
   },
   {
@@ -45,7 +45,6 @@ export const gridBoxForm = [
   {
     id: "comments",
     label: "Comments",
-    hint: "General comments, such as direction c-clip is facing respective to notch",
     type: "textarea",
   },
 ] as DynamicFormEntry[];
