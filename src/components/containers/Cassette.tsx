@@ -33,7 +33,7 @@ export const Cassette = ({ samples }: CassetteProps) => {
     () =>
       samples.reduce((selectable, sample) => {
         if (sample.subLocation === null) {
-          selectable.push({ id: sample.id, name: sample.name || "", data: {} });
+          selectable.push({ id: sample.id, name: sample.name || "", data: sample.details });
         }
         return selectable;
       }, [] as TreeData[]),
