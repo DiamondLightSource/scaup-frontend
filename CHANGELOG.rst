@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.15.5 (27/08/2025)
++++++++++
+
+**Fixed**
+
+- Display grid information in cassette 
+
++++++++++
 v0.15.4 (01/08/2025)
 +++++++++
 
