@@ -833,7 +833,7 @@ export interface components {
       /** Sublocation */
       subLocation?: number | null;
       /** Details */
-      details?: Record<string, never> | null;
+      details?: Record<string, any> | null;
       /** Comments */
       comments?: string | null;
       /**

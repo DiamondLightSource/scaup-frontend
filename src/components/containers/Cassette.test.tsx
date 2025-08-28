@@ -1,8 +1,9 @@
-import { renderAndInjectForm, sample } from "@/utils/test-utils";
+import { renderAndInjectForm } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { Cassette } from "@/components/containers/Cassette";
+import { components } from "@/types/schema";
 
-const defaultSample = {
+const defaultSample: components["schemas"]["SampleOut"] = {
   id: 1,
   name: "cassette-sample",
   subLocation: 1,
