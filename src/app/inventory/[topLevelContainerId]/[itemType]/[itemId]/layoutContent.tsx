@@ -1,5 +1,5 @@
 "use client";
-import { InventoryItemLayoutProps, InventoryItemParams } from "@/types/generic";
+import { InventoryItemLayoutProps } from "@/types/generic";
 import React, { useCallback, useEffect, useState } from "react";
 import { defaultUnassigned, setShipment, setUnassigned } from "@/features/shipment/shipmentSlice";
 import { internalEbicSteps, getCurrentStepIndex, BaseShipmentItem } from "@/mappings/pages";
@@ -15,8 +15,8 @@ import { components } from "@/types/schema";
 export interface InventoryItemLayoutContentProps {
   shipmentData: TreeData<BaseShipmentItem> | null;
   unassignedItems: components["schemas"]["Paged_GenericItem_"] | null;
-  children: React.ReactElement;
-  params: InventoryItemParams;
+  children: InventoryItemLayoutProps["children"];
+  params: Awaited<InventoryItemLayoutProps["params"]>;
 }
 
 export const ItemLayoutContent = ({

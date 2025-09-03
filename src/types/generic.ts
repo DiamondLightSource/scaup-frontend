@@ -8,10 +8,12 @@ export interface ItemFormPageContentProps {
   prepopData: Record<string, any>;
 }
 
-export interface InventoryItemLayoutProps {
-  children: React.ReactElement;
-  params: Promise<InventoryItemParams>;
-}
+export type InventoryItemLayoutProps =
+  LayoutProps<"/inventory/[topLevelContainerId]/[itemType]/[itemId]">;
+export type ShipmentLayoutProps =
+  LayoutProps<"/proposals/[proposalId]/sessions/[visitNumber]/shipments/[shipmentId]">;
+export type ShipmentItemLayoutProps =
+  LayoutProps<"/proposals/[proposalId]/sessions/[visitNumber]/shipments/[shipmentId]/[itemType]/[itemId]">;
 
 export type ChildSelectorProps = MultipleChildSelectorProps | SingleChildSelectorProps;
 

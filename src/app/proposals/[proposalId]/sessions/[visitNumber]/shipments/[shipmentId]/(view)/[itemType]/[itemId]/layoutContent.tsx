@@ -1,9 +1,9 @@
 "use client";
-import { ItemStepper, TypeCount } from "@/components/navigation/ItemStepper";
+import { ItemStepper } from "@/components/navigation/ItemStepper";
 import { selectActiveItem, selectIsEdit, selectIsReview } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { ItemParams } from "@/types/generic";
+import { ShipmentItemLayoutProps } from "@/types/generic";
 import {
   Button,
   Divider,
@@ -12,7 +12,6 @@ import {
   Heading,
   Skeleton,
   Spacer,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -21,8 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export interface ItemLayoutContentProps {
   isBooked?: boolean;
-  children: React.ReactNode;
-  params: ItemParams;
+  children: ShipmentItemLayoutProps["children"];
+  params: Awaited<ShipmentItemLayoutProps["params"]>;
 }
 
 const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutContentProps) => {

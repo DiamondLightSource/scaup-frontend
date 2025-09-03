@@ -9,17 +9,16 @@ import {
   setUnassigned,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
-import { BasePage, BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
-import { ShipmentParams } from "@/types/generic";
+import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
+import { ShipmentLayoutProps } from "@/types/generic";
 import { UnassignedItemResponse } from "@/types/server";
 import { Grid, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-export interface ShipmentsLayoutProps {
-  children: React.ReactElement<BasePage>;
-  params: ShipmentParams;
+export interface ShipmentsLayoutContentProps {
+  children: ShipmentLayoutProps["children"];
+  params: Awaited<ShipmentLayoutProps["params"]>;
   shipmentData: TreeData<BaseShipmentItem>[] | null;
   unassignedItems: UnassignedItemResponse | null;
 }
@@ -29,7 +28,7 @@ const ShipmentsLayoutContent = ({
   params,
   shipmentData,
   unassignedItems,
-}: ShipmentsLayoutProps) => {
+}: ShipmentsLayoutContentProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const isReview = useSelector(selectIsReview);

@@ -1,14 +1,8 @@
-import { BasePage } from "@/mappings/pages";
-import { ItemParams } from "@/types/generic";
+import { ShipmentItemLayoutProps } from "@/types/generic";
 import { getShipmentData } from "@/utils/client/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
 
-export interface ShipmentsLayoutProps {
-  children: React.ReactElement<BasePage>;
-  params: Promise<ItemParams>;
-}
-
-const ShipmentsLayout = async (props: ShipmentsLayoutProps) => {
+const ShipmentsLayout = async (props: ShipmentItemLayoutProps) => {
   const params = await props.params;
 
   const { children } = props;
