@@ -21,6 +21,7 @@ Configuration is done through environment variables:
 * :code:`OAUTH_PROFILE_INFO_ENDPOINT`: Microauth's profile endpoint. May be removed in the future if our auth solution provides profile info as well.
 * :code:`SERVER_API_URL`: Scaup API URL from the server perspective. Note that relative paths such as `/api` cannot be used, since the user has no concept of relative paths. Paths must be absolute. This can be modified at runtime/deploy time.
 * :code:`CONTACT_EMAIL`: Email for application support (like international shipments)
+* :code:`USER_GUIDE_URL`: URL for SCAUP user guide
 * :code:`NEXT_PUBLIC_API_URL`: SCAUP API URL
 * :code:`NEXT_PUBLIC_DEV_CONTACT`: Developer contact email
 * :code:`NEXT_PUBLIC_APP_VERSION`: App version
