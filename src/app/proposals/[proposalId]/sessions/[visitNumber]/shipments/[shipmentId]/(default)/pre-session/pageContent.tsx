@@ -2,6 +2,7 @@
 import { DynamicForm, formMapping } from "@/components/input/form";
 import { ShipmentParams } from "@/types/generic";
 import { authenticatedFetch } from "@/utils/client";
+import { requestAndInvalidate } from "@/utils/server/request";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,7 +23,7 @@ const PreSessionContent = ({ params, prepopData, skipPush }: PreSessionContentPr
   const onSubmit = formContext.handleSubmit(async (info) => {
     setIsLoading(true);
     if (!skipPush) {
-      const response = await authenticatedFetch.client(`/shipments/${params.shipmentId}/push`, {
+      const response = await requestAndInvalidate(`/shipments/${params.shipmentId}/push`, {
         method: "POST",
       });
 
