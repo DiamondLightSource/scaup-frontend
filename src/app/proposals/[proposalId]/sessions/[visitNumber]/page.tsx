@@ -1,4 +1,5 @@
 import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/sessions/[visitNumber]/pageContent";
+import { getShipmentStatus } from "@/mappings/colours";
 import { SessionParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
@@ -21,18 +22,6 @@ export const metadata: Metadata = {
   title: "Session - Scaup",
 };
 
-const VALID_SHIPMENT_STATUSES: Record<string, string> = {
-  "at facility": "green",
-  "awb created": "purple",
-  "dispatch-requested": "purple",
-  opened: "green",
-  "pickup booked": "purple",
-  "pickup cancelled": "red",
-  processing: "green",
-  "sent to facility": "green",
-  "transfer-requested": "purple",
-};
-
 const getShipments = async (proposalId: string, visitNumber: string) => {
   const res = await authenticatedFetch.server(
     `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
@@ -44,21 +33,6 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
   }
 
   return null;
-};
-
-const getShipmentStatus = (shipment: components["schemas"]["ShipmentOut"]) => {
-  if (shipment.status === null || shipment.status === undefined) {
-    const creationStatus = shipment.externalId ? "Submitted" : "Draft";
-    return {
-      colour: creationStatus === "Submitted" ? "green" : "gray",
-      statusText: creationStatus,
-    };
-  }
-
-  return {
-    colour: VALID_SHIPMENT_STATUSES[shipment.status] || "gray",
-    statusText: shipment.status,
-  };
 };
 
 const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
