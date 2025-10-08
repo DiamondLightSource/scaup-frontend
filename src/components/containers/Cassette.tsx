@@ -104,8 +104,16 @@ export const Cassette = ({ samples }: CassetteProps) => {
             borderColor='diamond.700'
             w='100%'
           >
-            <Tag colorScheme='teal'>{12 - i}</Tag>
-            <Text ml='0.5em' fontWeight='600' color={item === null ? "diamond.800" : "diamond.50"}>
+            <Tag colorScheme='teal' minW='30px' justifyContent='center' flexShrink='0'>
+              {12 - i}
+            </Tag>
+            <Text
+              px='10px'
+              fontWeight='600'
+              color={item === null ? "diamond.800" : "diamond.50"}
+              overflowX='hidden'
+              textOverflow='ellipsis'
+            >
               {item?.name ?? ""}
             </Text>
             <Spacer />
