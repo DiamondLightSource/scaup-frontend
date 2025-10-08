@@ -17,18 +17,28 @@ export type ShipmentItemLayoutProps =
 
 export type ChildSelectorProps = MultipleChildSelectorProps | SingleChildSelectorProps;
 
+export interface ItemDetails {
+  label: string;
+  value: string | number;
+  /** Measurement unit to display for label */
+  measurementUnit?: string;
+}
+export interface ItemWithDetails extends BaseShipmentItem {
+  displayDetails?: ItemDetails[];
+}
+
 export interface MultipleChildSelectorProps extends BaseChildSelectorProps {
   /** Enable multiple children to be selected */
   acceptMultiple: true;
   /** Callback for item selection event */
-  onSelect?: (child: TreeData<BaseShipmentItem>[]) => Promise<void>;
+  onSelect?: (child: TreeData<ItemWithDetails>[]) => Promise<void>;
 }
 
 export interface SingleChildSelectorProps extends BaseChildSelectorProps {
   /** Enable multiple children to be selected */
   acceptMultiple?: false;
   /** Callback for item selection event */
-  onSelect?: (child: TreeData<BaseShipmentItem>) => Promise<void>;
+  onSelect?: (child: TreeData<ItemWithDetails>) => Promise<void>;
 }
 
 export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
@@ -41,7 +51,9 @@ export interface BaseChildSelectorProps extends Omit<ModalProps, "children"> {
   /** Disable editing controls */
   readOnly?: boolean;
   /** Selectable children. If not provided, unassigned items are used */
-  selectableChildren?: TreeData[];
+  selectableChildren?: TreeData<ItemWithDetails>[];
+  /** Whether to display child details (data of passed children) underneath child name*/
+  displayDetails?: boolean;
 }
 
 export interface SessionParams {

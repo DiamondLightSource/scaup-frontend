@@ -33,7 +33,17 @@ export const Cassette = ({ samples }: CassetteProps) => {
     () =>
       samples.reduce((selectable, sample) => {
         if (sample.subLocation === null) {
-          selectable.push({ id: sample.id, name: sample.name || "", data: sample.details });
+          selectable.push({
+            id: sample.id,
+            name: sample.name || "",
+            data: {
+              type: sample.type,
+              displayDetails: [
+                { label: "Grid Box Name", value: sample.containerName },
+                { label: "Location", value: sample.location },
+              ],
+            },
+          });
         }
         return selectable;
       }, [] as TreeData[]),
@@ -109,6 +119,7 @@ export const Cassette = ({ samples }: CassetteProps) => {
         selectedItem={currentItem}
         isOpen={isOpen}
         onClose={onClose}
+        displayDetails={true}
         selectableChildren={selectableSamples}
       />
     </VStack>
