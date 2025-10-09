@@ -153,21 +153,26 @@ describe("Child Selector", () => {
         childrenType='sample'
         isOpen={true}
         onClose={() => {}}
-        selectableChildren={[{ id: 1, name: "selectable-child", data: {} }]}
+        selectableChildren={[{ id: 1, name: "selectable-child", data: { type: "Grid" } }]}
       />,
     );
 
     expect(screen.getByText("selectable-child")).toBeInTheDocument();
   });
 
-  it("should display details if child is sample", () => {
+  it("should display details if displayDetails is set", () => {
     renderWithProviders(
       <ChildSelector
+        displayDetails={true}
         childrenType='sample'
         isOpen={true}
         onClose={() => {}}
         selectableChildren={[
-          { id: 1, name: "selectable-child", data: { type: "Sample", concentration: 123 } },
+          {
+            id: 1,
+            name: "selectable-child",
+            data: { type: "Sample", displayDetails: [{ label: "Concentration", value: 123 }] },
+          },
         ]}
       />,
     );
