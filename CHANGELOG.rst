@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.17.0 (09/10/2025)
++++++++++
+
+**Added**
+
+- Display grid box name and location when populating cassette positions
+
++++++++++
 v0.16.0 (05/09/2025)
 +++++++++
 
