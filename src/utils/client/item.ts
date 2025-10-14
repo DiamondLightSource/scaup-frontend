@@ -59,10 +59,13 @@ export class Item {
     data: Record<string, any>,
     endpoint: Step["endpoint"],
     parentType: RootParentType = "shipment",
+    searchParams?: URLSearchParams
   ): Promise<CreationResponse | CreationResponse[]> {
     const parentEndpoint = parentTypeToEndpoint[parentType];
+    const searchParamText = searchParams ? "?" + searchParams.toString() : "";
+
     return await genericCreateItem(
-      `/${parentEndpoint}${parentType === "shipment" && parentId ? `/${parentId}` : ""}/${endpoint}`,
+      `/${parentEndpoint}${parentType === "shipment" && parentId ? `/${parentId}` : ""}/${endpoint}${searchParamText}`,
       data,
     );
   }
