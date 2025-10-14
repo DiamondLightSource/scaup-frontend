@@ -84,7 +84,7 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
               },
               "samples",
               "shipment",
-              new URLSearchParams({includeSuffix: "false", pushToExternalDb: "true"})
+              new URLSearchParams({ includeSuffix: "false", pushToExternalDb: "true" }),
             ),
           ),
         );

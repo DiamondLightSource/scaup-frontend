@@ -59,7 +59,7 @@ export class Item {
     data: Record<string, any>,
     endpoint: Step["endpoint"],
     parentType: RootParentType = "shipment",
-    searchParams?: URLSearchParams
+    searchParams?: URLSearchParams,
   ): Promise<CreationResponse | CreationResponse[]> {
     const parentEndpoint = parentTypeToEndpoint[parentType];
     const searchParamText = searchParams ? "?" + searchParams.toString() : "";
