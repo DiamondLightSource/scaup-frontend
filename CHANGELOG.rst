@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.17.1 (16/10/2025)
++++++++++
+
+**Changed**
+
+- Push samples to ISPyB when importing from a different session
+
++++++++++
 v0.17.0 (09/10/2025)
 +++++++++
 
