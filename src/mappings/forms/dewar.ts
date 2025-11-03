@@ -6,11 +6,18 @@ export const dewarForm = [
   {
     id: "code",
     label: "Dewar Code",
-    type: "dropdown",
-    hint: "Select the code on your dewar, or generate a new one if you dewar has no associated code",
+    type: "editableDropdown",
+    validation: {
+      required: true,
+      maxLength: { value: 15, message: "Serial number have less than 15 characters" },
+    },
+    hint:
+      "Select your dewar's code, or generate a new one if your dewar has no associated code." +
+      "\nIf generating a new code, serial numbers are required for international shipments." +
+      "\nIf your dewar has no serial code, set the value to N/A.",
     values: {
       $ref: { parent: "#/dewars", map: { value: "facilityCode", label: "facilityCode" } },
-      base: [{ label: "Generate New Code", value: "" }],
+      base: [{ label: "Generate New Code (Specify Serial Number)", value: "other" }],
     },
   },
 ] as DynamicFormEntry[];
