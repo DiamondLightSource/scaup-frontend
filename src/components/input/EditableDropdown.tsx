@@ -1,6 +1,6 @@
 import { DynamicFormEntry, SelectOption } from "@/types/forms";
 import { Select, Input } from "@chakra-ui/react";
-import { useState, useCallback, ChangeEvent, useEffect } from "react";
+import { useState, useCallback, ChangeEvent, useEffect, useMemo } from "react";
 import { FieldError } from "react-hook-form";
 
 export interface EditableDropdownProps
@@ -22,6 +22,13 @@ export const EditableDropdown = ({
 }: EditableDropdownProps) => {
   const [dropdownValue, setDropdownValue] = useState(values[0].value);
   const [textboxValue, setTextboxValue] = useState("");
+
+  const extendedValues = useMemo(() => {
+    if (!values.some((entry) => entry.value === "other")) {
+      return [...values, { label: "Other", value: "other" }];
+    }
+    return values;
+  }, [values]);
 
   const onDropdownChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -67,15 +74,12 @@ export const EditableDropdown = ({
         value={dropdownValue}
       >
         {values &&
-          Array.isArray(values) &&
-          values.map((v, i) => (
+          Array.isArray(extendedValues) &&
+          extendedValues.map((v, i) => (
             <option key={i} value={v.value}>
               {v.label}
             </option>
           ))}
-        <option key='other' value='other'>
-          Other
-        </option>
       </Select>
       {dropdownValue === "other" && (
         <Input
