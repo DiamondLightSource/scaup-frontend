@@ -20,7 +20,7 @@ export const EditableDropdown = ({
   onChange,
   selectedValue,
 }: EditableDropdownProps) => {
-  const [dropdownValue, setDropdownValue] = useState(values[0].value);
+  const [dropdownValue, setDropdownValue] = useState(values[0]?.value);
   const [textboxValue, setTextboxValue] = useState("");
 
   const extendedValues = useMemo(() => {
