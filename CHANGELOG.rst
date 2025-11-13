@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v0.17.2 (05/11/2025)
++++++++++
+
+**Changed**
+
+- Update dewar form to ask for dewar manufacturer serial number
+
++++++++++
 v0.17.1 (16/10/2025)
 +++++++++
 
