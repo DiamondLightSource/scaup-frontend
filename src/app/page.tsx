@@ -61,7 +61,7 @@ const Home = () => (
       >
         <Heading>SCAUP</Heading>
         <Heading size='md' fontWeight='200'>
-          Sample registration, shipping and experiment parametrisation
+          Sample consignment and user experiment parametrisation
         </Heading>
       </VStack>
     </Box>
