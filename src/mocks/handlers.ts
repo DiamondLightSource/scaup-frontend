@@ -54,6 +54,11 @@ export const handlers = [
     () => HttpResponse.json({ items: [defaultData] }),
   ),
 
+  http.get(
+    "http://localhost/api/proposals/:proposalReference/shipments",
+    () => HttpResponse.json({ items: [defaultData] }),
+  ),
+
   http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(defaultData)),
 
   http.post("http://localhost/api/shipments/:shipmentId/push", () =>

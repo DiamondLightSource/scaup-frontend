@@ -3,9 +3,14 @@ import { getShipmentStatus } from "@/mappings/colours";
 import { components } from "@/types/schema";
 import { authenticatedFetch } from "@/utils/client";
 import { formatDate } from "@/utils/generic";
-import { Divider, Heading, HStack, Tag, VStack } from "@chakra-ui/react";
+import { Divider, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import { Pagination, Table, TwoLineLink } from "@diamondlightsource/ui-components";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Proposal Sample Collections - SCAUP",
+};
 
 const getProposalShipments = async (proposalReference: string) => {
   const res = await authenticatedFetch.server(`/proposals/${proposalReference}/shipments`);
@@ -16,17 +21,7 @@ const getProposalShipments = async (proposalReference: string) => {
       ...shipments,
       items: shipments.items.map((shipment) => ({
         ...shipment,
-        visitNumber: (
-          <Link color='diamond.600' href=''>
-            {shipment.visitNumber}
-          </Link>
-        ),
         creationDate: shipment.creationDate ? formatDate(shipment.creationDate) : "Unknown",
-        status: (
-          <Tag colorScheme={getShipmentStatus(shipment).colour}>
-            {getShipmentStatus(shipment).statusText}
-          </Tag>
-        ),
       })),
     };
   }
@@ -34,7 +29,7 @@ const getProposalShipments = async (proposalReference: string) => {
   return null;
 };
 
-const ProposalPage = async (props: { params: Promise<{ proposalId: string }> }) => {
+const ProposalShipmentsPage = async (props: { params: Promise<{ proposalId: string }> }) => {
   const { proposalId } = await props.params;
   const shipments = await getProposalShipments(proposalId);
 
@@ -49,29 +44,21 @@ const ProposalPage = async (props: { params: Promise<{ proposalId: string }> }) 
       </VStack>
       <HStack w='100%' alignItems='start' gap='2em'>
         {/*{shipments ? (
-          <VStack flex='1 0 0'>
-            {shipments.map((shipment) => (
-              <ShipmentCard key={shipment.id} shipment={shipment} />
-            ))}
-          </VStack>
+          
         ) : (
           <p>Test</p>
         )}*/}
         <VStack flex='1 0 0' alignItems='start'>
           <Heading size='lg'>Shipments</Heading>
           <Divider />
-          {shipments && shipments.items && (
-            <Table
-              w='100%'
-              data={shipments.items}
-              headers={[
-                { key: "visitNumber", label: "Session" },
-                { key: "name", label: "Name" },
-                { key: "status", label: "Status" },
-                { key: "creationDate", label: "Creation Date" },
-                { key: "comments", label: "Comments" },
-              ]}
-            />
+          {shipments && shipments.items ? (
+            <VStack flex='1 0 0' w='100%'>
+              {shipments.items.map((shipment) => (
+                <ShipmentCard key={shipment.id} shipment={shipment} />
+              ))}
+            </VStack>
+          ) : (
+            <Text>No shipments found</Text>
           )}
         </VStack>
         <VStack alignItems='start' flexBasis='400px'>
@@ -89,4 +76,4 @@ const ProposalPage = async (props: { params: Promise<{ proposalId: string }> }) 
   );
 };
 
-export default ProposalPage;
+export default ProposalShipmentsPage;

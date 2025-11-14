@@ -1,4 +1,4 @@
-import { Link, Heading, HStack, Text, VStack, Box } from "@chakra-ui/react";
+import { Link, Heading, HStack, Text, VStack, Box, Stat, StatHelpText, StatLabel, StatNumber, Divider } from "@chakra-ui/react";
 import { Metadata } from "next/types";
 import { MdArrowForward } from "react-icons/md";
 
@@ -15,13 +15,15 @@ interface InfoBoxProps {
 const InfoBox = ({ title, children, href }: InfoBoxProps) => (
   <Box
     flex='1 0 0'
+    minW="300px"
     as={Link}
     href={href}
     alignItems='start'
-    bg='diamond.600'
     p='1em'
     position='relative'
-    color='diamond.50'
+    color='diamond.500'
+    borderColor="diamond.500"
+    border="1px solid"
     _hover={{ backgroundColor: "diamond.700" }}
   >
     <VStack alignItems='start'>
@@ -52,30 +54,160 @@ const Home = () => (
       mx='-7.3vw'
       borderBottom='10px solid var(--chakra-colors-diamond-500)'
     >
-      <VStack
-        px='10vw'
-        py='20vh'
-        backdropFilter='blur(5px)'
-        alignItems='start'
-        bg='rgba(0, 5, 77, 0.7)'
-      >
-        <Heading>SCAUP</Heading>
-        <Heading size='md' fontWeight='200'>
-          Sample registration, shipping and experiment parametrisation
-        </Heading>
-      </VStack>
+      <HStack
+          bg='rgba(0, 5, 77, 0.7)'
+          px='5vw'
+          backdropFilter='blur(5px)'
+          py='15vh'>
+        <VStack
+        flex="1 0 0"
+          alignItems='start'
+        >
+          <Heading>SCAUP</Heading>
+          <Heading size='md' fontWeight='200'>
+            Sample consignment and user experiment parametrisation
+          </Heading>
+        </VStack>
+        <HStack>
+        <InfoBox title='Proposals' href={`${process.env.PATO_URL}/proposals`}>
+          View list of proposals
+        </InfoBox>
+        <InfoBox title='User Guide' href={process.env.USER_GUIDE_URL!}>
+          Open detailed user guide
+        </InfoBox></HStack>
+      </HStack>
     </Box>
+    <Heading textAlign='left' w='100%' size='lg' mt="1em">
+      Current Proposals
+    </Heading>
+    <Divider borderColor='diamond.300' />
     <HStack mt='1em'>
-      <InfoBox title='Proposals' href={`${process.env.PATO_URL}/proposals`}>
-        View list of proposals
-      </InfoBox>
-      <InfoBox title='User Guide' href={process.env.USER_GUIDE_URL!}>
-        Open detailed user guide
-      </InfoBox>
-      <InfoBox title='API Definition' href={`${process.env.NEXT_PUBLIC_API_URL}/docs`}>
-        View API documentation
-      </InfoBox>
-    </HStack>
+            <Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                Krios I - Dr. Test
+              </StatLabel>
+              <StatNumber>
+                bi23047
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+            </Stat><Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                Krios I - Dr. Test
+              </StatLabel>
+              <StatNumber>
+                bi23047
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+            </Stat><Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                Krios I - Dr. Test
+              </StatLabel>
+              <StatNumber>
+                bi23047
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+            </Stat><Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                Krios I - Dr. Test
+              </StatLabel>
+              <StatNumber>
+                bi23047
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+            </Stat><Stat
+              _hover={{
+                borderColor: "diamond.400",
+              }}
+              bg='diamond.50'
+              overflow='hidden'
+              w='calc(100%)'
+              p={2}
+              border='1px solid grey'
+              borderRadius={5}
+            >
+              <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                Krios I - Dr. Test
+              </StatLabel>
+              <StatNumber>
+                bi23047
+              </StatNumber>
+              <StatHelpText mb='0'>
+                <b>Start: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+              <StatHelpText mb='0'>
+                <b>End: </b>
+                2025-01-01 11:11:11
+              </StatHelpText>
+            </Stat></HStack>
   </main>
 );
 
