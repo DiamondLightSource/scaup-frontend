@@ -5,7 +5,6 @@ import { HStack, Link, Tag, Text } from "@chakra-ui/react";
 
 type DeployType = "dev" | "production" | "beta";
 
-// TODO: Move this to component library
 const PhaseBanner = ({ deployType }: { deployType: DeployType }) => {
   if (deployType === "production") {
     return null;

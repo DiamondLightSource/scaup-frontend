@@ -24,7 +24,7 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
         <User
           user={
             session && session.user
-              ? { fedid: session.user.id!, name: session.user.name! }
+              ? { fedid: session.id!, name: session.user.name! }
               : null
           }
           onLogin={() => signIn("diamond")}

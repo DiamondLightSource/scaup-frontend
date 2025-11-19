@@ -5,6 +5,7 @@ declare module "next-auth" {
     /** OAuth2 access token */
     accessToken?: accessToken;
     permissions: string[];
+    id: string;
     user: {id: string;} & DefaultSession["user"];
   }
 
@@ -16,5 +17,6 @@ declare module "next-auth" {
   interface JWT extends Record<string, unknown>, DefaultJWT {
     accessToken?: string;
     permissions: string[];
+    id: string;
   }
 }

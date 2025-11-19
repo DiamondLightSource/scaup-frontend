@@ -8,6 +8,7 @@ export const authOptions: NextAuthOptions = {
         ...session,
         accessToken: token.accessToken,
         permissions: token.permissions,
+        id: token.id
       };
       return newSession;
     },
