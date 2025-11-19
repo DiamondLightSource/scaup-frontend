@@ -8,38 +8,32 @@ const baseShipment = { proposalReference: "cm00001" };
 
 describe("Proposal Sample Collections", () => {
   it("should display proposal sample collections", async () => {
-    
-
     render(await ProposalShipmentsPage(baseSessionParams));
 
-    expect(screen.getByText("Session: 1")).toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
   });
 
   it("should display message if there are no sample collections in this proposal", async () => {
     server.use(
-      http.get(
-        "http://localhost/api/proposals/:proposalReference/shipments",
-        () => HttpResponse.json({items: []}, { status: 200 }),
+      http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>
+        HttpResponse.json({ items: [] }, { status: 200 }),
       ),
     );
 
     render(await ProposalShipmentsPage(baseSessionParams));
 
-    expect(
-      screen.getByText("This session has no sample collections assigned to it yet. You can:"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("No shipments found")).toBeInTheDocument();
   });
 
   it("should display message if request fails", async () => {
     server.use(
-      http.get(
-        "http://localhost/api/proposals/:proposalReference/shipments",
-        () => HttpResponse.json({}, { status: 404 }),
+      http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>
+        HttpResponse.json({}, { status: 404 }),
       ),
     );
 
     render(await ProposalShipmentsPage(baseSessionParams));
 
-    expect(screen.getByText("cm1234-1")).toBeInTheDocument();
+    expect(screen.getByText("No shipments found")).toBeInTheDocument();
   });
 });

@@ -5,6 +5,7 @@ export const defaultData: BaseShipmentItem = {
   id: 1,
   name: "Shipment",
   type: "shipment",
+  visitNumber: 1,
   data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1 },
   children: [
     {
@@ -51,12 +52,22 @@ export const handlers = [
 
   http.get(
     "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
-    () => HttpResponse.json({ items: [defaultData] }),
+    () => HttpResponse.json({ items: [defaultData], 
+      total: 2, }),
   ),
 
-  http.get(
-    "http://localhost/api/proposals/:proposalReference/shipments",
-    () => HttpResponse.json({ items: [defaultData] }),
+  http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>
+    HttpResponse.json({ items: [defaultData] }),
+  ),
+
+  http.get("http://localhost/api/sessions", () =>
+    HttpResponse.json({
+      items: [
+        { visitNumber: 1, parentProposal: "cm1234", sessionId: 1 },
+        { visitNumber: 2, parentProposal: "cm1234", sessionId: 2 },
+      ],
+      total: 2,
+    }),
   ),
 
   http.get("http://localhost/api/shipments/:shipmentId", () => HttpResponse.json(defaultData)),

@@ -17,7 +17,7 @@ import { getShipmentStatus, VALID_SHIPMENT_STATUSES } from "@/mappings/colours";
 import { formatDate } from "@/utils/generic";
 
 export interface ShipmentCardProps {
-  /** Sample to display */
+  /** Sample collection to display */
   shipment: components["schemas"]["ShipmentOut"];
 }
 
@@ -62,7 +62,7 @@ export const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
             Session: <Link>{shipment.visitNumber}</Link>
         </Text>
         <Text>
-          Creation Date: {shipment.creationDate ? formatDate(shipment.creationDate) : "Unknown"}
+          Creation Date: {shipment.creationDate ? formatDate(shipment.creationDate) : "?"}
         </Text>
       </HStack>
     </Box>

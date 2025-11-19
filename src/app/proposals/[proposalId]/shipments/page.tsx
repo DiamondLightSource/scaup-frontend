@@ -43,22 +43,17 @@ const ProposalShipmentsPage = async (props: { params: Promise<{ proposalId: stri
         <Divider borderColor='gray.800' />
       </VStack>
       <HStack w='100%' alignItems='start' gap='2em'>
-        {/*{shipments ? (
-          
-        ) : (
-          <p>Test</p>
-        )}*/}
         <VStack flex='1 0 0' alignItems='start'>
           <Heading size='lg'>Shipments</Heading>
           <Divider />
-          {shipments && shipments.items ? (
+          {shipments && shipments.items && shipments.items.length > 0 ? (
             <VStack flex='1 0 0' w='100%'>
               {shipments.items.map((shipment) => (
                 <ShipmentCard key={shipment.id} shipment={shipment} />
               ))}
             </VStack>
           ) : (
-            <Text>No shipments found</Text>
+            <Heading variant="notFound" size="md">No shipments found</Heading>
           )}
         </VStack>
         <VStack alignItems='start' flexBasis='400px'>
