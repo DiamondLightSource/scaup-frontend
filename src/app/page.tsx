@@ -145,7 +145,7 @@ const Home = async () => {
               borderRadius={5}
             >
               <StatLabel whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
-                {item.session.beamLineOperator ? item.session.beamLineOperator.join(",") : "?"}
+                {item.session.beamLineOperator ? item.session.beamLineOperator.join(", ") : "?"}
               </StatLabel>
               <StatNumber>
                 {item.session.parentProposal}-{item.session.visitNumber ?? "?"}
