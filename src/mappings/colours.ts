@@ -6,12 +6,12 @@ export const VALID_SHIPMENT_STATUSES: Record<string, string> = {
   opened: "green",
   "awb created": "yellow",
   "sent to facility": "yellow",
-  "Created": "yellow",
+  Created: "yellow",
   "dispatch-requested": "purple",
   "pickup booked": "purple",
   "transfer-requested": "purple",
   "pickup cancelled": "red",
-  "Draft": "gray"
+  Draft: "gray",
 };
 
 export const getShipmentStatus = (shipment: components["schemas"]["ShipmentOut"]) => {

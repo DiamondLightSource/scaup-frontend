@@ -185,7 +185,9 @@ const Home = async () => {
             </Stat>
           ))
         ) : (
-          <Heading variant='notFound' w="100%">No sessions available</Heading>
+          <Heading variant='notFound' w='100%'>
+            No sessions available
+          </Heading>
         )}
       </HStack>
     </main>

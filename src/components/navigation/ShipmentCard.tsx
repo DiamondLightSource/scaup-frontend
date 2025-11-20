@@ -12,8 +12,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { ShipmentParams } from "@/types/generic";
-import { getShipmentStatus, VALID_SHIPMENT_STATUSES } from "@/mappings/colours";
+import { getShipmentStatus } from "@/mappings/colours";
 import { formatDate } from "@/utils/generic";
 
 export interface ShipmentCardProps {
@@ -53,13 +52,23 @@ export const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
             as={NextLink}
             href={`${urlPrefix}${shipment.proposalCode}${shipment.proposalNumber}/sessions/${shipment.visitNumber}/shipments/${shipment.id}`}
           >
-            View Shipment
+            View Sample Collection
           </Button>
         </HStack>
       </Stat>
-      <HStack w='100%' bg='gray.100' fontSize='14px' fontWeight='600' p='5px' justifyContent="space-between">
+      <HStack
+        w='100%'
+        bg='gray.100'
+        fontSize='14px'
+        fontWeight='600'
+        p='5px'
+        justifyContent='space-between'
+      >
         <Text>
-            Session: <Link>{shipment.visitNumber}</Link>
+          Session:{" "}
+          <Link as={NextLink} href={`sessions/${shipment.visitNumber}/shipments`}>
+            {shipment.visitNumber}
+          </Link>
         </Text>
         <Text>
           Creation Date: {shipment.creationDate ? formatDate(shipment.creationDate) : "?"}

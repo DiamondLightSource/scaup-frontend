@@ -143,7 +143,7 @@ export const parseNetworkError = (response?: Record<string, any>) => {
  */
 export const formatDate = (dateString: string | null | undefined) => {
   if (!dateString) {
-    return "?" 
+    return "?";
   }
   return new Date(dateString).toLocaleString("en-GB");
 };

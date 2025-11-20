@@ -53,7 +53,9 @@ const ProposalShipmentsPage = async (props: { params: Promise<{ proposalId: stri
               ))}
             </VStack>
           ) : (
-            <Heading variant="notFound" size="md">No shipments found</Heading>
+            <Heading variant='notFound' size='md'>
+              No shipments found
+            </Heading>
           )}
         </VStack>
         <VStack alignItems='start' flexBasis='400px'>

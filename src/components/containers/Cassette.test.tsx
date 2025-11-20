@@ -11,8 +11,8 @@ const defaultSample: components["schemas"]["SampleOut"] = {
   shipmentId: 1,
   proteinId: 1,
   details: {
-    concentration: 1
-  }
+    concentration: 1,
+  },
 };
 
 describe("Cassette", () => {

@@ -52,8 +52,7 @@ export const handlers = [
 
   http.get(
     "http://localhost/api/proposals/:proposalReference/sessions/:visitNumber/shipments",
-    () => HttpResponse.json({ items: [defaultData], 
-      total: 2, }),
+    () => HttpResponse.json({ items: [defaultData], total: 2 }),
   ),
 
   http.get("http://localhost/api/proposals/:proposalReference/shipments", () =>

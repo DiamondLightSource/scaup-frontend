@@ -4,2360 +4,2360 @@
  */
 
 export interface paths {
-    "/shipments/{shipmentId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Shipment
-         * @description Get shipment data
-         */
-        get: operations["get_shipment_shipments__shipmentId__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/shipments/{shipmentId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/unassigned": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Unassigned Items
-         * @description Get unassigned items in shipment
-         */
-        get: operations["get_unassigned_items_shipments__shipmentId__unassigned_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Shipment
+     * @description Get shipment data
+     */
+    get: operations["get_shipment_shipments__shipmentId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/unassigned": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/push": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Push Shipment
-         * @description Push shipment to ISPyB. Unassigned containers (such as a container with no parent top level
-         *     container) are ignored. Unassigned samples are pushed to ISPyB.
-         */
-        post: operations["push_shipment_shipments__shipmentId__push_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Unassigned Items
+     * @description Get unassigned items in shipment
+     */
+    get: operations["get_unassigned_items_shipments__shipmentId__unassigned_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/push": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/topLevelContainers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Top Level Containers
-         * @description Get top level containers in shipment
-         */
-        get: operations["get_top_level_containers_shipments__shipmentId__topLevelContainers_get"];
-        put?: never;
-        /**
-         * Create Top Level Container
-         * @description Create new container in shipment. If the top level container type is 'dewar' and the provided code is
-         *     empty or null, a new one is created.
-         */
-        post: operations["create_top_level_container_shipments__shipmentId__topLevelContainers_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Push Shipment
+     * @description Push shipment to ISPyB. Unassigned containers (such as a container with no parent top level
+     *     container) are ignored. Unassigned samples are pushed to ISPyB.
+     */
+    post: operations["push_shipment_shipments__shipmentId__push_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/topLevelContainers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/containers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create Container
-         * @description Create new container in shipment
-         */
-        post: operations["create_container_shipments__shipmentId__containers_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Top Level Containers
+     * @description Get top level containers in shipment
+     */
+    get: operations["get_top_level_containers_shipments__shipmentId__topLevelContainers_get"];
+    put?: never;
+    /**
+     * Create Top Level Container
+     * @description Create new container in shipment. If the top level container type is 'dewar' and the provided code is
+     *     empty or null, a new one is created.
+     */
+    post: operations["create_top_level_container_shipments__shipmentId__topLevelContainers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/samples": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Samples
-         * @description Get samples in shipment
-         */
-        get: operations["get_samples_shipments__shipmentId__samples_get"];
-        put?: never;
-        /**
-         * Create Sample
-         * @description Create new sample in shipment
-         */
-        post: operations["create_sample_shipments__shipmentId__samples_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Create Container
+     * @description Create new container in shipment
+     */
+    post: operations["create_container_shipments__shipmentId__containers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/samples": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/request": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Shipment Request
-         * @description Get shipment request
-         */
-        get: operations["get_shipment_request_shipments__shipmentId__request_get"];
-        put?: never;
-        /**
-         * Create Shipment Request
-         * @description Create new shipment request
-         */
-        post: operations["create_shipment_request_shipments__shipmentId__request_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Samples
+     * @description Get samples in shipment
+     */
+    get: operations["get_samples_shipments__shipmentId__samples_get"];
+    put?: never;
+    /**
+     * Create Sample
+     * @description Create new sample in shipment
+     */
+    post: operations["create_sample_shipments__shipmentId__samples_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/request": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/preSession": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Pre Session
-         * @description Create new pre session information
-         */
-        get: operations["get_pre_session_shipments__shipmentId__preSession_get"];
-        /**
-         * Create Pre Session
-         * @description Upsert new pre session information
-         */
-        put: operations["create_pre_session_shipments__shipmentId__preSession_put"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Shipment Request
+     * @description Get shipment request
+     */
+    get: operations["get_shipment_request_shipments__shipmentId__request_get"];
+    put?: never;
+    /**
+     * Create Shipment Request
+     * @description Create new shipment request
+     */
+    post: operations["create_shipment_request_shipments__shipmentId__request_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/preSession": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/tracking-labels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Shipping Labels
-         * @description Get shipping labels for dewar
-         */
-        get: operations["get_shipping_labels_shipments__shipmentId__tracking_labels_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Pre Session
+     * @description Create new pre session information
+     */
+    get: operations["get_pre_session_shipments__shipmentId__preSession_get"];
+    /**
+     * Create Pre Session
+     * @description Upsert new pre session information
+     */
+    put: operations["create_pre_session_shipments__shipmentId__preSession_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/tracking-labels": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/update-status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Update Shipment Status
-         * @description Update shipment status
-         */
-        post: operations["update_shipment_status_shipments__shipmentId__update_status_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Shipping Labels
+     * @description Get shipping labels for dewar
+     */
+    get: operations["get_shipping_labels_shipments__shipmentId__tracking_labels_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/update-status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/assign-data-collection-groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Assign Dcg In Sublocation
-         * @description Update data collection group sample ID in ISPyB. Does not return data.
-         */
-        post: operations["assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Update Shipment Status
+     * @description Update shipment status
+     */
+    post: operations["update_shipment_status_shipments__shipmentId__update_status_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/assign-data-collection-groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/shipments/{shipmentId}/pdf-report": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Pdf Report
-         * @description Get PDF report of shipment
-         */
-        get: operations["get_pdf_report_shipments__shipmentId__pdf_report_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Assign Dcg In Sublocation
+     * @description Update data collection group sample ID in ISPyB. Does not return data.
+     */
+    post: operations["assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/shipments/{shipmentId}/pdf-report": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/sessions/{visitNumber}/shipments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Shipments
-         * @description Get shipments in session
-         */
-        get: operations["get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get"];
-        put?: never;
-        /**
-         * Create Shipment
-         * @description Create new shipment in session
-         */
-        post: operations["create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Pdf Report
+     * @description Get PDF report of shipment
+     */
+    get: operations["get_pdf_report_shipments__shipmentId__pdf_report_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/shipments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/sessions/{visitNumber}/samples": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Samples
-         * @description Get samples in session
-         */
-        get: operations["get_samples_proposals__proposalReference__sessions__visitNumber__samples_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Shipments
+     * @description Get shipments in session
+     */
+    get: operations["get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get"];
+    put?: never;
+    /**
+     * Create Shipment
+     * @description Create new shipment in session
+     */
+    post: operations["create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/samples": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/sessions/{visitNumber}/containers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Containers
-         * @description Get containers in session
-         */
-        get: operations["get_containers_proposals__proposalReference__sessions__visitNumber__containers_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Samples
+     * @description Get samples in session
+     */
+    get: operations["get_samples_proposals__proposalReference__sessions__visitNumber__samples_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/data": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Shipment Data
-         * @description Get lab data for the proposal (lab contacts, proteins...)
-         *
-         *     We can skip auth on this one since it is calling Expeye, and auth is done there
-         */
-        get: operations["get_shipment_data_proposals__proposalReference__data_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Containers
+     * @description Get containers in session
+     */
+    get: operations["get_containers_proposals__proposalReference__sessions__visitNumber__containers_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/data": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/shipments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Proposal Shipments
-         * @description Get shipments in proposal
-         */
-        get: operations["get_proposal_shipments_proposals__proposalReference__shipments_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Shipment Data
+     * @description Get lab data for the proposal (lab contacts, proteins...)
+     *
+     *     We can skip auth on this one since it is calling Expeye, and auth is done there
+     */
+    get: operations["get_shipment_data_proposals__proposalReference__data_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/shipments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/proposals/{proposalReference}/sessions/{visitNumber}/assign-data-collection-groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Assign Dcg In Sublocation
-         * @description Update data collection group sample ID in ISPyB. Does not return data.
-         */
-        post: operations["assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Proposal Shipments
+     * @description Get shipments in proposal
+     */
+    get: operations["get_proposal_shipments_proposals__proposalReference__shipments_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/proposals/{proposalReference}/sessions/{visitNumber}/assign-data-collection-groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/samples/{sampleId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete Sample
-         * @description Create new sample in shipment
-         */
-        delete: operations["delete_sample_samples__sampleId__delete"];
-        options?: never;
-        head?: never;
-        /**
-         * Edit Sample
-         * @description Edit existing sample
-         */
-        patch: operations["edit_sample_samples__sampleId__patch"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Assign Dcg In Sublocation
+     * @description Update data collection group sample ID in ISPyB. Does not return data.
+     */
+    post: operations["assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/samples/{sampleId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/containers/{containerId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Container
-         * @description Get container
-         */
-        get: operations["get_container_containers__containerId__get"];
-        put?: never;
-        post?: never;
-        /**
-         * Delete Container
-         * @description Delete container in shipment
-         */
-        delete: operations["delete_container_containers__containerId__delete"];
-        options?: never;
-        head?: never;
-        /**
-         * Edit Container
-         * @description Edit existing container
-         */
-        patch: operations["edit_container_containers__containerId__patch"];
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete Sample
+     * @description Create new sample in shipment
+     */
+    delete: operations["delete_sample_samples__sampleId__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Edit Sample
+     * @description Edit existing sample
+     */
+    patch: operations["edit_sample_samples__sampleId__patch"];
+    trace?: never;
+  };
+  "/containers/{containerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/topLevelContainers/{topLevelContainerId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete Container
-         * @description Create new container in shipment
-         */
-        delete: operations["delete_container_topLevelContainers__topLevelContainerId__delete"];
-        options?: never;
-        head?: never;
-        /**
-         * Edit Container
-         * @description Edit existing container
-         */
-        patch: operations["edit_container_topLevelContainers__topLevelContainerId__patch"];
-        trace?: never;
+    /**
+     * Get Container
+     * @description Get container
+     */
+    get: operations["get_container_containers__containerId__get"];
+    put?: never;
+    post?: never;
+    /**
+     * Delete Container
+     * @description Delete container in shipment
+     */
+    delete: operations["delete_container_containers__containerId__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Edit Container
+     * @description Edit existing container
+     */
+    patch: operations["edit_container_containers__containerId__patch"];
+    trace?: never;
+  };
+  "/topLevelContainers/{topLevelContainerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/internal-containers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Internal Containers
-         * @description Get internal top level containers
-         */
-        get: operations["get_internal_containers_internal_containers_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete Container
+     * @description Create new container in shipment
+     */
+    delete: operations["delete_container_topLevelContainers__topLevelContainerId__delete"];
+    options?: never;
+    head?: never;
+    /**
+     * Edit Container
+     * @description Edit existing container
+     */
+    patch: operations["edit_container_topLevelContainers__topLevelContainerId__patch"];
+    trace?: never;
+  };
+  "/internal-containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/internal-containers/unassigned": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Unassigned Internal Containers
-         * @description Get orphan internal containers
-         */
-        get: operations["get_unassigned_internal_containers_internal_containers_unassigned_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Internal Containers
+     * @description Get internal top level containers
+     */
+    get: operations["get_internal_containers_internal_containers_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/internal-containers/unassigned": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/internal-containers/containers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create Orphan Container
-         * @description Create orphan container
-         */
-        post: operations["create_orphan_container_internal_containers_containers_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Unassigned Internal Containers
+     * @description Get orphan internal containers
+     */
+    get: operations["get_unassigned_internal_containers_internal_containers_unassigned_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/internal-containers/containers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/internal-containers/topLevelContainers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create Orphan Top Level Container
-         * @description Create orphan container
-         */
-        post: operations["create_orphan_top_level_container_internal_containers_topLevelContainers_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Create Orphan Container
+     * @description Create orphan container
+     */
+    post: operations["create_orphan_container_internal_containers_containers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/internal-containers/topLevelContainers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/internal-containers/{topLevelContainerId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Internal Container
-         * @description Get internal top level container and its children
-         */
-        get: operations["get_internal_container_internal_containers__topLevelContainerId__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Create Orphan Top Level Container
+     * @description Create orphan container
+     */
+    post: operations["create_orphan_top_level_container_internal_containers_topLevelContainers_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/internal-containers/{topLevelContainerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Sessions
-         * @description Get sessions a user can view (wrapper for Expeye endpoint)
-         */
-        get: operations["get_sessions_sessions_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Internal Container
+     * @description Get internal top level container and its children
+     */
+    get: operations["get_internal_container_internal_containers__topLevelContainerId__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/sessions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    /**
+     * Get Sessions
+     * @description Get sessions a user can view (wrapper for Expeye endpoint)
+     */
+    get: operations["get_sessions_sessions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        /** ContainerIn */
-        ContainerIn: {
-            /** Toplevelcontainerid */
-            topLevelContainerId?: number | null;
-            /** Parentid */
-            parentId?: number | null;
-            /** Capacity */
-            capacity?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Location */
-            location?: number | null;
-            /**
-             * Requestedreturn
-             * @default false
-             */
-            requestedReturn: boolean | null;
-            /** Registeredcontainer */
-            registeredContainer?: string | null;
-            /** Subtype */
-            subType?: string | null;
-            /**
-             * Name
-             * @description Base container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Comments */
-            comments?: string | null;
-            /** Type */
-            type: string;
-            /**
-             * Isinternal
-             * @default false
-             */
-            isInternal: boolean;
-        };
-        /** ContainerOut */
-        ContainerOut: {
-            /** Toplevelcontainerid */
-            topLevelContainerId?: number | null;
-            /** Parentid */
-            parentId?: number | null;
-            /** Capacity */
-            capacity?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Location */
-            location?: number | null;
-            /**
-             * Requestedreturn
-             * @default false
-             */
-            requestedReturn: boolean | null;
-            /** Registeredcontainer */
-            registeredContainer?: string | null;
-            /** Subtype */
-            subType?: string | null;
-            /**
-             * Name
-             * @description Base container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Comments */
-            comments?: string | null;
-            /** Shipmentid */
-            shipmentId: number;
-            /** Id */
-            id: number;
-            /** Type */
-            type: string;
-            /** Isinternal */
-            isInternal: boolean;
-            /**
-             * Internalstoragecontainer
-             * @description Internal storage container this container is currently in.Only set if this is stored in the facility
-             */
-            internalStorageContainer?: number | null;
-        };
-        /** GenericItem */
-        GenericItem: {
-            /** Id */
-            id: number;
-            /** Name */
-            name: string;
-            data: components["schemas"]["GenericItemData"];
-            /** Children */
-            children?: components["schemas"]["GenericItem"][] | null;
-        };
-        /** GenericItemData */
-        GenericItemData: {
-            /** Type */
-            type: string;
-        } & {
-            [key: string]: unknown;
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** OptionalContainer */
-        OptionalContainer: {
-            /** Toplevelcontainerid */
-            topLevelContainerId?: number | null;
-            /** Parentid */
-            parentId?: number | null;
-            /** Capacity */
-            capacity?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Location */
-            location?: number | null;
-            /**
-             * Requestedreturn
-             * @default false
-             */
-            requestedReturn: boolean | null;
-            /** Registeredcontainer */
-            registeredContainer?: string | null;
-            /** Subtype */
-            subType?: string | null;
-            /**
-             * Name
-             * @description Base container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Comments */
-            comments?: string | null;
-            /** Type */
-            type?: string | null;
-            /** Shipmentid */
-            shipmentId?: number | null;
-            /** Isinternal */
-            isInternal?: boolean | null;
-        };
-        /** OptionalSample */
-        OptionalSample: {
-            /** Containerid */
-            containerId?: number | null;
-            /** Location */
-            location?: number | null;
-            /** Sublocation */
-            subLocation?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
-             */
-            name?: string | null;
-            /** Proteinid */
-            proteinId?: number | null;
-            /** Type */
-            type?: string | null;
-            /** Shipmentid */
-            shipmentId?: number | null;
-        };
-        /** OptionalTopLevelContainer */
-        OptionalTopLevelContainer: {
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Type */
-            type?: string | null;
-            /** Code */
-            code?: string | null;
-            /** Barcode */
-            barCode?: string | null;
-        };
-        /** Paged[ContainerOut] */
-        Paged_ContainerOut_: {
-            /** Items */
-            items: components["schemas"]["ContainerOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** Paged[GenericItem] */
-        Paged_GenericItem_: {
-            /** Items */
-            items: components["schemas"]["GenericItem"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** Paged[SampleOut] */
-        Paged_SampleOut_: {
-            /** Items */
-            items: components["schemas"]["SampleOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** Paged[SessionOut] */
-        Paged_SessionOut_: {
-            /** Items */
-            items: components["schemas"]["SessionOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** Paged[ShipmentOut] */
-        Paged_ShipmentOut_: {
-            /** Items */
-            items: components["schemas"]["ShipmentOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** Paged[TopLevelContainerOut] */
-        Paged_TopLevelContainerOut_: {
-            /** Items */
-            items: components["schemas"]["TopLevelContainerOut"][];
-            /** Total */
-            total: number;
-            /** Page */
-            page: number;
-            /** Limit */
-            limit: number;
-        };
-        /** PreSessionIn */
-        PreSessionIn: {
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-        };
-        /** PreSessionOut */
-        PreSessionOut: {
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /**
-             * Islocked
-             * @default false
-             */
-            isLocked: boolean;
-        };
-        /** SampleIn */
-        SampleIn: {
-            /** Containerid */
-            containerId?: number | null;
-            /** Location */
-            location?: number | null;
-            /** Sublocation */
-            subLocation?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
-             */
-            name?: string | null;
-            /** Proteinid */
-            proteinId: number;
-            /** Type */
-            type?: string | null;
-            /**
-             * Copies
-             * @default 1
-             */
-            copies: number;
-            /** Parents */
-            parents?: number[] | null;
-        };
-        /** SampleOut */
-        SampleOut: {
-            /** Containerid */
-            containerId?: number | null;
-            /** Location */
-            location?: number | null;
-            /** Sublocation */
-            subLocation?: number | null;
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
-             */
-            name?: string | null;
-            /** Id */
-            id: number;
-            /** Shipmentid */
-            shipmentId: number;
-            /** Proteinid */
-            proteinId: number;
-            /** Containername */
-            containerName?: string | null;
-            /** Type */
-            type: string;
-            /** Datacollectiongroupid */
-            dataCollectionGroupId?: number | null;
-            /** Parentshipmentname */
-            parentShipmentName?: string | null;
-            /** Originsamples */
-            originSamples?: components["schemas"]["SampleOut"][] | null;
-            /** Derivedsamples */
-            derivedSamples?: components["schemas"]["SampleOut"][] | null;
-            /** Externalid */
-            externalId?: number | null;
-        };
-        /** SessionOut */
-        SessionOut: {
-            /** Beamlinesetupid */
-            beamLineSetupId?: number | null;
-            /** Beamcalendarid */
-            beamCalendarId?: number | null;
-            /** Startdate */
-            startDate?: string | null;
-            /** Enddate */
-            endDate?: string | null;
-            /** Beamlinename */
-            beamLineName?: string | null;
-            /** Scheduled */
-            scheduled?: number | null;
-            /** Nbshifts */
-            nbShifts?: number | null;
-            /** Comments */
-            comments?: string | null;
-            /** Visitnumber */
-            visitNumber?: number | null;
-            /**
-             * Usedflag
-             * @description Indicates if session has Datacollections or XFE or EnergyScans attached
-             */
-            usedFlag?: number | null;
-            /**
-             * Lastupdate
-             * @description Last update timestamp: by default the end of the session, the last collect
-             */
-            lastUpdate?: string | null;
-            /** Parentproposal */
-            parentProposal?: string | null;
-            /**
-             * Proposalid
-             * @description Proposal ID
-             */
-            proposalId: number;
-            /**
-             * Sessionid
-             * @description Session ID
-             */
-            sessionId: number;
-            /** Beamlineoperator */
-            beamLineOperator?: string[] | null;
-            /**
-             * Bltimestamp
-             * Format: date-time
-             */
-            bltimeStamp: string;
-            /** Purgedprocesseddata */
-            purgedProcessedData: boolean;
-            /**
-             * Archived
-             * @description The data for the session is archived and no longer available on disk
-             */
-            archived: number;
-            /** Collectiongroups */
-            collectionGroups?: number | null;
-        };
-        /** ShipmentChildren */
-        ShipmentChildren: {
-            /** Id */
-            id: number;
-            /** Name */
-            name: string;
-            /** Children */
-            children: components["schemas"]["GenericItem"][];
-            /** Data */
-            data: {
-                [key: string]: unknown;
-            };
-        };
-        /** ShipmentIn */
-        ShipmentIn: {
-            /** Name */
-            name: string;
-            /** Comments */
-            comments?: string | null;
-        };
-        /** ShipmentOut */
-        ShipmentOut: {
-            /** Id */
-            id: number;
-            /** Proposalcode */
-            proposalCode: string;
-            /** Proposalnumber */
-            proposalNumber: number;
-            /** Visitnumber */
-            visitNumber: number;
-            /** Name */
-            name: string;
-            /** Comments */
-            comments?: string | null;
-            /** Creationdate */
-            creationDate: string | null;
-            /** Status */
-            status?: string | null;
-            /** Shipmentrequest */
-            shipmentRequest?: number | null;
-            /**
-             * Laststatusupdate
-             * Format: date-time
-             */
-            lastStatusUpdate: string;
-            /** Externalid */
-            externalId?: number | null;
-        };
-        /** StatusUpdate */
-        StatusUpdate: {
-            /** Origin Url */
-            origin_url: string;
-            /** Journey Type */
-            journey_type: string;
-            /** Status */
-            status: string;
-            /** Tracking Number */
-            tracking_number: string;
-            /** Pickup Confirmation Code */
-            pickup_confirmation_code?: string | null;
-            /** Pickup Confirmation Timestamp */
-            pickup_confirmation_timestamp: string | null;
-        };
-        /** SublocationAssignment */
-        SublocationAssignment: {
-            /** Sublocation */
-            subLocation: number;
-            /** Datacollectiongroupid */
-            dataCollectionGroupId: number;
-        };
-        /** TopLevelContainerHistory */
-        TopLevelContainerHistory: {
-            /** Storagelocation */
-            storageLocation?: string | null;
-            /** Dewarid */
-            dewarId: number;
-            /** Dewarstatus */
-            dewarStatus: string;
-            /** Arrivaldate */
-            arrivalDate?: string | null;
-        };
-        /** TopLevelContainerIn */
-        TopLevelContainerIn: {
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Type */
-            type: string;
-            /** Code */
-            code?: string | null;
-            /**
-             * Isinternal
-             * @default false
-             */
-            isInternal: boolean;
-        };
-        /** TopLevelContainerOut */
-        TopLevelContainerOut: {
-            /** Details */
-            details?: {
-                [key: string]: unknown;
-            } | null;
-            /** Comments */
-            comments?: string | null;
-            /**
-             * Name
-             * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
-             */
-            name?: string | null;
-            /** Id */
-            id: number;
-            /** Type */
-            type: string;
-            /** Externalid */
-            externalId?: number | null;
-            /** Barcode */
-            barCode?: string | null;
-            /** History */
-            history?: components["schemas"]["TopLevelContainerHistory"][] | null;
-        };
-        /** UnassignedItems */
-        UnassignedItems: {
-            /** Samples */
-            samples: components["schemas"]["GenericItem"][];
-            /** Gridboxes */
-            gridBoxes: components["schemas"]["GenericItem"][];
-            /** Containers */
-            containers: components["schemas"]["GenericItem"][];
-        };
-        /** ValidationError */
-        ValidationError: {
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
-        };
+  schemas: {
+    /** ContainerIn */
+    ContainerIn: {
+      /** Toplevelcontainerid */
+      topLevelContainerId?: number | null;
+      /** Parentid */
+      parentId?: number | null;
+      /** Capacity */
+      capacity?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Location */
+      location?: number | null;
+      /**
+       * Requestedreturn
+       * @default false
+       */
+      requestedReturn: boolean | null;
+      /** Registeredcontainer */
+      registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
+      /**
+       * Name
+       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Comments */
+      comments?: string | null;
+      /** Type */
+      type: string;
+      /**
+       * Isinternal
+       * @default false
+       */
+      isInternal: boolean;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    /** ContainerOut */
+    ContainerOut: {
+      /** Toplevelcontainerid */
+      topLevelContainerId?: number | null;
+      /** Parentid */
+      parentId?: number | null;
+      /** Capacity */
+      capacity?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Location */
+      location?: number | null;
+      /**
+       * Requestedreturn
+       * @default false
+       */
+      requestedReturn: boolean | null;
+      /** Registeredcontainer */
+      registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
+      /**
+       * Name
+       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Comments */
+      comments?: string | null;
+      /** Shipmentid */
+      shipmentId: number;
+      /** Id */
+      id: number;
+      /** Type */
+      type: string;
+      /** Isinternal */
+      isInternal: boolean;
+      /**
+       * Internalstoragecontainer
+       * @description Internal storage container this container is currently in.Only set if this is stored in the facility
+       */
+      internalStorageContainer?: number | null;
+    };
+    /** GenericItem */
+    GenericItem: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      data: components["schemas"]["GenericItemData"];
+      /** Children */
+      children?: components["schemas"]["GenericItem"][] | null;
+    };
+    /** GenericItemData */
+    GenericItemData: {
+      /** Type */
+      type: string;
+    } & {
+      [key: string]: unknown;
+    };
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components["schemas"]["ValidationError"][];
+    };
+    /** OptionalContainer */
+    OptionalContainer: {
+      /** Toplevelcontainerid */
+      topLevelContainerId?: number | null;
+      /** Parentid */
+      parentId?: number | null;
+      /** Capacity */
+      capacity?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Location */
+      location?: number | null;
+      /**
+       * Requestedreturn
+       * @default false
+       */
+      requestedReturn: boolean | null;
+      /** Registeredcontainer */
+      registeredContainer?: string | null;
+      /** Subtype */
+      subType?: string | null;
+      /**
+       * Name
+       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Comments */
+      comments?: string | null;
+      /** Type */
+      type?: string | null;
+      /** Shipmentid */
+      shipmentId?: number | null;
+      /** Isinternal */
+      isInternal?: boolean | null;
+    };
+    /** OptionalSample */
+    OptionalSample: {
+      /** Containerid */
+      containerId?: number | null;
+      /** Location */
+      location?: number | null;
+      /** Sublocation */
+      subLocation?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
+       */
+      name?: string | null;
+      /** Proteinid */
+      proteinId?: number | null;
+      /** Type */
+      type?: string | null;
+      /** Shipmentid */
+      shipmentId?: number | null;
+    };
+    /** OptionalTopLevelContainer */
+    OptionalTopLevelContainer: {
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Type */
+      type?: string | null;
+      /** Code */
+      code?: string | null;
+      /** Barcode */
+      barCode?: string | null;
+    };
+    /** Paged[ContainerOut] */
+    Paged_ContainerOut_: {
+      /** Items */
+      items: components["schemas"]["ContainerOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[GenericItem] */
+    Paged_GenericItem_: {
+      /** Items */
+      items: components["schemas"]["GenericItem"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[SampleOut] */
+    Paged_SampleOut_: {
+      /** Items */
+      items: components["schemas"]["SampleOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[SessionOut] */
+    Paged_SessionOut_: {
+      /** Items */
+      items: components["schemas"]["SessionOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[ShipmentOut] */
+    Paged_ShipmentOut_: {
+      /** Items */
+      items: components["schemas"]["ShipmentOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** Paged[TopLevelContainerOut] */
+    Paged_TopLevelContainerOut_: {
+      /** Items */
+      items: components["schemas"]["TopLevelContainerOut"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Limit */
+      limit: number;
+    };
+    /** PreSessionIn */
+    PreSessionIn: {
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+    };
+    /** PreSessionOut */
+    PreSessionOut: {
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Islocked
+       * @default false
+       */
+      isLocked: boolean;
+    };
+    /** SampleIn */
+    SampleIn: {
+      /** Containerid */
+      containerId?: number | null;
+      /** Location */
+      location?: number | null;
+      /** Sublocation */
+      subLocation?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
+       */
+      name?: string | null;
+      /** Proteinid */
+      proteinId: number;
+      /** Type */
+      type?: string | null;
+      /**
+       * Copies
+       * @default 1
+       */
+      copies: number;
+      /** Parents */
+      parents?: number[] | null;
+    };
+    /** SampleOut */
+    SampleOut: {
+      /** Containerid */
+      containerId?: number | null;
+      /** Location */
+      location?: number | null;
+      /** Sublocation */
+      subLocation?: number | null;
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Sample name, if not provided, the provided protein's name followed by the sample index is used
+       */
+      name?: string | null;
+      /** Id */
+      id: number;
+      /** Shipmentid */
+      shipmentId: number;
+      /** Proteinid */
+      proteinId: number;
+      /** Containername */
+      containerName?: string | null;
+      /** Type */
+      type: string;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId?: number | null;
+      /** Parentshipmentname */
+      parentShipmentName?: string | null;
+      /** Originsamples */
+      originSamples?: components["schemas"]["SampleOut"][] | null;
+      /** Derivedsamples */
+      derivedSamples?: components["schemas"]["SampleOut"][] | null;
+      /** Externalid */
+      externalId?: number | null;
+    };
+    /** SessionOut */
+    SessionOut: {
+      /** Beamlinesetupid */
+      beamLineSetupId?: number | null;
+      /** Beamcalendarid */
+      beamCalendarId?: number | null;
+      /** Startdate */
+      startDate?: string | null;
+      /** Enddate */
+      endDate?: string | null;
+      /** Beamlinename */
+      beamLineName?: string | null;
+      /** Scheduled */
+      scheduled?: number | null;
+      /** Nbshifts */
+      nbShifts?: number | null;
+      /** Comments */
+      comments?: string | null;
+      /** Visitnumber */
+      visitNumber?: number | null;
+      /**
+       * Usedflag
+       * @description Indicates if session has Datacollections or XFE or EnergyScans attached
+       */
+      usedFlag?: number | null;
+      /**
+       * Lastupdate
+       * @description Last update timestamp: by default the end of the session, the last collect
+       */
+      lastUpdate?: string | null;
+      /** Parentproposal */
+      parentProposal?: string | null;
+      /**
+       * Proposalid
+       * @description Proposal ID
+       */
+      proposalId: number;
+      /**
+       * Sessionid
+       * @description Session ID
+       */
+      sessionId: number;
+      /** Beamlineoperator */
+      beamLineOperator?: string[] | null;
+      /**
+       * Bltimestamp
+       * Format: date-time
+       */
+      bltimeStamp: string;
+      /** Purgedprocesseddata */
+      purgedProcessedData: boolean;
+      /**
+       * Archived
+       * @description The data for the session is archived and no longer available on disk
+       */
+      archived: number;
+      /** Collectiongroups */
+      collectionGroups?: number | null;
+    };
+    /** ShipmentChildren */
+    ShipmentChildren: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** Children */
+      children: components["schemas"]["GenericItem"][];
+      /** Data */
+      data: {
+        [key: string]: unknown;
+      };
+    };
+    /** ShipmentIn */
+    ShipmentIn: {
+      /** Name */
+      name: string;
+      /** Comments */
+      comments?: string | null;
+    };
+    /** ShipmentOut */
+    ShipmentOut: {
+      /** Id */
+      id: number;
+      /** Proposalcode */
+      proposalCode: string;
+      /** Proposalnumber */
+      proposalNumber: number;
+      /** Visitnumber */
+      visitNumber: number;
+      /** Name */
+      name: string;
+      /** Comments */
+      comments?: string | null;
+      /** Creationdate */
+      creationDate: string | null;
+      /** Status */
+      status?: string | null;
+      /** Shipmentrequest */
+      shipmentRequest?: number | null;
+      /**
+       * Laststatusupdate
+       * Format: date-time
+       */
+      lastStatusUpdate: string;
+      /** Externalid */
+      externalId?: number | null;
+    };
+    /** StatusUpdate */
+    StatusUpdate: {
+      /** Origin Url */
+      origin_url: string;
+      /** Journey Type */
+      journey_type: string;
+      /** Status */
+      status: string;
+      /** Tracking Number */
+      tracking_number: string;
+      /** Pickup Confirmation Code */
+      pickup_confirmation_code?: string | null;
+      /** Pickup Confirmation Timestamp */
+      pickup_confirmation_timestamp: string | null;
+    };
+    /** SublocationAssignment */
+    SublocationAssignment: {
+      /** Sublocation */
+      subLocation: number;
+      /** Datacollectiongroupid */
+      dataCollectionGroupId: number;
+    };
+    /** TopLevelContainerHistory */
+    TopLevelContainerHistory: {
+      /** Storagelocation */
+      storageLocation?: string | null;
+      /** Dewarid */
+      dewarId: number;
+      /** Dewarstatus */
+      dewarStatus: string;
+      /** Arrivaldate */
+      arrivalDate?: string | null;
+    };
+    /** TopLevelContainerIn */
+    TopLevelContainerIn: {
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Type */
+      type: string;
+      /** Code */
+      code?: string | null;
+      /**
+       * Isinternal
+       * @default false
+       */
+      isInternal: boolean;
+    };
+    /** TopLevelContainerOut */
+    TopLevelContainerOut: {
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      } | null;
+      /** Comments */
+      comments?: string | null;
+      /**
+       * Name
+       * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
+       */
+      name?: string | null;
+      /** Id */
+      id: number;
+      /** Type */
+      type: string;
+      /** Externalid */
+      externalId?: number | null;
+      /** Barcode */
+      barCode?: string | null;
+      /** History */
+      history?: components["schemas"]["TopLevelContainerHistory"][] | null;
+    };
+    /** UnassignedItems */
+    UnassignedItems: {
+      /** Samples */
+      samples: components["schemas"]["GenericItem"][];
+      /** Gridboxes */
+      gridBoxes: components["schemas"]["GenericItem"][];
+      /** Containers */
+      containers: components["schemas"]["GenericItem"][];
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: (string | number)[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    get_shipment_shipments__shipmentId__get: {
-        parameters: {
-            query?: {
-                /** @description Whether to get children as part of the request */
-                getChildren?: boolean;
-            };
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShipmentChildren"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  get_shipment_shipments__shipmentId__get: {
+    parameters: {
+      query?: {
+        /** @description Whether to get children as part of the request */
+        getChildren?: boolean;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_unassigned_items_shipments__shipmentId__unassigned_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UnassignedItems"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ShipmentChildren"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    push_shipment_shipments__shipmentId__push_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_unassigned_items_shipments__shipmentId__unassigned_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_top_level_containers_shipments__shipmentId__topLevelContainers_get: {
-        parameters: {
-            query?: {
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_TopLevelContainerOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["UnassignedItems"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    create_top_level_container_shipments__shipmentId__topLevelContainers_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TopLevelContainerIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TopLevelContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  push_shipment_shipments__shipmentId__push_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    create_container_shipments__shipmentId__containers_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ContainerIn"];
-            };
+        content: {
+          "application/json": unknown;
         };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_samples_shipments__shipmentId__samples_get: {
-        parameters: {
-            query?: {
-                ignoreExternal?: boolean;
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_SampleOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_top_level_containers_shipments__shipmentId__topLevelContainers_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    create_sample_shipments__shipmentId__samples_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SampleIn"];
-            };
+        content: {
+          "application/json": components["schemas"]["Paged_TopLevelContainerOut_"];
         };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_SampleOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_shipment_request_shipments__shipmentId__request_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            307: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  create_top_level_container_shipments__shipmentId__topLevelContainers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    create_shipment_request_shipments__shipmentId__request_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShipmentOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TopLevelContainerIn"];
+      };
     };
-    get_pre_session_shipments__shipmentId__preSession_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PreSessionOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["TopLevelContainerOut"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    create_pre_session_shipments__shipmentId__preSession_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PreSessionIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PreSessionOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  create_container_shipments__shipmentId__containers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_shipping_labels_shipments__shipmentId__tracking_labels_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                    "application/pdf": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ContainerIn"];
+      };
     };
-    update_shipment_status_shipments__shipmentId__update_status_post: {
-        parameters: {
-            query: {
-                token: string;
-            };
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["StatusUpdate"];
-            };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShipmentOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SublocationAssignment"][];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_samples_shipments__shipmentId__samples_get: {
+    parameters: {
+      query?: {
+        ignoreExternal?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_pdf_report_shipments__shipmentId__pdf_report_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                shipmentId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["Paged_SampleOut_"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get: {
-        parameters: {
-            query?: {
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                proposalReference: string;
-                visitNumber: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_ShipmentOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  create_sample_shipments__shipmentId__samples_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                proposalReference: string;
-                visitNumber: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ShipmentIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShipmentOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SampleIn"];
+      };
     };
-    get_samples_proposals__proposalReference__sessions__visitNumber__samples_get: {
-        parameters: {
-            query?: {
-                ignoreExternal?: boolean;
-                internalOnly?: boolean;
-                ignoreInternal?: boolean;
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                proposalReference: string;
-                visitNumber: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_SampleOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["Paged_SampleOut_"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_containers_proposals__proposalReference__sessions__visitNumber__containers_get: {
-        parameters: {
-            query?: {
-                /** @description Only display containers assigned to internal containers */
-                isInternal?: boolean;
-                /** @description Container type to filter by */
-                type?: string;
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                proposalReference: string;
-                visitNumber: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_ContainerOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_shipment_request_shipments__shipmentId__request_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_shipment_data_proposals__proposalReference__data_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                proposalReference: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      307: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_proposal_shipments_proposals__proposalReference__shipments_get: {
-        parameters: {
-            query?: {
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                proposalReference: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  create_shipment_request_shipments__shipmentId__request_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                proposalReference: string;
-                visitNumber: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SublocationAssignment"][];
-            };
+        content: {
+          "application/json": components["schemas"]["ShipmentOut"];
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    delete_sample_samples__sampleId__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sampleId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_pre_session_shipments__shipmentId__preSession_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    edit_sample_samples__sampleId__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sampleId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["OptionalSample"];
-            };
+        content: {
+          "application/json": components["schemas"]["PreSessionOut"];
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SampleOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_container_containers__containerId__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                containerId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  create_pre_session_shipments__shipmentId__preSession_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    delete_container_containers__containerId__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                containerId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreSessionIn"];
+      };
     };
-    edit_container_containers__containerId__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                containerId: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["OptionalContainer"];
-            };
+        content: {
+          "application/json": components["schemas"]["PreSessionOut"];
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    delete_container_topLevelContainers__topLevelContainerId__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                topLevelContainerId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  get_shipping_labels_shipments__shipmentId__tracking_labels_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    edit_container_topLevelContainers__topLevelContainerId__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                topLevelContainerId: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["OptionalTopLevelContainer"];
-            };
+        content: {
+          "application/json": unknown;
+          "application/pdf": unknown;
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TopLevelContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    get_internal_containers_internal_containers_get: {
-        parameters: {
-            query?: {
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_TopLevelContainerOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  update_shipment_status_shipments__shipmentId__update_status_post: {
+    parameters: {
+      query: {
+        token: string;
+      };
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_unassigned_internal_containers_internal_containers_unassigned_get: {
-        parameters: {
-            query?: {
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_GenericItem_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StatusUpdate"];
+      };
     };
-    create_orphan_container_internal_containers_containers_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ContainerIn"];
-            };
+        content: {
+          "application/json": components["schemas"]["ShipmentOut"];
         };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
-    create_orphan_top_level_container_internal_containers_topLevelContainers_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TopLevelContainerIn"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TopLevelContainerOut"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  assign_dcg_in_sublocation_shipments__shipmentId__assign_data_collection_groups_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
     };
-    get_internal_container_internal_containers__topLevelContainerId__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                topLevelContainerId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ShipmentChildren"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SublocationAssignment"][];
+      };
     };
-    get_sessions_sessions_get: {
-        parameters: {
-            query?: {
-                minEndDate?: string | null;
-                /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
-                page?: number;
-                /** @description Number of results to show */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Paged_SessionOut_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
+        content: {
+          "application/json": unknown;
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
+  };
+  get_pdf_report_shipments__shipmentId__pdf_report_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        shipmentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_shipments_proposals__proposalReference__sessions__visitNumber__shipments_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_ShipmentOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_shipment_proposals__proposalReference__sessions__visitNumber__shipments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ShipmentIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ShipmentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_samples_proposals__proposalReference__sessions__visitNumber__samples_get: {
+    parameters: {
+      query?: {
+        ignoreExternal?: boolean;
+        internalOnly?: boolean;
+        ignoreInternal?: boolean;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_SampleOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_containers_proposals__proposalReference__sessions__visitNumber__containers_get: {
+    parameters: {
+      query?: {
+        /** @description Only display containers assigned to internal containers */
+        isInternal?: boolean;
+        /** @description Container type to filter by */
+        type?: string;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_ContainerOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_shipment_data_proposals__proposalReference__data_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_proposal_shipments_proposals__proposalReference__shipments_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        proposalReference: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  assign_dcg_in_sublocation_proposals__proposalReference__sessions__visitNumber__assign_data_collection_groups_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        proposalReference: string;
+        visitNumber: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SublocationAssignment"][];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_sample_samples__sampleId__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        sampleId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  edit_sample_samples__sampleId__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        sampleId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OptionalSample"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SampleOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_container_containers__containerId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        containerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_container_containers__containerId__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        containerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  edit_container_containers__containerId__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        containerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OptionalContainer"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_container_topLevelContainers__topLevelContainerId__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        topLevelContainerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  edit_container_topLevelContainers__topLevelContainerId__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        topLevelContainerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OptionalTopLevelContainer"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TopLevelContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_internal_containers_internal_containers_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_TopLevelContainerOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_unassigned_internal_containers_internal_containers_unassigned_get: {
+    parameters: {
+      query?: {
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_GenericItem_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_orphan_container_internal_containers_containers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ContainerIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_orphan_top_level_container_internal_containers_topLevelContainers_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TopLevelContainerIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TopLevelContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_internal_container_internal_containers__topLevelContainerId__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        topLevelContainerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ShipmentChildren"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_sessions_sessions_get: {
+    parameters: {
+      query?: {
+        minEndDate?: string | null;
+        /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
+        page?: number;
+        /** @description Number of results to show */
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Paged_SessionOut_"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
 }

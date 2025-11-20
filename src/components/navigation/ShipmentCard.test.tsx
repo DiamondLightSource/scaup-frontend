@@ -10,7 +10,7 @@ const baseShipment: components["schemas"]["ShipmentOut"] = {
   proposalCode: "cm",
   proposalNumber: 12345,
   visitNumber: 1,
-  lastStatusUpdate: "2025-01-01 01:01:01"
+  lastStatusUpdate: "2025-01-01 01:01:01",
 };
 
 describe("Shipment Card", () => {
@@ -21,10 +21,8 @@ describe("Shipment Card", () => {
   });
 
   it("should render '?' if no valid date is provided", () => {
-    renderWithProviders(
-      <ShipmentCard shipment={{...baseShipment, creationDate: null}} />
-    );
+    renderWithProviders(<ShipmentCard shipment={{ ...baseShipment, creationDate: null }} />);
 
-    expect(screen.getByText("Creation Date: ?")).toBeInTheDocument()
+    expect(screen.getByText("Creation Date: ?")).toBeInTheDocument();
   });
 });
