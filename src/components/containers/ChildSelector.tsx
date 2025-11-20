@@ -1,7 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
-import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
-import { ChildSelectorProps } from "@/types/generic";
+import { getCurrentStepIndex, steps } from "@/mappings/pages";
+import { ChildSelectorProps, ItemWithDetails } from "@/types/generic";
 import {
   Box,
   Button,
@@ -32,9 +32,10 @@ import { useSelector } from "react-redux";
 
 interface ChildItemDetailsProps {
   childType: string;
-  childData: TreeData<BaseShipmentItem>;
+  childData: TreeData<ItemWithDetails>;
   childId: number;
   hasCheckbox?: boolean;
+  displayDetails?: boolean;
 }
 
 interface ChildItemDetailsFieldProps {
@@ -58,27 +59,23 @@ const ChildItemDetails = ({
   childData,
   childId,
   hasCheckbox = false,
+  displayDetails,
 }: ChildItemDetailsProps) => (
   <VStack w='100%' key={childId} borderBottom='1px solid' borderColor='diamond.200' py='10px'>
     <HStack w='100%'>
       <Stat>
         <StatLabel>{childType}</StatLabel>
         <StatNumber>{childData.name}</StatNumber>
-        {childType === "Grid" && (
+        {displayDetails && childData.data.displayDetails && (
           <Grid w='100%' gap='0' templateColumns='repeat(2, 1fr)' mt='10px'>
-            <ChildItemDetailsField
-              label='Concentration'
-              value={childData.data.concentration}
-              measurementUnit='mg/ml'
-            />
-            <ChildItemDetailsField label='Buffer' value={childData.data.buffer} />
-            <ChildItemDetailsField
-              label='Support Material'
-              value={childData.data.supportMaterial}
-            />
-            <ChildItemDetailsField label='Foil' value={childData.data.foil} />
-            <ChildItemDetailsField label='Mesh' value={childData.data.mesh} />
-            <ChildItemDetailsField label='Hole Diameter' value={childData.data.hole} />
+            {childData.data.displayDetails.map((item) => (
+              <ChildItemDetailsField
+                key={item.label}
+                label={item.label}
+                value={item.value}
+                measurementUnit={item.measurementUnit}
+              />
+            ))}
           </Grid>
         )}
       </Stat>
@@ -92,6 +89,7 @@ const ChildItemDetails = ({
 );
 
 export const ChildSelector = ({
+  displayDetails,
   selectedItem,
   childrenType,
   onSelect,
@@ -109,7 +107,7 @@ export const ChildSelector = ({
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const unassignedItems: TreeData<BaseShipmentItem>[] | undefined | null = useMemo(() => {
+  const unassignedItems: TreeData<ItemWithDetails>[] | undefined | null = useMemo(() => {
     if (selectableChildren) {
       return selectableChildren;
     }
@@ -209,6 +207,7 @@ export const ChildSelector = ({
                         childData={item}
                         childId={i}
                         hasCheckbox={true}
+                        displayDetails={displayDetails}
                       />
                     ))}
                   </CheckboxGroup>
@@ -220,6 +219,7 @@ export const ChildSelector = ({
                         childType={childrenTypeData.data.singular}
                         childData={item}
                         childId={i}
+                        displayDetails={displayDetails}
                       />
                     ))}
                   </RadioGroup>

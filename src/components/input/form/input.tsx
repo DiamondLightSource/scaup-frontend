@@ -109,6 +109,7 @@ const InnerDynamicFormInput = ({
         <Controller
           control={control}
           name={id}
+          rules={validation}
           render={({ field: { onChange, value }, fieldState: { error } }) => {
             return (
               <EditableDropdown
@@ -176,7 +177,9 @@ export const DynamicFormInput = ({
           <FormLabel fontWeight='600' fontSize='18px' mb='0' htmlFor={id}>
             {label}
           </FormLabel>
-          <FormHelperText mt='0'>{hint}</FormHelperText>
+          <FormHelperText aria-multiline='true' whiteSpace='pre-line' mt='0' mb='0.2em'>
+            {hint}
+          </FormHelperText>
         </>
       )}
       <FormErrorMessage data-testid='error-message'>

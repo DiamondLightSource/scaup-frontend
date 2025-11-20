@@ -31,8 +31,14 @@ export const gridBoxForm = [
     label: "C-Clip Direction",
     type: "dropdown",
     values: [
-      { label: "Anti-Clockwise", value: "Anti-Clockwise" },
-      { label: "Clockwise", value: "Clockwise" },
+      {
+        label: "Anti-Clockwise (facing left with respect to notch)",
+        value: "Anti-Clockwise (facing left with respect to notch)",
+      },
+      {
+        label: "Clockwise (facing right with respect to notch)",
+        value: "Clockwise (facing right with respect to notch)",
+      },
     ],
   },
   {

@@ -3,6 +3,30 @@ Changelog
 ==========
 
 +++++++++
+v0.17.2 (05/11/2025)
++++++++++
+
+**Changed**
+
+- Update dewar form to ask for dewar manufacturer serial number
+
++++++++++
+v0.17.1 (16/10/2025)
++++++++++
+
+**Changed**
+
+- Push samples to ISPyB when importing from a different session
+
++++++++++
+v0.17.0 (09/10/2025)
++++++++++
+
+**Added**
+
+- Display grid box name and location when populating cassette positions
+
++++++++++
 v0.16.0 (05/09/2025)
 +++++++++
 

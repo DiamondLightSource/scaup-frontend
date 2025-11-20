@@ -25,6 +25,28 @@ describe("Editable Dropdown", () => {
     expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
 
+  it("should not add 'other' option to select if 'other' already exists", async () => {
+    renderWithForm(
+      <Controller
+        name='test'
+        render={({ field: { onChange, value } }) => (
+          <EditableDropdown
+            id='1'
+            values={[...values, { label: "exists", value: "other" }]}
+            onChange={onChange}
+            selectedValue={value}
+          />
+        )}
+      />,
+    );
+
+    const selectComponent = screen.getByRole("combobox");
+    fireEvent.change(selectComponent, { target: { value: "other" } });
+
+    expect(screen.getByRole("textbox")).toBeInTheDocument();
+    expect(selectComponent).toHaveTextContent("exists");
+  });
+
   it("should not display textbox if valid dropdown item is selected", async () => {
     renderWithForm(
       <Controller

@@ -1,8 +1,8 @@
 import { ChildSelector } from "@/components/containers/ChildSelector";
 import { TreeData } from "@/components/visualisation/treeView";
-import { selectActiveItem } from "@/features/shipment/shipmentSlice";
+import { selectActiveItem, selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
-import { BaseShipmentItem } from "@/mappings/pages";
+import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { calcCircumferencePos } from "@/utils/generic";
 import { Box, useDisclosure, Alert, AlertDescription, AlertIcon, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
@@ -11,7 +11,7 @@ import { ContainerProps, useChildLocationManager } from ".";
 import { GenericChildSlot } from "@/components/containers/child";
 import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
 import Image from "next/image";
-import { ContainerItem } from "@/types/generic";
+import { ContainerItem, ItemDetails } from "@/types/generic";
 
 const GRID_BOX_TYPES: Record<string, ContainerItem[]> = {
   "1": [
@@ -61,6 +61,7 @@ export const GridBox = ({
   containerSubType,
 }: Omit<ContainerProps, "containerType">) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const unassigned = useSelector(selectUnassigned);
   const currentGridBox = useSelector(selectActiveItem);
   const [currentSample, setCurrentSample] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
@@ -85,6 +86,25 @@ export const GridBox = ({
     }
     return { samples: newSamples, sampleOverload };
   }, [currentGridBox, containerSubType]);
+
+  const selectableSamples = useMemo(
+    () =>
+      unassigned[0].children![getCurrentStepIndex("Grid")].children?.map((grid) => ({
+        ...grid,
+        data: {
+          ...grid.data,
+          displayDetails: [
+            { label: "Concentration", value: grid.data.concentration, measurementUnit: "mg/ml" },
+            { label: "Buffer", value: grid.data.buffer },
+            { label: "Support Material", value: grid.data.supportMaterial },
+            { label: "Foil", value: grid.data.foil },
+            { label: "Mesh", value: grid.data.mesh },
+            { label: "Hole Diameter", value: grid.data.hole },
+          ] as ItemDetails[],
+        },
+      })),
+    [unassigned],
+  );
 
   const setLocation = useChildLocationManager({
     parentId,
@@ -143,6 +163,8 @@ export const GridBox = ({
         ))}
         {parentType === "shipment" ? (
           <ChildSelector
+            displayDetails={true}
+            selectableChildren={selectableSamples}
             childrenType='sample'
             onSelect={handlePopulatePosition}
             onRemove={handleRemoveSample}
