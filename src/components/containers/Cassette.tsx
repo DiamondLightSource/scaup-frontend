@@ -33,7 +33,17 @@ export const Cassette = ({ samples }: CassetteProps) => {
     () =>
       samples.reduce((selectable, sample) => {
         if (sample.subLocation === null) {
-          selectable.push({ id: sample.id, name: sample.name || "", data: sample.details });
+          selectable.push({
+            id: sample.id,
+            name: sample.name || "",
+            data: {
+              type: sample.type,
+              displayDetails: [
+                { label: "Grid Box Name", value: sample.containerName },
+                { label: "Location", value: sample.location },
+              ],
+            },
+          });
         }
         return selectable;
       }, [] as TreeData[]),
@@ -94,8 +104,16 @@ export const Cassette = ({ samples }: CassetteProps) => {
             borderColor='diamond.700'
             w='100%'
           >
-            <Tag colorScheme='teal'>{12 - i}</Tag>
-            <Text ml='0.5em' fontWeight='600' color={item === null ? "diamond.800" : "diamond.50"}>
+            <Tag colorScheme='teal' minW='30px' justifyContent='center' flexShrink='0'>
+              {12 - i}
+            </Tag>
+            <Text
+              px='10px'
+              fontWeight='600'
+              color={item === null ? "diamond.800" : "diamond.50"}
+              overflowX='hidden'
+              textOverflow='ellipsis'
+            >
               {item?.name ?? ""}
             </Text>
             <Spacer />
@@ -109,6 +127,7 @@ export const Cassette = ({ samples }: CassetteProps) => {
         selectedItem={currentItem}
         isOpen={isOpen}
         onClose={onClose}
+        displayDetails={true}
         selectableChildren={selectableSamples}
       />
     </VStack>

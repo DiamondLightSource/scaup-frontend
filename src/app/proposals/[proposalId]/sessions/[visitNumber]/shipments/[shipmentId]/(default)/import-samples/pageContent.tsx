@@ -83,11 +83,13 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
                 parents: [samples[parseInt(i)].id],
               },
               "samples",
+              "shipment",
+              new URLSearchParams({ includeSuffix: "false", pushToExternalDb: "true" }),
             ),
           ),
         );
 
-        router.push("pre-session");
+        router.push("pre-session?skipPush=true");
       } catch {
         toast({ title: "Could not update items, please try again later", status: "error" });
       } finally {
