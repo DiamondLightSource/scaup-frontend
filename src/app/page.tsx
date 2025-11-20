@@ -64,8 +64,6 @@ const getSessions = async () => {
     `/sessions?limit=4&minEndDate=${currentDate.toISOString()}`,
   );
 
-  return null;
-
   if (response.status !== 200) {
     return null;
   }
