@@ -34,9 +34,9 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
   return (
     <Box w='100%' key={sample.id}>
       <Stat
-        bg='gray.100'
+        bg='gray.50'
         p='10px'
-        border='1px solid black'
+        border='1px solid #EDF2F7'
         borderBottom='none'
         borderRadius='0'
         m='0'

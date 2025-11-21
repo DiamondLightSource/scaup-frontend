@@ -141,7 +141,9 @@ export const parseNetworkError = (response?: Record<string, any>) => {
  * @param dateString Original date string
  * @returns Human readable date string
  */
-export const formatDate = (dateString: string) => {
-  const options = { year: "numeric", month: "long", day: "numeric" };
+export const formatDate = (dateString: string | null | undefined) => {
+  if (!dateString) {
+    return "?";
+  }
   return new Date(dateString).toLocaleString("en-GB");
 };
