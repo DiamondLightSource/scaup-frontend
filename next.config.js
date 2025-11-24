@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         source: "/proposals/:proposalId",
-        destination: "/proposals/:proposalId/sessions",
+        destination: "/proposals/:proposalId/shipments",
         permanent: true,
       },
       {

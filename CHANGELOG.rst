@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v0.18.0 (21/11/2025)
++++++++++
+
+**Added**
+
+- Add session shortcut links to frontpage
+- Add page displaying all sample collections for a given proposal
+
++++++++++
 v0.17.2 (05/11/2025)
 +++++++++
 
