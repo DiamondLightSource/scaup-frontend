@@ -8,7 +8,6 @@ export const dewarForm = [
     label: "Dewar Code",
     type: "editableDropdown",
     validation: {
-      required: true,
       maxLength: { value: 15, message: "Serial number have less than 15 characters" },
     },
     hint:
