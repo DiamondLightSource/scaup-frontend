@@ -1,5 +1,5 @@
 import { ShipmentParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import {
   Button,
   Divider,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 const getIsBooked = async (shipmentId: string) => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+  const res = await serverFetch(`/shipments/${shipmentId}`);
   const data = res && res.status === 200 ? await res.json() : [];
 
   return data && !!data.data.shipmentRequest;

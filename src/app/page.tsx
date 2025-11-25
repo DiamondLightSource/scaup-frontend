@@ -1,5 +1,5 @@
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { formatDate } from "@/utils/generic";
 import {
   Link,
@@ -60,9 +60,7 @@ const InfoBox = ({ title, children, href }: InfoBoxProps) => (
 
 const getSessions = async () => {
   const currentDate = new Date();
-  const response = await authenticatedFetch.server(
-    `/sessions?limit=4&minEndDate=${currentDate.toISOString()}`,
-  );
+  const response = await serverFetch(`/sessions?limit=4&minEndDate=${currentDate.toISOString()}`);
 
   if (response.status !== 200) {
     return null;
@@ -75,7 +73,7 @@ const getSessions = async () => {
         return { session, shipmentCount: 0 };
       }
 
-      const response = await authenticatedFetch.server(
+      const response = await serverFetch(
         `/proposals/${session.parentProposal}/sessions/${session.visitNumber}/shipments?limit=1`,
       );
 

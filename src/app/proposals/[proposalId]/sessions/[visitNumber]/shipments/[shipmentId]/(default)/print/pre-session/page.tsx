@@ -1,5 +1,5 @@
 import { ShipmentParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { Divider, HStack, Heading, Spacer, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { PrintButton } from "../pageContent";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const getPreSessionData = async (shipmentId: string) => {
-  const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
+  const resPreSession = await serverFetch(`/shipments/${shipmentId}/preSession`);
 
   if (resPreSession.status === 200) {
     return (await resPreSession.json()).details;

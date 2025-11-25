@@ -12,8 +12,8 @@ Configuration
 
 Configuration is done through environment variables:
 
-* :code:`NEXTAUTH_URL`: NextAuth instance URL. Usually the application's path, followed by :code:`/nextauth`
-* :code:`NEXTAUTH_SECRET`: Random string used for generating the encrypted NextAuth JWT. Do not use the secret in :code:`.example.env` in production
+* :code:`BETTER_AUTH_URL`: Betterauth instance URL. Usually the application's path, followed by :code:`/auth`
+* :code:`BETTER_AUTH_SECRET`: Random string used for generating the encrypted Betterauth JWT. Do not use the secret in :code:`.example.env` in production
 * :code:`OAUTH_CLIENT_ID`: OIDC client ID
 * :code:`OAUTH_CLIENT_SECRET`: OIDC client secret
 * :code:`OAUTH_COOKIE_NAME`: Authentication token cookie name

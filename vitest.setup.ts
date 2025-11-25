@@ -12,6 +12,11 @@ vi.mock("next/cache", async (importOriginal) => {
   return { ...actual, revalidateTag: () => {}, revalidatePath: () => {} };
 });
 
+vi.mock("next/headers", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return { ...actual, headers: async () => new Map()};
+});
+
 vi.mock("next/navigation", () => ({
   ...require("next-router-mock"),
   usePathname: pathnameMock,
@@ -37,37 +42,11 @@ afterAll(() => {
   server.close();
 });
 
-// Reference: https://github.com/nextauthjs/next-auth/discussions/4185#discussioncomment-2397318
-// We also need to mock the whole next-auth package, since it's used in
-// our various pages via the `export { getServerSideProps }` function.
-vi.mock("next-auth/next", () => ({
-  __esModule: true,
-  default: vi.fn(),
-  getServerSession: vi.fn(
-    () =>
-      new Promise((resolve) => {
-        resolve({
-          expiresIn: undefined,
-          loggedInAt: undefined,
-          someProp: "someString",
-        });
-      }),
-  ),
-}));
-
 vi.mock("@chakra-ui/react", async (importOriginal) => {
   const actual = await importOriginal<any>();
   return {
     ...actual,
     createStandaloneToast: () => ({ toast: toastMock }),
     useToast: () => toastMock,
-  };
-});
-
-vi.mock("next-auth", async (importOriginal) => {
-  const actual = await importOriginal<any>();
-  return {
-    ...actual,
-    getServerSession: () => {}
   };
 });

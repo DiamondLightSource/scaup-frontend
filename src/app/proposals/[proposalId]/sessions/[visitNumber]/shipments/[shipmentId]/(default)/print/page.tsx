@@ -1,8 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem } from "@/mappings/pages";
 import { ShipmentParams } from "@/types/generic";
-import { getPrepopData } from "@/utils/client";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getPrepopData } from "@/utils/server/request";
+import { getShipmentData } from "@/utils/server/shipment";
 import {
   Alert,
   AlertDescription,

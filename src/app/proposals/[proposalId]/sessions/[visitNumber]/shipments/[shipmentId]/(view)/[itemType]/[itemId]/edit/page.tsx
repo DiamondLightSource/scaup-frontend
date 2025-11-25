@@ -1,4 +1,4 @@
-import { getPrepopData } from "@/utils/client";
+import { getPrepopData } from "@/utils/server/request";
 import { Metadata } from "next";
 import ItemFormPageContent from "./pageContent";
 import { ItemParams } from "@/types/generic";

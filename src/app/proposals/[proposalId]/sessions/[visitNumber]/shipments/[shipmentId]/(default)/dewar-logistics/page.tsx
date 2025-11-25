@@ -1,6 +1,6 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { formatDate } from "@/utils/generic";
 import {
   Box,
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const getTopLevelContainers = async (shipmentId: string) => {
-  const resTlc = await authenticatedFetch.server(`/shipments/${shipmentId}/topLevelContainers`);
+  const resTlc = await serverFetch(`/shipments/${shipmentId}/topLevelContainers`);
 
   if (resTlc.status === 200) {
     return (await resTlc.json()).items;

@@ -1,6 +1,6 @@
 import { RootParentType } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 
 export const parentTypeToEndpoint: Record<RootParentType, string> = {
   shipment: "shipments",
@@ -13,7 +13,7 @@ export const getShipmentData = async (
   parentType: RootParentType = "shipment",
   getChildren: boolean = true,
 ) => {
-  const res = await authenticatedFetch.server(
+  const res = await serverFetch(
     `/${parentTypeToEndpoint[parentType]}/${shipmentId}${suffix}?getChildren=${getChildren}`,
     {
       cache: "force-cache",

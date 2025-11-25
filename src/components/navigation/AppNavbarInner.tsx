@@ -1,11 +1,14 @@
 "use client";
 import { Breadcrumbs, Navbar, NavLink, NavLinks, User } from "@diamondlightsource/ui-components";
-import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import NextLink from "next/link";
+import { signIn, signOut } from "@/utils/client/auth";
 
-export const AppNavbarInner = ({ session }: { session: null | Session }) => {
+export const AppNavbarInner = ({
+  session,
+}: {
+  session: { permissions: string[]; id: string; name: string } | null;
+}) => {
   const pathname = usePathname();
 
   // As for not using NextLink in breadcrumbs, https://github.com/vercel/next.js/discussions/54075
@@ -22,15 +25,9 @@ export const AppNavbarInner = ({ session }: { session: null | Session }) => {
           <></>
         )}
         <User
-          user={
-            session && session.user
-              ? { fedid: session.id!, name: session.user.name! }
-              : null
-          }
-          onLogin={() => signIn("diamond")}
-          onLogout={() =>
-            signOut({ callbackUrl: "https://authalpha.diamond.ac.uk/cas/oidc/logout" })
-          }
+          user={session ? { fedid: session.id, name: session.name } : null}
+          onLogin={() => signIn.social({ provider: "diamond" })}
+          onLogout={signOut}
         />
       </Navbar>
       <Breadcrumbs path={pathname} />
