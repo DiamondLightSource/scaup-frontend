@@ -3,11 +3,12 @@ Changelog
 ==========
 
 +++++++++
-v0.18.0 (21/11/2025)
+v0.18.0 (25/11/2025)
 +++++++++
 
 **Added**
 
+- Prevent users from continuing with unassigned items
 - Add session shortcut links to frontpage
 - Add page displaying all sample collections for a given proposal
 
