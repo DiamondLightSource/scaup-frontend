@@ -10,8 +10,6 @@ import { FieldValues, useFormContext, useWatch } from "react-hook-form";
 export interface DynamicFormProps {
   /** Form structure */
   formType: DynamicFormEntry[];
-  /** Default values */
-  defaultValues?: Record<string, any>;
   /** Data to prepopulate the form fields with. Useful for dynamic dropdowns */
   prepopData?: Record<string, any>;
   /** Callback for updated watched items */
@@ -19,7 +17,6 @@ export interface DynamicFormProps {
 }
 
 export const DynamicForm = ({
-  defaultValues,
   prepopData,
   formType,
   onWatchedUpdated,

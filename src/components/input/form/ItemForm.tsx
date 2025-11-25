@@ -141,7 +141,6 @@ export const ItemForm = ({
             <DynamicForm
               onWatchedUpdated={handleWatchedUpdated}
               formType={renderedForm}
-              defaultValues={activeItem!.data}
               prepopData={prepopData}
             />
           </Box>
