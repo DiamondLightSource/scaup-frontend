@@ -1,7 +1,7 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
-import { getShipmentData } from "@/utils/client/shipment";
+import { serverFetch } from "@/utils/server/request";
+import { getShipmentData } from "@/utils/server/shipment";
 import { allItemsEmptyInDict, pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
@@ -18,13 +18,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 import { TwoLineLink } from "@diamondlightsource/ui-components";
 import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { SampleCard } from "@/components/navigation/SampleCard";
+import { headers } from "next/headers";
+import { auth } from "@/utils/auth";
 
 export const metadata: Metadata = {
   title: "Sample Collection - Scaup",
@@ -32,15 +32,12 @@ export const metadata: Metadata = {
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = await getShipmentData(shipmentId, "", "shipment", true);
-  const resSamples = await authenticatedFetch.server(
-    `/shipments/${shipmentId}/samples?ignoreExternal=false`,
-    {
-      cache: "force-cache",
-      next: { tags: ["samples", "shipment"] },
-    },
-  );
+  const resSamples = await serverFetch(`/shipments/${shipmentId}/samples?ignoreExternal=false`, {
+    cache: "force-cache",
+    next: { tags: ["samples", "shipment"] },
+  });
 
-  const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
+  const resPreSession = await serverFetch(`/shipments/${shipmentId}/preSession`);
   const unassignedData = (await getShipmentData(shipmentId, "/unassigned")) as Record<string, any>;
 
   const hasUnassigned = allItemsEmptyInDict(unassignedData);
@@ -71,8 +68,10 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
 const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
   const params = await props.params;
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
-  const session = await getServerSession(authOptions);
-  const isStaff = !!session && session.permissions.includes("em_admin");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const isStaff = !!session && session.user.permissions.includes("em_admin");
 
   return (
     <VStack alignItems='start'>

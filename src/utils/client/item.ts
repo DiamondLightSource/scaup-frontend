@@ -3,7 +3,7 @@ import { BaseShipmentItem, Step } from "@/mappings/pages";
 import { RootParentType } from "@/types/generic";
 import { CreationResponse } from "@/types/server";
 import { createStandaloneToast } from "@chakra-ui/react";
-import { parentTypeToEndpoint } from "@/utils/client/shipment";
+import { parentTypeToEndpoint } from "@/utils/server/shipment";
 import { requestAndInvalidate } from "@/utils/server/request";
 import { parseNetworkError } from "../generic";
 

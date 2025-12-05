@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getShipmentData } from "@/utils/server/shipment";
 
 export const metadata: Metadata = {
   title: "Sample Collection Submitted - Scaup",

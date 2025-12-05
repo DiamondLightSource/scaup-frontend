@@ -1,5 +1,5 @@
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { Divider, Grid, Heading, Stat, StatNumber, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const getContainers = async () => {
-  const res = await authenticatedFetch.server(`/internal-containers`);
+  const res = await serverFetch(`/internal-containers`);
 
   if (res) {
     switch (res.status) {

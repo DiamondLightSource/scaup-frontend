@@ -21,7 +21,7 @@ import {
   Divider,
   Heading,
 } from "@chakra-ui/react";
-import { authenticatedFetch } from "@/utils/client";
+import { clientFetch } from "@/utils/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SingleChildSelectorProps } from "@/types/generic";
 import { getCurrentStepIndex, steps } from "@/mappings/pages";
@@ -79,9 +79,7 @@ export const CrossShipmentSelector = ({
       endpoint += `?ignoreInternal=true`;
     }
     setIsLoading(true);
-    const res = await authenticatedFetch.client(
-      `/proposals/${proposal}/sessions/${session}/${endpoint}`,
-    );
+    const res = await clientFetch(`/proposals/${proposal}/sessions/${session}/${endpoint}`);
     setIsLoading(false);
 
     if (res && res.status === 200) {

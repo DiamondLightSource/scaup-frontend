@@ -1,5 +1,5 @@
 import { UnassignedItemResponse } from "@/types/server";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getShipmentData } from "@/utils/server/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
 import { redirect } from "next/navigation";
 import { ShipmentLayoutProps } from "@/types/generic";
@@ -15,13 +15,9 @@ const ShipmentsLayout = async (props: ShipmentLayoutProps) => {
     "/unassigned",
   )) as UnassignedItemResponse | null;
 
-  if (shipmentData === null || unassignedItems === null) {
-    redirect("../..");
-  }
-
   return (
     <ShipmentsLayoutContent
-      shipmentData={shipmentData?.children}
+      shipmentData={shipmentData?.children ?? null}
       unassignedItems={unassignedItems}
       params={params}
     >

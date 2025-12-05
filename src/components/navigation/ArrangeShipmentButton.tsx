@@ -1,7 +1,7 @@
 "use client";
 
 import { ShipmentParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
+import { clientFetch } from "@/utils/client";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -32,7 +32,7 @@ export const ArrangeShipmentButton = ({
 
   const onShipmentCreateClicked = useCallback(async () => {
     setIsLoading(true);
-    const resp = await authenticatedFetch.client(`/shipments/${params.shipmentId}/request`, {
+    const resp = await clientFetch(`/shipments/${params.shipmentId}/request`, {
       method: "POST",
     });
 

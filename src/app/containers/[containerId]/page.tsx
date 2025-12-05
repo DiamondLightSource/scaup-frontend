@@ -1,12 +1,12 @@
 import { ContainerParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { parseNetworkError } from "@/utils/generic";
 import { Heading, Link, VStack, Text, Code } from "@chakra-ui/react";
 import { redirect } from "next/navigation";
 
 const getContainerURL = async (containerId: number) => {
-  const resp = await authenticatedFetch.server(`/containers/${containerId}`);
+  const resp = await serverFetch(`/containers/${containerId}`);
 
   if (resp?.status !== 200) {
     const jsonResponse = await resp?.json().catch(() => undefined);
@@ -19,7 +19,7 @@ const getContainerURL = async (containerId: number) => {
     return `/inventory/${container.internalStorageContainer}/${container.type}/${container.id}`;
   }
 
-  const respShipment = await authenticatedFetch.server(`/shipments/${container.shipmentId}`);
+  const respShipment = await serverFetch(`/shipments/${container.shipmentId}`);
 
   if (respShipment?.status !== 200) {
     const jsonResponse = await respShipment?.json().catch(() => undefined);

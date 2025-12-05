@@ -3,11 +3,15 @@ import { AppNavbar } from "./AppNavbar";
 
 const mocks = vi.hoisted(() => {
   return {
-    permissionsMock: vi.fn(() => ({ permissions: ["em_admin"] })),
+    getSessionMock: vi.fn(() => ({
+      user: { fedid: "abc1234", permissions: ["em_admin"], name: "Foo" },
+    })),
   };
 });
 
-vi.mock("next-auth/next", () => ({ getServerSession: mocks.permissionsMock }));
+vi.mock("@/utils/auth", () => ({
+  auth: { api: { getSession: mocks.getSessionMock } },
+}));
 
 describe("App Navbar", () => {
   it.each([{ deployType: "beta" }, { deployType: "dev" }])(
@@ -27,16 +31,18 @@ describe("App Navbar", () => {
     expect(screen.queryByText(/still in testing/i)).not.toBeInTheDocument();
   });
 
-  it("should not display inventory link if user is not eBIC staff", async () => {
-    mocks.permissionsMock.mockReturnValueOnce({ permissions: [""] });
-    render(await AppNavbar());
-
-    expect(screen.queryByText(/inventory/i)).not.toBeInTheDocument();
-  });
-
   it("should display inventory link if user is eBIC staff", async () => {
     render(await AppNavbar());
 
     expect(screen.getByText(/inventory/i)).toBeInTheDocument();
+  });
+
+  it("should not display inventory link if user is not eBIC staff", async () => {
+    mocks.getSessionMock.mockReturnValueOnce({
+      user: { fedid: "abc1234", permissions: [], name: "Foo" },
+    });
+    render(await AppNavbar());
+
+    expect(screen.queryByText(/inventory/i)).not.toBeInTheDocument();
   });
 });
