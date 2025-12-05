@@ -3,8 +3,9 @@
 import { revalidateTag } from "next/cache";
 import { authenticatedFetch } from "@/utils/request";
 import { headers } from "next/headers";
+import { cookies } from "next/headers";
+import { auth, refreshToken } from "@/utils/auth";
 import { redirect } from "next/navigation";
-import { auth } from "@/utils/auth";
 
 /**
  * Perform server-side authenticated fetch
@@ -15,26 +16,38 @@ import { auth } from "@/utils/auth";
  */
 export const serverFetch = async (url: RequestInfo, init?: RequestInit) => {
   const requestHeaders = await headers();
-  const session = await auth.api.getSession({
-    headers: requestHeaders,
-  });
+  const cookieStore = await cookies();
 
-  try {
-    return await authenticatedFetch(
-      process.env.SERVER_API_URL! + url,
-      init,
-      session?.user.accessToken,
-    );
-  } catch (e) {
-    console.log(e);
-    const { url } = await auth.api.signInSocial({
-      body: {
-        provider: "diamond",
-        callbackURL: requestHeaders.get("x-path") ?? "/",
-      },
+  const res = await authenticatedFetch(
+    process.env.SERVER_API_URL! + url,
+    { ...init, credentials: "include" },
+    cookieStore.get(process.env.OAUTH_COOKIE_NAME!)?.value,
+    false,
+  );
+
+  if (res.status === 401) {
+    // TODO: remove this once Better Auth supports refreshing tokens natively
+    const session = await auth.api.getSession({
+      headers: requestHeaders,
     });
-    redirect(url!);
+
+    if (!session) {
+      return res;
+    }
+
+    const newToken = await refreshToken(session.user.refreshToken);
+
+    if (newToken) {
+      return await authenticatedFetch(
+        process.env.SERVER_API_URL! + url,
+        { ...init, credentials: "include" },
+        newToken,
+      );
+    }
+    redirect("/sign-in?callbackURL=" + (requestHeaders.get("x-path") ?? "/"));
   }
+
+  return res;
 };
 
 /**

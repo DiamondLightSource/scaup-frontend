@@ -11,13 +11,14 @@ export const authenticatedFetch = async (
   url: RequestInfo,
   init?: RequestInit,
   token?: string | null,
+  throwOnFail: boolean = true,
 ) => {
   const headers: Record<string, string> = {
     "content-type": "application/json",
     ...(init ? (init.headers as Record<string, string>) : {}),
   };
 
-  if (token === null) {
+  if (token === null && throwOnFail) {
     throw new Error("Authentication Failure");
   }
 
@@ -30,7 +31,7 @@ export const authenticatedFetch = async (
     headers,
   });
 
-  if (res.status === 401) {
+  if (res.status === 401 && throwOnFail) {
     throw new Error("Authentication Failure");
   }
 

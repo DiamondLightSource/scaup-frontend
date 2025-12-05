@@ -15,13 +15,9 @@ const ShipmentsLayout = async (props: ShipmentLayoutProps) => {
     "/unassigned",
   )) as UnassignedItemResponse | null;
 
-  if (shipmentData === null || unassignedItems === null) {
-    redirect("../..");
-  }
-
   return (
     <ShipmentsLayoutContent
-      shipmentData={shipmentData?.children}
+      shipmentData={shipmentData?.children ?? null}
       unassignedItems={unassignedItems}
       params={params}
     >
