@@ -14,7 +14,7 @@ vi.mock("next/cache", async (importOriginal) => {
 
 vi.mock("next/headers", async (importOriginal) => {
   const actual = await importOriginal<any>();
-  return { ...actual, headers: async () => new Map()};
+  return { ...actual, cookies: async () => new Map(), headers: async () => new Map()};
 });
 
 vi.mock("next/navigation", () => ({
