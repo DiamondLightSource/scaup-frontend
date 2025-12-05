@@ -12,9 +12,14 @@ import {
   Link,
   Text,
   Spacer,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { ShipmentParams } from "@/types/generic";
+import { MdExpandMore, MdDatasetLinked, MdBlurCircular } from "react-icons/md";
 
 export interface SampleCardProps {
   /** Sample to display */
@@ -67,14 +72,30 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
             )}
           </VStack>
           {sample.dataCollectionGroupId && (
-            <Button
-              as={NextLink}
-              href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
-            >
-              View Data
-            </Button>
+            <HStack>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<MdExpandMore />} leftIcon={<MdDatasetLinked />}>
+                  View Data
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    as={NextLink}
+                    href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}/atlas`}
+                  >
+                    Atlas
+                  </MenuItem>
+                  <MenuItem
+                    as={NextLink}
+                    href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
+                  >
+                    Data Collection
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
           )}
           <Button
+            leftIcon={<MdBlurCircular />}
             as={NextLink}
             href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}
           >
