@@ -1,5 +1,5 @@
 "use client";
-import { ItemStepper } from "@/components/navigation/ItemStepper";
+import { ItemStepper, TypeCount } from "@/components/navigation/ItemStepper";
 import { selectActiveItem, selectIsEdit, selectIsReview } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
@@ -13,6 +13,7 @@ import {
   Skeleton,
   Spacer,
   VStack,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -35,6 +36,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
   const stepDescription = useMemo(() => steps[getCurrentStepIndex(params.itemType)], [params]);
   const activeStep = useMemo(() => getCurrentStepIndex(params.itemType), [params]);
 
+  const [hasUnassigned, setHasUnassigned] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
@@ -70,10 +72,25 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
     }
   }, [handleSetStep, activeStep, router, isReview]);
 
+  const cannotFinish = useMemo(
+    () => activeStep >= steps.length - 1 && hasUnassigned,
+
+    [activeStep, hasUnassigned],
+  );
+
+  const handleTypeCountChanged = useCallback((typeCount: TypeCount[]) => {
+    setHasUnassigned(typeCount.some((count) => count.unassigned > 0));
+  }, []);
+
   return (
     <>
       <GridItem flexBasis='fill' flexShrink='0' w='100%' area='stepper'>
-        <ItemStepper steps={steps} onStepChanged={handleSetStep} currentStep={currentStep} />
+        <ItemStepper
+          steps={steps}
+          onStepChanged={handleSetStep}
+          currentStep={currentStep}
+          onTypeCountChanged={handleTypeCountChanged}
+        />
         <Divider mb='10px' />
       </GridItem>
 
@@ -103,6 +120,11 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
 
       <GridItem area='nav'>
         <HStack h='100%' px='1em' bg='gray.200'>
+          {cannotFinish && (
+            <Text fontWeight='600' color='gray.600'>
+              Cannot progress without assigning all items to a container!
+            </Text>
+          )}
           <Spacer />
           {isReview && (
             <Button
@@ -113,7 +135,7 @@ const ItemLayoutContent = ({ isBooked = false, children, params }: ItemLayoutCon
               Edit
             </Button>
           )}
-          <Button onClick={handleContinue} bg='green.500'>
+          <Button onClick={handleContinue} bg='green.500' isDisabled={cannotFinish}>
             {isReview ? "Continue to Pre-Session Info" : "Continue"}
           </Button>
         </HStack>

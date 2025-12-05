@@ -97,7 +97,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
           <HStack w='100%' mb='1em'>
             <Stat borderBottom='3px solid' borderColor='diamond.700'>
               <StatLabel>Status</StatLabel>
-              <StatNumber>{shipmentData.dispatch.status || "Unknown"}</StatNumber>
+              <StatNumber>
+                {typeof shipmentData.dispatch.status === "string"
+                  ? shipmentData.dispatch.status
+                  : "Unknown"}
+              </StatNumber>
             </Stat>
             {Object.entries(shipmentData.counts).map(([key, value]) => (
               <Stat borderBottom='3px solid' borderColor='diamond.700' key={key}>
