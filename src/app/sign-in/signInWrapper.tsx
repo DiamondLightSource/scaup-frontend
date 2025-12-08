@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export const SignInWrapper = ({ callbackURL = "/" }: { callbackURL?: string }) => {
   useEffect(() => {
     const login = async () => {
-      await signIn.social({ provider: "diamond", callbackURL: "/" });
+      await signIn.social({ provider: "diamond", callbackURL });
     };
 
     login();
