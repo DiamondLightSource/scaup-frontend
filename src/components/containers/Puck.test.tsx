@@ -1,8 +1,14 @@
 import { Puck } from "@/components/containers/Puck";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
-import { gridBox, puck, renderAndInjectForm, testInitialState } from "@/utils/test-utils";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import {
+  gridBox,
+  puck,
+  renderAndInjectForm,
+  renderWithProviders,
+  testInitialState,
+} from "@/utils/test-utils";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { setLocationMock } from "@/components/containers/__mocks__";
 
 vi.mock("@/components/containers");
@@ -95,6 +101,20 @@ describe("Puck", () => {
     });
 
     expect(screen.getByText("5")).toHaveAttribute("title", "Stored at eBIC");
+  });
+
+  it("should not display info box if there's no form context", () => {
+    renderWithProviders(<Puck parentId='1' formContext={undefined} />, {
+      preloadedState: {
+        shipment: {
+          ...testInitialState,
+          activeItem: populatedContainerStored,
+          isEdit: true,
+        },
+      },
+    });
+
+    expect(screen.queryByText("Select a puck slot to populate it")).not.toBeInTheDocument();
   });
 
   it("should fire remove callback when remove is clicked", async () => {

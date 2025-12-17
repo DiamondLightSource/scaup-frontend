@@ -184,6 +184,12 @@ export const GridBox = ({
           />
         )}
       </Box>
+      {formContext !== undefined && (
+        <Alert status='info' variant='info'>
+          <AlertIcon />
+          <AlertDescription>Select a grid box slot to populate it</AlertDescription>
+        </Alert>
+      )}
     </VStack>
   );
 };

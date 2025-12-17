@@ -1,6 +1,6 @@
 import { GridBox } from "@/components/containers/GridBox";
 import { initialState } from "@/features/shipment/shipmentSlice";
-import { gridBox, renderAndInjectForm, sample } from "@/utils/test-utils";
+import { gridBox, renderAndInjectForm, renderWithProviders, sample } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { setLocationMock } from "@/components/containers/__mocks__";
 
@@ -85,6 +85,12 @@ describe("Grid Box", () => {
     fireEvent.click(screen.getByText("1"));
 
     expect(screen.getByText(/no unassigned grids available/i));
+  });
+
+  it("should not display info box if there's no form context", () => {
+    renderWithProviders(<GridBox parentId='1' formContext={undefined} />);
+
+    expect(screen.queryByText("Select a grid box slot to populate it")).not.toBeInTheDocument();
   });
 
   it("should fire location callback when apply clicked", async () => {
