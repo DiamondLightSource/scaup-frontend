@@ -9,6 +9,8 @@ v0.19.0 (17/12/2025)
 **Added**
 
 - Add link to atlas in shipment overview 
+- Further instructions for pucks/grid boxes
+- Updated pre-session information form 
 
 **Removed**
 
