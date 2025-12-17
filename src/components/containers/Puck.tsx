@@ -162,6 +162,12 @@ export const Puck = ({
           />
         )}
       </Box>
+      {formContext !== undefined && (
+        <Alert status='info' variant='info'>
+          <AlertIcon />
+          <AlertDescription>Select a puck slot to populate it</AlertDescription>
+        </Alert>
+      )}
     </VStack>
   );
 };

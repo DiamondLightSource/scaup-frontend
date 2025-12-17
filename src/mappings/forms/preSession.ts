@@ -74,7 +74,7 @@ export const preSessionForm = [
   {
     id: "collectTiltData",
     label: "Collect Tilt Data",
-    type: "checkbox"
+    type: "checkbox",
   },
   {
     id: "imagingSeparator",
