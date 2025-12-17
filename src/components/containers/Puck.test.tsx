@@ -8,7 +8,7 @@ import {
   renderWithProviders,
   testInitialState,
 } from "@/utils/test-utils";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { setLocationMock } from "@/components/containers/__mocks__";
 
 vi.mock("@/components/containers");
