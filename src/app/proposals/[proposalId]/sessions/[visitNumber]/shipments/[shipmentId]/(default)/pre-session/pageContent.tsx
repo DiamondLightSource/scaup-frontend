@@ -1,7 +1,6 @@
 "use client";
 import { DynamicForm, formMapping } from "@/components/input/form";
 import { ShipmentParams } from "@/types/generic";
-import { clientFetch } from "@/utils/client";
 import { requestAndInvalidate } from "@/utils/server/request";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -34,7 +33,7 @@ const PreSessionContent = ({ params, prepopData, skipPush }: PreSessionContentPr
       }
     }
 
-    const preSessionResponse = await clientFetch(`/shipments/${params.shipmentId}/preSession`, {
+    const preSessionResponse = await requestAndInvalidate(`/shipments/${params.shipmentId}/preSession`, {
       method: "PUT",
       body: JSON.stringify({ details: info }),
     });
