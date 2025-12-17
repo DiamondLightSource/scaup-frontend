@@ -1,5 +1,5 @@
 import { renderWithProviders } from "@/utils/test-utils";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { SampleCard } from "./SampleCard";
 
 const baseSample = { name: "test-sample", id: 1, type: "grid", proteinId: 1, shipmentId: 1 };
@@ -22,7 +22,12 @@ describe("Sample Card", () => {
     );
 
     expect(screen.getByText("test-sample")).toBeInTheDocument();
-    expect(screen.getByText("View Data")).toHaveAttribute(
+    fireEvent.click(screen.getByText("View Data"));
+    expect(screen.getByText("Atlas")).toHaveAttribute(
+      "href",
+      "https://pato.ac.uk/proposals/cm00001/sessions/1/groups/1/atlas",
+    );
+    expect(screen.getByText("Data Collection")).toHaveAttribute(
       "href",
       "https://pato.ac.uk/proposals/cm00001/sessions/1/groups/1",
     );
