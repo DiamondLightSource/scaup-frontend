@@ -3,6 +3,30 @@ Changelog
 ==========
 
 +++++++++
+v0.19.0 (17/12/2025)
++++++++++
+
+**Added**
+
+- Add link to atlas in shipment overview 
+
+**Removed**
+
+- Remove international shipping message
+
+**Fixed**
+
+- Bump Next version
+
++++++++++
+v0.18.1 (08/12/2025)
++++++++++
+
+**Fixed**
+
+- Bump Next version
+
++++++++++
 v0.18.0 (25/11/2025)
 +++++++++
 
