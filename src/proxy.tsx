@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth, refreshToken } from "@/utils/auth";
 import { cookies } from "next/headers";
 
-export const middleware = async (request: NextRequest) => {
+export const proxy = async (request: NextRequest) => {
   const fullHeaders = new Headers(request.headers);
   const requestCookies = await cookies();
 
@@ -43,4 +43,7 @@ export const middleware = async (request: NextRequest) => {
 
 export const config = {
   matcher: ["/((?!api|auth|favicon.ico|_next|_next/static|_next/image).*)"],
+  unstable_allowDynamic: [
+    "**/node_modules/@better-auth/telemetry/dist/**"
+  ]
 };

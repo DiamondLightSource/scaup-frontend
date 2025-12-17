@@ -9,7 +9,7 @@ export const toastMock = vi.fn();
 
 vi.mock("next/cache", async (importOriginal) => {
   const actual = await importOriginal<any>();
-  return { ...actual, revalidateTag: () => {}, revalidatePath: () => {} };
+  return { ...actual, updateTag: () => {}, revalidatePath: () => {} };
 });
 
 vi.mock("next/headers", async (importOriginal) => {

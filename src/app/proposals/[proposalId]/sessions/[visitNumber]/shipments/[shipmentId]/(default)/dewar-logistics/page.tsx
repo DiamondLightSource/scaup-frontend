@@ -20,6 +20,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
+import NextLink from "next/link"
 
 export const metadata: Metadata = {
   title: "Request Returns - Scaup",
@@ -67,12 +68,10 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                   <Heading flex='1 0 0' size='lg'>
                     {tlc.name ?? "Unnamed Dewar"}
                   </Heading>
-                  <Button
-                    as={Link}
-                    href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}
-                  >
+                  <NextLink href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
+                  <Button>
                     Request Return
-                  </Button>
+                  </Button></NextLink>
                 </HStack>
                 <Divider />
                 <HStack w='100%' my='1em' gap='2em' flexWrap='wrap' alignItems='start'>

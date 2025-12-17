@@ -17,9 +17,10 @@ export const AppNavbarInner = ({
       <Navbar logo='/diamondgs.png'>
         {session && session.permissions.includes("em_admin") ? (
           <NavLinks>
-            <NavLink as={NextLink} href='/inventory'>
+            <NextLink href='/inventory'>
+            <NavLink>
               Inventory
-            </NavLink>
+            </NavLink></NextLink>
           </NavLinks>
         ) : (
           <></>

@@ -14,7 +14,7 @@ export const clientFetch = async (url: RequestInfo, init?: RequestInit) => {
     return await authenticatedFetch(process.env.NEXT_PUBLIC_API_URL! + url, init);
   } catch (e) {
     if (e instanceof Error && e.message === "Authentication Failure") {
-      await signIn.social({ provider: "diamond" });
+      await signIn.social({ provider: "diamond", callbackURL: window.location.pathname });
     }
   }
 };

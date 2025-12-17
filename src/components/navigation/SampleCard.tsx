@@ -1,3 +1,5 @@
+"use client";
+
 import { components } from "@/types/schema";
 import {
   Box,
@@ -78,29 +80,26 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
                   View Data
                 </MenuButton>
                 <MenuList>
-                  <MenuItem
-                    as={NextLink}
-                    href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}/atlas`}
-                  >
-                    Atlas
+                  <MenuItem>
+                    <NextLink href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}/atlas`}>
+                      Atlas
+                    </NextLink>
                   </MenuItem>
-                  <MenuItem
-                    as={NextLink}
-                    href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
-                  >
-                    Data Collection
+                  <MenuItem>
+                    <NextLink href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}>
+                      Data Collection
+                    </NextLink>
                   </MenuItem>
                 </MenuList>
               </Menu>
             </HStack>
           )}
+          <NextLink href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}>
           <Button
             leftIcon={<MdBlurCircular />}
-            as={NextLink}
-            href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}
           >
             View Grid
-          </Button>
+          </Button></NextLink>
         </HStack>
       </Stat>
 
@@ -109,14 +108,13 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
           <HStack>
             <Text>Derived from </Text>
             {sample.originSamples.map((parent) => (
-              <Link
+              <NextLink
                 color='gray.300'
                 key={parent.id}
-                as={NextLink}
                 href={`${urlPrefix}${parent.shipmentId}/${parent.type}/${parent.id}/review`}
               >
                 {parent.name}
-              </Link>
+              </NextLink>
             ))}
           </HStack>
         )}

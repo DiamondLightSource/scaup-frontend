@@ -88,9 +88,9 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
           <Text>
             This sample collection does not exist or you do not have permission to view it.
           </Text>
-          <Link as={NextLink} href='..'>
+          <NextLink href='..'>
             Return to session page
-          </Link>
+          </NextLink>
         </VStack>
       ) : (
         <>
@@ -115,9 +115,10 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <HStack w='100%'>
                 <Heading size='lg'>Grids</Heading>
                 <Spacer />
-                <Button as={NextLink} href={`${params.shipmentId}/import-samples`} size='sm'>
+                <NextLink href={`${params.shipmentId}/import-samples`}>
+                <Button size='sm'>
                   Import Grids from Session
-                </Button>
+                </Button></NextLink>
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start' flexWrap='wrap'>
@@ -149,7 +150,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <Heading size='lg'>Actions</Heading>
               <TwoLineLink
                 title='Edit Sample Collection'
-                as={NextLink}
                 href={`${params.shipmentId}/edit`}
                 isDisabled={!!shipmentData.dispatch.shipmentRequest}
               >
@@ -157,7 +157,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
-                as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo || !!shipmentData.preSessionInfo.isLocked}
               >
@@ -165,12 +164,11 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Review Sample Collection'
-                as={NextLink}
                 href={`${params.shipmentId}/review`}
               >
                 Review sample collection contents
               </TwoLineLink>
-              <TwoLineLink title='Print Contents' as={NextLink} href={`${params.shipmentId}/print`}>
+              <TwoLineLink title='Print Contents' href={`${params.shipmentId}/print`}>
                 View contents in a printable tree format
               </TwoLineLink>
               <TwoLineLink
@@ -181,7 +179,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Print Pre-Session Information'
-                as={NextLink}
                 href={`${params.shipmentId}/print/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo}
                 data-testid='pre-session-label'
@@ -190,7 +187,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Booking & Labels'
-                as={NextLink}
                 href={`${params.shipmentId}/booking-and-labels`}
                 isDisabled={!shipmentData.counts.Dewar || !shipmentData.dispatch.externalId}
                 data-testid='booking-label'

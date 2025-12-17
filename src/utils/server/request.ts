@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { authenticatedFetch } from "@/utils/request";
 import { headers } from "next/headers";
 import { cookies } from "next/headers";
@@ -72,10 +72,10 @@ export const requestAndInvalidate = async (url: string, init: RequestInit) => {
   } catch {}
 
   if (response.ok) {
-    revalidateTag("shipment");
+    updateTag("shipment");
     if (init.method === "POST" && url.includes("topLevelContainer")) {
       // Since a dewar might be created
-      revalidateTag("proposalData");
+      updateTag("proposalData");
     }
   } else {
     console.warn(`Request '${url}' returned '${response.status}'`, init, responseBody);

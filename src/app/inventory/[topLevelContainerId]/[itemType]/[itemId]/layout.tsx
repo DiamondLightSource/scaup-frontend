@@ -37,9 +37,9 @@ const ItemLayout = async (props: InventoryItemLayoutProps) => {
       <VStack w='100%' mt='3em'>
         <Heading variant='notFound'>Inventory Item Unavailable</Heading>
         <Text>This inventory item does not exist or you do not have permission to view it.</Text>
-        <Link as={NextLink} href='..'>
+        <NextLink href='..'>
           Return to inventory page
-        </Link>
+        </NextLink>
       </VStack>
     );
   }

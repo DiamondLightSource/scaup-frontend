@@ -1,3 +1,5 @@
+"use client";
+
 import { components } from "@/types/schema";
 import {
   Box,
@@ -9,7 +11,6 @@ import {
   Tag,
   Button,
   Text,
-  Link,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { getShipmentStatus } from "@/mappings/colours";
@@ -66,9 +67,9 @@ export const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
       >
         <Text>
           Session:{" "}
-          <Link as={NextLink} href={`sessions/${shipment.visitNumber}/shipments`}>
+          <NextLink href={`sessions/${shipment.visitNumber}/shipments`}>
             {shipment.visitNumber}
-          </Link>
+          </NextLink>
         </Text>
         <Text>
           Creation Date: {shipment.creationDate ? formatDate(shipment.creationDate) : "?"}
