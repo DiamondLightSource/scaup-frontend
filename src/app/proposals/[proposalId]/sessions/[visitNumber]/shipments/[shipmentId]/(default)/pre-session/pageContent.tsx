@@ -33,10 +33,13 @@ const PreSessionContent = ({ params, prepopData, skipPush }: PreSessionContentPr
       }
     }
 
-    const preSessionResponse = await requestAndInvalidate(`/shipments/${params.shipmentId}/preSession`, {
-      method: "PUT",
-      body: JSON.stringify({ details: info }),
-    });
+    const preSessionResponse = await requestAndInvalidate(
+      `/shipments/${params.shipmentId}/preSession`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ details: info }),
+      },
+    );
     setIsLoading(false);
 
     if (preSessionResponse && preSessionResponse.status === 201) {

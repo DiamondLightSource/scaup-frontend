@@ -65,10 +65,8 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
           <Heading size='lg'>No assigned items</Heading>
           <Text>
             This sample collection contains <b>no assigned items</b>. You must{" "}
-            <NextLink href='edit'>
-              add at least one item
-            </NextLink>{" "}
-            to this sample collection to get a list of contents.
+            <NextLink href='edit'>add at least one item</NextLink> to this sample collection to get
+            a list of contents.
           </Text>
         </VStack>
       )}

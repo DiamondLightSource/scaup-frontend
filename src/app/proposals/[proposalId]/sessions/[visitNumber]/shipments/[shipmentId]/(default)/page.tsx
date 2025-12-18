@@ -88,9 +88,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
           <Text>
             This sample collection does not exist or you do not have permission to view it.
           </Text>
-          <NextLink href='..'>
-            Return to session page
-          </NextLink>
+          <NextLink href='..'>Return to session page</NextLink>
         </VStack>
       ) : (
         <>
@@ -116,9 +114,8 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                 <Heading size='lg'>Grids</Heading>
                 <Spacer />
                 <NextLink href={`${params.shipmentId}/import-samples`}>
-                <Button size='sm'>
-                  Import Grids from Session
-                </Button></NextLink>
+                  <Button size='sm'>Import Grids from Session</Button>
+                </NextLink>
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start' flexWrap='wrap'>
@@ -162,10 +159,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>
-              <TwoLineLink
-                title='Review Sample Collection'
-                href={`${params.shipmentId}/review`}
-              >
+              <TwoLineLink title='Review Sample Collection' href={`${params.shipmentId}/review`}>
                 Review sample collection contents
               </TwoLineLink>
               <TwoLineLink title='Print Contents' href={`${params.shipmentId}/print`}>

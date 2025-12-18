@@ -1,17 +1,7 @@
 "use client";
 
 import { components } from "@/types/schema";
-import {
-  Box,
-  Stat,
-  HStack,
-  VStack,
-  StatLabel,
-  Heading,
-  Tag,
-  Button,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Stat, HStack, VStack, StatLabel, Heading, Tag, Button, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { getShipmentStatus } from "@/mappings/colours";
 import { formatDate } from "@/utils/generic";

@@ -10,9 +10,7 @@ const PageNotFound = () => (
   <VStack h='100%' w='100%' justifyContent='center'>
     <Heading variant='notFound'>Page not found</Heading>
     <Text>This page does not exist.</Text>
-    <NextLink href='/'>
-      Go home
-    </NextLink>
+    <NextLink href='/'>Go home</NextLink>
   </VStack>
 );
 

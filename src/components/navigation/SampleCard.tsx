@@ -1,5 +1,3 @@
-"use client";
-
 import { components } from "@/types/schema";
 import {
   Box,
@@ -76,17 +74,23 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
           {sample.dataCollectionGroupId && (
             <HStack>
               <Menu>
-                <MenuButton as={Button} rightIcon={<MdExpandMore />} leftIcon={<MdDatasetLinked />}>
-                  View Data
+                <MenuButton>
+                  <Button leftIcon={<MdDatasetLinked />} rightIcon={<MdExpandMore />}>
+                    View Data
+                  </Button>
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
-                    <NextLink href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}/atlas`}>
+                    <NextLink
+                      href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}/atlas`}
+                    >
                       Atlas
                     </NextLink>
                   </MenuItem>
                   <MenuItem>
-                    <NextLink href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}>
+                    <NextLink
+                      href={`${process.env.PATO_URL}/proposals/${params.proposalId}/sessions/${params.visitNumber}/groups/${sample.dataCollectionGroupId}`}
+                    >
                       Data Collection
                     </NextLink>
                   </MenuItem>
@@ -95,11 +99,8 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
             </HStack>
           )}
           <NextLink href={`${urlPrefix}${sample.shipmentId}/${sample.type}/${sample.id}/review`}>
-          <Button
-            leftIcon={<MdBlurCircular />}
-          >
-            View Grid
-          </Button></NextLink>
+            <Button leftIcon={<MdBlurCircular />}>View Grid</Button>
+          </NextLink>
         </HStack>
       </Stat>
 
@@ -123,14 +124,13 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
           <HStack>
             <Text>Originated </Text>
             {sample.derivedSamples.map((child) => (
-              <Link
+              <NextLink
                 color='gray.300'
                 key={child.id}
-                as={NextLink}
                 href={`${urlPrefix}${child.shipmentId}/${child.type}/${child.id}/review`}
               >
                 {child.name}
-              </Link>
+              </NextLink>
             ))}
           </HStack>
         )}

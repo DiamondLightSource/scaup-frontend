@@ -5,7 +5,7 @@ import { nextCookies } from "better-auth/next-js";
 export const auth = betterAuth({
   basePath: "/auth",
   telemetry: {
-    enabled: false
+    enabled: false,
   },
   user: {
     additionalFields: {

@@ -18,9 +18,8 @@ export const AppNavbarInner = ({
         {session && session.permissions.includes("em_admin") ? (
           <NavLinks>
             <NextLink href='/inventory'>
-            <NavLink>
-              Inventory
-            </NavLink></NextLink>
+              <NavLink>Inventory</NavLink>
+            </NextLink>
           </NavLinks>
         ) : (
           <></>

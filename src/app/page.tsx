@@ -124,24 +124,18 @@ const Home = async () => {
                 {item.shipmentCount}
               </StatHelpText>
               <HStack flexWrap='wrap'>
-                <NextLink 
-                  href={`/proposals/${item.session.parentProposal}/sessions/${item.session.visitNumber}/shipments`}>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
+                <NextLink
+                  href={`/proposals/${item.session.parentProposal}/sessions/${item.session.visitNumber}/shipments`}
                 >
-                  View session overview
-                </Button></NextLink>
-                <NextLink 
-                  href={`/proposals/${item.session.parentProposal}/shipments`}>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
-                >
-                  View proposal overview
-                </Button></NextLink>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View session overview
+                  </Button>
+                </NextLink>
+                <NextLink href={`/proposals/${item.session.parentProposal}/shipments`}>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View proposal overview
+                  </Button>
+                </NextLink>
               </HStack>
             </Stat>
           ))

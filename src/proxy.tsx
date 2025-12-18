@@ -43,7 +43,5 @@ export const proxy = async (request: NextRequest) => {
 
 export const config = {
   matcher: ["/((?!api|auth|favicon.ico|_next|_next/static|_next/image).*)"],
-  unstable_allowDynamic: [
-    "**/node_modules/@better-auth/telemetry/dist/**"
-  ]
+  unstable_allowDynamic: ["**/node_modules/@better-auth/telemetry/dist/**"],
 };
