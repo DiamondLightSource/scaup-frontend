@@ -14,31 +14,4 @@ describe("Sample Collection Layout", () => {
   it("should render child content", async () => {
     renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
   });
-
-  it("should redirect to previous page if shipments data item request returns error", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({}, { status: 404 }),
-        { once: true },
-      ),
-    );
-
-    renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
-    expect(redirect).toHaveBeenCalledOnce();
-  });
-
-  it("should redirect to previous page if unassigned item request returns error", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/shipments/:shipmentId/unassigned",
-        () => HttpResponse.json({}, { status: 404 }),
-        { once: true },
-      ),
-    );
-
-    renderWithProviders(await ShipmentsLayout({ children: <></>, params }));
-
-    expect(redirect).toHaveBeenCalledOnce();
-  });
 });

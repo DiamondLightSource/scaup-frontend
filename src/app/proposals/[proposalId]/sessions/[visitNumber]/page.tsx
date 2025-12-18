@@ -2,7 +2,7 @@ import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/sessions/[vis
 import { getShipmentStatus } from "@/mappings/colours";
 import { SessionParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import {
   Divider,
   Grid,
@@ -23,9 +23,7 @@ export const metadata: Metadata = {
 };
 
 const getShipments = async (proposalId: string, visitNumber: string) => {
-  const res = await authenticatedFetch.server(
-    `/proposals/${proposalId}/sessions/${visitNumber}/shipments`,
-  );
+  const res = await serverFetch(`/proposals/${proposalId}/sessions/${visitNumber}/shipments`);
 
   if (res && res.status === 200) {
     const shipments = await res.json();

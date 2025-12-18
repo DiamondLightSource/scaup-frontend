@@ -1,19 +1,17 @@
 import { ShipmentCard } from "@/components/navigation/ShipmentCard";
-import { getShipmentStatus } from "@/mappings/colours";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { formatDate } from "@/utils/generic";
-import { Divider, Heading, HStack, Text, VStack } from "@chakra-ui/react";
-import { Pagination, Table, TwoLineLink } from "@diamondlightsource/ui-components";
+import { Divider, Heading, HStack, VStack } from "@chakra-ui/react";
+import { TwoLineLink } from "@diamondlightsource/ui-components";
 import { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Proposal Sample Collections - SCAUP",
 };
 
 const getProposalShipments = async (proposalReference: string) => {
-  const res = await authenticatedFetch.server(`/proposals/${proposalReference}/shipments`);
+  const res = await serverFetch(`/proposals/${proposalReference}/shipments`);
 
   if (res && res.status === 200) {
     const shipments: components["schemas"]["Paged_ShipmentOut_"] = await res.json();

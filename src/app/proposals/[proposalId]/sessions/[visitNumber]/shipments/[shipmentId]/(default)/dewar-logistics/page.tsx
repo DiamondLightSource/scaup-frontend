@@ -1,6 +1,6 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { formatDate } from "@/utils/generic";
 import {
   Box,
@@ -20,13 +20,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
+import NextLink from "next/link";
 
 export const metadata: Metadata = {
   title: "Request Returns - Scaup",
 };
 
 const getTopLevelContainers = async (shipmentId: string) => {
-  const resTlc = await authenticatedFetch.server(`/shipments/${shipmentId}/topLevelContainers`);
+  const resTlc = await serverFetch(`/shipments/${shipmentId}/topLevelContainers`);
 
   if (resTlc.status === 200) {
     return (await resTlc.json()).items;
@@ -67,12 +68,9 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                   <Heading flex='1 0 0' size='lg'>
                     {tlc.name ?? "Unnamed Dewar"}
                   </Heading>
-                  <Button
-                    as={Link}
-                    href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}
-                  >
-                    Request Return
-                  </Button>
+                  <NextLink href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
+                    <Button>Request Return</Button>
+                  </NextLink>
                 </HStack>
                 <Divider />
                 <HStack w='100%' my='1em' gap='2em' flexWrap='wrap' alignItems='start'>

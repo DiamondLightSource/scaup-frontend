@@ -1,7 +1,7 @@
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { ItemLayoutContent } from "./layoutContent";
 import React from "react";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getShipmentData } from "@/utils/server/shipment";
 import { TreeData } from "@/components/visualisation/treeView";
 import { components } from "@/types/schema";
 import { InventoryItemLayoutProps } from "@/types/generic";
@@ -9,7 +9,7 @@ import { VStack, Heading, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 const getUnassignedItems = async () => {
-  const res = await authenticatedFetch.server("/internal-containers/unassigned", {
+  const res = await serverFetch("/internal-containers/unassigned", {
     cache: "force-cache",
     next: { tags: ["shipment"] },
   });
@@ -37,9 +37,7 @@ const ItemLayout = async (props: InventoryItemLayoutProps) => {
       <VStack w='100%' mt='3em'>
         <Heading variant='notFound'>Inventory Item Unavailable</Heading>
         <Text>This inventory item does not exist or you do not have permission to view it.</Text>
-        <Link as={NextLink} href='..'>
-          Return to inventory page
-        </Link>
+        <NextLink href='..'>Return to inventory page</NextLink>
       </VStack>
     );
   }

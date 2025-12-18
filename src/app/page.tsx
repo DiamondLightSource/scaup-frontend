@@ -1,11 +1,9 @@
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import { formatDate } from "@/utils/generic";
 import {
-  Link,
   Heading,
   HStack,
-  Text,
   VStack,
   Box,
   Stat,
@@ -16,53 +14,16 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { Metadata } from "next/types";
-import { MdArrowForward } from "react-icons/md";
 import NextLink from "next/link";
+import { InfoBox } from "@/components/navigation/InfoCard";
 
 export const metadata: Metadata = {
   title: "SCAUP",
 };
 
-interface InfoBoxProps {
-  title: string;
-  children: string;
-  href: string;
-}
-
-const InfoBox = ({ title, children, href }: InfoBoxProps) => (
-  <Box
-    flex='1 0 0'
-    minW='300px'
-    as={Link}
-    href={href}
-    alignItems='start'
-    p='1em'
-    position='relative'
-    color='diamond.500'
-    borderColor='diamond.500'
-    border='1px solid'
-    _hover={{ backgroundColor: "diamond.700" }}
-  >
-    <VStack alignItems='start'>
-      <Heading>{title}</Heading>
-      <Text fontSize='20px' h='4em'>
-        {children}
-      </Text>
-      <HStack w='100%' justifyContent='space-between' color='diamond.500'>
-        <Text fontWeight='600' fontSize='20px'>
-          View
-        </Text>
-        <MdArrowForward fontSize='20px' />
-      </HStack>
-    </VStack>
-  </Box>
-);
-
 const getSessions = async () => {
   const currentDate = new Date();
-  const response = await authenticatedFetch.server(
-    `/sessions?limit=4&minEndDate=${currentDate.toISOString()}`,
-  );
+  const response = await serverFetch(`/sessions?limit=4&minEndDate=${currentDate.toISOString()}`);
 
   if (response.status !== 200) {
     return null;
@@ -75,7 +36,7 @@ const getSessions = async () => {
         return { session, shipmentCount: 0 };
       }
 
-      const response = await authenticatedFetch.server(
+      const response = await serverFetch(
         `/proposals/${session.parentProposal}/sessions/${session.visitNumber}/shipments?limit=1`,
       );
 
@@ -118,7 +79,7 @@ const Home = async () => {
             <InfoBox title='Proposals' href={`${process.env.PATO_URL}/proposals`}>
               View list of proposals
             </InfoBox>
-            <InfoBox title='User Guide' href={process.env.USER_GUIDE_URL!}>
+            <InfoBox title='User Guide' href={process.env.USER_GUIDE_URL ?? "#"}>
               Open detailed user guide
             </InfoBox>
           </HStack>
@@ -163,24 +124,18 @@ const Home = async () => {
                 {item.shipmentCount}
               </StatHelpText>
               <HStack flexWrap='wrap'>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
+                <NextLink
                   href={`/proposals/${item.session.parentProposal}/sessions/${item.session.visitNumber}/shipments`}
-                  as={NextLink}
                 >
-                  View session overview
-                </Button>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
-                  href={`/proposals/${item.session.parentProposal}/shipments`}
-                  as={NextLink}
-                >
-                  View proposal overview
-                </Button>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View session overview
+                  </Button>
+                </NextLink>
+                <NextLink href={`/proposals/${item.session.parentProposal}/shipments`}>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View proposal overview
+                  </Button>
+                </NextLink>
               </HStack>
             </Stat>
           ))

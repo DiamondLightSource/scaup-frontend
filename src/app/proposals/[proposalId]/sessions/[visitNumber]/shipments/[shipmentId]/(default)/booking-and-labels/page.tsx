@@ -1,5 +1,5 @@
 import { ShipmentParams } from "@/types/generic";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 import {
   Button,
   Divider,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 const getIsBooked = async (shipmentId: string) => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}`);
+  const res = await serverFetch(`/shipments/${shipmentId}`);
   const data = res && res.status === 200 ? await res.json() : [];
 
   return data && !!data.data.shipmentRequest;
@@ -60,12 +60,11 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
               multiple dewars, ensure the dewar matches the barcode you&#39;ve selected for it
               previously.
             </Text>
-            <Button
-              as={NextLink}
+            <NextLink
               href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
             >
-              Print Tracking Labels
-            </Button>
+              <Button>Print Tracking Labels</Button>
+            </NextLink>
           </ListItem>
           <ListItem>
             <Heading size='lg'>Book shipment with courier (optional)</Heading>
@@ -81,10 +80,8 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
             <Heading size='lg'>Request dewar return at the end of your session</Heading>
             <Text my='1em'>
               Once your session is finished, you must{" "}
-              <Link as={NextLink} href='returns'>
-                request for your dewars to be returned
-              </Link>{" "}
-              if you wish for them to be returned to your institution.
+              <NextLink href='returns'>request for your dewars to be returned</NextLink> if you wish
+              for them to be returned to your institution.
             </Text>
             <Text my='1em'>
               If you have already printed the tracking label, you do not need to do so again once

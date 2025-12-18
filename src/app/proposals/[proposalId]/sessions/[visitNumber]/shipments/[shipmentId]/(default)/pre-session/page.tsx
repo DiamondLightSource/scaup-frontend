@@ -2,14 +2,14 @@ import { ShipmentParams } from "@/types/generic";
 import { Divider, Heading, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import PreSessionContent from "./pageContent";
-import { authenticatedFetch } from "@/utils/client";
+import { serverFetch } from "@/utils/server/request";
 
 export const metadata: Metadata = {
   title: "Pre-Session Data - Scaup",
 };
 
 const getPreSessionData = async (shipmentId: string) => {
-  const res = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
+  const res = await serverFetch(`/shipments/${shipmentId}/preSession`);
   return res && res.status === 200 ? (await res.json()).details : null;
 };
 

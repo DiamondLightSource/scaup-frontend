@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getShipmentData } from "@/utils/server/shipment";
 
 export const metadata: Metadata = {
   title: "Sample Collection Submitted - Scaup",
@@ -50,9 +50,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
       <VStack w='100%' mt='3em'>
         <Heading variant='notFound'>Sample Collection Unavailable</Heading>
         <Text>This sample collection does not exist or you do not have permission to view it.</Text>
-        <Link as={NextLink} href='..'>
-          Return to session page
-        </Link>
+        <NextLink href='..'>Return to session page</NextLink>
       </VStack>
     );
   }
@@ -130,12 +128,11 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
             </Text>
             <HStack>
               <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
-              <Button
-                as={Link}
+              <NextLink
                 href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
               >
-                Print Tracking Labels
-              </Button>
+                <Button>Print Tracking Labels</Button>
+              </NextLink>
             </HStack>
           </>
         )}

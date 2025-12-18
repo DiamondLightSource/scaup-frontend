@@ -24,10 +24,8 @@ export default defineConfig({
         "e2e/",
         // Test mocks
         "src/mocks",
-        // NextAuth
-        "src/app/nextauth",
-        // Auth options, part of NextAuth's configuration
-        "src/mappings/authOptions.ts",
+        // Auth route
+        "src/app/auth",
         // Styling
         "src/styles",
         // Types

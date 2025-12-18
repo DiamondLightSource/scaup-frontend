@@ -1,11 +1,10 @@
-import { authOptions } from "@/mappings/authOptions";
-import { getServerSession } from "next-auth/next";
+import { headers } from "next/headers";
 import { AppNavbarInner } from "./AppNavbarInner";
 import { HStack, Link, Tag, Text } from "@chakra-ui/react";
+import { auth } from "@/utils/auth";
 
 type DeployType = "dev" | "production" | "beta";
 
-// TODO: Move this to component library
 const PhaseBanner = ({ deployType }: { deployType: DeployType }) => {
   if (deployType === "production") {
     return null;
@@ -37,11 +36,23 @@ const PhaseBanner = ({ deployType }: { deployType: DeployType }) => {
 };
 
 export const AppNavbar = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <span className='hide-on-print' style={{ marginBottom: "0.3em" }}>
-      <AppNavbarInner session={session} />
+      <AppNavbarInner
+        session={
+          session
+            ? {
+                id: session.user.fedid,
+                name: session.user.name,
+                permissions: session.user.permissions,
+              }
+            : null
+        }
+      />
       <PhaseBanner deployType={process.env.DEPLOY_TYPE as DeployType} />
     </span>
   );
