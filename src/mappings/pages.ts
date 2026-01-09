@@ -34,17 +34,12 @@ export const steps: Step[] = [
 ];
 
 export const internalEbicSteps: Step[] = [
+  { title: "Grids", id: ["sample", "grid"], singular: "Grid", endpoint: "samples" },
   { title: "Grid Boxes", id: "gridBox", singular: "Grid Box", endpoint: "containers" },
   {
     title: "Pucks",
     id: ["puck"],
     singular: "Puck",
-    endpoint: "containers",
-  },
-  {
-    title: "Canes",
-    id: ["cane"],
-    singular: "Cane",
     endpoint: "containers",
   },
 ];

@@ -16,7 +16,7 @@ import {
   StepSeparator,
   StepperProps,
 } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
 
@@ -31,7 +31,7 @@ export interface ItemStepperProps extends Omit<StepperProps, "children" | "index
   /** Current step */
   currentStep: number;
   /** Callback for when the current step changes */
-  onStepChanged: (v: number) => void;
+  onStepChanged?: (v: number) => void;
   /** Callback for when the amount of items per type changes */
   onTypeCountChanged?: (typeCount: TypeCount[]) => void;
 }
@@ -93,14 +93,20 @@ export const ItemStepper = ({
     }
   }, [typeCount, onTypeCountChanged]);
 
+  const handleStepChanged = useCallback((index: number) => {
+    if (onStepChanged) {
+      onStepChanged(index)
+    }
+  }, [onStepChanged])
+
   return (
     <Stepper colorScheme='green' h='60px' index={activeStep} {...props}>
       {steps.map((step, index) => (
         <ChakraStep key={index}>
           <HStack
             aria-label={`${step.title} Step`}
-            onClick={() => onStepChanged(index)}
-            style={{ cursor: isReview ? "not-allowed" : "pointer" }}
+            onClick={() => handleStepChanged(index)}
+            style={{ cursor: !onStepChanged || isReview ? "not-allowed" : "pointer" }}
           >
             <StepIndicator bg='white'>
               <StepStatus

@@ -49,22 +49,6 @@ export const ItemLayoutContent = ({
     }
   }, [unassignedItems, dispatch]);
 
-  const handleStepChanged = useCallback(
-    (step: number) => {
-      if (step >= internalEbicSteps.length) {
-        return;
-      }
-      const currentStep = internalEbicSteps[step];
-
-      const newType = (
-        Array.isArray(currentStep.id) ? currentStep.id[0] : currentStep.id
-      ) as BaseShipmentItem["type"];
-
-      router.push(`../${newType}/new`);
-    },
-    [router],
-  );
-
   const handleActiveChanged = useCallback(
     (item: TreeData<BaseShipmentItem>) => {
       router.push(`../${item.data.type}/${item.id}`);
@@ -77,7 +61,6 @@ export const ItemLayoutContent = ({
       <ItemStepper
         steps={internalEbicSteps}
         currentStep={currentStep}
-        onStepChanged={handleStepChanged}
         width='100%'
       />
       <Divider />
@@ -86,7 +69,7 @@ export const ItemLayoutContent = ({
           {children}
         </VStack>
         <VStack height='100%' flex='1' alignItems='start' gap='0'>
-          <ShipmentOverview title='Inventory' onActiveChanged={handleActiveChanged} />
+          <ShipmentOverview title='Inventory' onActiveChanged={handleActiveChanged} readOnly={true} hideUnassigned={true} startCollapsed={true}/>
         </VStack>
       </HStack>
     </VStack>
