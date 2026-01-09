@@ -10,12 +10,16 @@ export interface ShipmentOverviewInnerProps {
   onActiveChanged: (data: TreeData) => void;
   title: string;
   readOnly?: boolean;
+  startCollapsed?: boolean;
+  hideUnassigned?: boolean;
 }
 
 export const ShipmentOverview = ({
   title,
   onActiveChanged,
   readOnly = false,
+  startCollapsed = false,
+  hideUnassigned = false
 }: ShipmentOverviewInnerProps) => {
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
@@ -86,9 +90,11 @@ export const ShipmentOverview = ({
               onRemove={handleUnassign}
               onEdit={onActiveChanged}
               selectedItem={activeItem ?? undefined}
+              collapseChildren={startCollapsed}
+              defaultIndex={startCollapsed ? [0] : undefined}
             />
           </Box>
-          <TreeView
+          { !hideUnassigned && <TreeView
             readOnly={readOnly}
             mb='10px'
             w='100%'
@@ -96,7 +102,7 @@ export const ShipmentOverview = ({
             onEdit={onActiveChanged}
             onRemove={handleDelete}
             selectedItem={activeItem ?? undefined}
-          />
+          /> }
         </>
       )}
     </>

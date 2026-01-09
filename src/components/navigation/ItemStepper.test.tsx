@@ -1,6 +1,6 @@
 import { TreeData } from "@/components/visualisation/treeView";
 import { internalEbicSteps, steps } from "@/mappings/pages";
-import { cane, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
+import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import { ItemStepper } from "./ItemStepper";
 
@@ -10,15 +10,6 @@ const defaultShipmentItems: TreeData[] = [
     name: "",
     data: { type: "dewar" },
     children: [puck],
-  },
-];
-
-const defaultInternalItems: TreeData[] = [
-  {
-    id: "",
-    name: "",
-    data: { type: "dewar" },
-    children: [cane],
   },
 ];
 
@@ -85,13 +76,13 @@ describe("Item Stepper", () => {
         onTypeCountChanged={typeCountCallback}
         currentStep={0}
       />,
-      { preloadedState: { shipment: { ...testInitialState, items: defaultInternalItems } } },
+      { preloadedState: { shipment: { ...testInitialState, items: defaultShipmentItems } } },
     );
 
     expect(typeCountCallback).toBeCalledWith([
       { total: 0, unassigned: 0 },
-      { total: 1, unassigned: 0 },
       { total: 0, unassigned: 0 },
+      { total: 1, unassigned: 0 },
     ]);
   });
 });

@@ -46,11 +46,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const currentUnassigned = useSelector(selectUnassigned);
 
   useEffect(() => {
-    if (params.itemId !== "new") {
-      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
-    } else {
-      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
-    }
+    dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
   }, [params, dispatch, currentShipment, currentUnassigned]);
 
   const onSubmit = useCallback(

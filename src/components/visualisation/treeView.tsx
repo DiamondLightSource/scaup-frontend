@@ -39,6 +39,7 @@ export interface TreeViewProps extends AccordionProps {
   /** Disable edit/remove buttons */
   readOnly?: boolean;
   selectedItem?: TreeData;
+  collapseChildren?: boolean;
 }
 
 const typeColours: Record<BaseShipmentItem["type"], string> = {
@@ -58,6 +59,8 @@ export const TreeView = ({
   readOnly = false,
   onEdit,
   selectedItem,
+  defaultIndex = [0,1,2,3,4],
+  collapseChildren = false,
   ...props
 }: TreeViewProps) => {
   /*
@@ -97,7 +100,7 @@ export const TreeView = ({
 
   // Whenever comparing items in the list, I actually want to compare by reference, not by value.
   return (
-    <Accordion allowMultiple {...props} defaultIndex={[0, 1, 2, 3]}>
+    <Accordion allowMultiple {...props} defaultIndex={defaultIndex}>
       {data.map((item, index) => {
         const isSelected =
           item.id === selectedItem?.id && item.data.type === selectedItem?.data.type;
@@ -168,6 +171,7 @@ export const TreeView = ({
                       onEdit={onEdit}
                       readOnly={readOnly}
                       selectedItem={selectedItem}
+                      defaultIndex={collapseChildren ? [] : undefined}
                       {...props}
                     />
                   </AccordionPanel>
