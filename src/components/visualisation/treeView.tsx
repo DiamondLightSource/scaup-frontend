@@ -1,6 +1,7 @@
 import { BaseShipmentItem } from "@/mappings/pages";
 import "@/styles/tree.css";
 import { pascalToSpace } from "@/utils/generic";
+import { isInChildren, recursiveFind } from "@/utils/tree";
 import {
   Accordion,
   AccordionButton,
@@ -13,7 +14,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export interface TreeData<T = any> {
   /** Node label */
@@ -59,7 +60,7 @@ export const TreeView = ({
   readOnly = false,
   onEdit,
   selectedItem,
-  defaultIndex = [0,1,2,3,4],
+  defaultIndex = [0, 1, 2, 3, 4],
   collapseChildren = false,
   ...props
 }: TreeViewProps) => {
@@ -89,6 +90,26 @@ export const TreeView = ({
     [onRemove],
   );
 
+  const activeParent = useMemo(() => {
+    // Do not extend if user/app provided manual override
+    if (!collapseChildren) {
+      return defaultIndex;
+    }
+
+    let foundIndex = data.findIndex(
+      (item) =>
+        item.children &&
+        selectedItem &&
+        isInChildren(item.children, selectedItem.id, selectedItem.data.type),
+    );
+
+    if (foundIndex < 0) {
+      return defaultIndex;
+    }
+
+    return Array.isArray(defaultIndex) ? [...defaultIndex, foundIndex] : [defaultIndex, foundIndex];
+  }, [data, selectedItem, defaultIndex]);
+
   const handleEdit = useCallback(
     (item: TreeData) => {
       if (onEdit) {
@@ -100,7 +121,7 @@ export const TreeView = ({
 
   // Whenever comparing items in the list, I actually want to compare by reference, not by value.
   return (
-    <Accordion allowMultiple {...props} defaultIndex={defaultIndex}>
+    <Accordion allowMultiple {...props} defaultIndex={activeParent}>
       {data.map((item, index) => {
         const isSelected =
           item.id === selectedItem?.id && item.data.type === selectedItem?.data.type;
@@ -172,6 +193,7 @@ export const TreeView = ({
                       readOnly={readOnly}
                       selectedItem={selectedItem}
                       defaultIndex={collapseChildren ? [] : undefined}
+                      collapseChildren={collapseChildren}
                       {...props}
                     />
                   </AccordionPanel>

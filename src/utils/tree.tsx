@@ -25,6 +25,32 @@ export const recursiveFind = (
   }
 };
 
+/** Recursively check if item is present in the children of the passed array
+ *
+ * @param data Original tree object
+ * @param key ID to search for
+ * @param itemType Type of the item to search for
+ */
+export const isInChildren = (
+  data: TreeData[],
+  key: string | number,
+  itemType: BaseShipmentItem["type"],
+): boolean => {
+  let isFound = false;
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+    if (item.id === key && item.data.type == itemType) {
+      return true;
+    }
+    if (item.children && item.children.length > 0) {
+      if (isInChildren(item.children, key, itemType)) {
+        return true;
+      }
+    }
+  }
+  return isFound;
+};
+
 /** Recursively count number of children of a given type
  *
  * @param data Original tree object

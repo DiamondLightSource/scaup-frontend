@@ -93,11 +93,14 @@ export const ItemStepper = ({
     }
   }, [typeCount, onTypeCountChanged]);
 
-  const handleStepChanged = useCallback((index: number) => {
-    if (onStepChanged) {
-      onStepChanged(index)
-    }
-  }, [onStepChanged])
+  const handleStepChanged = useCallback(
+    (index: number) => {
+      if (onStepChanged) {
+        onStepChanged(index);
+      }
+    },
+    [onStepChanged],
+  );
 
   return (
     <Stepper colorScheme='green' h='60px' index={activeStep} {...props}>

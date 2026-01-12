@@ -36,12 +36,7 @@ export const ItemForm = ({
   const [formSubType, setFormSubType] = useState<string | undefined>(undefined);
   const [renderedForm, setRenderedForm] = useState<DynamicFormEntry[]>([]);
 
-  const isCreationDisabled = useMemo(
-    () =>
-      parentType === "topLevelContainer" &&
-      ["storageDewar", "grid", "sample"].includes(activeItem!.data.type),
-    [parentType, activeItem],
-  );
+  const isCreationDisabled = useMemo(() => parentType === "topLevelContainer", [parentType]);
 
   useEffect(() => {
     const newForm = formMapping[formType];
@@ -117,9 +112,8 @@ export const ItemForm = ({
   const redirectToNew = useCallback(() => {
     if (parentType === "shipment") {
       router.replace("../new/edit");
-    } else {
-      router.replace("new");
     }
+    // Do not trigger if parent is not shipment
   }, [router, parentType]);
 
   // This does not get rendered if there is no active item, so it's safe to assume it's not null

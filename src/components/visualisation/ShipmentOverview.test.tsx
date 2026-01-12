@@ -70,7 +70,9 @@ describe("Sample Collection Overview", () => {
   });
 
   it("should not render unassigned items if hideUnassigned is set", () => {
-    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} hideUnassigned={true} />);
+    renderWithProviders(
+      <ShipmentOverview title='' onActiveChanged={() => {}} hideUnassigned={true} />,
+    );
 
     expect(screen.queryByText(/unassigned/i)).not.toBeInTheDocument();
   });
@@ -80,11 +82,14 @@ describe("Sample Collection Overview", () => {
 
     puckWithChildren[0].children[0].children = [gridBox];
 
-    renderWithProviders(<ShipmentOverview title='' onActiveChanged={() => {}} startCollapsed={true}/>, {
-      preloadedState: { shipment: { ...testInitialState, items: puckWithChildren } },
-    });
+    renderWithProviders(
+      <ShipmentOverview title='' onActiveChanged={() => {}} startCollapsed={true} />,
+      {
+        preloadedState: { shipment: { ...testInitialState, items: puckWithChildren } },
+      },
+    );
 
-    expect(screen.queryByText(/gridbox/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/gridbox/i)).not.toBeInTheDocument();
   });
 
   it("should unassign item if assigned to unassigned item", async () => {
