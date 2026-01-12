@@ -19,14 +19,6 @@ const baseShipment = {
 };
 
 describe("Inventory Item Page Content", () => {
-  it("should redirect once item is created", async () => {
-    renderWithProviders(<ItemFormPageContent params={params} />);
-
-    fireEvent.click(screen.getByText("Add"));
-
-    await waitFor(() => expect(mockRouter.pathname).toBe("/puck/1"));
-  });
-
   it("should redirect once item is saved", async () => {
     renderWithProviders(<ItemFormPageContent params={params} />, {
       preloadedState: {
@@ -42,7 +34,7 @@ describe("Inventory Item Page Content", () => {
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/2"));
   });
 
-  it("should sync active item to new item if item ID is 'new'", async () => {
+  it("should display message if item does not exist", async () => {
     renderWithProviders(<ItemFormPageContent params={{ ...params, itemId: "new" }} />, {
       preloadedState: {
         shipment: {
@@ -52,6 +44,6 @@ describe("Inventory Item Page Content", () => {
       },
     });
 
-    expect(screen.getByText("New Puck")).toBeInTheDocument();
+    expect(screen.getByText("No item selected")).toBeInTheDocument();
   });
 });

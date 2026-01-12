@@ -42,6 +42,12 @@ export const internalEbicSteps: Step[] = [
     singular: "Puck",
     endpoint: "containers",
   },
+  {
+    title: "Dewars",
+    id: ["dewar", "walk-in"],
+    singular: "Dewar",
+    endpoint: "topLevelContainers",
+  },
 ];
 
 export const pluralToSingular: Record<string, string> = {

@@ -19,7 +19,7 @@ export const ShipmentOverview = ({
   onActiveChanged,
   readOnly = false,
   startCollapsed = false,
-  hideUnassigned = false
+  hideUnassigned = false,
 }: ShipmentOverviewInnerProps) => {
   const unassigned = useSelector(selectUnassigned);
   const data = useSelector(selectItems);
@@ -94,15 +94,17 @@ export const ShipmentOverview = ({
               defaultIndex={startCollapsed ? [0] : undefined}
             />
           </Box>
-          { !hideUnassigned && <TreeView
-            readOnly={readOnly}
-            mb='10px'
-            w='100%'
-            data={unassigned}
-            onEdit={onActiveChanged}
-            onRemove={handleDelete}
-            selectedItem={activeItem ?? undefined}
-          /> }
+          {!hideUnassigned && (
+            <TreeView
+              readOnly={readOnly}
+              mb='10px'
+              w='100%'
+              data={unassigned}
+              onEdit={onActiveChanged}
+              onRemove={handleDelete}
+              selectedItem={activeItem ?? undefined}
+            />
+          )}
         </>
       )}
     </>

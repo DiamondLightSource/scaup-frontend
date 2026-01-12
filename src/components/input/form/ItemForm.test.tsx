@@ -1,4 +1,4 @@
-import { fireEvent, waitFor, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { ItemForm } from "@/components/input/form/ItemForm";
 import mockRouter from "next-router-mock";
 import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
@@ -39,25 +39,6 @@ describe("Inventory Item Page Content", () => {
     screen.getByText("Add");
   });
 
-  it("should redirect to new item when button is clicked", () => {
-    renderWithProviders(
-      <ItemForm parentId='1' onSubmit={async () => {}} parentType='topLevelContainer' />,
-      {
-        preloadedState: {
-          shipment: {
-            ...baseShipment.shipment,
-            activeItem: puck,
-            isEdit: true,
-          },
-        },
-      },
-    );
-
-    fireEvent.click(screen.getByText("Create New Item"));
-
-    expect(mockRouter.pathname).toBe("/new");
-  });
-
   it("should redirect to new/edit item when button is clicked and parent is shipment", () => {
     renderWithProviders(<ItemForm parentId='1' onSubmit={async () => {}} parentType='shipment' />, {
       preloadedState: {
@@ -72,7 +53,7 @@ describe("Inventory Item Page Content", () => {
     expect(mockRouter.pathname).toBe("/new/edit");
   });
 
-  it("should disable 'create new item' button if item is sample/grid/dewar", () => {
+  it("should disable 'create new item' button if parent is internal top level container", () => {
     renderWithProviders(
       <ItemForm parentId='1' parentType='topLevelContainer' onSubmit={async () => {}} />,
       {

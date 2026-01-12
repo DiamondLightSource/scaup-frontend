@@ -66,23 +66,4 @@ describe("Item Stepper", () => {
 
     expect(stepClickedCallback).toBeCalledWith(3);
   });
-
-  it("should not include top level containers in count if steps do not include top level container step", () => {
-    const typeCountCallback = vi.fn();
-    renderWithProviders(
-      <ItemStepper
-        steps={internalEbicSteps}
-        onStepChanged={() => {}}
-        onTypeCountChanged={typeCountCallback}
-        currentStep={0}
-      />,
-      { preloadedState: { shipment: { ...testInitialState, items: defaultShipmentItems } } },
-    );
-
-    expect(typeCountCallback).toBeCalledWith([
-      { total: 0, unassigned: 0 },
-      { total: 0, unassigned: 0 },
-      { total: 1, unassigned: 0 },
-    ]);
-  });
 });

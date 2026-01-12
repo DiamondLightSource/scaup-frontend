@@ -18,7 +18,7 @@ describe("Inventory Layout", () => {
   it("should redirect to previous page if shipments data item request returns error", async () => {
     server.use(
       http.get(
-        "http://localhost/api/internal-containers/unassigned",
+        "http://localhost/api/internal-containers/:topLevelContainerId",
         () => HttpResponse.json({}, { status: 404 }),
         { once: true },
       ),
@@ -26,19 +26,6 @@ describe("Inventory Layout", () => {
 
     renderWithProviders(await InventoryLayout({ children: <></>, params }));
 
-    expect(screen.getByText("Return to inventory page")).toBeInTheDocument();
-  });
-
-  it("should redirect to previous page if unassigned item request returns error", async () => {
-    server.use(
-      http.get(
-        "http://localhost/api/internal-containers/1",
-        () => HttpResponse.json({}, { status: 404 }),
-        { once: true },
-      ),
-    );
-
-    renderWithProviders(await InventoryLayout({ children: <></>, params }));
     expect(screen.getByText("Return to inventory page")).toBeInTheDocument();
   });
 });
