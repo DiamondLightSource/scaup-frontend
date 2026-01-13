@@ -91,7 +91,14 @@ const rootKeyMap: Record<Step["endpoint"], string[]> = {
     "subType",
   ],
   samples: [...commonRootKeys, "proteinId", "copies"],
-  topLevelContainers: [...commonRootKeys, "code", "barCode", "status", "labContact"],
+  topLevelContainers: [
+    ...commonRootKeys,
+    "code",
+    "barCode",
+    "status",
+    "labContact",
+    "manufacturerSerialNumber",
+  ],
   shipments: [...commonRootKeys, "proposalReference"],
 };
 
