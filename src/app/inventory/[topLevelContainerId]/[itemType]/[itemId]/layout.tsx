@@ -3,7 +3,7 @@ import React from "react";
 import { getShipmentData } from "@/utils/client/shipment";
 import { TreeData } from "@/components/visualisation/treeView";
 import { InventoryItemLayoutProps } from "@/types/generic";
-import { VStack, Heading, Text } from "@chakra-ui/react";
+import { VStack, Heading, Text, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 const ItemLayout = async (props: InventoryItemLayoutProps) => {
