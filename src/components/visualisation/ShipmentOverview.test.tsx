@@ -2,7 +2,7 @@ import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
 import { TreeData } from "@/components/visualisation/treeView";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
-import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
+import { gridBox, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import { toastMock } from "@/../vitest.setup";
@@ -67,6 +67,29 @@ describe("Sample Collection Overview", () => {
     });
 
     expect(screen.queryByText(/unassigned/i)).not.toBeInTheDocument();
+  });
+
+  it("should not render unassigned items if hideUnassigned is set", () => {
+    renderWithProviders(
+      <ShipmentOverview title='' onActiveChanged={() => {}} hideUnassigned={true} />,
+    );
+
+    expect(screen.queryByText(/unassigned/i)).not.toBeInTheDocument();
+  });
+
+  it("should collapse children of root item if startCollapsed is set", async () => {
+    const puckWithChildren = structuredClone(defaultShipment);
+
+    puckWithChildren[0].children[0].children = [gridBox];
+
+    renderWithProviders(
+      <ShipmentOverview title='' onActiveChanged={() => {}} startCollapsed={true} />,
+      {
+        preloadedState: { shipment: { ...testInitialState, items: puckWithChildren } },
+      },
+    );
+
+    expect(screen.queryByText(/gridbox/i)).not.toBeInTheDocument();
   });
 
   it("should unassign item if assigned to unassigned item", async () => {

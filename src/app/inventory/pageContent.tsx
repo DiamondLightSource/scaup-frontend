@@ -1,8 +1,7 @@
 "use client";
 import { DynamicForm } from "@/components/input/form";
 import { DynamicFormEntry } from "@/types/forms";
-import { CreationResponse } from "@/types/server";
-import { Item } from "@/utils/client/item";
+import { requestAndInvalidate } from "@/utils/server/request";
 import { Button, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,14 +24,12 @@ export const TopLevelContainerCreationForm = () => {
   const onSubmit = formContext.handleSubmit(async (info: ShipmentData) => {
     try {
       setIsLoading(true);
-      const newTlc = (await Item.create(
-        null,
-        { name: info.name, type: "storageDewar", code: "" },
-        "topLevelContainers",
-        "topLevelContainer",
-      )) as CreationResponse;
+      const newTlc = await requestAndInvalidate("/internal-containers/preloaded-dewars", {
+        method: "POST",
+        body: JSON.stringify({ name: info.name }),
+      });
 
-      router.push(`inventory/${newTlc.id}/gridBox/new`);
+      router.push(`inventory/${newTlc.json.id}/dewar/${newTlc.json.id}`);
     } catch (e) {
     } finally {
       setIsLoading(false);

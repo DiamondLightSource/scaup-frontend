@@ -1,6 +1,8 @@
 import { TreeView } from "@/components/visualisation/treeView";
 import { fireEvent, render, screen } from "@testing-library/react";
 
+const dummyItem = { id: "1", name: "Test", data: { type: "someType" } };
+
 describe("Tree View", () => {
   it("should render root", () => {
     render(<TreeView data={[{ id: "1", name: "Test", data: {} }]} />);
@@ -92,8 +94,29 @@ describe("Tree View", () => {
   });
 
   it("should display item type if available", () => {
-    render(<TreeView data={[{ id: "1", name: "Test", data: { type: "someType" } }]} />);
+    render(<TreeView data={[dummyItem]} />);
 
     expect(screen.getByText("Some Type")).toBeInTheDocument();
+  });
+
+  it("should expand parents of selected item", () => {
+    const selectedItem = { ...dummyItem, name: "baz", id: 12 };
+    render(
+      <TreeView
+        selectedItem={selectedItem}
+        collapseChildren={true}
+        data={[
+          {
+            ...dummyItem,
+            children: [
+              { ...dummyItem, id: 10, name: "foo" },
+              { ...dummyItem, id: 11, name: "bar", children: [selectedItem] },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("baz")).toBeInTheDocument();
   });
 });
