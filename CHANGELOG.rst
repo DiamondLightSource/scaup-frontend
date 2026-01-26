@@ -3,6 +3,24 @@ Changelog
 ==========
 
 +++++++++
+v0.20.0 (16/01/2026)
++++++++++
+
+**Changed**
+
+- Make inventory items undeletable
+- Remove capacity to create items in inventory
+- Add manufacturer serial number field to dewar page 
+
++++++++++
+v0.19.1 (09/12/2025)
++++++++++
+
+**Fixed**
+
+- Fixed link to dewar return page
+
++++++++++
 v0.19.0 (17/12/2025)
 +++++++++
 

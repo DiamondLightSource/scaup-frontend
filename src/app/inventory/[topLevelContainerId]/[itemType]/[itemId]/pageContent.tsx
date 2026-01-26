@@ -1,25 +1,25 @@
 "use client";
 import { ItemForm } from "@/components/input/form/ItemForm";
-import { TreeData } from "@/components/visualisation/treeView";
 import {
   selectActiveItem,
   selectIsEdit,
   selectItems,
-  selectUnassigned,
-  setNewActiveItem,
   syncActiveItem,
 } from "@/features/shipment/shipmentSlice";
-import {
-  BaseShipmentItem,
-  getCurrentStepIndex,
-  internalEbicSteps,
-  separateDetails,
-  steps,
-} from "@/mappings/pages";
+import { getCurrentStepIndex, internalEbicSteps, separateDetails, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
 import { InventoryItemParams } from "@/types/generic";
 import { Item } from "@/utils/client/item";
-import { Divider, Heading, HStack, Skeleton, Spacer, useToast, VStack } from "@chakra-ui/react";
+import {
+  Divider,
+  Heading,
+  HStack,
+  Skeleton,
+  Spacer,
+  useToast,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
@@ -30,7 +30,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
   const activeStep = useMemo(() => {
-    if (params.itemType === "storageDewar") {
+    if (params.itemType === "dewar") {
       return steps[steps.length - 1];
     }
 
@@ -43,54 +43,45 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
   const activeIsEdit = useSelector(selectIsEdit);
 
   const currentShipment = useSelector(selectItems);
-  const currentUnassigned = useSelector(selectUnassigned);
 
   useEffect(() => {
-    if (params.itemId !== "new") {
-      dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
-    } else {
-      dispatch(setNewActiveItem({ type: params.itemType, title: params.itemType }));
-    }
-  }, [params, dispatch, currentShipment, currentUnassigned]);
+    dispatch(syncActiveItem({ id: Number(params.itemId), type: params.itemType }));
+  }, [params, dispatch, currentShipment]);
 
   const onSubmit = useCallback(
     async (info: FieldValues) => {
-      if (!activeIsEdit && activeItem) {
-        const values: TreeData<BaseShipmentItem> = {
-          ...activeItem,
-          data: { type: activeItem.data.type, ...info },
-        };
-
-        let newItem = await Item.create(
-          params.topLevelContainerId,
-          separateDetails(info, activeStep.endpoint),
-          activeStep.endpoint,
-          "topLevelContainer",
-        );
-
-        if (Array.isArray(newItem)) {
-          newItem = newItem[0];
-        }
-
-        toast({ title: "Successfully created item!" });
-
-        values.id = newItem.id;
-        values.name = newItem.name ?? "";
-
-        router.replace(`../${newItem.type}/${newItem.id}`, { scroll: false });
-      } else {
+      if (activeItem) {
         await Item.patch(
-          activeItem!.id,
+          activeItem.id,
           separateDetails(info, activeStep.endpoint),
           activeStep.endpoint,
         );
 
         toast({ title: "Successfully saved item!" });
-        router.replace(`../${info.type}/${activeItem!.id}`, { scroll: false });
+        router.replace(`../${info.type}/${activeItem.id}`, { scroll: false });
       }
     },
-    [toast, activeItem, activeIsEdit, params, router, activeStep],
+    [toast, activeItem, params, router, activeStep],
   );
+
+  if (!activeItem) {
+    return (
+      <VStack alignItems='stretch' h='100%' w='100%'>
+        <Skeleton h='4em' />
+        <Skeleton flex='1 0 0' />
+        <Skeleton h='3.5em' />
+      </VStack>
+    );
+  }
+
+  if (activeItem && !activeIsEdit) {
+    return (
+      <VStack w='100%' py='2em'>
+        <Heading variant='notFound'>No item selected</Heading>
+        <Text>Select an item from the menu on the right</Text>
+      </VStack>
+    );
+  }
 
   if (activeItem) {
     return (
@@ -99,7 +90,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
           {activeStep.singular}
         </Heading>
         <HStack w='100%'>
-          <Heading>{activeIsEdit ? activeItem.name : `New ${activeStep.singular}`}</Heading>
+          <Heading>{activeItem.name}</Heading>
           <Spacer />
         </HStack>
         <Divider borderColor='gray.800' />
@@ -111,12 +102,4 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
       </VStack>
     );
   }
-
-  return (
-    <VStack alignItems='stretch' h='100%' w='100%'>
-      <Skeleton h='4em' />
-      <Skeleton flex='1 0 0' />
-      <Skeleton h='3.5em' />
-    </VStack>
-  );
 };

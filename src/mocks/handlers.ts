@@ -120,6 +120,10 @@ export const handlers = [
     HttpResponse.json({ name: "TLC Name", id: 1 }, { status: 201 }),
   ),
 
+  http.post("http://localhost/api/internal-containers/preloaded-dewars", () =>
+    HttpResponse.json({ name: "TLC Name", id: 1 }, { status: 201 }),
+  ),
+
   // Samples
 
   http.get("http://localhost/api/shipments/:shipmentId/samples", () =>

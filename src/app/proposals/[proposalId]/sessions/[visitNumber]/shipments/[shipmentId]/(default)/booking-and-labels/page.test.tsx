@@ -15,6 +15,6 @@ describe("Booking and Labels Page", () => {
   it("should direct user to returns page if returns link clicked", async () => {
     render(await BookingAndLabelsPage(baseShipmentParams));
 
-    expect(screen.getByText(/request for your dewars/i)).toHaveAttribute("href", "returns");
+    expect(screen.getByText(/request for your dewars/i)).toHaveAttribute("href", "dewar-logistics");
   });
 });
