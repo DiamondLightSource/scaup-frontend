@@ -8,18 +8,21 @@ export const authOptions: NextAuthOptions = {
         ...session,
         accessToken: token.accessToken,
         permissions: token.permissions,
+        id: token.id
       };
       return newSession;
     },
   },
   session: {
-    maxAge: 60 * 60 * 6,
+    maxAge: 60 * 3,
   },
   providers: [
     {
+      authorization: {params: {scope: "openid profile email fedid"}},
       id: "diamond",
       name: "Diamond",
       type: "oauth",
+      idToken: true,
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
       wellKnown: process.env.OAUTH_DISCOVERY_ENDPOINT,
@@ -31,10 +34,10 @@ export const authOptions: NextAuthOptions = {
 
         const user = await response.json();
         return {
-          id: profile.sub,
-          email: profile.sub,
+          id: profile.fedid,
+          email: profile.email,
           permissions: user.permissions,
-          name: user.givenName,
+          name: profile.given_name,
           accessToken: tokens.access_token,
         };
       },
