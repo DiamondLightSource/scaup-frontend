@@ -33,16 +33,20 @@ export const ShipmentOverview = ({
           ? { containerId: null, location: null }
           : { topLevelContainerId: null, parentId: null, location: null };
 
-      await Item.patch(item.id, body, endpoint);
-      toast({ title: "Successfully unassigned item!" });
+      const updatedItem = await Item.patch(item.id, body, endpoint);
+      if (updatedItem !== undefined) {
+        toast({ title: "Successfully unassigned item!" });
+      }
     },
     [toast],
   );
 
   const deleteItem = useCallback(
     async (item: TreeData<BaseShipmentItem>, endpoint: Step["endpoint"]) => {
-      await Item.delete(item.id, endpoint);
-      toast({ title: "Successfully removed item!" });
+      const status = await Item.delete(item.id, endpoint);
+      if (status?.status === "OK") {
+        toast({ title: "Successfully deleted item!" });
+      }
     },
     [toast],
   );
@@ -52,9 +56,9 @@ export const ShipmentOverview = ({
     const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
 
     if (endpoint === "topLevelContainers") {
-      deleteItem(item, endpoint);
+      await deleteItem(item, endpoint);
     } else {
-      unassignItem(item, endpoint);
+      await unassignItem(item, endpoint);
     }
   };
 
@@ -63,7 +67,7 @@ export const ShipmentOverview = ({
     async (item: TreeData<BaseShipmentItem>) => {
       const endpoint = steps[getCurrentStepIndex(item.data.type)].endpoint;
       if (item.data.containerId || item.data.parentId || item.data.topLevelContainerId) {
-        unassignItem(item, endpoint);
+        await unassignItem(item, endpoint);
       } else {
         await deleteItem(item, endpoint);
       }
