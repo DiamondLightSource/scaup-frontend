@@ -12,7 +12,7 @@ const defaultShipment = [
     id: "dewar",
     name: "dewar",
     data: { type: "dewar" },
-    children: [puck],
+    children: [{ ...puck, data: { topLevelContainerId: 1 } }],
   },
 ] satisfies TreeData<BaseShipmentItem>[];
 
@@ -55,9 +55,9 @@ describe("Sample Collection Overview", () => {
 
     screen.getByText("dewar");
 
-    fireEvent.click(screen.getAllByText("Remove")[0]);
+    fireEvent.click(screen.getAllByText("Delete")[0]);
     await waitFor(() =>
-      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
+      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully deleted item!" }),
     );
   });
 
@@ -129,9 +129,9 @@ describe("Sample Collection Overview", () => {
       },
     });
 
-    fireEvent.click(screen.getByText("Remove"));
+    fireEvent.click(screen.getByText("Delete"));
     await waitFor(() =>
-      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully removed item!" }),
+      expect(toastMock).toHaveBeenCalledWith({ title: "Successfully deleted item!" }),
     );
   });
 });

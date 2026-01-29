@@ -82,7 +82,7 @@ export const TreeView = ({
         setCurrentlyLoading(item.id);
         try {
           await onRemove(item);
-        } catch {
+        } finally {
           setCurrentlyLoading(null);
         }
       }
@@ -180,7 +180,9 @@ export const TreeView = ({
                       onClick={() => handleRemove(item)}
                       isLoading={item.id === currentlyLoading}
                     >
-                      Remove
+                      {item.data.containerId || item.data.parentId || item.data.topLevelContainerId
+                        ? "Remove"
+                        : "Delete"}
                     </Button>
                   )}
                 </HStack>
