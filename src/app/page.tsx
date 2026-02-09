@@ -106,7 +106,7 @@ const Home = async () => {
         mx='-7.3vw'
         borderBottom='10px solid var(--chakra-colors-diamond-500)'
       >
-        <HStack bg='rgba(0, 5, 77, 0.7)' px='5vw' backdropFilter='blur(5px)' py='15vh'>
+        <HStack bg='rgba(0, 5, 77, 0.7)' px='5vw' backdropFilter='blur(5px)' py='15vh' flexWrap="wrap">
           <VStack flex='1 0 0' alignItems='start'>
             <Heading>SCAUP</Heading>
             <Heading size='md' fontWeight='200'>
@@ -114,7 +114,10 @@ const Home = async () => {
               arametrisation
             </Heading>
           </VStack>
-          <HStack>
+          <HStack flexWrap="wrap">
+            <InfoBox title='Calendar' href={`${process.env.PATO_URL}/calendar`}>
+              View calendar
+            </InfoBox>
             <InfoBox title='Proposals' href={`${process.env.PATO_URL}/proposals`}>
               View list of proposals
             </InfoBox>
@@ -163,24 +166,18 @@ const Home = async () => {
                 {item.shipmentCount}
               </StatHelpText>
               <HStack flexWrap='wrap'>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
+                <NextLink
                   href={`/proposals/${item.session.parentProposal}/sessions/${item.session.visitNumber}/shipments`}
-                  as={NextLink}
                 >
-                  View session overview
-                </Button>
-                <Button
-                  size='xs'
-                  minW='160px'
-                  flex='1 0 0'
-                  href={`/proposals/${item.session.parentProposal}/shipments`}
-                  as={NextLink}
-                >
-                  View proposal overview
-                </Button>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View session sample collections
+                  </Button>
+                </NextLink>
+                <NextLink href={`/proposals/${item.session.parentProposal}/shipments`}>
+                  <Button size='xs' minW='160px' flex='1 0 0'>
+                    View proposal sample collections
+                  </Button>
+                </NextLink>
               </HStack>
             </Stat>
           ))
