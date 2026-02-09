@@ -11,7 +11,7 @@ describe("Tree View", () => {
   });
 
   it("should render remove/edit buttons by default", () => {
-    render(<TreeView data={[{ id: "1", name: "Test", data: {} }]} />);
+    render(<TreeView data={[{ id: "1", name: "Test", data: { parentId: 1 } }]} />);
 
     expect(screen.getByText("Remove")).toBeInTheDocument();
     expect(screen.getByLabelText(/view/i)).toBeInTheDocument();
@@ -33,7 +33,12 @@ describe("Tree View", () => {
     render(
       <TreeView
         data={[
-          { id: "1", name: "Parent", data: {}, children: [{ id: "2", name: "Child", data: {} }] },
+          {
+            id: "1",
+            name: "Parent",
+            data: {},
+            children: [{ id: "2", name: "Child", data: { parentId: 1 } }],
+          },
         ]}
       />,
     );
@@ -97,6 +102,12 @@ describe("Tree View", () => {
     render(<TreeView data={[dummyItem]} />);
 
     expect(screen.getByText("Some Type")).toBeInTheDocument();
+  });
+
+  it("should display 'delete' instead of 'remove' if item has no parent", () => {
+    render(<TreeView data={[dummyItem]} />);
+
+    expect(screen.getByText("Delete")).toBeInTheDocument();
   });
 
   it("should expand parents of selected item", () => {
