@@ -3,6 +3,19 @@ Changelog
 ==========
 
 +++++++++
+v0.20.1 (16/02/2026)
++++++++++
+
+**Added**
+
+- Add link to calendar in front page
+- Display explicit error message if name of item is too long
+
+**Changed**
+
+- Display "delete" button instead of "remove" when item is to be deleted
+
++++++++++
 v0.20.0 (16/01/2026)
 +++++++++
 
