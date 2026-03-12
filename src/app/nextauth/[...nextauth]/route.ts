@@ -10,6 +10,7 @@ const handler = NextAuth({
         const cookieStore = await cookies();
         token.accessToken = account.access_token;
         token.permissions = user.permissions;
+        token.id = user.id;
         cookieStore.set({
           name: `__Host-${process.env.OAUTH_COOKIE_NAME}`,
           value: token.accessToken as string,
