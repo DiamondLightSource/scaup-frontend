@@ -6,7 +6,7 @@ describe("Booking and Labels Page", () => {
   it("should direct user to sample page if sample clicked", async () => {
     render(await BookingAndLabelsPage(baseShipmentParams));
 
-    expect(screen.getByText("Print Tracking Labels")).toHaveAttribute(
+    expect(screen.getByText("Print Tracking Labels").parentElement).toHaveAttribute(
       "href",
       "http://localhost/api/shipments/1/tracking-labels",
     );

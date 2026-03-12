@@ -1,7 +1,7 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
-import { authenticatedFetch } from "@/utils/client";
-import { getShipmentData } from "@/utils/client/shipment";
+import { serverFetch } from "@/utils/server/request";
+import { getShipmentData } from "@/utils/server/shipment";
 import { allItemsEmptyInDict, pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
@@ -18,13 +18,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/mappings/authOptions";
 import NextLink from "next/link";
 import { TwoLineLink } from "@diamondlightsource/ui-components";
 import { Cassette } from "@/components/containers/Cassette";
 import { DynamicFormView } from "@/components/visualisation/formView";
 import { SampleCard } from "@/components/navigation/SampleCard";
+import { headers } from "next/headers";
+import { auth } from "@/utils/auth";
 
 export const metadata: Metadata = {
   title: "Sample Collection - Scaup",
@@ -32,15 +32,12 @@ export const metadata: Metadata = {
 
 const getShipmentAndSampleData = async (shipmentId: string) => {
   const data = await getShipmentData(shipmentId, "", "shipment", true);
-  const resSamples = await authenticatedFetch.server(
-    `/shipments/${shipmentId}/samples?ignoreExternal=false`,
-    {
-      cache: "force-cache",
-      next: { tags: ["samples", "shipment"] },
-    },
-  );
+  const resSamples = await serverFetch(`/shipments/${shipmentId}/samples?ignoreExternal=false`, {
+    cache: "force-cache",
+    next: { tags: ["samples", "shipment"] },
+  });
 
-  const resPreSession = await authenticatedFetch.server(`/shipments/${shipmentId}/preSession`);
+  const resPreSession = await serverFetch(`/shipments/${shipmentId}/preSession`);
   const unassignedData = (await getShipmentData(shipmentId, "/unassigned")) as Record<string, any>;
 
   const hasUnassigned = allItemsEmptyInDict(unassignedData);
@@ -71,8 +68,10 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
 const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
   const params = await props.params;
   const shipmentData = await getShipmentAndSampleData(params.shipmentId);
-  const session = await getServerSession(authOptions);
-  const isStaff = !!session && session.permissions.includes("em_admin");
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const isStaff = !!session && session.user.permissions.includes("em_admin");
 
   return (
     <VStack alignItems='start'>
@@ -89,9 +88,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
           <Text>
             This sample collection does not exist or you do not have permission to view it.
           </Text>
-          <Link as={NextLink} href='..'>
-            Return to session page
-          </Link>
+          <NextLink href='..'>Return to session page</NextLink>
         </VStack>
       ) : (
         <>
@@ -116,9 +113,9 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <HStack w='100%'>
                 <Heading size='lg'>Grids</Heading>
                 <Spacer />
-                <Button as={NextLink} href={`${params.shipmentId}/import-samples`} size='sm'>
-                  Import Grids from Session
-                </Button>
+                <NextLink href={`${params.shipmentId}/import-samples`}>
+                  <Button size='sm'>Import Grids from Session</Button>
+                </NextLink>
               </HStack>
               <Divider borderColor='gray.800' />
               <HStack w='100%' alignItems='start' flexWrap='wrap'>
@@ -150,7 +147,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <Heading size='lg'>Actions</Heading>
               <TwoLineLink
                 title='Edit Sample Collection'
-                as={NextLink}
                 href={`${params.shipmentId}/edit`}
                 isDisabled={!!shipmentData.dispatch.shipmentRequest}
               >
@@ -158,20 +154,15 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title={`${shipmentData.preSessionInfo ? "Edit" : "Set"} Pre-Session Information`}
-                as={NextLink}
                 href={`${params.shipmentId}/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo || !!shipmentData.preSessionInfo.isLocked}
               >
                 Set imaging conditions, grid/data acquisition parameters
               </TwoLineLink>
-              <TwoLineLink
-                title='Review Sample Collection'
-                as={NextLink}
-                href={`${params.shipmentId}/review`}
-              >
+              <TwoLineLink title='Review Sample Collection' href={`${params.shipmentId}/review`}>
                 Review sample collection contents
               </TwoLineLink>
-              <TwoLineLink title='Print Contents' as={NextLink} href={`${params.shipmentId}/print`}>
+              <TwoLineLink title='Print Contents' href={`${params.shipmentId}/print`}>
                 View contents in a printable tree format
               </TwoLineLink>
               <TwoLineLink
@@ -182,7 +173,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Print Pre-Session Information'
-                as={NextLink}
                 href={`${params.shipmentId}/print/pre-session`}
                 isDisabled={!shipmentData.preSessionInfo}
                 data-testid='pre-session-label'
@@ -191,7 +181,6 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               </TwoLineLink>
               <TwoLineLink
                 title='Booking & Labels'
-                as={NextLink}
                 href={`${params.shipmentId}/booking-and-labels`}
                 isDisabled={!shipmentData.counts.Dewar || !shipmentData.dispatch.externalId}
                 data-testid='booking-label'

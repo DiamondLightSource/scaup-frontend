@@ -1,5 +1,5 @@
 import { ShipmentItemLayoutProps } from "@/types/generic";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getShipmentData } from "@/utils/server/shipment";
 import ShipmentsLayoutContent from "./layoutContent";
 
 const ShipmentsLayout = async (props: ShipmentItemLayoutProps) => {

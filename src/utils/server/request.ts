@@ -1,7 +1,54 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-import { authenticatedFetch } from "@/utils/client";
+import { updateTag } from "next/cache";
+import { authenticatedFetch } from "@/utils/request";
+import { headers } from "next/headers";
+import { cookies } from "next/headers";
+import { auth, refreshToken } from "@/utils/auth";
+import { redirect } from "next/navigation";
+
+/**
+ * Perform server-side authenticated fetch
+ *
+ * @param url Fetch URL
+ * @param init Fetch options
+ * @returns Fetch body response or redirects user to 401/403 page
+ */
+export const serverFetch = async (url: RequestInfo, init?: RequestInit) => {
+  const requestHeaders = await headers();
+  const cookieStore = await cookies();
+
+  const res = await authenticatedFetch(
+    process.env.SERVER_API_URL! + url,
+    { ...init, credentials: "include" },
+    cookieStore.get(process.env.OAUTH_COOKIE_NAME!)?.value,
+    false,
+  );
+
+  if (res.status === 401) {
+    // TODO: remove this once Better Auth supports refreshing tokens natively
+    const session = await auth.api.getSession({
+      headers: requestHeaders,
+    });
+
+    if (!session) {
+      return res;
+    }
+
+    const newToken = await refreshToken(session.user.refreshToken);
+
+    if (newToken) {
+      return await authenticatedFetch(
+        process.env.SERVER_API_URL! + url,
+        { ...init, credentials: "include" },
+        newToken,
+      );
+    }
+    redirect("/sign-in?callbackURL=" + (requestHeaders.get("x-path") ?? "/"));
+  }
+
+  return res;
+};
 
 /**
  * Perform request and invalidate shipment cache
@@ -11,7 +58,7 @@ import { authenticatedFetch } from "@/utils/client";
  * @returns Request JSON body and status
  */
 export const requestAndInvalidate = async (url: string, init: RequestInit) => {
-  const response = await authenticatedFetch.server(url, init);
+  const response = await serverFetch(url, init);
 
   if (!response) {
     console.error(`Request to ${url} failed, no response`);
@@ -25,14 +72,32 @@ export const requestAndInvalidate = async (url: string, init: RequestInit) => {
   } catch {}
 
   if (response.ok) {
-    revalidateTag("shipment");
+    updateTag("shipment");
     if (init.method === "POST" && url.includes("topLevelContainer")) {
       // Since a dewar might be created
-      revalidateTag("proposalData");
+      updateTag("proposalData");
     }
   } else {
     console.warn(`Request '${url}' returned '${response.status}'`, init, responseBody);
   }
 
   return { status: response.status, json: responseBody };
+};
+
+interface PrepopDataModel {
+  labContacts: Record<string, any>;
+  proteins: Record<string, any>;
+  containers: Record<string, any>;
+  dewars: Record<string, any>;
+}
+
+export const getPrepopData = async (proposalId: string) => {
+  const res = await serverFetch(`/proposals/${proposalId}/data`, {
+    cache: "force-cache",
+    next: { tags: ["proposalData"] },
+  });
+  if (res && res.status === 200) {
+    return (await res.json()) as PrepopDataModel;
+  }
+  return {};
 };

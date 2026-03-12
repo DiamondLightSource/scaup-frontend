@@ -1,8 +1,7 @@
 import { TreeData } from "@/components/visualisation/treeView";
-import { BaseShipmentItem } from "@/mappings/pages";
 import { ShipmentParams } from "@/types/generic";
-import { getPrepopData } from "@/utils/client";
-import { getShipmentData } from "@/utils/client/shipment";
+import { getPrepopData } from "@/utils/server/request";
+import { getShipmentData } from "@/utils/server/shipment";
 import {
   Alert,
   AlertDescription,
@@ -10,7 +9,6 @@ import {
   Divider,
   HStack,
   Heading,
-  Link,
   Spacer,
   Text,
   VStack,
@@ -67,10 +65,8 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
           <Heading size='lg'>No assigned items</Heading>
           <Text>
             This sample collection contains <b>no assigned items</b>. You must{" "}
-            <Link as={NextLink} href='edit'>
-              add at least one item
-            </Link>{" "}
-            to this sample collection to get a list of contents.
+            <NextLink href='edit'>add at least one item</NextLink> to this sample collection to get
+            a list of contents.
           </Text>
         </VStack>
       )}

@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { authenticatedFetch } from "@/utils/client";
+import { clientFetch } from "@/utils/client";
 import { Item } from "@/utils/client/item";
 import { useRouter } from "next/navigation";
 
@@ -53,7 +53,7 @@ const ImportSamplesPageContent = ({ params }: { params: ShipmentParams }) => {
 
   const onSubmitSession = formContextSession.handleSubmit(async (info) => {
     setIsLoading(true);
-    const res = await authenticatedFetch.client(
+    const res = await clientFetch(
       `/proposals/${params.proposalId}/sessions/${info.session}/samples?isInternal=false`,
     );
     setIsLoading(false);
