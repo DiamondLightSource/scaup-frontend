@@ -117,6 +117,23 @@ describe("Sample Card", () => {
     );
   });
 
+  it("should display tag if item is in inventory", () => {
+    renderWithProviders(
+      <SampleCard
+        sample={{
+          ...baseSample,
+          containerName: "inventory_gridbox",
+          containerId: 1,
+          isInternal: true,
+          originSamples: [{ ...baseSample, name: "parent-sample" }],
+        }}
+        params={params}
+      />,
+    );
+
+    expect(screen.getByText("In Inventory")).toBeInTheDocument();
+  });
+
   it("should display multiple parents", () => {
     renderWithProviders(
       <SampleCard
