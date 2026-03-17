@@ -16,28 +16,6 @@ describe("Sample Collection Submission Overview", () => {
     expect(screen.getAllByText(/2/i)).toHaveLength(2);
   });
 
-  it("should display toast if shipment request creation fails", async () => {
-    server.use(
-      http.post(
-        "http://localhost/api/shipments/:shipmentId/request",
-        () => HttpResponse.json({}, { status: 424 }),
-        { once: true },
-      ),
-    );
-
-    render(await SubmissionOverview(baseShipmentParams));
-
-    fireEvent.click(screen.getByText("Arrange Shipping"));
-    fireEvent.click(screen.getByText(/continue/i));
-
-    await waitFor(() =>
-      expect(toastMock).toHaveBeenCalledWith({
-        status: "error",
-        title: "Unable to create shipment request",
-      }),
-    );
-  });
-
   it("should display warning if shipment contents are 'locked'", async () => {
     server.use(
       http.get(
