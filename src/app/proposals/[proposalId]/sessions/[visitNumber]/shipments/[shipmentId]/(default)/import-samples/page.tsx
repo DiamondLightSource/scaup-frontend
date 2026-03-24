@@ -11,7 +11,6 @@ const SubmissionOverview = async (props: {
   params: Promise<ShipmentParams>;
   searchParams: Promise<{ new: string }>;
 }) => {
-  const searchParams = await props.searchParams;
   const params = await props.params;
   return (
     <VStack alignItems='start'>
