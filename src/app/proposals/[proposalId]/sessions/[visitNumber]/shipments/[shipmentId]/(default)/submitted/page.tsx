@@ -17,8 +17,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 import { getShipmentData } from "@/utils/server/shipment";
+import { ShippingInstructions } from "./pageContent";
 
 export const metadata: Metadata = {
   title: "Sample Collection Submitted - Scaup",
@@ -101,39 +101,7 @@ const SubmissionOverview = async (props: { params: Promise<ShipmentParams> }) =>
               <DynamicFormView formType={shipmentData.formModel} data={shipmentData.counts} />
             </VStack>
 
-            <Text fontSize='18px' mt='1em'>
-              If you <b>do not plan to use Diamond&#39;s own courier</b> (DHL, on Diamond&#39;s
-              account), you <b>do not need to arrange shipping</b> through Diamond. When using your
-              own courier, ensure the labels provided by your courier are securely affixed.
-            </Text>
-            <Text fontSize='18px'>
-              If you plan to arrange shipping through Diamond,{" "}
-              <b>
-                print the tracking labels after you&#39;re finished setting up your shipping details
-              </b>
-              . This can be done on the{" "}
-              <Link
-                textDecoration='underline'
-                color='diamond.600'
-                href={`/proposals/${params.proposalId}/sessions/${params.visitNumber}/shipments/${params.shipmentId}`}
-              >
-                sample collection summary page
-              </Link>
-              . You will be automatically redirected to that page once you finish setting up
-              shipping.
-            </Text>
-            <Text fontSize='18px'>
-              Tracking labels <b>must</b> be securely affixed to the outside of both dewars and
-              dewar cases, even if using your own courier.
-            </Text>
-            <HStack>
-              <ArrangeShipmentButton params={params} isBooked={shipmentData.isBooked} />
-              <NextLink
-                href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
-              >
-                <Button>Print Tracking Labels</Button>
-              </NextLink>
-            </HStack>
+            <ShippingInstructions params={params} isBooked={shipmentData.isBooked} />
           </>
         )}
       </VStack>
