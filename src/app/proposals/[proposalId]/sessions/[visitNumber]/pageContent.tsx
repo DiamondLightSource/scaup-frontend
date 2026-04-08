@@ -2,6 +2,7 @@
 import { DynamicForm } from "@/components/input/form";
 import { DynamicFormEntry } from "@/types/forms";
 import { SessionParams } from "@/types/generic";
+import { components } from "@/types/schema";
 import { CreationResponse } from "@/types/server";
 import { Item } from "@/utils/client/item";
 import { Button, Heading } from "@chakra-ui/react";
@@ -12,6 +13,7 @@ import { FormProvider, useForm } from "react-hook-form";
 interface ShipmentData {
   name: string;
   importSamples: boolean;
+  sessionType: components["schemas"]["SessionTypeName"];
 }
 
 const shipmentForm = [
@@ -21,6 +23,15 @@ const shipmentForm = [
     type: "text",
     hint: 'Use a descriptive name, that indicates what the grids will be used in. For example, "FIB"',
     validation: { required: "Required" },
+  },
+  {
+    id: "sessionType",
+    label: "Session Type",
+    type: "dropdown",
+    values: [
+      { label: "TEM", value: "TEM" },
+      { label: "FIB (Aquilos)", value: "Aquilos" },
+    ],
   },
   {
     id: "importSamples",
@@ -40,6 +51,7 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
       setIsLoading(true);
       const newShipment = (await Item.createShipment(proposalId, visitNumber, {
         name: info.name,
+        sessionType: info.sessionType,
       })) as CreationResponse;
 
       router.push(

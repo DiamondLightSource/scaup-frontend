@@ -9,7 +9,6 @@ import {
   Divider,
   HStack,
   Heading,
-  Link,
   Spacer,
   Stat,
   StatLabel,
@@ -25,6 +24,7 @@ import { DynamicFormView } from "@/components/visualisation/formView";
 import { SampleCard } from "@/components/navigation/SampleCard";
 import { headers } from "next/headers";
 import { auth } from "@/utils/auth";
+import { AquilosShuttle } from "@/components/containers/AquilosShuttle";
 
 export const metadata: Metadata = {
   title: "Sample Collection - Scaup",
@@ -62,7 +62,14 @@ const getShipmentAndSampleData = async (shipmentId: string) => {
     preSessionInfo = await resPreSession.json();
   }
 
-  return { counts, samples, dispatch: data.data, name: data.name, preSessionInfo, hasUnassigned };
+  return {
+    counts,
+    samples,
+    dispatch: data.data as components["schemas"]["ShipmentOut"],
+    name: data.name,
+    preSessionInfo,
+    hasUnassigned,
+  };
 };
 
 const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
@@ -124,7 +131,13 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                     <SampleCard key={sample.id} sample={sample} params={params} />
                   ))}
                 </VStack>
-                {isStaff && shipmentData.samples && <Cassette samples={shipmentData.samples} />}
+                {isStaff &&
+                shipmentData.samples &&
+                shipmentData.dispatch.sessionType.name === "TEM" ? (
+                  <Cassette samples={shipmentData.samples} />
+                ) : (
+                  <AquilosShuttle samples={shipmentData.samples}></AquilosShuttle>
+                )}
               </HStack>
 
               <Heading mt='1em' size='lg'>

@@ -6,7 +6,7 @@ export const defaultData: BaseShipmentItem = {
   name: "Shipment",
   type: "shipment",
   visitNumber: 1,
-  data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1 },
+  data: { proposalNumber: "123", proposalCode: "cm", visitNumber: 1, sessionType: { name: "TEM" } },
   children: [
     {
       name: "Dewar",

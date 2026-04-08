@@ -10,7 +10,7 @@ describe("Sample Collection Submission Overview", () => {
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getByText(/grid box/i)).toBeInTheDocument();
-    expect(screen.getAllByText("2")).toHaveLength(2);
+    expect(screen.getAllByText("2")).toHaveLength(3);
   });
 
   it("should render shipment status", async () => {

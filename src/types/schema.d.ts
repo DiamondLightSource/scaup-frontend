@@ -564,6 +564,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/internal-containers/preloaded-dewars": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create Preloaded Inventory Dewar
+     * @description Create preloaded inventory dewar with pucks and grid boxes
+     */
+    post: operations["create_preloaded_inventory_dewar_internal_containers_preloaded_dewars_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/sessions": {
     parameters: {
       query?: never;
@@ -657,7 +677,7 @@ export interface components {
       /** Comments */
       comments?: string | null;
       /** Shipmentid */
-      shipmentId: number;
+      shipmentId?: number | null;
       /** Id */
       id: number;
       /** Type */
@@ -768,10 +788,10 @@ export interface components {
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
-      /** Type */
-      type?: string | null;
       /** Code */
       code?: string | null;
+      /** Type */
+      type?: string | null;
       /** Barcode */
       barCode?: string | null;
     };
@@ -860,6 +880,11 @@ export interface components {
        */
       isLocked: boolean;
     };
+    /** PreloadedInventoryDewar */
+    PreloadedInventoryDewar: {
+      /** Name */
+      name: string;
+    };
     /** SampleIn */
     SampleIn: {
       /** Containerid */
@@ -913,7 +938,7 @@ export interface components {
       /** Id */
       id: number;
       /** Shipmentid */
-      shipmentId: number;
+      shipmentId?: number | null;
       /** Proteinid */
       proteinId: number;
       /** Containername */
@@ -924,6 +949,8 @@ export interface components {
       dataCollectionGroupId?: number | null;
       /** Parentshipmentname */
       parentShipmentName?: string | null;
+      /** Isinternal */
+      isInternal?: boolean | null;
       /** Originsamples */
       originSamples?: components["schemas"]["SampleOut"][] | null;
       /** Derivedsamples */
@@ -990,6 +1017,14 @@ export interface components {
       /** Collectiongroups */
       collectionGroups?: number | null;
     };
+    /** SessionType */
+    SessionType: {
+      name: components["schemas"]["SessionTypeName"];
+      /** Samplecapacity */
+      sampleCapacity: number;
+    };
+    /** @enum {string} */
+    SessionTypeName: "TEM" | "Aquilos";
     /** ShipmentChildren */
     ShipmentChildren: {
       /** Id */
@@ -1009,6 +1044,11 @@ export interface components {
       name: string;
       /** Comments */
       comments?: string | null;
+      /**
+       * @description Session type for the shipment
+       * @default TEM
+       */
+      sessionType: components["schemas"]["SessionTypeName"];
     };
     /** ShipmentOut */
     ShipmentOut: {
@@ -1037,17 +1077,18 @@ export interface components {
       lastStatusUpdate: string;
       /** Externalid */
       externalId?: number | null;
+      sessionType: components["schemas"]["SessionType"];
     };
     /** StatusUpdate */
     StatusUpdate: {
       /** Origin Url */
       origin_url: string;
       /** Journey Type */
-      journey_type: string;
+      journey_type?: string | null;
       /** Status */
       status: string;
       /** Tracking Number */
-      tracking_number: string;
+      tracking_number?: string | null;
       /** Pickup Confirmation Code */
       pickup_confirmation_code?: string | null;
       /** Pickup Confirmation Timestamp */
@@ -1084,10 +1125,12 @@ export interface components {
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
-      /** Type */
-      type: string;
       /** Code */
       code?: string | null;
+      /** Type */
+      type: string;
+      /** Manufacturerserialnumber */
+      manufacturerSerialNumber?: string | null;
       /**
        * Isinternal
        * @default false
@@ -1107,6 +1150,8 @@ export interface components {
        * @description Base top level container name. If name is not provided, the container's type followedby the container index is used
        */
       name?: string | null;
+      /** Code */
+      code?: string | null;
       /** Id */
       id: number;
       /** Type */
@@ -1386,7 +1431,12 @@ export interface operations {
   };
   create_sample_shipments__shipmentId__samples_post: {
     parameters: {
-      query?: never;
+      query?: {
+        /** @description Push sample to external DB. May create orphan samples (samples without a container) */
+        pushToExternalDb?: boolean;
+        /** @description Include ordinal suffix in sample's name */
+        includeSuffix?: boolean;
+      };
       header?: never;
       path: {
         shipmentId: number;
@@ -2325,9 +2375,43 @@ export interface operations {
       };
     };
   };
+  create_preloaded_inventory_dewar_internal_containers_preloaded_dewars_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreloadedInventoryDewar"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TopLevelContainerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_sessions_sessions_get: {
     parameters: {
       query?: {
+        /** @description Minimum session end date */
         minEndDate?: string | null;
         /** @description Page number/Results to skip. Negative numbers count backwards from the last page */
         page?: number;
