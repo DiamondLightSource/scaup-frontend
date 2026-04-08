@@ -1,7 +1,8 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { ModalProps } from "@chakra-ui/react";
+import { components } from "@/types/schema";
 
 export interface ItemFormPageContentProps {
   params: ItemParams;
@@ -88,3 +89,5 @@ export interface ContainerItem {
   // Y position for item in visual representation
   y: number;
 }
+
+export type Sample = components["schemas"]["SampleOut"];

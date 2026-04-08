@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { ItemStepper } from "@/components/navigation/ItemStepper";
 import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 
 export interface InventoryItemLayoutContentProps {
   shipmentData: TreeData<BaseShipmentItem> | null;

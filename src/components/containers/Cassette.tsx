@@ -1,13 +1,14 @@
 "use client";
 
 import { ChildSelector } from "@/components/containers/ChildSelector";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { Button, Heading, List, Spacer, Tag, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { components } from "@/types/schema";
 import { Item } from "@/utils/client/item";
+import { getSelectable } from "@/utils/tree";
 
 export interface CassetteProps {
   samples: components["schemas"]["SampleOut"][];
@@ -29,26 +30,7 @@ export const Cassette = ({ samples }: CassetteProps) => {
     return newSamples;
   }, [samples]);
 
-  const selectableSamples = useMemo<Array<TreeData>>(
-    () =>
-      samples.reduce((selectable, sample) => {
-        if (sample.subLocation === null) {
-          selectable.push({
-            id: sample.id,
-            name: sample.name || "",
-            data: {
-              type: sample.type,
-              displayDetails: [
-                { label: "Grid Box Name", value: sample.containerName },
-                { label: "Location", value: sample.location },
-              ],
-            },
-          });
-        }
-        return selectable;
-      }, [] as TreeData[]),
-    [samples],
-  );
+  const selectableSamples = getSelectable(samples);
 
   const handlePopulatePosition = useCallback(
     async (sample: TreeData<BaseShipmentItem>) => {

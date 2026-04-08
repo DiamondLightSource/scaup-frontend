@@ -1,5 +1,7 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
+import { components } from "@/types/schema";
+import { Sample } from "@/types/generic";
 
 /** Recursively find item, its position in sibling array, and its siblings
  *
@@ -150,3 +152,27 @@ export const flattenTree = (data: TreeData<BaseShipmentItem>, parent: string | n
 
   return flattenedTree;
 };
+
+/**
+ * Filter selectable samples (ones which haven't been assigned to a tree item)
+ *
+ * @param samples Samples to check
+ * @returns Selectable samples
+ */
+export const getSelectable = (samples: Sample[]) =>
+  samples.reduce((selectable, sample) => {
+    if (sample.subLocation === null) {
+      selectable.push({
+        id: sample.id,
+        name: sample.name || "",
+        data: {
+          type: sample.type,
+          displayDetails: [
+            { label: "Grid Box Name", value: sample.containerName },
+            { label: "Location", value: sample.location },
+          ],
+        },
+      });
+    }
+    return selectable;
+  }, [] as TreeData[]);

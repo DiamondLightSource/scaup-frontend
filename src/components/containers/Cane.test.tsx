@@ -1,5 +1,5 @@
 import { Cane } from "@/components/containers/Cane";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { puck, renderAndInjectForm, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";

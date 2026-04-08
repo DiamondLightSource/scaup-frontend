@@ -1,7 +1,7 @@
 "use client";
 
 import { DynamicFormView } from "@/components/visualisation/formView";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem } from "@/mappings/pages";
 import {
   Accordion,

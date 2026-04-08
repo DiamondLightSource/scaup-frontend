@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { getCurrentStepIndex, steps } from "@/mappings/pages";
 import { ChildSelectorProps, ItemWithDetails } from "@/types/generic";

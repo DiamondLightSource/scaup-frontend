@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { setInUnassignedClone } from "@/features/shipment/utils";
 import { BaseShipmentItem, pluralToSingular } from "@/mappings/pages";
 import { RootState } from "@/store";

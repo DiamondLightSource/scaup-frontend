@@ -1,5 +1,5 @@
 import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { server } from "@/mocks/server";
 import { gridBox, puck, renderWithProviders, testInitialState } from "@/utils/test-utils";

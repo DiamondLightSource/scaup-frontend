@@ -1,7 +1,7 @@
 import { BaseShipmentItem } from "@/mappings/pages";
 import "@/styles/tree.css";
 import { pascalToSpace } from "@/utils/generic";
-import { isInChildren, recursiveFind } from "@/utils/tree";
+import { isInChildren } from "@/utils/tree";
 import {
   Accordion,
   AccordionButton,

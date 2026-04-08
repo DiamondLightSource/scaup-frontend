@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import {
   flattenTree,
   recursiveCountChildrenByType,

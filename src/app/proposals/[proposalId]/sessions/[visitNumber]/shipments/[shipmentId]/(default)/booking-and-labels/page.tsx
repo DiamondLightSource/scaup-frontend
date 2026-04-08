@@ -80,10 +80,8 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
             <Heading size='lg'>Request dewar return at the end of your session</Heading>
             <Text my='1em'>
               Once your session is finished, you must{" "}
-              <NextLink href='dewar-logistics'>
-                request for your dewars to be returned
-              </NextLink>{" "}
-              if you wish for them to be returned to your institution.
+              <NextLink href='dewar-logistics'>request for your dewars to be returned</NextLink> if
+              you wish for them to be returned to your institution.
             </Text>
             <Text my='1em'>
               If you have already printed the tracking label, you do not need to do so again once

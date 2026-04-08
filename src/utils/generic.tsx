@@ -1,3 +1,5 @@
+import { TreeData } from "@/types/forms";
+
 export const genUniqueId = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
 
 export interface JsonRefMap {

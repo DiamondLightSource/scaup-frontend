@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import { gridBox, gridBox2, renderAndInjectForm, renderWithProviders } from "@/utils/test-utils";
