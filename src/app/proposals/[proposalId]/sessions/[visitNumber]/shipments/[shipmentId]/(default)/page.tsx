@@ -108,6 +108,12 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                   : "Unknown"}
               </StatNumber>
             </Stat>
+            <Stat borderBottom='3px solid' borderColor='diamond.700'>
+              <StatLabel>Session Type</StatLabel>
+              <StatNumber>
+                {shipmentData.dispatch.sessionType.name}
+              </StatNumber>
+            </Stat>
             {Object.entries(shipmentData.counts).map(([key, value]) => (
               <Stat borderBottom='3px solid' borderColor='diamond.700' key={key}>
                 <StatLabel>{key}</StatLabel>
