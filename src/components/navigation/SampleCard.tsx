@@ -65,6 +65,11 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
             {sample.containerId && sample.containerName ? (
               <StatHelpText m='0'>
                 In <Link href={`/containers/${sample.containerId}`}>{sample.containerName}</Link>{" "}
+                {sample.isInternal && (
+                  <Tag colorScheme='red' size='sm'>
+                    In Inventory
+                  </Tag>
+                )}
                 {sample.location && `, slot ${sample.location}`}
               </StatHelpText>
             ) : (

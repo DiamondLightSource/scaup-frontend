@@ -1,6 +1,14 @@
 ==========
 Changelog
 ==========
++++++++++
+v1.0.0 (24/03/2026)
++++++++++
+
+**Added**
+
+- Display tag if sample is in inventory
+- Narrow down shipping instructions based on user choice
 
 +++++++++
 v0.20.2 (12/03/2026)
