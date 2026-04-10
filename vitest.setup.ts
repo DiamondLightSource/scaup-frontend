@@ -29,7 +29,7 @@ process.env.NEXT_PUBLIC_API_URL = "http://localhost/api";
 process.env.SERVER_API_URL = "http://localhost/api";
 process.env.PATO_URL = "https://pato.ac.uk";
 
-beforeEach(() => server.listen());
+beforeAll(() => server.listen());
 
 afterEach(() => {
   server.resetHandlers();
