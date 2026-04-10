@@ -5,6 +5,18 @@ import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
 
+const mocks = vi.hoisted(() => {
+  return {
+    getSessionMock: vi.fn(() => ({
+      user: { fedid: "abc1234", permissions: ["em_admin"], name: "Foo" },
+    })),
+  };
+});
+
+vi.mock("@/utils/auth", () => ({
+  auth: { api: { getSession: mocks.getSessionMock } },
+}));
+
 describe("Sample Collection Submission Overview", () => {
   it("should render item quantities", async () => {
     renderWithProviders(await ShipmentHome(baseShipmentParams));
@@ -17,7 +29,8 @@ describe("Sample Collection Submission Overview", () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ ...defaultData, data: { status: "Booked" } }),
+        () =>
+          HttpResponse.json({ ...defaultData, data: { ...defaultData.data, status: "Booked" } }),
         { once: true },
       ),
     );
@@ -47,7 +60,8 @@ describe("Sample Collection Submission Overview", () => {
     server.use(
       http.get(
         "http://localhost/api/shipments/:shipmentId",
-        () => HttpResponse.json({ ...defaultData, data: { shipmentRequest: 1 } }),
+        () =>
+          HttpResponse.json({ ...defaultData, data: { ...defaultData.data, shipmentRequest: 1 } }),
         { once: true },
       ),
     );
@@ -136,5 +150,15 @@ describe("Sample Collection Submission Overview", () => {
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getByTestId("booking-label")).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should not display cassette/shuttle if user is not staff", async () => {
+    mocks.getSessionMock.mockReturnValueOnce({
+      user: { fedid: "abc1234", permissions: [], name: "Foo" },
+    });
+
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
+
+    expect(screen.queryByText("Cassette")).not.toBeInTheDocument();
   });
 });
