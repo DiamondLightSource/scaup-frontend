@@ -110,9 +110,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
             </Stat>
             <Stat borderBottom='3px solid' borderColor='diamond.700'>
               <StatLabel>Session Type</StatLabel>
-              <StatNumber>
-                {shipmentData.dispatch.sessionType.name}
-              </StatNumber>
+              <StatNumber>{shipmentData.dispatch.sessionType.name}</StatNumber>
             </Stat>
             {Object.entries(shipmentData.counts).map(([key, value]) => (
               <Stat borderBottom='3px solid' borderColor='diamond.700' key={key}>
@@ -137,13 +135,13 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                     <SampleCard key={sample.id} sample={sample} params={params} />
                   ))}
                 </VStack>
-                {isStaff &&
-                shipmentData.samples &&
-                shipmentData.dispatch.sessionType.name === "TEM" ? (
-                  <Cassette samples={shipmentData.samples} />
-                ) : (
-                  <AquilosShuttle samples={shipmentData.samples}></AquilosShuttle>
-                )}
+                {isStaff && shipmentData.samples ? (
+                  shipmentData.dispatch.sessionType.name === "TEM" ? (
+                    <Cassette samples={shipmentData.samples} />
+                  ) : (
+                    <AquilosShuttle samples={shipmentData.samples}></AquilosShuttle>
+                  )
+                ) : null}
               </HStack>
 
               <Heading mt='1em' size='lg'>
