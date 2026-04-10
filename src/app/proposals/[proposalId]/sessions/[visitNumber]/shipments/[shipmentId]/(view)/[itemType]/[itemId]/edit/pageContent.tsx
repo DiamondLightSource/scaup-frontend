@@ -1,6 +1,6 @@
 "use client";
 import { ItemForm } from "@/components/input/form/ItemForm";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import {
   selectActiveItem,
   selectIsEdit,

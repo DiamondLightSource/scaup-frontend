@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { initialState } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { getCurrentStepIndex } from "@/mappings/pages";

@@ -42,9 +42,7 @@ export const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
           <NextLink
             href={`${urlPrefix}${shipment.proposalCode}${shipment.proposalNumber}/sessions/${shipment.visitNumber}/shipments/${shipment.id}`}
           >
-            <Button>
-            View Sample Collection
-            </Button>
+            <Button>View Sample Collection</Button>
           </NextLink>
         </HStack>
       </Stat>

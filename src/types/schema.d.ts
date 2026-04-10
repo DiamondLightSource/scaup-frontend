@@ -1017,6 +1017,14 @@ export interface components {
       /** Collectiongroups */
       collectionGroups?: number | null;
     };
+    /** SessionType */
+    SessionType: {
+      name: components["schemas"]["SessionTypeName"];
+      /** Samplecapacity */
+      sampleCapacity: number;
+    };
+    /** @enum {string} */
+    SessionTypeName: "TEM" | "Aquilos";
     /** ShipmentChildren */
     ShipmentChildren: {
       /** Id */
@@ -1036,6 +1044,11 @@ export interface components {
       name: string;
       /** Comments */
       comments?: string | null;
+      /**
+       * @description Session type for the shipment
+       * @default TEM
+       */
+      sessionType: components["schemas"]["SessionTypeName"];
     };
     /** ShipmentOut */
     ShipmentOut: {
@@ -1064,6 +1077,7 @@ export interface components {
       lastStatusUpdate: string;
       /** Externalid */
       externalId?: number | null;
+      sessionType: components["schemas"]["SessionType"];
     };
     /** StatusUpdate */
     StatusUpdate: {

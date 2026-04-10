@@ -1,7 +1,7 @@
 "use client";
 
 import { ShipmentOverview } from "@/components/visualisation/ShipmentOverview";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import {
   defaultUnassigned,
   selectIsReview,

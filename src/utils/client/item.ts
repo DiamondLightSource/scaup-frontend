@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem, Step } from "@/mappings/pages";
 import { RootParentType } from "@/types/generic";
 import { CreationResponse } from "@/types/server";

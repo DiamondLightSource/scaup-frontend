@@ -1,5 +1,5 @@
 import { ChildSelector } from "@/components/containers/ChildSelector";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { selectActiveItem, selectUnassigned } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";

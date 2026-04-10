@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { internalEbicSteps, steps } from "@/mappings/pages";
 import { puck, renderWithProviders, testInitialState } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";

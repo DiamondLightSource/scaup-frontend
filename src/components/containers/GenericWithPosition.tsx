@@ -1,6 +1,6 @@
 import { useChildLocationManager } from "@/components/containers";
 import { ChildSelector } from "@/components/containers/ChildSelector";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { Button, Heading, List, Spacer, Tag, Text, useDisclosure, VStack } from "@chakra-ui/react";

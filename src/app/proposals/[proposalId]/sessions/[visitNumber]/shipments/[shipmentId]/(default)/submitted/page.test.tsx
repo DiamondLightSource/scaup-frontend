@@ -1,6 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
-import { toastMock } from "@/../vitest.setup";
 import { defaultData } from "@/mocks/handlers";
 import { server } from "@/mocks/server";
 import { HttpResponse, http } from "msw";

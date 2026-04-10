@@ -31,3 +31,20 @@ export interface DynamicFormEntry {
   /** Disable input */
   isDisabled?: boolean;
 }
+
+export interface TreeData<T = any> {
+  /** Node label */
+  name: string;
+  /** Unique node ID */
+  id: string | number;
+  /** Tag prefixed to label */
+  tag?: string;
+  /** Node data */
+  data: T;
+  /** Node children */
+  children?: TreeData[] | null;
+  /** Should 'remove' button be invisible */
+  isUndeletable?: boolean;
+  /** Should 'view' button be invisible */
+  isNotViewable?: boolean;
+}

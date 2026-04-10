@@ -1,4 +1,4 @@
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { ShipmentParams } from "@/types/generic";
 import { getPrepopData } from "@/utils/server/request";
 import { getShipmentData } from "@/utils/server/shipment";

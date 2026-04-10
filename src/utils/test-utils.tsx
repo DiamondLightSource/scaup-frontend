@@ -1,5 +1,5 @@
 import { BaseContainerProps } from "@/components/containers";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import shipmentSlice, { ShipmentState, initialState } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { configureStore } from "@reduxjs/toolkit";

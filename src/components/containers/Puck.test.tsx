@@ -1,5 +1,5 @@
 import { Puck } from "@/components/containers/Puck";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { BaseShipmentItem, getCurrentStepIndex } from "@/mappings/pages";
 import {
   gridBox,

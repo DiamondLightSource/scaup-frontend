@@ -10,7 +10,7 @@ describe("Sample Collection Submission Overview", () => {
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getByText(/grid box/i)).toBeInTheDocument();
-    expect(screen.getAllByText("2")).toHaveLength(2);
+    expect(screen.getAllByText("2")).toHaveLength(3);
   });
 
   it("should render shipment status", async () => {
@@ -54,6 +54,18 @@ describe("Sample Collection Submission Overview", () => {
     renderWithProviders(await ShipmentHome(baseShipmentParams));
 
     expect(screen.getAllByRole("group")[0]).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("should display Aquilos shuttle for FIB sessions", async () => {
+    server.use(
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json({ ...defaultData, data: { sessionType: { name: "Aquilos" } } }),
+        { once: true },
+      ),
+    );
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
+    expect(screen.getByText("Shuttle")).toBeInTheDocument();
   });
 
   it("should not enable 'edit pre-session information' button if session is locked", async () => {

@@ -2,7 +2,7 @@ import { serverFetch } from "@/utils/server/request";
 import { ItemLayoutContent } from "./layoutContent";
 import React from "react";
 import { getShipmentData } from "@/utils/server/shipment";
-import { TreeData } from "@/components/visualisation/treeView";
+import { TreeData } from "@/types/forms";
 import { InventoryItemLayoutProps } from "@/types/generic";
 import { VStack, Heading, Text, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
