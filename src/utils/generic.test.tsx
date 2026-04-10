@@ -47,9 +47,9 @@ describe("Pointer resolver", () => {
         data,
       ),
     ).toEqual([
-      { result1: 5, result2: 5 },
       { result: 1, result2: 3 },
       { result: 99, result2: 100 },
+      { result1: 5, result2: 5 },
     ]);
   });
 
