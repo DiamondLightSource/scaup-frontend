@@ -140,7 +140,7 @@ describe("Item Page Layout Content", () => {
     );
 
     const stepHeading = screen.getAllByRole("heading", {
-      name: /packages/i,
+      name: /dewars/i,
     });
 
     expect(stepHeading[0]).toHaveAttribute("data-status", "active");

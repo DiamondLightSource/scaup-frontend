@@ -26,9 +26,9 @@ export const steps: Step[] = [
     endpoint: "containers",
   },
   {
-    title: "Packages",
+    title: "Dewars",
     id: ["dewar", "walk-in"],
-    singular: "Package",
+    singular: "Dewar",
     endpoint: "topLevelContainers",
   },
 ];
