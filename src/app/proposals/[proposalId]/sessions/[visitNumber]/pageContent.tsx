@@ -72,6 +72,7 @@ export const ShipmentCreationForm = ({ proposalId, visitNumber }: SessionParams)
           flexDirection: "column",
           width: "40em",
           flex: "1 0 auto",
+          marginBottom: "1em",
         }}
       >
         <Heading mt='3' mb='0.5em' size='lg' color='grey.700'>

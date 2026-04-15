@@ -73,7 +73,7 @@ const ShipmentsLayoutContent = ({
       gap='1em'
     >
       {shipmentData && children}
-      <VStack spacing='0' alignItems='start'>
+      <VStack spacing='0' alignItems='start' minW='0'>
         <ShipmentOverview
           readOnly={isReview}
           onActiveChanged={handleActiveChanged}

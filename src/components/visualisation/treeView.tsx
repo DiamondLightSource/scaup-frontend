@@ -154,37 +154,48 @@ export const TreeView = ({
                     </AccordionButton>
                     <HStack
                       alignItems='center'
-                      w='100%'
                       h='100%'
                       onClick={item.isNotViewable ? undefined : () => handleEdit(item)}
                       aria-label={item.isNotViewable ? undefined : `View ${item.name}`}
                       aria-current={isSelected}
+                      minInlineSize='0'
+                      flex='4 0 0'
                     >
                       {item.tag !== undefined && <Tag colorScheme='teal'>{item.tag}</Tag>}
-                      <Text fontSize='md' fontWeight={isSelected ? "600" : "200"}>
+                      <Text
+                        fontSize='md'
+                        textOverflow='ellipsis'
+                        overflow='hidden'
+                        minW='0'
+                        style={{ textWrap: "nowrap" }}
+                        fontWeight={isSelected ? "600" : "200"}
+                      >
                         {item.name}
                       </Text>
                       {item.data.type && (
-                        <Tag colorScheme={typeColours[item.data.type]} size='sm'>
+                        <Tag colorScheme={typeColours[item.data.type]} minW='auto' size='sm'>
                           {pascalToSpace(item.data.type)}
                         </Tag>
                       )}
                     </HStack>
+                    {!(item.isUndeletable || readOnly || hasChildren(item)) && (
+                      <Button
+                        bg='red.600'
+                        mr='1'
+                        ml='10px'
+                        size='xs'
+                        onClick={() => handleRemove(item)}
+                        isLoading={item.id === currentlyLoading}
+                        minW='40px'
+                      >
+                        {item.data.containerId ||
+                        item.data.parentId ||
+                        item.data.topLevelContainerId
+                          ? "Remove"
+                          : "Delete"}
+                      </Button>
+                    )}
                   </h2>
-
-                  {!(item.isUndeletable || readOnly || hasChildren(item)) && (
-                    <Button
-                      bg='red.600'
-                      mr='1'
-                      size='xs'
-                      onClick={() => handleRemove(item)}
-                      isLoading={item.id === currentlyLoading}
-                    >
-                      {item.data.containerId || item.data.parentId || item.data.topLevelContainerId
-                        ? "Remove"
-                        : "Delete"}
-                    </Button>
-                  )}
                 </HStack>
                 {isExpanded && hasChildren(item) && (
                   <AccordionPanel py='0' pr='0'>

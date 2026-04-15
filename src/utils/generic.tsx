@@ -105,7 +105,7 @@ export const pascalToSpace = (input: string) =>
   input.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
 export const nameValidation = {
-  maxLength: 80,
+  maxLength: { value: 30, message: "Name must have a max length of 30 characters" },
   pattern: {
     value: /^[a-zA-Z0-9_]*$/,
     message: "Name must only contain alphanumeric characters and underscores",
