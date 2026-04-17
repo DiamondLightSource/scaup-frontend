@@ -42,7 +42,7 @@ export const parseJsonReferences = (pointer: string | JsonRef, pointee: Record<s
       pointerVal = parseArrayUsingMap(ref.map, pointerVal);
     }
 
-    const fullValue = baseArray ? baseArray.concat(pointerVal) : pointerVal;
+    const fullValue = baseArray ? pointerVal.concat(baseArray) : pointerVal;
 
     return fullValue.length < 1 ? null : fullValue;
   }

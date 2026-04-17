@@ -20,7 +20,7 @@ describe("Item Stepper", () => {
     expect(screen.getByLabelText("Grids Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Grid Boxes Step")).toBeInTheDocument();
     expect(screen.getByLabelText("Containers Step")).toBeInTheDocument();
-    expect(screen.getByLabelText("Packages Step")).toBeInTheDocument();
+    expect(screen.getByLabelText("Dewars Step")).toBeInTheDocument();
   });
 
   it("should count item amounts", () => {
@@ -28,7 +28,7 @@ describe("Item Stepper", () => {
       preloadedState: { shipment: { ...testInitialState, items: defaultShipmentItems } },
     });
 
-    expect(screen.getByText(/1 Packages/i)).toBeInTheDocument();
+    expect(screen.getByText(/1 Dewars/i)).toBeInTheDocument();
     expect(screen.getByText(/1 Containers/i)).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe("Item Stepper", () => {
     );
 
     const stepHeading = screen.getByRole("heading", {
-      name: /packages/i,
+      name: /dewars/i,
     });
 
     fireEvent.click(stepHeading);
