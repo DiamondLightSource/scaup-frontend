@@ -1,6 +1,20 @@
 ==========
 Changelog
 ==========
+
++++++++++
+v1.1.0 (29/04/2026)
++++++++++
+
+**Added**
+
+- Allow user to specify session type
+- Display Aquilos shuttle for FIB sessions
+
+**Changed**
+
+- Change "packages" to "dewars"
+
 +++++++++
 v1.0.0 (24/03/2026)
 +++++++++
