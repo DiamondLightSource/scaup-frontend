@@ -1,4 +1,4 @@
-FROM node:24.14.0-alpine3.23 AS base
+FROM node:24.15.0-alpine3.23 AS base
 
 ARG API_URL="/api"
 ARG DEV_CONTACT="guilherme.de-freitas@diamond.ac.uk"
