@@ -71,7 +71,7 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                   <Heading flex='1 0 0' size='lg'>
                     {tlc.name ?? "Unnamed Dewar"}
                   </Heading>
-                  <ArrangeShipmentButton params={params} isBooked={isBooked} />
+                  {isBooked && <ArrangeShipmentButton params={params} isBooked={isBooked} />}
                   <NextLink href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
                     <Button>Request Return</Button>
                   </NextLink>
