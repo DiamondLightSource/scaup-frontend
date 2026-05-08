@@ -1,29 +1,13 @@
 import { ShipmentParams } from "@/types/generic";
 import { serverFetch } from "@/utils/server/request";
-import {
-  Button,
-  Divider,
-  HStack,
-  Heading,
-  Link,
-  List,
-  ListItem,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Divider, HStack, Heading, List, ListItem, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import NextLink from "next/link";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
+import { getIsBooked } from "@/utils/server/shipment";
 
 export const metadata: Metadata = {
   title: "Booking & Labels - Scaup",
-};
-
-const getIsBooked = async (shipmentId: string) => {
-  const res = await serverFetch(`/shipments/${shipmentId}`);
-  const data = res && res.status === 200 ? await res.json() : [];
-
-  return data && !!data.data.shipmentRequest;
 };
 
 const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) => {
