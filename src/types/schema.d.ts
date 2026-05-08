@@ -633,7 +633,7 @@ export interface components {
       subType?: string | null;
       /**
        * Name
-       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       * @description Base container name. If name is not provided, the container's type followed by the container index is used
        */
       name?: string | null;
       /** Comments */
@@ -671,7 +671,7 @@ export interface components {
       subType?: string | null;
       /**
        * Name
-       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       * @description Base container name. If name is not provided, the container's type followed by the container index is used
        */
       name?: string | null;
       /** Comments */
@@ -712,6 +712,7 @@ export interface components {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
     };
+    IspybCompliantName: string;
     /** OptionalContainer */
     OptionalContainer: {
       /** Toplevelcontainerid */
@@ -737,7 +738,7 @@ export interface components {
       subType?: string | null;
       /**
        * Name
-       * @description Base container name. If name is not provided, the container's type followedby the container index is used
+       * @description Base container name. If name is not provided, the container's type followed by the container index is used
        */
       name?: string | null;
       /** Comments */
@@ -1024,7 +1025,7 @@ export interface components {
       sampleCapacity: number;
     };
     /** @enum {string} */
-    SessionTypeName: "TEM" | "Aquilos";
+    SessionTypeName: "TEM" | "Aquilos" | "CLEM" | "TALOS";
     /** ShipmentChildren */
     ShipmentChildren: {
       /** Id */
@@ -1040,8 +1041,7 @@ export interface components {
     };
     /** ShipmentIn */
     ShipmentIn: {
-      /** Name */
-      name: string;
+      name: components["schemas"]["IspybCompliantName"];
       /** Comments */
       comments?: string | null;
       /**

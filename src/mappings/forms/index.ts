@@ -3,6 +3,8 @@ import { containerForm } from "@/mappings/forms/container";
 import { dewarForm } from "@/mappings/forms/dewar";
 import { gridBoxForm } from "@/mappings/forms/gridBox";
 import { preSessionForm } from "@/mappings/forms/preSession";
+import { preSessionFibForm } from "@/mappings/forms/preSessionFib";
+import { preSessionClemForm } from "@/mappings/forms/preSessionClem";
 import { puckForm } from "@/mappings/forms/puck";
 import { sampleForm } from "@/mappings/forms/sample";
 import { walkInForm } from "@/mappings/forms/walkIn";
@@ -20,6 +22,8 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   "walk-in": walkInForm,
   gridBox: gridBoxForm,
   preSession: preSessionForm,
+  preSessionFib: preSessionFibForm,
+  preSessionClem: preSessionClemForm,
   cane: caneForm,
   storageDewar: storageDewarForm,
   shipment: [],
