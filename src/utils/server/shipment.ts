@@ -25,3 +25,10 @@ export const getShipmentData = async (
     ? ((await res.json()) as components["schemas"]["ShipmentChildren"])
     : null;
 };
+
+export const getIsBooked = async (shipmentId: string) => {
+  const res = await serverFetch(`/shipments/${shipmentId}`);
+  const data = res && res.status === 200 ? await res.json() : [];
+
+  return data && !!data.data.shipmentRequest;
+};
