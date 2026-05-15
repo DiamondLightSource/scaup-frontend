@@ -7,6 +7,7 @@ import { http, HttpResponse } from "msw";
 import mockRouter from "next-router-mock";
 import { toastMock } from "@/../vitest.setup";
 import PreSessionContent from "./pageContent";
+import { SessionType } from "@/types/forms";
 
 const params = {
   itemType: "puck" as BaseShipmentItem["type"],
@@ -36,6 +37,20 @@ const fillInFormAndSubmit = () => {
   fireEvent.change(screen.getByRole("textbox", { name: "Dose per Frame (e-/Å)" }), {
     target: { value: "1" },
   });
+  fireEvent.change(
+    screen.getByRole("combobox", {
+      name: "Do you need a cross-grating/quantifoil grid for alignments?",
+    }),
+    {
+      target: { value: "No" },
+    },
+  );
+  fireEvent.change(screen.getByRole("combobox", { name: "Use Tomo or EPU?" }), {
+    target: { value: "EPU" },
+  });
+  fireEvent.change(screen.getByRole("combobox", { name: "Experiment Type" }), {
+    target: { value: "Single Particle Analysis" },
+  });
 
   const finishButton = screen.getByText("Finish");
 
@@ -54,9 +69,12 @@ describe("Item Page Layout", () => {
 
     mockRouter.setCurrentUrl("/");
 
-    renderWithProviders(<PreSessionContent params={params} prepopData={null} />, {
-      preloadedState,
-    });
+    renderWithProviders(
+      <PreSessionContent shipmentType='TEM' params={params} prepopData={null} />,
+      {
+        preloadedState,
+      },
+    );
 
     fillInFormAndSubmit();
 
@@ -75,9 +93,12 @@ describe("Item Page Layout", () => {
 
     mockRouter.setCurrentUrl("/");
 
-    renderWithProviders(<PreSessionContent params={params} prepopData={null} />, {
-      preloadedState,
-    });
+    renderWithProviders(
+      <PreSessionContent shipmentType='TEM' params={params} prepopData={null} />,
+      {
+        preloadedState,
+      },
+    );
 
     fillInFormAndSubmit();
 
@@ -88,14 +109,17 @@ describe("Item Page Layout", () => {
   it("should redirect if push is successful", async () => {
     mockRouter.setCurrentUrl("/");
 
-    renderWithProviders(<PreSessionContent params={params} prepopData={null} />, {
-      preloadedState: {
-        shipment: {
-          ...testInitialState,
-          isReview: true,
+    renderWithProviders(
+      <PreSessionContent shipmentType='TEM' params={params} prepopData={null} />,
+      {
+        preloadedState: {
+          shipment: {
+            ...testInitialState,
+            isReview: true,
+          },
         },
       },
-    });
+    );
 
     fillInFormAndSubmit();
 
@@ -105,11 +129,35 @@ describe("Item Page Layout", () => {
   it("should populate form with existing pre-session data, if available", () => {
     mockRouter.setCurrentUrl("/");
 
-    renderWithProviders(<PreSessionContent params={params} prepopData={{ pixelSize: 250 }} />, {
-      preloadedState,
-    });
+    renderWithProviders(
+      <PreSessionContent shipmentType='TEM' params={params} prepopData={{ pixelSize: 250 }} />,
+      {
+        preloadedState,
+      },
+    );
 
     expect(screen.getByDisplayValue("250")).toBeInTheDocument();
+  });
+
+  it.each([
+    { field: "Post-milling fluorescence imaging", type: "Aquilos" },
+    { field: "Fluorescence map (2D correlation)", type: "CLEM" },
+    { field: "Imaging Conditions", type: "TEM" },
+  ])("should display $field if shipment type is $type", ({ field, type }) => {
+    mockRouter.setCurrentUrl("/");
+
+    renderWithProviders(
+      <PreSessionContent
+        shipmentType={type as SessionType}
+        params={params}
+        prepopData={{}}
+      />,
+      {
+        preloadedState,
+      },
+    );
+
+    expect(screen.getByText(field)).toBeInTheDocument();
   });
 
   it("should ignore push if skipPush is set", async () => {
@@ -122,7 +170,12 @@ describe("Item Page Layout", () => {
     );
 
     renderWithProviders(
-      <PreSessionContent params={params} prepopData={{ pixelSize: 250 }} skipPush={true} />,
+      <PreSessionContent
+        shipmentType='TEM'
+        params={params}
+        prepopData={{ pixelSize: 250 }}
+        skipPush={true}
+      />,
       {
         preloadedState,
       },

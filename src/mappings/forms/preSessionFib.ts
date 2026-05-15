@@ -10,10 +10,13 @@ export const preSessionFibForm = [
     id: "clipped",
     label: "Grid Clipped",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
-      {label: "Not clipped", value: "Not clipped"},
-      {label: "Clipped, facing left", value: "Clipped, facing left"},
-      {label: "Clipped, facing right", value: "Clipped, facing right"}
+      { label: "Not clipped", value: "Not clipped" },
+      { label: "Clipped, facing left", value: "Clipped, facing left" },
+      { label: "Clipped, facing right", value: "Clipped, facing right" },
     ],
     hint: "Whether your grids were clipped or not, and how they're clipped",
   },
@@ -21,6 +24,9 @@ export const preSessionFibForm = [
     id: "gridCrossGrating",
     label: "Do you need a cross-grating/quantifoil grid for alignments?",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       { label: "No", value: "No" },
       {
@@ -42,6 +48,9 @@ export const preSessionFibForm = [
     id: "experimentType",
     label: "Experiment Type",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       {
         label: "Fully automated lamella preparation",
@@ -56,12 +65,12 @@ export const preSessionFibForm = [
   {
     id: "preMillingFluorescenceImaging",
     label: "Pre-milling fluorescence imaging – 2D/3D correlation",
-    type: "checkbox"
+    type: "checkbox",
   },
   {
     id: "postMillingFluorescenceImaging",
     label: "Post-milling fluorescence imaging",
-    type: "checkbox"
+    type: "checkbox",
   },
   {
     id: "comments",

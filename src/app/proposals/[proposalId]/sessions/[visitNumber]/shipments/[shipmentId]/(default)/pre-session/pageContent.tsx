@@ -1,6 +1,7 @@
 "use client";
 import { DynamicForm, formMapping } from "@/components/input/form";
 import { Shipment, ShipmentParams } from "@/types/generic";
+import { formTypeMap } from "@/utils/generic";
 import { requestAndInvalidate } from "@/utils/server/request";
 import { Box, Button, HStack, Spacer, VStack, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,12 @@ export interface PreSessionContentProps {
   shipmentType: Shipment["sessionType"]["name"];
 }
 
-const PreSessionContent = ({ params, prepopData, shipmentType, skipPush }: PreSessionContentProps) => {
+const PreSessionContent = ({
+  params,
+  prepopData,
+  shipmentType,
+  skipPush,
+}: PreSessionContentProps) => {
   const formContext = useForm({ values: prepopData ?? {} });
   const toast = useToast();
   const router = useRouter();
@@ -22,6 +28,7 @@ const PreSessionContent = ({ params, prepopData, shipmentType, skipPush }: PreSe
 
   const onSubmit = formContext.handleSubmit(async (info) => {
     setIsLoading(true);
+
     if (!skipPush) {
       const response = await requestAndInvalidate(`/shipments/${params.shipmentId}/push`, {
         method: "POST",
@@ -50,24 +57,12 @@ const PreSessionContent = ({ params, prepopData, shipmentType, skipPush }: PreSe
     }
   });
 
-  const getFormType = () => {
-    switch (shipmentType) {
-      case "TEM":
-        return "preSession";
-      case "Aquilos":
-      case "TALOS":
-        return "preSessionFib";
-      case "CLEM":
-        return "preSessionClem";
-    }
-  }
-
   return (
     <VStack alignItems='start' h='100%' w='100%' py='3'>
       <FormProvider {...formContext}>
         <form onSubmit={onSubmit} style={{ width: "100%" }}>
           <Box py='3' w={{ lg: "50%", base: "100%" }}>
-            <DynamicForm formType={formMapping[getFormType()]} />
+            <DynamicForm formType={formMapping[formTypeMap[shipmentType]]} />
           </Box>
           <HStack h='3.5em' px='1em' bg='gray.200'>
             <Spacer />

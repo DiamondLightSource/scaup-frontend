@@ -8,14 +8,20 @@ export const preSessionClemForm = [
     hint: "Whether your grids were clipped or not",
   },
   {
-    id: "Auto grid mark",
+    id: "autoGridMark",
     label: "Describe auto grid mark",
     type: "textarea",
+    validation: {
+      required: "Required",
+    },
   },
   {
     id: "gridCrossGrating",
     label: "Do you need a cross-grating/quantifoil grid for alignments?",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       { label: "No", value: "No" },
       {
