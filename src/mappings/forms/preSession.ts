@@ -16,6 +16,9 @@ export const preSessionForm = [
     id: "gridCrossGrating",
     label: "Do you need a cross-grating/quantifoil grid for alignments?",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       { label: "No", value: "No" },
       {
@@ -37,6 +40,9 @@ export const preSessionForm = [
     id: "useTomoEpu",
     label: "Use Tomo or EPU?",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       {
         label: "Tomo",
@@ -52,6 +58,9 @@ export const preSessionForm = [
     id: "experimentType",
     label: "Experiment Type",
     type: "dropdown",
+    validation: {
+      required: "Required",
+    },
     values: [
       {
         label: "3D-ED",

@@ -2,7 +2,7 @@ import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { serverFetch } from "@/utils/server/request";
 import { getShipmentData } from "@/utils/server/shipment";
-import { allItemsEmptyInDict, pascalToSpace } from "@/utils/generic";
+import { allItemsEmptyInDict, formTypeMap, pascalToSpace } from "@/utils/generic";
 import { recursiveCountTypeInstances } from "@/utils/tree";
 import {
   Button,
@@ -150,7 +150,7 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
               <Divider borderColor='gray.800' />
               {shipmentData.preSessionInfo?.details ? (
                 <DynamicFormView
-                  formType='preSession'
+                  formType={formTypeMap[shipmentData.dispatch.sessionType.name]}
                   data={shipmentData.preSessionInfo.details}
                   prepopData={shipmentData.preSessionInfo.details}
                 />

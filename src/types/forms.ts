@@ -1,5 +1,6 @@
 import { JsonRef } from "@/utils/generic";
 import { RegisterOptions } from "react-hook-form";
+import { components } from "./schema";
 
 export interface SelectOption {
   label: string;
@@ -48,3 +49,5 @@ export interface TreeData<T = any> {
   /** Should 'view' button be invisible */
   isNotViewable?: boolean;
 }
+
+export type SessionType = components["schemas"]["SessionType"]["name"];

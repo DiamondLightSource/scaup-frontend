@@ -161,4 +161,42 @@ describe("Sample Collection Submission Overview", () => {
 
     expect(screen.queryByText("Cassette")).not.toBeInTheDocument();
   });
+
+  it.each([
+    {
+      field: "Post-milling fluorescence imaging",
+      type: "Aquilos",
+      key: "postMillingFluorescenceImaging",
+    },
+    { field: "Describe auto grid mark", type: "CLEM", key: "autoGridMark" },
+    { field: "Pixel Size (Å)", type: "TEM", key: "pixelSize" },
+  ])("should use $type pre-session form for $type session", async ({ field, type, key }) => {
+    const sessionTypeData = structuredClone(defaultData);
+
+    sessionTypeData.data.sessionType.name = type;
+
+    server.use(
+      http.get(
+        "http://localhost/api/shipments/:shipmentId",
+        () => HttpResponse.json(sessionTypeData),
+        {
+          once: true,
+        },
+      ),
+    );
+
+    server.use(
+      http.get(
+        "http://localhost/api/shipments/:shipmentId/preSession",
+        () => HttpResponse.json({ details: { [key]: "foo" } }),
+        {
+          once: true,
+        },
+      ),
+    );
+
+    renderWithProviders(await ShipmentHome(baseShipmentParams));
+
+    await screen.findByText(field);
+  });
 });

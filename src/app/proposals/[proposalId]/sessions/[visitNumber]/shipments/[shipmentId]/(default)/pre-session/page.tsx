@@ -1,8 +1,9 @@
-import { ShipmentParams } from "@/types/generic";
+import { Shipment, ShipmentParams } from "@/types/generic";
 import { Divider, Heading, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import PreSessionContent from "./pageContent";
 import { serverFetch } from "@/utils/server/request";
+import { getShipmentData } from "@/utils/server/shipment";
 
 export const metadata: Metadata = {
   title: "Pre-Session Data - Scaup",
@@ -20,6 +21,9 @@ const PreSession = async (props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const preSessionInfo = await getPreSessionData(params.shipmentId);
+  const shipment = await getShipmentData(params.shipmentId);
+  const shipmentType = (shipment?.data as Shipment).sessionType.name ?? "TEM";
+  
   return (
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>
@@ -30,6 +34,7 @@ const PreSession = async (props: {
         <Divider borderColor='gray.800' />
         <PreSessionContent
           params={params}
+          shipmentType={shipmentType}
           prepopData={preSessionInfo}
           skipPush={searchParams && searchParams.skipPush}
         />

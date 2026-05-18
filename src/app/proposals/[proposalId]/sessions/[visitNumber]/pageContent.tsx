@@ -31,6 +31,8 @@ const shipmentForm = [
     values: [
       { label: "TEM", value: "TEM" },
       { label: "FIB (Aquilos)", value: "Aquilos" },
+      { label: "CLEM", value: "CLEM" },
+      { label: "FIB Screening (Talos)", value: "Talos" },
     ],
   },
   {

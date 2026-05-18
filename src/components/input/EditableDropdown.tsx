@@ -3,8 +3,10 @@ import { Select, Input } from "@chakra-ui/react";
 import { useState, useCallback, ChangeEvent, useEffect, useMemo } from "react";
 import { FieldError } from "react-hook-form";
 
-export interface EditableDropdownProps
-  extends Omit<DynamicFormEntry, "type" | "label" | "hint" | "values"> {
+export interface EditableDropdownProps extends Omit<
+  DynamicFormEntry,
+  "type" | "label" | "hint" | "values"
+> {
   error?: FieldError;
   onChange: (v: string) => void;
   /** Previously selected value */
