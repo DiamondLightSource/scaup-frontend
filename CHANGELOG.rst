@@ -3,6 +3,18 @@ Changelog
 ==========
 
 +++++++++
+v1.2.0 (26/05/2026)
++++++++++
+
+**Added**
+
+- Separate pre-session forms
+
+**Changed**
+
+- Clear up dewar logistics page
+
++++++++++
 v1.1.1 (29/04/2026)
 +++++++++
 
