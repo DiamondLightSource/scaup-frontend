@@ -1025,7 +1025,7 @@ export interface components {
       sampleCapacity: number;
     };
     /** @enum {string} */
-    SessionTypeName: "TEM" | "Aquilos" | "CLEM" | "Talos";
+    SessionTypeName: "TEM" | "Aquilos" | "CLEM" | "Talos" | "SXT" | "CryoSIM";
     /** ShipmentChildren */
     ShipmentChildren: {
       /** Id */

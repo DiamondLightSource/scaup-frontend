@@ -156,4 +156,6 @@ export const formTypeMap: Record<SessionType, string> = {
   Aquilos: "preSessionFib",
   CLEM: "preSessionClem",
   Talos: "preSessionFib",
+  SXT: "preSessionSxt",
+  CryoSIM: "preSessionSxt"
 };

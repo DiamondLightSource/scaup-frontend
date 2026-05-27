@@ -5,6 +5,7 @@ import { gridBoxForm } from "@/mappings/forms/gridBox";
 import { preSessionForm } from "@/mappings/forms/preSession";
 import { preSessionFibForm } from "@/mappings/forms/preSessionFib";
 import { preSessionClemForm } from "@/mappings/forms/preSessionClem";
+import { preSessionSxtForm } from "@/mappings/forms/preSessionSxt";
 import { puckForm } from "@/mappings/forms/puck";
 import { sampleForm } from "@/mappings/forms/sample";
 import { walkInForm } from "@/mappings/forms/walkIn";
@@ -24,6 +25,7 @@ export const formMapping: Record<BaseShipmentItem["type"], DynamicFormEntry[]> =
   preSession: preSessionForm,
   preSessionFib: preSessionFibForm,
   preSessionClem: preSessionClemForm,
+  preSessionSxt: preSessionSxtForm,
   cane: caneForm,
   storageDewar: storageDewarForm,
   shipment: [],
