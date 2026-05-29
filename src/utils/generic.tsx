@@ -155,5 +155,5 @@ export const formTypeMap: Record<SessionType, string> = {
   TEM: "preSession",
   Aquilos: "preSessionFib",
   CLEM: "preSessionClem",
-  Talos: "preSessionFib",
+  Talos: "preSession",
 };
