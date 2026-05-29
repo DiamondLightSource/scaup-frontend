@@ -21,6 +21,8 @@ import {
 } from "@chakra-ui/react";
 import { Metadata } from "next";
 import NextLink from "next/link";
+import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
+import { getIsBooked } from "@/utils/server/shipment";
 
 export const metadata: Metadata = {
   title: "Request Returns - Scaup",
@@ -39,6 +41,7 @@ const getTopLevelContainers = async (shipmentId: string) => {
 const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
   const params = await props.params;
   const tlcData = await getTopLevelContainers(params.shipmentId);
+  const isBooked = await getIsBooked(params.shipmentId);
 
   return (
     <VStack gap='0' alignItems='start' w='100%'>
@@ -68,6 +71,7 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                   <Heading flex='1 0 0' size='lg'>
                     {tlc.name ?? "Unnamed Dewar"}
                   </Heading>
+                  {isBooked && <ArrangeShipmentButton params={params} isBooked={isBooked} />}
                   <NextLink href={`${process.env.SYNCHWEB_URL}/dewars/dispatch/${tlc.externalId}`}>
                     <Button>Request Return</Button>
                   </NextLink>
@@ -80,7 +84,7 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                     borderRight='1px solid'
                     borderColor='diamond.100'
                   >
-                    <Heading size='md'>Transport History</Heading>
+                    <Heading size='md'>Internal Tracking History</Heading>
                     <Box w='100%' overflowY='scroll' h='20em' p='1em'>
                       {tlc.history ? (
                         <Stepper index={0} orientation='vertical' maxH='400px' gap='0' size='sm'>
