@@ -68,13 +68,13 @@ export const preSessionClemForm = [
   },
   {
     id: "gfpEt",
-    label: "GFP ET ",
+    label: "GFP ET",
     hint: "Ex: 470/40; Em: 525/50; Dichroic: 495",
     type: "checkbox",
   },
   {
     id: "farRedY5",
-    label: "GFP ET ",
+    label: "Far Red Y5",
     hint: "Ex: BP 620/60; Em: 700/75; Dichroic: 660",
     type: "checkbox",
   },
