@@ -33,6 +33,8 @@ const shipmentForm = [
       { label: "FIB (Aquilos)", value: "Aquilos" },
       { label: "CLEM", value: "CLEM" },
       { label: "FIB Screening (Talos)", value: "Talos" },
+      { label: "CryoSIM", value: "CryoSIM" },
+      { label: "Soft X-Ray Tomography", value: "SXT" },
     ],
   },
   {
