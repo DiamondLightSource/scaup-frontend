@@ -147,11 +147,7 @@ describe("Item Page Layout", () => {
     mockRouter.setCurrentUrl("/");
 
     renderWithProviders(
-      <PreSessionContent
-        shipmentType={type as SessionType}
-        params={params}
-        prepopData={{}}
-      />,
+      <PreSessionContent shipmentType={type as SessionType} params={params} prepopData={{}} />,
       {
         preloadedState,
       },

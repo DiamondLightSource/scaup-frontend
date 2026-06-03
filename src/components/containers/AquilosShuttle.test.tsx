@@ -19,7 +19,7 @@ describe("Aquilos Shuttle", () => {
   it("should render 2 shuttle slots", () => {
     renderAndInjectForm(<AquilosShuttle samples={[]} />);
 
-    expect(screen.getAllByRole("button")).toHaveLength(2);
+    expect(screen.getAllByRole("button")).toHaveLength(4);
   });
 
   it("should render passed samples", () => {
@@ -31,7 +31,7 @@ describe("Aquilos Shuttle", () => {
   it("should render selectable samples in modal", () => {
     renderAndInjectForm(<AquilosShuttle samples={[{ ...defaultSample, subLocation: null }]} />);
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getAllByText("2")[0]);
 
     expect(screen.getByText("aquilos-sample")).toBeInTheDocument();
   });
@@ -39,7 +39,7 @@ describe("Aquilos Shuttle", () => {
   it("should close modal when adding sample", async () => {
     renderAndInjectForm(<AquilosShuttle samples={[{ ...defaultSample, subLocation: null }]} />);
 
-    fireEvent.click(screen.getByText("2"));
+    fireEvent.click(screen.getAllByText("2")[0]);
 
     expect(screen.getByText("aquilos-sample")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("radio"));
@@ -51,7 +51,7 @@ describe("Aquilos Shuttle", () => {
   it("should close modal when removing sample", async () => {
     renderAndInjectForm(<AquilosShuttle samples={[defaultSample]} />);
 
-    fireEvent.click(screen.getByText("1"));
+    fireEvent.click(screen.getAllByText("1")[0]);
     fireEvent.click(screen.getByText("Remove"));
 
     await waitFor(() => expect(screen.queryByText("Apply")).not.toBeInTheDocument());

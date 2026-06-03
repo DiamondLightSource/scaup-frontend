@@ -136,10 +136,10 @@ const ShipmentHome = async (props: { params: Promise<ShipmentParams> }) => {
                   ))}
                 </VStack>
                 {isStaff && shipmentData.samples ? (
-                  shipmentData.dispatch.sessionType.name === "TEM" ? (
+                  ["TEM", "Talos"].includes(shipmentData.dispatch.sessionType.name) ? (
                     <Cassette samples={shipmentData.samples} />
                   ) : (
-                    <AquilosShuttle samples={shipmentData.samples}></AquilosShuttle>
+                    <AquilosShuttle samples={shipmentData.samples} />
                   )
                 ) : null}
               </HStack>
