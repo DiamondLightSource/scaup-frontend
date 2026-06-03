@@ -1,6 +1,16 @@
 import { components } from "@/types/schema";
 import { serverFetch } from "@/utils/server/request";
-import { Divider, Grid, Heading, Stat, StatNumber, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  Grid,
+  Heading,
+  HStack,
+  Stat,
+  StatNumber,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { TopLevelContainerCreationForm } from "./pageContent";
@@ -34,7 +44,12 @@ const InventoryPage = async () => {
         <Heading size='md' color='gray.600'>
           Internal Containers
         </Heading>
-        <Heading>Inventory</Heading>
+        <HStack w='100%' justifyContent='space-between'>
+          <Heading>Inventory</Heading>
+          <Link href='/api/internal-containers/report'>
+            <Button>Print Report</Button>
+          </Link>
+        </HStack>
         <Divider borderColor='gray.800' />
       </VStack>
       {data === null ? (
