@@ -3,6 +3,20 @@ Changelog
 ==========
 
 +++++++++
+v1.3.0 (03/06/2026)
++++++++++
+
+**Added**
+
+- Add endpoint for generating inventory dewar report
+- Add new session types
+- Allow multiple shuttles
+
+**Fixed**
+
+- Use TEM questions for Talos sessions
+
++++++++++
 v1.2.0 (26/05/2026)
 +++++++++
 
