@@ -84,7 +84,7 @@ export const AquilosShuttle = ({ samples }: AquilosShuttleProps) => {
               <HStack key={shuttleRow} w='100%'>
                 {items.slice(shuttleRow, shuttleRow + 2).map((item, j) => (
                   <Button
-                    key={`{i}-{j}`}
+                    key={`${i}-${j}`}
                     p='5px'
                     flex='1 0 0'
                     display='flex'

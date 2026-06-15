@@ -12,4 +12,9 @@ export const preSessionSxtForm = [
     type: "checkbox",
     hint: "Whether your grids were clipped or not",
   },
+  {
+    id: "comments",
+    label: "Any other information relevant to your session?",
+    type: "textarea",
+  },
 ] as DynamicFormEntry[];

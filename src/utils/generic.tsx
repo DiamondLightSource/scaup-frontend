@@ -155,7 +155,7 @@ export const formTypeMap: Record<SessionType, string> = {
   TEM: "preSession",
   Aquilos: "preSessionFib",
   CLEM: "preSessionClem",
-  Talos: "preSession",
+  Talos: "preSessionSxt", // This is because Talos has the same questions as SXT experiments
   SXT: "preSessionSxt",
   CryoSIM: "preSessionSxt"
 };
