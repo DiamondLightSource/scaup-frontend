@@ -3,6 +3,15 @@ Changelog
 ==========
 
 +++++++++
+v1.3.1 (15/06/2026)
++++++++++
+
+**Fixed**
+
+- Update Talos questions
+- Use cassette for Talos sessions
+
++++++++++
 v1.3.0 (03/06/2026)
 +++++++++
 
