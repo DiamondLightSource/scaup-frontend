@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
-import { createAuthMiddleware, genericOAuth } from "better-auth/plugins";
+import { genericOAuth } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { createAuthMiddleware } from "better-auth/api";
 
 export const auth = betterAuth({
   basePath: "/auth",

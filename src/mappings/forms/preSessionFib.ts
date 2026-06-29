@@ -21,25 +21,6 @@ export const preSessionFibForm = [
     hint: "Whether your grids were clipped or not, and how they're clipped",
   },
   {
-    id: "gridCrossGrating",
-    label: "Do you need a cross-grating/quantifoil grid for alignments?",
-    type: "dropdown",
-    validation: {
-      required: "Required",
-    },
-    values: [
-      { label: "No", value: "No" },
-      {
-        label: "I need it, and I'm sending it myself",
-        value: "I need it, and I'm sending it myself",
-      },
-      {
-        label: "I need it, and eBIC should provide it",
-        value: "I need it, and eBIC should provide it",
-      },
-    ],
-  },
-  {
     id: "sessionSetupSeparator",
     label: "Session Setup",
     type: "separator",
