@@ -113,7 +113,7 @@ export const nameValidation = {
 };
 
 export const commentValidation = {
-  maxLength: 255,
+  maxLength: { value: 255, message: "Comments can't be longer than 255 characters" },
 };
 
 /**
@@ -161,5 +161,5 @@ export const formTypeMap: Record<SessionType, string> = {
   CLEM: "preSessionClem",
   Talos: "preSessionSxt", // This is because Talos has the same questions as SXT experiments
   SXT: "preSessionSxt",
-  CryoSIM: "preSessionSxt"
+  CryoSIM: "preSessionSxt",
 };
