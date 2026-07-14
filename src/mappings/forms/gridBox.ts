@@ -1,5 +1,5 @@
 import { DynamicFormEntry } from "@/types/forms";
-import { nameValidation } from "@/utils/generic";
+import { commentValidation, nameValidation } from "@/utils/generic";
 
 export const gridBoxForm = [
   {
@@ -52,5 +52,8 @@ export const gridBoxForm = [
     id: "comments",
     label: "Comments",
     type: "textarea",
+    validation: {
+      ...commentValidation,
+    },
   },
 ] as DynamicFormEntry[];

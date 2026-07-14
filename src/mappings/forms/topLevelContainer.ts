@@ -1,5 +1,6 @@
 import { DynamicFormEntry } from "@/types/forms";
 import { BaseShipmentItem } from "../pages";
+import { commentValidation } from "@/utils/generic";
 
 export const topLevelContainerForm = [
   {
@@ -16,5 +17,8 @@ export const topLevelContainerForm = [
     id: "comments",
     label: "Comments",
     type: "textarea",
+    validation: {
+      ...commentValidation
+    }
   },
 ] as DynamicFormEntry[];

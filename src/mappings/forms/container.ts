@@ -1,5 +1,5 @@
 import { DynamicFormEntry } from "@/types/forms";
-import { nameValidation } from "@/utils/generic";
+import { commentValidation, nameValidation } from "@/utils/generic";
 import { BaseShipmentItem } from "../pages";
 
 export const containerForm = [
@@ -27,5 +27,8 @@ export const containerForm = [
     id: "comments",
     label: "Comments",
     type: "textarea",
+    validation: {
+      ...commentValidation
+    }
   },
 ] as DynamicFormEntry[];

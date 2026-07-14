@@ -1,4 +1,5 @@
 import { DynamicFormEntry } from "@/types/forms";
+import { commentValidation } from "@/utils/generic";
 
 export const preSessionForm = [
   {
@@ -147,5 +148,8 @@ export const preSessionForm = [
     id: "comments",
     label: "Any other information relevant to your session?",
     type: "textarea",
+    validation: {
+      ...commentValidation
+    }
   },
 ] as DynamicFormEntry[];
