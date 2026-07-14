@@ -112,6 +112,10 @@ export const nameValidation = {
   },
 };
 
+export const commentValidation = {
+  maxLength: 255,
+};
+
 /**
  * Check if all keys in a dictionary have empty arrays in them
  *

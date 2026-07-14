@@ -1,5 +1,5 @@
 import { DynamicFormEntry } from "@/types/forms";
-import { nameValidation } from "@/utils/generic";
+import { commentValidation, nameValidation } from "@/utils/generic";
 
 export const caneForm = [
   {
@@ -15,5 +15,8 @@ export const caneForm = [
     id: "comments",
     label: "Comments",
     type: "textarea",
+    validation: {
+      ...commentValidation
+    }
   },
 ] as DynamicFormEntry[];
