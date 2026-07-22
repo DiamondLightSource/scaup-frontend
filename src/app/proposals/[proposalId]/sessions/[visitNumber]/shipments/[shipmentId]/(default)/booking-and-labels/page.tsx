@@ -44,6 +44,9 @@ const BookingAndLabelsPage = async (props: { params: Promise<ShipmentParams> }) 
               multiple dewars, ensure the dewar matches the barcode you&#39;ve selected for it
               previously.
             </Text>
+            <Text my='1em' textDecor="underline" fontWeight="600">
+              Always remember to print your tracking labels! Make sure they are securely affixed to the dewar and dewar case!
+            </Text>
             <NextLink
               href={`${process.env.NEXT_PUBLIC_API_URL}/shipments/${params.shipmentId}/tracking-labels`}
             >
