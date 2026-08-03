@@ -19,6 +19,7 @@ import {
   useToast,
   VStack,
   Text,
+  Tag,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
@@ -92,6 +93,11 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
         <HStack w='100%'>
           <Heading>{activeItem.name}</Heading>
           <Spacer />
+          {activeItem.data.sessionReference && (
+            <Tag colorScheme='purple' size='lg'>
+              {activeItem.data.sessionReference}
+            </Tag>
+          )}
         </HStack>
         <Divider borderColor='gray.800' />
         <ItemForm
