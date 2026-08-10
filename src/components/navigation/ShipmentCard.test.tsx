@@ -11,6 +11,7 @@ const baseShipment: components["schemas"]["ShipmentOut"] = {
   proposalNumber: 12345,
   visitNumber: 1,
   lastStatusUpdate: "2025-01-01 01:01:01",
+  sessionType: { name: "TEM", sampleCapacity: 16 }
 };
 
 describe("Shipment Card", () => {
