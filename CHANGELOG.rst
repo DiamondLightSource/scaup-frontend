@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v1.3.5 (10/08/2026)
++++++++++
+
+**Changed**
+
+- Display session for inventory samples
+
++++++++++
 v1.3.4 (13/07/2026)
 +++++++++
 
