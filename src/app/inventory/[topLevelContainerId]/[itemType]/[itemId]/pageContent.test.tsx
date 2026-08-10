@@ -12,7 +12,9 @@ const baseShipment = {
         id: 1,
         data: { type: "dewar" },
         name: "dewar",
-        children: [{ id: 2, data: { type: "puck" }, name: "puck" }],
+        children: [
+          { id: 2, data: { type: "puck", sessionReference: "bi23047-100" }, name: "puck" },
+        ],
       },
     ],
   },
@@ -32,6 +34,19 @@ describe("Inventory Item Page Content", () => {
     fireEvent.click(screen.getByText("Save"));
 
     await waitFor(() => expect(mockRouter.pathname).toBe("/puck/2"));
+  });
+
+  it("should display session if selected item has session associated", async () => {
+    renderWithProviders(<ItemFormPageContent params={params} />, {
+      preloadedState: {
+        shipment: {
+          ...baseShipment.shipment,
+          isEdit: true,
+        },
+      },
+    });
+
+    expect(screen.getByText("bi23047-100")).toBeInTheDocument();
   });
 
   it("should display message if item does not exist", async () => {
