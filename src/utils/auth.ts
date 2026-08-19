@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { genericOAuth } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware } from "better-auth/api";
+import { inferAdditionalFields } from "better-auth/client/plugins";
 
 export const auth = betterAuth({
   basePath: "/auth",
@@ -12,15 +13,15 @@ export const auth = betterAuth({
     additionalFields: {
       permissions: {
         type: "string[]",
-        input: false,
+        input: true,
       },
       fedid: {
         type: "string",
-        input: false,
+        input: true,
       },
       refreshToken: {
         type: "string",
-        input: false,
+        input: true,
       },
     },
   },
@@ -58,6 +59,7 @@ export const auth = betterAuth({
     }),
   },
   plugins: [
+    inferAdditionalFields(),
     genericOAuth({
       config: [
         {
