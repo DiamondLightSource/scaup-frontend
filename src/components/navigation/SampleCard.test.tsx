@@ -1,8 +1,9 @@
 import { renderWithProviders } from "@/utils/test-utils";
 import { fireEvent, screen } from "@testing-library/react";
 import { SampleCard } from "./SampleCard";
+import { Sample } from "@/types/generic";
 
-const baseSample = { name: "test-sample", id: 1, type: "grid", proteinId: 1, shipmentId: 1 };
+const baseSample: Sample = { name: "test-sample", id: 1, type: "grid", proteinId: 1, shipmentId: 1, ancestorContainerId: null };
 const params = { proposalId: "cm00001", shipmentId: "1", visitNumber: "1" };
 
 describe("Sample Card", () => {
@@ -42,7 +43,7 @@ describe("Sample Card", () => {
   it("should render link if parent container is provided", async () => {
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, containerName: "parent-gridbox", containerId: 5 }}
+        sample={{ ...baseSample, containerName: "parent-gridbox", ancestorContainerId: 5 }}
         params={params}
       />,
     );
@@ -53,7 +54,7 @@ describe("Sample Card", () => {
   it("should include slot in container text if sample has location", () => {
     renderWithProviders(
       <SampleCard
-        sample={{ ...baseSample, containerName: "parent-gridbox", containerId: 5, location: 10 }}
+        sample={{ ...baseSample, containerName: "parent-gridbox", ancestorContainerId: 5, location: 10 }}
         params={params}
       />,
     );
@@ -123,7 +124,7 @@ describe("Sample Card", () => {
         sample={{
           ...baseSample,
           containerName: "inventory_gridbox",
-          containerId: 1,
+          ancestorContainerId: 1,
           isInternal: true,
           originSamples: [{ ...baseSample, name: "parent-sample" }],
         }}
