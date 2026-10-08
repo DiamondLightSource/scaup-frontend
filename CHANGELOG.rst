@@ -3,6 +3,14 @@ Changelog
 ==========
 
 +++++++++
+v1.3.7 (08/10/2026)
++++++++++
+
+**Changed**
+
+- Display ancestor details for sample
+
++++++++++
 v1.3.6 (21/08/2026)
 +++++++++
 
