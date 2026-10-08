@@ -1,9 +1,9 @@
 import { renderAndInjectForm } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { Cassette } from "@/components/containers/Cassette";
-import { components } from "@/types/schema";
+import { Sample } from "@/types/generic";
 
-const defaultSample: components["schemas"]["SampleOut"] = {
+const defaultSample: Sample = {
   id: 1,
   name: "cassette-sample",
   subLocation: 1,
@@ -13,6 +13,7 @@ const defaultSample: components["schemas"]["SampleOut"] = {
   details: {
     concentration: 1,
   },
+  ancestorContainerId: 1
 };
 
 describe("Cassette", () => {

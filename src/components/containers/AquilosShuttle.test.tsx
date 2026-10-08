@@ -1,15 +1,16 @@
 import { renderAndInjectForm } from "@/utils/test-utils";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { AquilosShuttle } from "@/components/containers/AquilosShuttle";
-import { components } from "@/types/schema";
+import { Sample } from "@/types/generic";
 
-const defaultSample: components["schemas"]["SampleOut"] = {
+const defaultSample: Sample = {
   id: 1,
   name: "aquilos-sample",
   subLocation: 0,
   type: "sample",
   shipmentId: 1,
   proteinId: 1,
+  ancestorContainerId: 1,
   details: {
     concentration: 1,
   },
