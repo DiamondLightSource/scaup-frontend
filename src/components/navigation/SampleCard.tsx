@@ -62,9 +62,9 @@ export const SampleCard = ({ sample, params }: SampleCardProps) => {
                 {sample.dataCollectionGroupId ? "Collected" : "Created"}
               </Tag>
             </StatLabel>
-            {sample.containerId && sample.containerName ? (
+            {sample.ancestorContainerId && sample.containerName ? (
               <StatHelpText m='0'>
-                In <Link href={`/containers/${sample.containerId}`}>{sample.containerName}</Link>{" "}
+                In <Link href={`/containers/${sample.ancestorContainerId}`}>{sample.containerName}</Link>{" "}
                 {sample.isInternal && (
                   <Tag colorScheme='red' size='sm'>
                     In Inventory

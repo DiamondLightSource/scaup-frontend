@@ -919,6 +919,7 @@ export interface components {
     };
     /** SampleOut */
     SampleOut: {
+      ancestorContainerId: number | null;
       /** Containerid */
       containerId?: number | null;
       /** Location */
