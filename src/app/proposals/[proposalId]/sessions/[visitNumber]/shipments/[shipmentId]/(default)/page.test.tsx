@@ -4,6 +4,7 @@ import { baseShipmentParams, dewar, renderWithProviders } from "@/utils/test-uti
 import { screen } from "@testing-library/react";
 import { HttpResponse, http } from "msw";
 import ShipmentHome from "./page";
+import { getAccessToken } from "better-auth/api";
 
 const mocks = vi.hoisted(() => {
   return {
@@ -14,7 +15,9 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("@/utils/auth", () => ({
-  auth: { api: { getSession: mocks.getSessionMock } },
+  auth: {
+    api: { getSession: mocks.getSessionMock, getAccessToken: () => ({ accessToken: "foo" }) },
+  },
 }));
 
 describe("Sample Collection Submission Overview", () => {

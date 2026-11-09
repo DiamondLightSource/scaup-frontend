@@ -1,37 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth, refreshToken } from "@/utils/auth";
-import { cookies } from "next/headers";
+import { auth } from "@/utils/auth";
+import { headers } from "next/headers";
 
 export const proxy = async (request: NextRequest) => {
   const fullHeaders = new Headers(request.headers);
-  const requestCookies = await cookies();
 
-  if (!requestCookies.get(process.env.OAUTH_COOKIE_NAME!)?.value) {
-    const session = await auth.api.getSession({
-      headers: fullHeaders,
-    });
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (session?.user.refreshToken) {
-      const newToken = await refreshToken(session.user.refreshToken);
-      if (newToken) {
-        // Set cookie in frontend and return user to the page they were in before
-        return NextResponse.redirect(request.nextUrl, {
-          headers: {
-            "set-cookie": `${process.env.OAUTH_COOKIE_NAME}=${newToken};path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=250`,
-          },
-        });
-      }
-    }
 
+  if (!session) {
     const redirectUrl = request.nextUrl.pathname + "?" + request.nextUrl.searchParams.toString();
-    const { url } = await auth.api.signInSocial({
+    const resp = await auth.api.signInSocial({
       body: {
         provider: "diamond",
-        callbackURL: redirectUrl,
+        callbackURL: redirectUrl.toString()
       },
+      asResponse: true,
     });
 
-    return NextResponse.redirect(url!);
+    // Ungodly hack to make sure headers come through...
+    return NextResponse.redirect(resp.headers.get("Location")!, { ...resp, status: undefined });
   }
 
   const redirectUrl = request.nextUrl.pathname + "?" + request.nextUrl.searchParams.toString();

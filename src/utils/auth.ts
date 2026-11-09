@@ -2,13 +2,11 @@ import { betterAuth } from "better-auth";
 import { genericOAuth } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware } from "better-auth/api";
-import { inferAdditionalFields } from "better-auth/client/plugins";
+
+const domain = new URL(process.env.PORTAL_URL ?? "https://local-oidc-test.diamond.ac.uk:9000");
 
 export const auth = betterAuth({
   basePath: "/auth",
-  telemetry: {
-    enabled: false,
-  },
   user: {
     additionalFields: {
       permissions: {
@@ -16,10 +14,6 @@ export const auth = betterAuth({
         input: true,
       },
       fedid: {
-        type: "string",
-        input: true,
-      },
-      refreshToken: {
         type: "string",
         input: true,
       },
@@ -38,13 +32,23 @@ export const auth = betterAuth({
     },
   },
   advanced: {
-    cookiePrefix: "scaup",
+    cookiePrefix: "evo",
+    crossSubDomainCookies: {
+      enabled: true,
+      // We do not use subdomains in dev
+      domain: process.env.NODE_ENV === "development" ? undefined : "." + domain.host,
+    },
+  },
+  account: {
+    storeStateStrategy: "cookie",
+    storeAccountCookie: true,
+    updateAccountOnSignIn: true,
   },
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/oauth2/callback/:providerId") {
+      if (ctx.path === "/sign-in/social") {
         const token = await auth.api.getAccessToken({
-          body: { providerId: "diamond" },
+          body: { useAccountCookie: true },
           headers: ctx.headers,
         });
 
@@ -59,7 +63,6 @@ export const auth = betterAuth({
     }),
   },
   plugins: [
-    inferAdditionalFields(),
     genericOAuth({
       config: [
         {
@@ -79,42 +82,22 @@ export const auth = betterAuth({
 
             const user = await response.json();
             return {
-              id: user.fedid as string,
+              sub: user.fedid as string,
               fedid: user.fedid as string,
               emailVerified: true,
               email: user.email || (user.fedid as string),
               permissions: user.permissions,
-              name: user.givenName as string,
-              refreshToken: tokens.raw.refresh_token,
+              name: user.givenName as string
             };
           },
+          mapProfileToUser: async (profile) => ({
+            sub: profile.sub,
+            fedid: profile.fedid,
+            permissions: profile.permissions,
+          }),
         },
       ],
     }),
     nextCookies(),
   ],
 });
-
-// TODO: remove this once Better Auth supports refreshing tokens natively
-export const refreshToken = async (token: string) => {
-  const data = new URLSearchParams({
-    client_id: process.env.OAUTH_CLIENT_ID!,
-    client_secret: process.env.OAUTH_CLIENT_SECRET!,
-    grant_type: "refresh_token",
-    scope: "openid",
-    refresh_token: token,
-  });
-
-  const response = await fetch(process.env.OAUTH_ISSUER! + "/protocol/openid-connect/token", {
-    body: data,
-    method: "POST",
-  });
-
-  if (response.status !== 200) {
-    return null;
-  }
-
-  const tokens = await response.json();
-
-  return tokens.access_token;
-};

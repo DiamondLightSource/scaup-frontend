@@ -22,6 +22,12 @@ vi.mock("next/navigation", () => ({
   usePathname: pathnameMock,
   redirect: vi.fn(),
 }));
+
+vi.mock("@/utils/auth", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return { auth: {...actual.auth, api: {...actual.auth.api, getAccessToken: () => ({accessToken: "foo"})}}};
+});
+
 window.scrollTo = () => {};
 window.print = () => {};
 
