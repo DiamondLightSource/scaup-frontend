@@ -9,13 +9,12 @@ export const proxy = async (request: NextRequest) => {
     headers: await headers(),
   });
 
-
   if (!session) {
     const redirectUrl = request.nextUrl.pathname + "?" + request.nextUrl.searchParams.toString();
     const resp = await auth.api.signInSocial({
       body: {
         provider: "diamond",
-        callbackURL: redirectUrl.toString()
+        callbackURL: redirectUrl.toString(),
       },
       asResponse: true,
     });

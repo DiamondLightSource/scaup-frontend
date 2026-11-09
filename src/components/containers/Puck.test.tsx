@@ -103,6 +103,14 @@ describe("Puck", () => {
     expect(screen.getByText("5")).toHaveAttribute("title", "Stored at eBIC");
   });
 
+  it("should highlight items with slot owners", () => {
+    renderAndInjectForm(
+      <Puck parentId='1' slotOwnership={[{ slot: 4, proposalCode: "cm", proposalNumber: 1 }]} />,
+    );
+
+    expect(screen.getByText("5")).toHaveAttribute("title", "Owned by cm1");
+  });
+
   it("should not display info box if there's no form context", () => {
     renderWithProviders(<Puck parentId='1' formContext={undefined} />, {
       preloadedState: {

@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { TreeData } from "../visualisation/treeView";
 import { Puck } from "@/components/containers/Puck";
 import { Cane } from "@/components/containers/Cane";
-import { RootParentType } from "@/types/generic";
+import { RootParentType, SlotOwnership } from "@/types/generic";
 import { useCallback } from "react";
 import { CreationResponse } from "@/types/server";
 import { StorageDewar } from "./StorageDewar";
@@ -25,6 +25,7 @@ export interface ContainerProps extends BaseContainerProps {
   /** Container type */
   containerType: BaseShipmentItem["type"];
   containerSubType?: string;
+  slotOwnership?: SlotOwnership;
 }
 
 export interface ChildLocationManagerProps {

@@ -87,7 +87,7 @@ export const auth = betterAuth({
               emailVerified: true,
               email: user.email || (user.fedid as string),
               permissions: user.permissions,
-              name: user.givenName as string
+              name: user.givenName as string,
             };
           },
           mapProfileToUser: async (profile) => ({

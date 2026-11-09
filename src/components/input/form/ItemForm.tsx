@@ -5,7 +5,7 @@ import { DynamicFormEntry } from "@/types/forms";
 import { selectActiveItem, selectIsEdit, setIsReview } from "@/features/shipment/shipmentSlice";
 import { BaseShipmentItem } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { RootParentType } from "@/types/generic";
+import { RootParentType, SlotOwnership } from "@/types/generic";
 import { Box, Button, HStack, Spacer } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -17,6 +17,7 @@ export interface ItemFormProps {
   prepopData?: DynamicFormProps["prepopData"];
   parentType?: RootParentType;
   onSubmit: (values: FieldValues) => Promise<void>;
+  slotOwnership?: SlotOwnership;
 }
 
 export const ItemForm = ({
@@ -24,6 +25,7 @@ export const ItemForm = ({
   prepopData,
   onSubmit,
   parentType = "topLevelContainer",
+  slotOwnership,
 }: ItemFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
@@ -144,6 +146,7 @@ export const ItemForm = ({
             parentId={parentId}
             formContext={formContext}
             parentType={parentType}
+            slotOwnership={slotOwnership}
           />
         </HStack>
         <HStack h='3.5em' px='1em' bg='gray.200'>

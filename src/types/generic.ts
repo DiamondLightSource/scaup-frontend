@@ -92,3 +92,4 @@ export interface ContainerItem {
 
 export type Sample = components["schemas"]["SampleOut"];
 export type Shipment = components["schemas"]["ShipmentOut"];
+export type SlotOwnership = components["schemas"]["ContainerOut"]["slotOwnership"];

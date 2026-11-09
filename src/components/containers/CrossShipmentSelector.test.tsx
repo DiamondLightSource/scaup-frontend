@@ -134,6 +134,30 @@ describe("Cross Sample Collection Child Selector", () => {
     await waitFor(() => expect(itemRemoveCallback).toHaveBeenCalledWith(selectedSample));
   });
 
+  it("should always prefix proposal if proposal reference", async () => {
+    server.use(
+      http.get(
+        "http://localhost/api/proposals/bi23047/sessions/:visitNumber/containers",
+        () => HttpResponse.json({ items: [{ ...gridBox, name: "filtered-gridbox" }] }),
+        { once: true },
+      ),
+    );
+
+    renderWithProviders(
+      <CrossShipmentSelector
+        childrenType='gridBox'
+        isOpen={true}
+        onClose={() => {}}
+        proposalReference='bi23047'
+      />,
+    );
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "5" } });
+    fireEvent.click(screen.getByText("Select"));
+
+    await screen.findByText("filtered-gridbox");
+  });
+
   it("should display toast if invalid proposal reference is provided", () => {
     renderWithProviders(
       <CrossShipmentSelector childrenType='sample' isOpen={true} onClose={() => {}} />,
