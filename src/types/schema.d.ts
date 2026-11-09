@@ -689,6 +689,7 @@ export interface components {
        * @description Internal storage container this container is currently in.Only set if this is stored in the facility
        */
       internalStorageContainer?: number | null;
+      slotOwnership: { slotNumber: number, proposalCode: string, proposalNumber: number}[]
     };
     /** GenericItem */
     GenericItem: {
