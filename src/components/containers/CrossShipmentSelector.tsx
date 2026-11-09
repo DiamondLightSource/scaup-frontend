@@ -20,6 +20,8 @@ import {
   Box,
   Divider,
   Heading,
+  InputGroup,
+  InputLeftAddon,
 } from "@chakra-ui/react";
 import { clientFetch } from "@/utils/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -30,13 +32,21 @@ import { useSelector } from "react-redux";
 
 const proposalPattern = /^([A-z]{2}[0-9]+)-([0-9]+)$/;
 
+export interface CrossShipmentSelectorProps extends Omit<
+  SingleChildSelectorProps,
+  "readOnly" | "acceptMultiple"
+> {
+  proposalReference?: string;
+}
+
 export const CrossShipmentSelector = ({
   onSelect,
   onRemove,
   selectedItem,
   childrenType,
+  proposalReference,
   ...props
-}: Omit<SingleChildSelectorProps, "readOnly" | "acceptMultiple">) => {
+}: CrossShipmentSelectorProps) => {
   const toast = useToast();
   const childrenTypeData = useMemo(() => {
     const index = getCurrentStepIndex(childrenType);
@@ -44,7 +54,7 @@ export const CrossShipmentSelector = ({
   }, [childrenType]);
   const [radioIndex, setRadioIndex] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [proposalReference, setProposalReference] = useState("");
+  const [proposal, setProposal] = useState("");
   const [items, setItems] = useState<Record<string, any>[] | null | undefined>();
   const unassigned = useSelector(selectUnassigned);
 
@@ -63,13 +73,14 @@ export const CrossShipmentSelector = ({
   }, [unassigned, childrenType, childrenTypeData]);
 
   const onSessionSelect = useCallback(async () => {
-    const proposalMatches = proposalPattern.exec(proposalReference);
+    const fullProposal = proposalReference ? `${proposalReference}-${proposal}` : proposal;
+    const proposalMatches = proposalPattern.exec(fullProposal);
     if (proposalMatches === null || proposalMatches.length !== 3) {
       toast({ title: "Invalid proposal reference provided", status: "error" });
       return;
     }
 
-    const [, proposal, session] = proposalMatches;
+    const [, proposalName, session] = proposalMatches;
 
     let endpoint = childrenTypeData.data.endpoint;
     if (childrenTypeData.data.endpoint === "containers") {
@@ -79,7 +90,7 @@ export const CrossShipmentSelector = ({
       endpoint += `?ignoreInternal=true`;
     }
     setIsLoading(true);
-    const res = await clientFetch(`/proposals/${proposal}/sessions/${session}/${endpoint}`);
+    const res = await clientFetch(`/proposals/${proposalName}/sessions/${session}/${endpoint}`);
     setIsLoading(false);
 
     if (res && res.status === 200) {
@@ -88,7 +99,7 @@ export const CrossShipmentSelector = ({
     } else {
       setItems(null);
     }
-  }, [proposalReference, toast, childrenTypeData, childrenType]);
+  }, [proposal, toast, childrenTypeData, childrenType]);
 
   const handleItemSelected = useCallback(async () => {
     if (onSelect && radioIndex !== null && items) {
@@ -155,11 +166,14 @@ export const CrossShipmentSelector = ({
             collection, or unassigned items
           </Text>
           <Text fontWeight='600'>Proposal Reference</Text>
-          <Input
-            variant='hi-contrast'
-            value={proposalReference}
-            onChange={(e) => setProposalReference(e.target.value)}
-          />
+          <InputGroup>
+            <InputLeftAddon>{proposalReference}</InputLeftAddon>
+            <Input
+              variant='hi-contrast'
+              value={proposal}
+              onChange={(e) => setProposal(e.target.value)}
+            />
+          </InputGroup>
           <Button w='150px' mt='1em' type='submit' isLoading={isLoading} onClick={onSessionSelect}>
             Select
           </Button>

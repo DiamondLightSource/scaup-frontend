@@ -4,7 +4,7 @@ import { updateTag } from "next/cache";
 import { authenticatedFetch } from "@/utils/request";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "../auth";
+import { auth } from "@/utils/auth";
 
 /**
  * Perform server-side authenticated fetch

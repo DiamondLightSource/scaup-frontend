@@ -5,6 +5,4 @@ type schemas = components["schemas"];
 export type UnassignedItemResponse = schemas["UnassignedItems"];
 
 export type CreationResponse =
-  | schemas["ContainerOut"]
-  | schemas["SampleOut"]
-  | schemas["TopLevelContainerOut"];
+  schemas["ContainerOut"] | schemas["SampleOut"] | schemas["TopLevelContainerOut"];
