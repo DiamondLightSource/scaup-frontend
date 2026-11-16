@@ -32,12 +32,7 @@ export const auth = betterAuth({
     },
   },
   advanced: {
-    cookiePrefix: "evo",
-    crossSubDomainCookies: {
-      enabled: true,
-      // We do not use subdomains in dev
-      domain: process.env.NODE_ENV === "development" ? undefined : "." + domain.host,
-    },
+    cookiePrefix: "scaup",
   },
   account: {
     storeStateStrategy: "cookie",
@@ -46,7 +41,7 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/sign-in/social") {
+      if (ctx.path === "/oauth2/callback/diamond") {
         const token = await auth.api.getAccessToken({
           body: { useAccountCookie: true },
           headers: ctx.headers,
