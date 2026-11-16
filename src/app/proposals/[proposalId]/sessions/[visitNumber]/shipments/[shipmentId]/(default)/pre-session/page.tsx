@@ -23,7 +23,7 @@ const PreSession = async (props: {
   const preSessionInfo = await getPreSessionData(params.shipmentId);
   const shipment = await getShipmentData(params.shipmentId);
   const shipmentType = (shipment?.data as Shipment).sessionType.name ?? "TEM";
-  
+
   return (
     <VStack alignItems='start'>
       <VStack gap='0' alignItems='start' w='100%'>

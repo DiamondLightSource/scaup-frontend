@@ -16,7 +16,7 @@ export const caneForm = [
     label: "Comments",
     type: "textarea",
     validation: {
-      ...commentValidation
-    }
+      ...commentValidation,
+    },
   },
 ] as DynamicFormEntry[];
