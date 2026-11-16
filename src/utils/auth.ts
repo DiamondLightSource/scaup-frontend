@@ -82,7 +82,7 @@ export const auth = betterAuth({
 
             const user = await response.json();
             return {
-              sub: user.fedid as string,
+              id: Number(user.id),
               fedid: user.fedid as string,
               emailVerified: true,
               email: user.email || (user.fedid as string),
