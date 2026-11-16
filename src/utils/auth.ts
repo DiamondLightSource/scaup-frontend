@@ -41,19 +41,23 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/oauth2/callback/diamond") {
-        const token = await auth.api.getAccessToken({
-          body: { useAccountCookie: true },
-          headers: ctx.headers,
-        });
+      if (ctx.path === "/get-session" && !ctx.getCookie(process.env.OAUTH_COOKIE_NAME!)) {
+        try {
+          const token = await auth.api.getAccessToken({
+            body: { useAccountCookie: true },
+            headers: ctx.headers,
+          });
 
-        ctx.setCookie(process.env.OAUTH_COOKIE_NAME!, token.accessToken, {
+          ctx.setCookie(process.env.OAUTH_COOKIE_NAME!, token.accessToken, {
           httpOnly: true,
           path: "/",
           sameSite: "none",
           secure: true,
           maxAge: 250,
         });
+        } catch (e) {
+          return;
+        }        
       }
     }),
   },
