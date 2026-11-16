@@ -18,7 +18,7 @@ export const topLevelContainerForm = [
     label: "Comments",
     type: "textarea",
     validation: {
-      ...commentValidation
-    }
+      ...commentValidation,
+    },
   },
 ] as DynamicFormEntry[];

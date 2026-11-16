@@ -36,8 +36,7 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
 const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
   const params = await props.params;
   const data = (await getShipments(params.proposalId, params.visitNumber)) as
-    | components["schemas"]["ShipmentOut"][]
-    | null;
+    components["schemas"]["ShipmentOut"][] | null;
 
   return (
     <VStack alignItems='start'>

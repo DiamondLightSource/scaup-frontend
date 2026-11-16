@@ -8,7 +8,7 @@ import {
 } from "@/features/shipment/shipmentSlice";
 import { getCurrentStepIndex, internalEbicSteps, separateDetails, steps } from "@/mappings/pages";
 import { AppDispatch } from "@/store";
-import { InventoryItemParams } from "@/types/generic";
+import { InventoryItemParams, SlotOwnership } from "@/types/generic";
 import { Item } from "@/utils/client/item";
 import {
   Divider,
@@ -26,7 +26,12 @@ import { useCallback, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 
-export const ItemFormPageContent = ({ params }: { params: InventoryItemParams }) => {
+interface ItemFormContentProps {
+  params: InventoryItemParams;
+  slotOwnership?: SlotOwnership;
+}
+
+export const ItemFormPageContent = ({ params, slotOwnership }: ItemFormContentProps) => {
   const toast = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const activeItem = useSelector(selectActiveItem);
@@ -104,6 +109,7 @@ export const ItemFormPageContent = ({ params }: { params: InventoryItemParams })
           parentType='topLevelContainer'
           parentId={params.topLevelContainerId}
           onSubmit={onSubmit}
+          slotOwnership={slotOwnership}
         />
       </VStack>
     );

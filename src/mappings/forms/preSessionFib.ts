@@ -59,7 +59,7 @@ export const preSessionFibForm = [
     label: "Any other information relevant to your session?",
     type: "textarea",
     validation: {
-      ...commentValidation
-    }
+      ...commentValidation,
+    },
   },
 ] as DynamicFormEntry[];

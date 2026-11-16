@@ -3,14 +3,23 @@ import { TreeData } from "@/types/forms";
 import { selectActiveItem } from "@/features/shipment/shipmentSlice";
 import { PositionedItem } from "@/mappings/forms/sample";
 import { BaseShipmentItem } from "@/mappings/pages";
-import { Alert, AlertDescription, AlertIcon, Box, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Box,
+  useDisclosure,
+  VStack,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { ContainerProps, useChildLocationManager } from ".";
 import Image from "next/image";
 import { GenericChildSlot, GenericChildSlotProps } from "@/components/containers/child";
 import { CrossShipmentSelector } from "@/components/containers/CrossShipmentSelector";
-import { ContainerItem } from "@/types/generic";
+import { ContainerItem, SlotOwnership } from "@/types/generic";
 
 const PUCK_IMAGES: Record<string, string> = {
   "1": "/containers/puck1.svg",
@@ -47,16 +56,39 @@ const PUCK_TYPES: Record<string, ContainerItem[]> = {
   ],
 };
 
+interface SlotMap {
+  slots: Record<number, string>;
+  colours: Record<string, string>;
+}
+
+const slotColours = ["#E63946", "#2A9D8F", "#F4A261", "#264653", "#9B5DE5"];
+
+const mapSlotOwnership = (slotOwnership: SlotOwnership) =>
+  slotOwnership.reduce(
+    (slots, slot) => {
+      const proposal = `${slot.proposalCode}${slot.proposalNumber}`;
+      slots.slots[slot.slot] = proposal;
+      if (!slots.colours[proposal]) {
+        slots.colours[proposal] = slotColours[Object.keys(slots.colours).length];
+      }
+      return slots;
+    },
+    { slots: {}, colours: {} } as SlotMap,
+  );
+
 export const Puck = ({
   parentId,
   parentType = "shipment",
   formContext,
   containerSubType,
+  slotOwnership,
 }: Omit<ContainerProps, "containerType">) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentPuck = useSelector(selectActiveItem);
   const [currentItem, setCurrentItem] = useState<TreeData<PositionedItem> | null>(null);
   const [currentPosition, setCurrentPosition] = useState(0);
+
+  const slotOwnershipMap = slotOwnership ? mapSlotOwnership(slotOwnership) : undefined;
 
   const positions = useMemo(() => {
     const selectedType = PUCK_TYPES[containerSubType ?? "1"] || PUCK_TYPES["1"];
@@ -139,6 +171,11 @@ export const Puck = ({
             props.title = "Stored at eBIC";
           }
 
+          if (slotOwnershipMap && slotOwnershipMap.slots[i]) {
+            props.bgColor = slotOwnershipMap.colours[slotOwnershipMap.slots[i]];
+            props.title = `Owned by ${slotOwnershipMap.slots[i]}`;
+          }
+
           return <GenericChildSlot key={i} {...props} />;
         })}
         {parentType === "shipment" ? (
@@ -159,13 +196,36 @@ export const Puck = ({
             onSelect={handlePopulatePosition}
             onRemove={handleRemoveItem}
             childrenType='gridBox'
+            proposalReference={
+              slotOwnershipMap !== undefined ? slotOwnershipMap.slots[currentPosition] : undefined
+            }
           />
         )}
       </Box>
-      {formContext !== undefined && (
+      {slotOwnershipMap === undefined && formContext !== undefined && (
         <Alert status='info' variant='info'>
           <AlertIcon />
           <AlertDescription>Select a puck slot to populate it</AlertDescription>
+        </Alert>
+      )}
+      {slotOwnershipMap !== undefined && (
+        <Alert status='info' variant='subtle' alignItems='center'>
+          <VStack wrap='wrap' gap={4} align='center'>
+            <Text fontWeight='semibold'>Slot Owners:</Text>
+            {Object.entries(slotOwnershipMap.colours).map(([label, colour]) => (
+              <HStack key={label} align='center' gap={2}>
+                <Box
+                  w='14px'
+                  h='14px'
+                  borderRadius='sm'
+                  border='1px solid'
+                  borderColor='blackAlpha.300'
+                  bg={colour}
+                />
+                <Text fontSize='sm'>{label}</Text>
+              </HStack>
+            ))}
+          </VStack>
         </Alert>
       )}
     </VStack>

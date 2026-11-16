@@ -13,7 +13,7 @@ const defaultSample: Sample = {
   details: {
     concentration: 1,
   },
-  ancestorContainerId: 1
+  ancestorContainerId: 1,
 };
 
 describe("Cassette", () => {
