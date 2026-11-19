@@ -1,28 +1,12 @@
 import { ShipmentParams } from "@/types/generic";
 import { components } from "@/types/schema";
 import { serverFetch } from "@/utils/server/request";
-import { formatDate } from "@/utils/generic";
-import {
-  Box,
-  Button,
-  Divider,
-  HStack,
-  Heading,
-  Link,
-  Step,
-  StepDescription,
-  StepIndicator,
-  StepSeparator,
-  StepStatus,
-  StepTitle,
-  Stepper,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import NextLink from "next/link";
 import { ArrangeShipmentButton } from "@/components/navigation/ArrangeShipmentButton";
 import { getIsBooked } from "@/utils/server/shipment";
+import { TrackingHistory } from "@/components/visualisation/TrackingHistory";
 
 export const metadata: Metadata = {
   title: "Request Returns - Scaup",
@@ -85,48 +69,8 @@ const ReturnRequests = async (props: { params: Promise<ShipmentParams> }) => {
                     borderColor='diamond.100'
                   >
                     <Heading size='md'>Internal Tracking History</Heading>
-                    <Box w='100%' overflowY='scroll' h='20em' p='1em'>
-                      {tlc.history ? (
-                        <Stepper index={0} orientation='vertical' maxH='400px' gap='0' size='sm'>
-                          {tlc.history.map((item, index) => (
-                            <Step key={index}>
-                              <StepIndicator
-                                sx={{
-                                  "[data-status=active] &": {
-                                    background: "diamond.800",
-                                    borderColor: "diamond.800",
-                                    color: "diamond.50",
-                                  },
-                                  "[data-status=incomplete] &": {
-                                    background: "diamond.50",
-                                    borderColor: "diamond.700",
-                                  },
-                                }}
-                              >
-                                <StepStatus />
-                              </StepIndicator>
-
-                              <Box flexShrink='0'>
-                                <StepTitle>{item.dewarStatus}</StepTitle>
-                                <StepDescription>
-                                  {item.storageLocation}
-                                  {item.storageLocation ? " - " : ""}
-                                  {formatDate(item.arrivalDate || "")}
-                                </StepDescription>
-                              </Box>
-
-                              <StepSeparator />
-                            </Step>
-                          ))}
-                        </Stepper>
-                      ) : (
-                        <Heading size='md' variant='notFound'>
-                          No history found for this dewar
-                        </Heading>
-                      )}
-                    </Box>
+                    <TrackingHistory history={tlc.history} />
                   </VStack>
-
                   <VStack width='33%' minW='15em' alignItems='start'>
                     <Heading size='md'>Barcode</Heading>
                     <Text>{tlc.barCode}</Text>
