@@ -1,4 +1,5 @@
 import { ShipmentCreationForm } from "@/app/proposals/[proposalId]/sessions/[visitNumber]/pageContent";
+import { TrackingHistory } from "@/components/visualisation/TrackingHistory";
 import { getShipmentStatus } from "@/mappings/colours";
 import { SessionParams } from "@/types/generic";
 import { components } from "@/types/schema";
@@ -7,6 +8,7 @@ import {
   Divider,
   Grid,
   Heading,
+  HStack,
   Stat,
   StatHelpText,
   StatLabel,
@@ -27,7 +29,7 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
 
   if (res && res.status === 200) {
     const shipments = await res.json();
-    return shipments.items;
+    return shipments.items as components["schemas"]["ShipmentOut"][];
   }
 
   return null;
@@ -35,8 +37,21 @@ const getShipments = async (proposalId: string, visitNumber: string) => {
 
 const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
   const params = await props.params;
-  const data = (await getShipments(params.proposalId, params.visitNumber)) as
-    components["schemas"]["ShipmentOut"][] | null;
+  const data = await getShipments(params.proposalId, params.visitNumber);
+
+  let tlc: components["schemas"]["TopLevelContainerOut"] | null = null;
+
+  if (data && data.length > 0) {
+    const resTlc = await serverFetch(`/shipments/${data[data.length - 1].id}/topLevelContainers`);
+
+    if (resTlc.ok) {
+      const jsonResTlc = await resTlc.json();
+      console.log(jsonResTlc.items.history);
+      if (jsonResTlc.items.length > 0) {
+        tlc = jsonResTlc.items[0];
+      }
+    }
+  }
 
   return (
     <VStack alignItems='start'>
@@ -58,62 +73,77 @@ const SessionOverview = async (props: { params: Promise<SessionParams> }) => {
             <Text fontSize='18px' mt='2'>
               View existing sample collections for this session, or add new sample collections.
             </Text>{" "}
-            <Heading mt='3' size='lg' color='grey.700'>
-              Select Existing Sample Collection
-            </Heading>
           </VStack>
-          {data.length > 0 ? (
-            <>
-              <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
-                {data.map((shipment, i) => (
-                  <Link href={`${params.visitNumber}/shipments/${shipment.id}`} key={i}>
-                    <Stat
-                      key={i}
-                      _hover={{
-                        borderColor: "diamond.400",
-                      }}
-                      bg='white'
-                      overflow='hidden'
-                      p={2}
-                      border='1px solid grey'
-                      borderRadius={5}
-                      w='100%'
-                      cursor='pointer'
-                    >
-                      <StatLabel>
-                        <Tag colorScheme={getShipmentStatus(shipment).colour}>
-                          {getShipmentStatus(shipment).statusText}
-                        </Tag>
-                      </StatLabel>
-                      <StatNumber>
-                        <Text whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
-                          {shipment.name ?? "No Name"}
-                        </Text>
-                      </StatNumber>
-                      <StatHelpText mb='0'>
-                        <b>Created: </b>
-                        {shipment.creationDate ?? "?"}
-                      </StatHelpText>
-                    </Stat>
-                  </Link>
-                ))}
-              </Grid>
-              <Heading
-                size='md'
-                borderLeft='3px solid'
-                p='0.5em'
-                my='0.5em'
-                borderColor='diamond.800'
-              >
-                or
-              </Heading>
-            </>
-          ) : (
-            <Text fontWeight='600'>
-              This session has no sample collections assigned to it yet. You can:
-            </Text>
-          )}
-          <ShipmentCreationForm proposalId={params.proposalId} visitNumber={params.visitNumber} />
+          <HStack alignItems='start'>
+            <VStack alignItems='start'>
+              {data.length > 0 ? (
+                <>
+                  <Heading mt='3' size='lg' color='grey.700'>
+                    Select Existing Sample Collection
+                  </Heading>
+                  <Grid templateColumns='repeat(5,1fr)' gap='4px' w='100%'>
+                    {data.map((shipment, i) => (
+                      <Link href={`${params.visitNumber}/shipments/${shipment.id}`} key={i}>
+                        <Stat
+                          key={i}
+                          _hover={{
+                            borderColor: "diamond.400",
+                          }}
+                          bg='white'
+                          overflow='hidden'
+                          p={2}
+                          border='1px solid grey'
+                          borderRadius={5}
+                          w='100%'
+                          cursor='pointer'
+                        >
+                          <StatLabel>
+                            <Tag colorScheme={getShipmentStatus(shipment).colour}>
+                              {getShipmentStatus(shipment).statusText}
+                            </Tag>
+                          </StatLabel>
+                          <StatNumber>
+                            <Text whiteSpace='nowrap' textOverflow='ellipsis' overflow='hidden'>
+                              {shipment.name ?? "No Name"}
+                            </Text>
+                          </StatNumber>
+                          <StatHelpText mb='0'>
+                            <b>Created: </b>
+                            {shipment.creationDate ?? "?"}
+                          </StatHelpText>
+                        </Stat>
+                      </Link>
+                    ))}
+                  </Grid>
+                  <Heading
+                    size='md'
+                    borderLeft='3px solid'
+                    p='0.5em'
+                    my='0.5em'
+                    borderColor='diamond.800'
+                  >
+                    or
+                  </Heading>
+                </>
+              ) : (
+                <Text fontWeight='600'>
+                  This session has no sample collections assigned to it yet. You can:
+                </Text>
+              )}
+              <ShipmentCreationForm
+                proposalId={params.proposalId}
+                visitNumber={params.visitNumber}
+              />
+            </VStack>
+            {data?.length && tlc && (
+              <VStack w='33%'>
+                <Heading size='md'>
+                  Internal Tracking History ({tlc?.code ?? "Unknown"}, {data[data.length - 1].name})
+                </Heading>
+                <TrackingHistory height="100%" history={tlc?.history} />
+              </VStack>
+            )}
+          </HStack>
         </>
       )}
     </VStack>
