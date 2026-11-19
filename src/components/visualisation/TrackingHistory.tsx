@@ -21,7 +21,7 @@ interface TrackingHistoryProps {
 export const TrackingHistory = ({ history, height = "20em" }: TrackingHistoryProps) => {
   return (
     <Box w='100%' overflowY='scroll' h={height} p='1em'>
-      {history ? (
+      {history && history.length > 0 ? (
         <Stepper index={0} orientation='vertical' maxH='400px' gap='0' size='sm'>
           {history.map((item, index) => (
             <Step key={index}>
