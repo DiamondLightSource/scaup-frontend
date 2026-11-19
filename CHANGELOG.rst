@@ -9,6 +9,7 @@ v1.4.0 (16/11/2026)
 **Added**
 
 - Display slot ownership
+- Display tracking history in dashboard
 
 +++++++++
 v1.3.9 (27/10/2026)
